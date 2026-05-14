@@ -257,6 +257,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .analysis-block h4{font-size:.95rem;font-weight:700;margin-bottom:.4rem;color:var(--text);}
 .analysis-block p{font-size:.9rem;line-height:1.85;color:var(--text-dim);text-indent:2em;}
 
+/* ═══════════════════════════ BGM PLAYER ═══════════════════════════ */
+.bgm-wrap{
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:9997;
+  border-radius:8px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.15);
+  opacity:.85;transition:opacity .3s,transform .3s;
+  border:1px solid var(--border);
+}
+.bgm-wrap:hover{opacity:1;transform:translateY(-2px);}
+.bgm-wrap iframe{display:block;}
+@media(max-width:600px){.bgm-wrap{bottom:.8rem;right:.8rem;}}
+
 /* ═══════════════════════════ VIDEO SECTION ═══════════════════════════ */
 .video-section{margin:2rem 0;}
 .video-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
@@ -565,20 +576,20 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <div class="video-grid">
         <div class="video-card">
           <div class="vid-wrap">
-            <iframe src="https://www.youtube.com/embed/zMH3yr0ChhA?rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1Pj41187G2&autoplay=0&danmaku=0" allowfullscreen="allowfullscreen" loading="lazy"></iframe>
           </div>
           <div class="v-meta">
-            <h4>秋葉 Autumn Leaf</h4>
-            <p>纽卡 · 竹笛与中国风旋律。秋叶飘零、远山如黛，与「清秋晚，霜叶坠寒流」意境相合。</p>
+            <h4>诗意杭州｜江南忆，最忆是杭州</h4>
+            <p>中国国家地理景观 · 杭州山水四时之美。从白居易到苏东坡，从西湖到大运河，恰与「忆江南」词牌遥相呼应。</p>
           </div>
         </div>
         <div class="video-card">
           <div class="vid-wrap">
-            <iframe src="https://www.youtube.com/embed/X3yjHnDlqzc?rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1h4411s7F7&autoplay=0&danmaku=0" allowfullscreen="allowfullscreen" loading="lazy"></iframe>
           </div>
           <div class="v-meta">
-            <h4>梧葉舞秋風</h4>
-            <p>Nancy Chan · 古筝演绎。秋风萧索、梧叶摇落满地，正应「霜叶坠寒流」与「芦雪泊孤舟」之境。</p>
+            <h4>空山鸟语 · 古琴古筝竹笛</h4>
+            <p>古琴诊所 · 古琴、古筝、竹笛合奏。磬箫筝笛递相搀，击擫弹吹声逦迤，正合「残笛起高楼」之韵。</p>
           </div>
         </div>
       </div>
@@ -760,5 +771,11 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   });
 })();
 </script>
+
+<!-- ══ BGM PLAYER ══ -->
+<div class="bgm-wrap">
+  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=426341501&auto=0&height=32"></iframe>
+</div>
+
 </body>
 </html>
