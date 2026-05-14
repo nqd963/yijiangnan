@@ -257,6 +257,22 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .analysis-block h4{font-size:.95rem;font-weight:700;margin-bottom:.4rem;color:var(--text);}
 .analysis-block p{font-size:.9rem;line-height:1.85;color:var(--text-dim);text-indent:2em;}
 
+/* ═══════════════════════════ VIDEO SECTION ═══════════════════════════ */
+.video-section{margin:2rem 0;}
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.video-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:4px;
+  overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.02),0 4px 16px var(--shadow);
+  transition:transform .3s;
+}
+.video-card:hover{transform:translateY(-3px);}
+.video-card .vid-wrap{position:relative;width:100%;padding-top:56.25%;background:#000;}
+.video-card .vid-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+.video-card .v-meta{padding:1rem 1.2rem 1.2rem;}
+.video-card .v-meta h4{font-size:.85rem;font-weight:700;margin-bottom:.25rem;letter-spacing:.05em;}
+.video-card .v-meta p{font-size:.75rem;color:var(--text-faint);line-height:1.6;text-indent:0;}
+@media(max-width:600px){.video-grid{grid-template-columns:1fr;}}
+
 /* ═══════════════════════════ COMPARISON ═══════════════════════════ */
 .comparison{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin:2rem 0;}
 .comp-card{
@@ -536,6 +552,36 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <span class="num">四</span>
       <h4>叙事节奏 · 五句起承转合</h4>
       <p>「晚」起→「坠」承→「归梦」转→「泊」转深→「起」合。静—动—静—静—动，如四拍曲子末拍意外扬起又戛然而收。</p>
+    </div>
+  </section>
+
+  <!-- ══ VIDEO ══ -->
+  <section>
+    <h2 class="sec-title">音画共赏 <span class="sub">视听之境</span></h2>
+    <p style="font-size:.88rem;color:var(--text-dim);margin-bottom:1rem;text-indent:2em;">
+    以下视频与词作意境相通——笛声秋叶、古筝舞风，可于读词之后静心聆听，入境其间。
+    </p>
+    <div class="video-section">
+      <div class="video-grid">
+        <div class="video-card">
+          <div class="vid-wrap">
+            <iframe src="https://www.youtube.com/embed/zMH3yr0ChhA?rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="v-meta">
+            <h4>秋葉 Autumn Leaf</h4>
+            <p>纽卡 · 竹笛与中国风旋律。秋叶飘零、远山如黛，与「清秋晚，霜叶坠寒流」意境相合。</p>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="vid-wrap">
+            <iframe src="https://www.youtube.com/embed/X3yjHnDlqzc?rel=0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="v-meta">
+            <h4>梧葉舞秋風</h4>
+            <p>Nancy Chan · 古筝演绎。秋风萧索、梧叶摇落满地，正应「霜叶坠寒流」与「芦雪泊孤舟」之境。</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
