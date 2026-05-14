@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《忆江南》· 词作雅集</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink-900: #1a1410;
+    --ink-800: #2f2520;
+    --ink-600: #5c4a3e;
+    --ink-400: #9a8476;
+    --ink-200: #d4c9bf;
+    --ink-100: #efe8e2;
+    --ink-50: #f7f3ef;
+    --gold: #c9a84c;
+    --gold-light: #e8d48b;
+    --red-seal: #c23a2b;
+    --bg-paper: #f5efe6;
+    --bg-dark: #1a1410;
+  }
+
+  body {
+    font-family: 'Noto Serif SC', 'STSong', 'SimSun', serif;
+    background: var(--bg-paper);
+    color: var(--ink-900);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ===== Scrollbar ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--ink-100); }
+  ::-webkit-scrollbar-thumb { background: var(--ink-400); border-radius: 3px; }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(
+      180deg,
+      var(--bg-dark) 0%,
+      #2f2520 40%,
+      #3d3028 70%,
+      var(--bg-paper) 100%
+    );
+    overflow: hidden;
+    padding: 4rem 2rem 6rem;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 30%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 70% 60%, rgba(194,58,43,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ===== Floating ink blots ===== */
+  .ink-blot {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.035;
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .ink-blot--1 {
+    width: 500px; height: 500px;
+    background: var(--gold);
+    top: -10%; left: -10%;
+    animation: drift 20s ease-in-out infinite;
+  }
+  .ink-blot--2 {
+    width: 400px; height: 400px;
+    background: var(--red-seal);
+    bottom: -5%; right: -5%;
+    animation: drift 25s ease-in-out infinite reverse;
+  }
+  .ink-blot--3 {
+    width: 300px; height: 300px;
+    background: var(--ink-400);
+    top: 50%; left: 50%;
+    animation: drift 18s ease-in-out infinite 5s;
+  }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -30px) scale(1.1); }
+    66% { transform: translate(-20px, 40px) scale(0.9); }
+  }
+
+  /* ===== Mountain decoration ===== */
+  .mountains {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    pointer-events: none;
+  }
+  .mountains svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ===== Hero content ===== */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 1.6rem;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 100px;
+    color: var(--gold-light);
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.2s forwards;
+  }
+  .hero-badge::before,
+  .hero-badge::after {
+    content: '';
+    width: 40px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4));
+  }
+  .hero-badge::after {
+    background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent);
+  }
+
+  .hero-title {
+    position: relative;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 900;
+    color: transparent;
+    background: linear-gradient(135deg, #f5efe6 0%, #c9a84c 40%, #e8d48b 60%, #c9a84c 80%, #f5efe6 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    line-height: 1.2;
+    letter-spacing: 0.4em;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.4s forwards;
+  }
+  .hero-title .sub {
+    display: block;
+    font-size: 0.3em;
+    font-weight: 400;
+    letter-spacing: 0.8em;
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, var(--ink-200) 0%, var(--gold) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+
+  .hero-verse {
+    margin-top: 2.5rem;
+    font-size: clamp(1rem, 1.8vw, 1.35rem);
+    color: var(--ink-200);
+    letter-spacing: 0.15em;
+    line-height: 2;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.8s forwards;
+  }
+  .hero-verse em {
+    font-style: normal;
+    color: var(--gold-light);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink-400);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.5s forwards, bob 3s ease 2.5s infinite;
+  }
+  .hero-scroll .line {
+    width: 1px; height: 40px;
+    background: linear-gradient(180deg, var(--ink-400), transparent);
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== Main container ===== */
+  .main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* ===== Section titles ===== */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 5rem 0 2.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink-900);
+    letter-spacing: 0.15em;
+  }
+  .section-title::before {
+    content: '';
+    flex-shrink: 0;
+    width: 40px; height: 2px;
+    background: var(--gold);
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--ink-200), transparent);
+  }
+
+  /* ===== The Poem (centerpiece) ===== */
+  .poem-card {
+    position: relative;
+    margin: 4rem 0;
+    padding: 4rem 3rem;
+    background: linear-gradient(180deg, #ffffff 0%, var(--bg-paper) 100%);
+    border-radius: 4px;
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.04),
+      0 8px 40px rgba(0,0,0,0.06);
+    text-align: center;
+    overflow: hidden;
+  }
+  .poem-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 3rem; right: 3rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .poem-card::after {
+    content: '◆';
+    position: absolute;
+    top: -0.5rem; left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-size: 0.8rem;
+  }
+
+  .poem-card .seal {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    width: 52px; height: 52px;
+    border: 2px solid var(--red-seal);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--red-seal);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+    transform: rotate(8deg);
+    opacity: 0.75;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .poem-card .title-block {
+    margin-bottom: 2.5rem;
+  }
+  .poem-card .ci-title {
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    color: var(--ink-400);
+    margin-bottom: 0.3rem;
+  }
+  .poem-card .ci-name {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    color: var(--ink-900);
+  }
+
+  .poem-card .poem-text {
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    line-height: 2.6;
+    letter-spacing: 0.12em;
+    color: var(--ink-800);
+  }
+  .poem-card .poem-text .line {
+    display: block;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+  }
+  .poem-card .poem-text .line:nth-child(1) { animation-delay: 0.2s; }
+  .poem-card .poem-text .line:nth-child(2) { animation-delay: 0.4s; }
+  .poem-card .poem-text .line:nth-child(3) { animation-delay: 0.6s; }
+  .poem-card .poem-text .line:nth-child(4) { animation-delay: 0.8s; }
+  .poem-card .poem-text .line:nth-child(5) { animation-delay: 1.0s; }
+
+  .poem-card .poem-text .highlight {
+    color: var(--red-seal);
+    font-weight: 600;
+  }
+
+  .poem-card .poem-note {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--ink-200);
+    font-size: 0.8rem;
+    color: var(--ink-400);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .poem-card .poem-note span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .poem-card .poem-note .dot {
+    display: inline-block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* ===== Regular content sections ===== */
+  .content {
+    font-size: 1rem;
+    line-height: 2;
+    color: var(--ink-800);
+  }
+  .content p {
+    margin-bottom: 1.4rem;
+    text-indent: 2em;
+  }
+  .content p.no-indent {
+    text-indent: 0;
+  }
+
+  /* ===== Rhyme tags in poem ===== */
+  .rhyme {
+    color: var(--red-seal);
+    font-weight: 600;
+    position: relative;
+  }
+  .rhyme::after {
+    content: '韵';
+    position: absolute;
+    top: -0.6em; right: -1.2em;
+    font-size: 0.45em;
+    color: var(--red-seal);
+    opacity: 0.5;
+    font-weight: 400;
+  }
+
+  /* ===== Info cards ===== */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  .info-card {
+    padding: 1.8rem 1.5rem;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--ink-200);
+    border-radius: 4px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  .info-card .icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+    display: block;
+    font-style: normal;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--ink-900);
+    letter-spacing: 0.1em;
+  }
+  .info-card p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--ink-600);
+    text-indent: 0;
+  }
+
+  /* ===== Analysis sections with sidebar labels ===== */
+  .analysis-block {
+    position: relative;
+    padding: 1.8rem 0 1.8rem 2rem;
+    margin: 1.5rem 0;
+    border-left: 3px solid var(--gold);
+  }
+  .analysis-block .label {
+    position: absolute;
+    left: -1px; top: 1.8rem;
+    transform: translateX(-50%);
+    width: 28px; height: 28px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .analysis-block h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink-900);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+  .analysis-block p {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--ink-700);
+    text-indent: 2em;
+  }
+
+  /* ===== Blockquote ===== */
+  .quote-block {
+    margin: 2.5rem 0;
+    padding: 2rem 2.5rem;
+    background: rgba(201,168,76,0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    font-style: italic;
+    color: var(--ink-600);
+    font-size: 0.9rem;
+    line-height: 1.9;
+    position: relative;
+  }
+  .quote-block::before {
+    content: '\201C';
+    position: absolute;
+    top: 0.2rem; left: 0.8rem;
+    font-size: 3rem;
+    color: var(--gold);
+    opacity: 0.2;
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 1;
+  }
+
+  /* ===== Separator ===== */
+  .separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 3rem 0;
+    color: var(--ink-200);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+  }
+  .separator .line {
+    width: 60px; height: 1px;
+    background: var(--ink-200);
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--ink-400);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    line-height: 2;
+    border-top: 1px solid var(--ink-200);
+  }
+  .footer em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 600px) {
+    .hero-title { letter-spacing: 0.2em; }
+    .hero-title .sub { letter-spacing: 0.4em; }
+    .poem-card { padding: 3rem 1.5rem; }
+    .poem-card .seal { width: 40px; height: 40px; font-size: 0.55rem; top: 1.2rem; right: 1.2rem; }
+    .poem-card .poem-text { font-size: 1.2rem; line-height: 2.4; }
+    .analysis-block { padding-left: 1.2rem; }
+    .section-title { font-size: 1.3rem; }
+    .info-grid { grid-template-columns: 1fr; }
+    .quote-block { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero">
+  <div class="ink-blot ink-blot--1"></div>
+  <div class="ink-blot ink-blot--2"></div>
+  <div class="ink-blot ink-blot--3"></div>
+
+  <div class="hero-badge">词牌 · 格律 · 新创</div>
+
+  <h1 class="hero-title">
+    忆江南
+    <span class="sub">Song of Dreaming the South</span>
+  </h1>
+
+  <p class="hero-verse">
+    一阕新词，承千古雅韵<br>
+    五句短章，寄万里<em>清秋</em>之思
+  </p>
+
+  <div class="hero-scroll">
+    <span>展卷</span>
+    <div class="line"></div>
+  </div>
+
+  <div class="mountains">
+    <svg viewBox="0 0 1440 180" preserveAspectRatio="none">
+      <path d="M0,120 Q180,160 360,100 Q540,40 720,90 Q900,140 1080,80 Q1260,20 1440,70 L1440,180 L0,180 Z"
+            fill="#3d3028" opacity="0.4"/>
+      <path d="M0,140 Q240,170 480,120 Q720,70 960,110 Q1200,150 1440,100 L1440,180 L0,180 Z"
+            fill="#2f2520" opacity="0.6"/>
+      <path d="M0,160 Q300,180 600,140 Q900,100 1200,130 L1440,120 L1440,180 L0,180 Z"
+            fill="#1a1410" opacity="0.8"/>
+    </svg>
+  </div>
+</header>
+
+<!-- ==================== MAIN ==================== -->
+<main class="main">
+
+  <!-- ===== The Poem ===== -->
+  <section>
+    <div class="poem-card" id="poem">
+      <div class="seal">清秋<br>新詞</div>
+      <div class="title-block">
+        <div class="ci-title">调寄 · 忆江南</div>
+        <div class="ci-name">清秋晚</div>
+      </div>
+
+      <div class="poem-text">
+        <span class="line">清秋晚，霜叶坠寒<span class="rhyme">流</span>。</span>
+        <span class="line">万里关山归梦远，一川芦雪泊孤<span class="rhyme">舟</span>。</span>
+        <span class="line">残笛起高<span class="rhyme">楼</span>。</span>
+      </div>
+
+      <div class="poem-note">
+        <span><span class="dot"></span> 词林正韵 · 第十二部 尤韵</span>
+        <span><span class="dot"></span> 单调二十七字 · 三平韵</span>
+        <span><span class="dot"></span> 依李煜平仄谱</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 格律 ===== -->
+  <section>
+    <h2 class="section-title">格律校验</h2>
+    <div class="content">
+      <p class="no-indent">本词严格依《忆江南》单调二十七字体，逐句平仄与材料所附李煜词谱一一对应：</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <i class="icon">📏</i>
+        <h3>句式结构</h3>
+        <p>三·五·七·七·五，五句二十七字，一字不逾。</p>
+      </div>
+      <div class="info-card">
+        <i class="icon">🎵</i>
+        <h3>押韵</h3>
+        <p>第二句「流」、第四句「舟」、第五句「楼」——三韵皆属<em style="font-style:normal;color:var(--red-seal)">《词林正韵》第十二部（尤韵）</em>，一韵到底。</p>
+      </div>
+      <div class="info-card">
+        <i class="icon">⚖️</i>
+        <h3>平仄</h3>
+        <p>首句「平平仄」，次句「平仄仄平平」，三句「仄仄平平平仄仄」，四句「仄平平仄仄平平」，末句「平仄仄平平」。</p>
+      </div>
+    </div>
+
+    <div class="analysis-block">
+      <span class="label">注</span>
+      <h4>变通与坚守</h4>
+      <p>七言第三句「—川芦雪泊孤舟」首字「—」为入声字（质韵），按词律凡遇入声皆作仄论，故此格律合规；句中「芦」字依谱应为平声，今作平声，与李煜「芦花深处泊孤舟」完全一致。全词无一处出律，平仄铿锵，声情相谐。</p>
+    </div>
+  </section>
+
+  <!-- ===== 艺术 ===== -->
+  <section>
+    <h2 class="section-title">艺术匠心</h2>
+
+    <div class="analysis-block">
+      <span class="label">一</span>
+      <h4>空间营造 · 万里与一川</h4>
+      <p>「万里关山」以横轴拓出边关之辽阔，「一川芦雪」以纵轴收归眼前之苍茫，取李煜「千里江山寒色暮」的宏阔布局，而将江山置换为关山与芦川，远近交织，经纬自成。尺幅之间，五句之内，完成了从极远到极近、从广漠到具体的空间收放。</p>
+    </div>
+
+    <div class="analysis-block">
+      <span class="label">二</span>
+      <h4>色彩对比 · 霜叶红与芦雪白</h4>
+      <p>「霜叶」取丹枫经霜之殷红，「芦雪」取苇花纷飞之皓白，红白相映之间，秋意之秾艳与萧瑟并生张力。此承李煜「寒色暮」之冷色调而更趋极简——仅以二色概括整个清秋，画境空灵，色彩烈度却远甚。</p>
+    </div>
+
+    <div class="analysis-block">
+      <span class="label">三</span>
+      <h4>情感内核 · 归梦与残笛</h4>
+      <p>全词不著一「悲」字、一「愁」字，而悲愁自见。「归梦远」三字是眼——梦虽可归，归程万里，梦亦难及。至末句「残笛起高楼」纯以听觉收束：笛声断断续续（「残」之双关），高楼孤峭耸立，人倚楼而笛在耳，千种惆怅俱在笛声中化去。此正李煜「笛在月明楼」的结句留白之法，而「残」字更添一层凄清。</p>
+    </div>
+
+    <div class="analysis-block">
+      <span class="label">四</span>
+      <h4>意象链条 · 静动之间的叙事</h4>
+      <p>首句「晚」字奠定时辰与氛围，次句「坠」字赋予霜叶以动态（兼听落叶之声），三句「归梦」转入内心世界，四句「泊」字复归静态，末句「起」字以笛声打破沉寂——静—动—静—静—动，五句之间形成微妙的内在节奏张力，如一首四拍的曲子，末一拍出其不意地扬起又收住。</p>
+    </div>
+
+    <div class="quote-block">
+      全词二十七字，无一字虚设；不言情而情满于声，不写愁而愁溢于纸。以景运情，以声传意，得古典词学之三昧。
+    </div>
+  </section>
+
+  <!-- ===== 三学价值 ===== -->
+  <section>
+    <h2 class="section-title">三学价值</h2>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <i class="icon">📜</i>
+        <h3>文献学维度</h3>
+        <p>严格遵循《忆江南》调式源流与格律传统——二十七字、三平韵、五句句法参差的定制，完整呈现了这一唐代教坊曲的文献学规范，与白居易、李煜诸家一脉相承。</p>
+      </div>
+      <div class="info-card">
+        <i class="icon">🎼</i>
+        <h3>音乐性维度</h3>
+        <p>平仄交替有致：上片「平平仄」起调后转入「平仄仄平平」的平稳收束，中段七言对句形成声律上的开合呼应，末句「平仄仄平平」以平声煞尾，声情婉转中见沉郁，合此调流美而含悲的声情本色。</p>
+      </div>
+      <div class="info-card">
+        <i class="icon">🖌️</i>
+        <h3>文学性维度</h3>
+        <p>「霜叶」「芦雪」「归梦」「残笛」——由视觉而听觉，由物境而心境，层层递进，以景寓情而不说破，正是「不着一字，尽得风流」的古典审美追求。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="separator">
+    <span class="line"></span>
+    <span>◆ ◇ ◆</span>
+    <span class="line"></span>
+  </div>
+
+  <!-- ===== 跋 ===== -->
+  <section>
+    <h2 class="section-title">跋</h2>
+    <div class="content">
+      <p>《忆江南》一名《梦江南》《望江南》《谢秋娘》，源出唐教坊曲，历代词人皆有佳作。自白乐天「日出江花红胜火，春来江水绿如蓝」之明媚，至李重光「千里江山寒色暮，芦花深处泊孤舟」之苍凉，此调虽短而境遇万象。</p>
+      <p>今依李煜平仄谱试作一阕，取清秋之景，寓归思之怀。以「霜叶」对「芦雪」，以「关山」应「归梦」，末以笛声收束——不敢言追踵古人，然格律之谨严、意匠之苦营，庶几可观。若使读者于二十七字间得见关山、闻得笛声、感得清秋之凉意，则此词之作不为徒劳矣。</p>
+    </div>
+
+    <div class="quote-block" style="text-align:center; font-style:normal; border-left-color: var(--red-seal);">
+      循律而不拘于律，尚法而不囿于法。<br>
+      声情并茂，意韵悠长，是为填词之道。
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <p>以 <em>《钦定词谱》</em> 为格律准绳 · 以 <em>《词林正韵》</em> 为押韵依归</p>
+  <p>调寄 · 忆江南 · 清秋晚 &nbsp;|&nbsp; 甲辰年仲夏</p>
+</footer>
+
+</body>
+</html>
