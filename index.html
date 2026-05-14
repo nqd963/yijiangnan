@@ -861,6 +861,105 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   <p>调寄 · 忆江南 · 清秋晚 &nbsp;|&nbsp; 甲辰年仲夏</p>
 </footer>
 
+
+
+<!-- ══ BGM PLAYER ══ -->
+<div class="bgm-wrap" id="bgmWrap">
+  <div class="bgm-btn" id="bgmBtn" title="点击播放背景音乐">
+    <span class="bgm-icon">♫</span>
+    <span class="bgm-label">BGM</span>
+  </div>
+  <audio id="bgmAudio" loop preload="none">
+    <source src="bgm.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<!-- ══ MINI-PROGRAM BUTTON ══ -->
+<button class="mp-btn" id="mpBtn" title="填词小工具">
+  <span class="mp-icon">🎋</span>
+  <span>工具</span>
+</button>
+
+<!-- ══ MINI-PROGRAM OVERLAY ══ -->
+<div class="mp-overlay" id="mpOverlay">
+  <div class="mp-header">
+    <button class="mp-back" id="mpBack" title="返回">←</button>
+    <span class="mp-title">填词小工具 <span class="mp-sub">词学 · 格律 · 音韵</span></span>
+  </div>
+
+  <!-- Home -->
+  <div class="mp-home" id="mpHome">
+    <div class="mp-app" data-view="cipu">
+      <span class="aicon">📚</span>
+      <div class="aname">词谱宝库</div>
+      <div class="adesc">《词林正韵》《钦定词谱》《白香词谱》原典</div>
+    </div>
+    <div class="mp-app" data-view="game">
+      <span class="aicon">🎵</span>
+      <div class="aname">清音阁·音游</div>
+      <div class="adesc">古典音韵节奏游戏 · 依律击拍</div>
+    </div>
+    <div class="mp-app" data-view="pingze">
+      <span class="aicon">◎</span>
+      <div class="aname">平仄校验器</div>
+      <div class="adesc">输入词句 · 即时分析平仄押韵</div>
+    </div>
+  </div>
+
+  <!-- 词谱宝库 -->
+  <div class="mp-view" id="viewCipu">
+    <div class="cipu-tabs" id="cipuTabs">
+      <div class="cipu-tab active" data-cipu="zhengyun">词林正韵</div>
+      <div class="cipu-tab" data-cipu="qinding">钦定词谱</div>
+      <div class="cipu-tab" data-cipu="baixiang">白香词谱</div>
+    </div>
+    <div id="cipuZhengyun" class="cipu-content active"></div>
+    <div id="cipuQinding" class="cipu-content"></div>
+    <div id="cipuBaixiang" class="cipu-content"></div>
+  </div>
+
+  <!-- 清音阁·音游 -->
+  <div class="mp-view" id="viewGame">
+    <div class="game-wrap">
+      <div class="game-score" id="gameScore">得分：0</div>
+      <div class="game-combo" id="gameCombo">连击：0</div>
+      <div class="game-board" id="gameBoard">
+        <div class="game-lane"></div>
+        <div class="game-lane"></div>
+        <div class="game-lane"></div>
+        <div class="game-lane"></div>
+        <div class="game-target"></div>
+        <div class="game-overlay" id="gameOverlay">
+          <div class="big">🎵 清音阁</div>
+          <div class="sub">依律击拍 · 以乐和词</div>
+          <button class="game-btn primary" id="gameStart" style="margin-top:.8rem;">开始演奏</button>
+        </div>
+      </div>
+      <div class="game-ctrl">
+        <button class="game-btn" id="gameKey1">🔵 宫</button>
+        <button class="game-btn" id="gameKey2">🟢 商</button>
+        <button class="game-btn" id="gameKey3">🟡 角</button>
+        <button class="game-btn" id="gameKey4">🔴 徵</button>
+      </div>
+      <div class="game-tip">按下 D F J K 键或点击按钮击落音符 · 宫商角徵羽五音</div>
+    </div>
+  </div>
+
+  <!-- 平仄校验器 -->
+  <div class="mp-view" id="viewPingze">
+    <textarea class="pz-input" id="pzInput" placeholder="请输入词句，如：清秋晚，霜叶坠寒流。&#10;每句用句号或逗号或换行分隔。"></textarea>
+    <select class="pz-select" id="pzSelect">
+      <option value="yijiangnan">《忆江南》（五句三平韵）</option>
+      <option value="puziman">《菩萨蛮》（双调四十四字）</option>
+      <option value="huanshaxi">《浣溪沙》（双调四十二字）</option>
+      <option value="custom">自定义（仅标注平仄）</option>
+    </select>
+    <button class="pz-submit" id="pzSubmit">开始校验</button>
+    <div class="pz-result" id="pzResult"></div>
+  </div>
+</div>
+
+
 <!-- ═══════════════════════════ JS ═══════════════════════════ -->
 <script>
 (function(){
@@ -1340,102 +1439,5 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   })();
 })();
 </script>
-
-<!-- ══ BGM PLAYER ══ -->
-<div class="bgm-wrap" id="bgmWrap">
-  <div class="bgm-btn" id="bgmBtn" title="点击播放背景音乐">
-    <span class="bgm-icon">♫</span>
-    <span class="bgm-label">BGM</span>
-  </div>
-  <audio id="bgmAudio" loop preload="none">
-    <source src="bgm.mp3" type="audio/mpeg">
-  </audio>
-</div>
-
-<!-- ══ MINI-PROGRAM BUTTON ══ -->
-<button class="mp-btn" id="mpBtn" title="填词小工具">
-  <span class="mp-icon">🎋</span>
-  <span>工具</span>
-</button>
-
-<!-- ══ MINI-PROGRAM OVERLAY ══ -->
-<div class="mp-overlay" id="mpOverlay">
-  <div class="mp-header">
-    <button class="mp-back" id="mpBack" title="返回">←</button>
-    <span class="mp-title">填词小工具 <span class="mp-sub">词学 · 格律 · 音韵</span></span>
-  </div>
-
-  <!-- Home -->
-  <div class="mp-home" id="mpHome">
-    <div class="mp-app" data-view="cipu">
-      <span class="aicon">📚</span>
-      <div class="aname">词谱宝库</div>
-      <div class="adesc">《词林正韵》《钦定词谱》《白香词谱》原典</div>
-    </div>
-    <div class="mp-app" data-view="game">
-      <span class="aicon">🎵</span>
-      <div class="aname">清音阁·音游</div>
-      <div class="adesc">古典音韵节奏游戏 · 依律击拍</div>
-    </div>
-    <div class="mp-app" data-view="pingze">
-      <span class="aicon">◎</span>
-      <div class="aname">平仄校验器</div>
-      <div class="adesc">输入词句 · 即时分析平仄押韵</div>
-    </div>
-  </div>
-
-  <!-- 词谱宝库 -->
-  <div class="mp-view" id="viewCipu">
-    <div class="cipu-tabs" id="cipuTabs">
-      <div class="cipu-tab active" data-cipu="zhengyun">词林正韵</div>
-      <div class="cipu-tab" data-cipu="qinding">钦定词谱</div>
-      <div class="cipu-tab" data-cipu="baixiang">白香词谱</div>
-    </div>
-    <div id="cipuZhengyun" class="cipu-content active"></div>
-    <div id="cipuQinding" class="cipu-content"></div>
-    <div id="cipuBaixiang" class="cipu-content"></div>
-  </div>
-
-  <!-- 清音阁·音游 -->
-  <div class="mp-view" id="viewGame">
-    <div class="game-wrap">
-      <div class="game-score" id="gameScore">得分：0</div>
-      <div class="game-combo" id="gameCombo">连击：0</div>
-      <div class="game-board" id="gameBoard">
-        <div class="game-lane"></div>
-        <div class="game-lane"></div>
-        <div class="game-lane"></div>
-        <div class="game-lane"></div>
-        <div class="game-target"></div>
-        <div class="game-overlay" id="gameOverlay">
-          <div class="big">🎵 清音阁</div>
-          <div class="sub">依律击拍 · 以乐和词</div>
-          <button class="game-btn primary" id="gameStart" style="margin-top:.8rem;">开始演奏</button>
-        </div>
-      </div>
-      <div class="game-ctrl">
-        <button class="game-btn" id="gameKey1">🔵 宫</button>
-        <button class="game-btn" id="gameKey2">🟢 商</button>
-        <button class="game-btn" id="gameKey3">🟡 角</button>
-        <button class="game-btn" id="gameKey4">🔴 徵</button>
-      </div>
-      <div class="game-tip">按下 D F J K 键或点击按钮击落音符 · 宫商角徵羽五音</div>
-    </div>
-  </div>
-
-  <!-- 平仄校验器 -->
-  <div class="mp-view" id="viewPingze">
-    <textarea class="pz-input" id="pzInput" placeholder="请输入词句，如：清秋晚，霜叶坠寒流。&#10;每句用句号或逗号或换行分隔。"></textarea>
-    <select class="pz-select" id="pzSelect">
-      <option value="yijiangnan">《忆江南》（五句三平韵）</option>
-      <option value="puziman">《菩萨蛮》（双调四十四字）</option>
-      <option value="huanshaxi">《浣溪沙》（双调四十二字）</option>
-      <option value="custom">自定义（仅标注平仄）</option>
-    </select>
-    <button class="pz-submit" id="pzSubmit">开始校验</button>
-    <div class="pz-result" id="pzResult"></div>
-  </div>
-</div>
-
 </body>
 </html>
