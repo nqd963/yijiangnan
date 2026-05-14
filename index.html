@@ -260,12 +260,25 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 /* ═══════════════════════════ BGM PLAYER ═══════════════════════════ */
 .bgm-wrap{
   position:fixed;bottom:1.5rem;right:1.5rem;z-index:9997;
-  border-radius:8px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.15);
-  opacity:.85;transition:opacity .3s,transform .3s;
-  border:1px solid var(--border);
+  border-radius:50%;box-shadow:0 4px 20px rgba(0,0,0,.15);
+  transition:opacity .3s,transform .3s;
 }
-.bgm-wrap:hover{opacity:1;transform:translateY(-2px);}
-.bgm-wrap iframe{display:block;}
+.bgm-wrap:hover{transform:translateY(-2px);}
+.bgm-btn{
+  width:52px;height:52px;border-radius:50%;border:1px solid var(--border);
+  background:var(--bg-card);cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0;line-height:1;
+  transition:all .3s;box-shadow:0 2px 12px var(--shadow);
+}
+.bgm-btn:hover{border-color:var(--gold);background:var(--gold-dim);}
+.bgm-btn .bgm-icon{font-size:1.2rem;color:var(--text-dim);transition:color .3s;}
+.bgm-btn .bgm-label{font-size:.5rem;color:var(--text-faint);letter-spacing:.1em;margin-top:1px;}
+.bgm-btn.playing .bgm-icon{color:var(--gold);animation:bgmPulse 2s ease infinite;}
+.bgm-btn.playing{border-color:var(--gold);}
+@keyframes bgmPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.3);}
+  50%{box-shadow:0 0 0 8px rgba(201,168,76,0);}
+}
 @media(max-width:600px){.bgm-wrap{bottom:.8rem;right:.8rem;}}
 
 /* ═══════════════════════════ VIDEO SECTION ═══════════════════════════ */
@@ -576,7 +589,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <div class="video-grid">
         <div class="video-card">
           <div class="vid-wrap">
-            <iframe src="//player.bilibili.com/player.html?bvid=BV1Pj41187G2&autoplay=0&danmaku=0" allowfullscreen="allowfullscreen" loading="lazy"></iframe>
+            <iframe src="https://player.bilibili.com/player.html?bvid=BV1Pj41187G2&autoplay=0&high_quality=1&as_wide=1&danmaku=0" allowfullscreen="allowfullscreen" loading="lazy" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
           </div>
           <div class="v-meta">
             <h4>诗意杭州｜江南忆，最忆是杭州</h4>
@@ -585,7 +598,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         </div>
         <div class="video-card">
           <div class="vid-wrap">
-            <iframe src="//player.bilibili.com/player.html?bvid=BV1h4411s7F7&autoplay=0&danmaku=0" allowfullscreen="allowfullscreen" loading="lazy"></iframe>
+            <iframe src="https://player.bilibili.com/player.html?bvid=BV1h4411s7F7&autoplay=0&high_quality=1&as_wide=1&danmaku=0" allowfullscreen="allowfullscreen" loading="lazy" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
           </div>
           <div class="v-meta">
             <h4>空山鸟语 · 古琴古筝竹笛</h4>
@@ -594,6 +607,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         </div>
       </div>
     </div>
+    <p style="font-size:.78rem;color:var(--text-faint);text-align:center;margin-top:.8rem;">
+      ⚡ 若嵌入无法播放，
+      <a href="https://www.bilibili.com/video/BV1Pj41187G2" target="_blank" style="color:var(--gold);">前往B站观看「诗意杭州」</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.bilibili.com/video/BV1h4411s7F7" target="_blank" style="color:var(--gold);">前往B站观看「空山鸟语」</a>
+    </p>
   </section>
 
   <!-- ══ COMPARISON ══ -->
@@ -730,6 +749,27 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     speechSynthesis.speak(utterance);
   });
 
+  /* ── BGM ── */
+  var bgmBtn = document.getElementById('bgmBtn');
+  var bgmAudio = document.getElementById('bgmAudio');
+  var bgmPlaying = false;
+  bgmBtn.addEventListener('click', function(){
+    if(bgmPlaying){
+      bgmAudio.pause();
+      bgmBtn.classList.remove('playing');
+      bgmPlaying = false;
+    } else {
+      bgmAudio.play().then(function(){
+        bgmBtn.classList.add('playing');
+        bgmPlaying = true;
+      }).catch(function(){
+        bgmBtn.classList.add('playing');
+        bgmPlaying = true;
+        bgmAudio.play();
+      });
+    }
+  });
+
   /* ── Ping/Zé Toggle ── */
   var pzBtn = document.getElementById('pingzeBtn');
   pzBtn.addEventListener('click', function(){
@@ -773,8 +813,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 </script>
 
 <!-- ══ BGM PLAYER ══ -->
-<div class="bgm-wrap">
-  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=426341501&auto=0&height=32"></iframe>
+<div class="bgm-wrap" id="bgmWrap">
+  <div class="bgm-btn" id="bgmBtn" title="点击播放背景音乐">
+    <span class="bgm-icon">♫</span>
+    <span class="bgm-label">BGM</span>
+  </div>
+  <audio id="bgmAudio" loop preload="none">
+    <source src="bgm.mp3" type="audio/mpeg">
+  </audio>
 </div>
 
 </body>
