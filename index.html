@@ -348,6 +348,170 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .info-grid{grid-template-columns:1fr;}
   .analysis-block{padding-left:1rem;}
 }
+/* ═══════════════════════════ MINI-APPS ═══════════════════════════ */
+.mp-btn{
+  position:fixed;bottom:1.5rem;left:1.5rem;z-index:9997;
+  width:52px;height:52px;border-radius:50%;border:1px solid var(--border);
+  background:var(--bg-card);cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0;line-height:1;
+  font-size:.45rem;color:var(--text-faint);letter-spacing:.05em;
+  transition:all .3s;box-shadow:0 2px 12px var(--shadow);
+}
+.mp-btn:hover{border-color:var(--gold);background:var(--gold-dim);transform:translateY(-2px);}
+.mp-btn .mp-icon{font-size:1.3rem;color:var(--gold);margin-bottom:1px;}
+
+.mp-overlay{
+  position:fixed;inset:0;z-index:99999;overflow-y:auto;
+  background:var(--bg);display:none;
+  animation:mpFadeIn .35s ease;
+}
+.mp-overlay.open{display:block;}
+@keyframes mpFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.mp-header{
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;padding:.8rem 1.2rem;
+  background:var(--bg-card);border-bottom:1px solid var(--border);
+  gap:.8rem;
+}
+.mp-back{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
+  background:transparent;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:1.1rem;color:var(--text-dim);
+  transition:all .2s;flex-shrink:0;
+}
+.mp-back:hover{border-color:var(--gold);color:var(--gold);}
+.mp-title{font-size:1.05rem;font-weight:700;letter-spacing:.1em;flex:1;}
+.mp-title .mp-sub{font-size:.65rem;font-weight:400;color:var(--text-faint);letter-spacing:.1em;margin-left:.4rem;}
+
+/* home grid */
+.mp-home{padding:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:500px;margin:0 auto;}
+.mp-app{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
+  padding:1.8rem 1rem;text-align:center;cursor:pointer;
+  transition:all .3s;box-shadow:0 2px 12px var(--shadow);
+}
+.mp-app:hover{transform:translateY(-4px);box-shadow:0 8px 30px var(--shadow);border-color:var(--gold);}
+.mp-app .aicon{font-size:2.2rem;display:block;margin-bottom:.6rem;}
+.mp-app .aname{font-size:.9rem;font-weight:700;letter-spacing:.05em;margin-bottom:.2rem;}
+.mp-app .adesc{font-size:.7rem;color:var(--text-faint);line-height:1.4;}
+
+/* app views */
+.mp-view{display:none;padding:1rem 1.2rem 2rem;max-width:600px;margin:0 auto;}
+.mp-view.active{display:block;}
+
+/* ── 词谱宝库 ── */
+.cipu-tabs{display:flex;gap:2px;margin-bottom:1rem;border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.cipu-tab{
+  flex:1;padding:.5rem;text-align:center;cursor:pointer;font-size:.78rem;
+  background:var(--bg-card-alt);color:var(--text-dim);transition:all .2s;letter-spacing:.05em;
+}
+.cipu-tab:hover{background:var(--gold-dim);}
+.cipu-tab.active{background:var(--gold);color:#fff;font-weight:700;}
+.cipu-content{display:none;}
+.cipu-content.active{display:block;}
+.cipu-entry{padding:.7rem 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.cipu-entry:last-child{border-bottom:none;}
+.cipu-entry:hover{color:var(--gold);}
+.cipu-entry .e-title{font-size:.85rem;font-weight:600;}
+.cipu-entry .e-desc{font-size:.72rem;color:var(--text-faint);margin-top:.15rem;line-height:1.5;}
+.cipu-entry.open .e-desc{color:var(--text-dim);}
+.cipu-entry .e-body{
+  max-height:0;overflow:hidden;transition:max-height .4s;
+  font-size:.78rem;line-height:1.8;color:var(--text-dim);background:var(--bg-card-alt);
+  border-radius:6px;margin:0;padding:0 1rem;
+}
+.cipu-entry.open .e-body{max-height:500px;padding:.8rem 1rem;margin-top:.5rem;}
+.cipu-empty{text-align:center;padding:2rem;color:var(--text-faint);font-size:.8rem;}
+
+/* ── 清音阁·音游 ── */
+.game-wrap{text-align:center;}
+.game-score{font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:.3rem;}
+.game-combo{font-size:.75rem;color:var(--text-faint);margin-bottom:.8rem;}
+.game-board{
+  position:relative;width:100%;max-width:340px;height:400px;margin:0 auto;
+  background:var(--bg-card-alt);border:2px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.game-lane{position:absolute;bottom:0;top:0;width:25%;border-left:1px dashed var(--border);}
+.game-lane:nth-child(1){left:0;border-left:none;}
+.game-lane:nth-child(2){left:25%;}
+.game-lane:nth-child(3){left:50%;}
+.game-lane:nth-child(4){left:75%;}
+.game-target{
+  position:absolute;bottom:36px;left:0;right:0;height:4px;
+  background:var(--gold);z-index:2;
+}
+.game-target::before{content:'✦';position:absolute;left:50%;top:-10px;transform:translateX(-50%);color:var(--gold);font-size:.8rem;}
+.game-note{
+  position:absolute;width:32px;height:32px;border-radius:50%;z-index:3;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;color:#fff;font-weight:700;cursor:pointer;
+  transition:opacity .15s;user-select:none;
+  left:50%;transform:translateX(-50%);
+}
+.game-note.n1{background:#3b82f6;}
+.game-note.n2{background:#22c55e;}
+.game-note.n3{background:var(--gold);}
+.game-note.n4{background:var(--red-seal);}
+.game-note.missed{opacity:0.2;}
+.game-note.hit{opacity:0;transform:translateX(-50%) scale(1.5);}
+.game-ctrl{
+  display:flex;gap:.6rem;justify-content:center;margin-top:.8rem;flex-wrap:wrap;
+}
+.game-btn{
+  padding:.4rem 1.2rem;border:1px solid var(--border);border-radius:100px;
+  background:transparent;cursor:pointer;font-size:.78rem;font-family:inherit;
+  color:var(--text-dim);transition:all .2s;
+}
+.game-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.game-btn.primary{background:var(--gold);color:#fff;border-color:var(--gold);}
+.game-btn.primary:hover{background:var(--gold-light);}
+.game-overlay{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:rgba(0,0,0,0.6);
+  color:#fff;z-index:5;border-radius:10px;gap:.3rem;
+}
+.game-overlay .big{font-size:2rem;font-weight:700;}
+.game-overlay .sub{font-size:.8rem;opacity:.7;}
+.game-tip{font-size:.72rem;color:var(--text-faint);margin-top:.5rem;line-height:1.6;}
+
+/* ── 平仄校验器 ── */
+.pz-input{width:100%;padding:.8rem;border:1px solid var(--border);border-radius:8px;
+  background:var(--bg-card);color:var(--text);font-size:1rem;font-family:inherit;
+  resize:vertical;min-height:80px;transition:border-color .3s;
+}
+.pz-input:focus{outline:none;border-color:var(--gold);}
+.pz-select{
+  width:100%;padding:.6rem .8rem;border:1px solid var(--border);border-radius:8px;
+  background:var(--bg-card);color:var(--text);font-size:.85rem;font-family:inherit;
+  margin-top:.6rem;cursor:pointer;
+}
+.pz-select:focus{outline:none;border-color:var(--gold);}
+.pz-submit{
+  display:block;width:100%;padding:.6rem;margin-top:.6rem;
+  border:none;border-radius:8px;background:var(--gold);color:#fff;
+  font-size:.9rem;font-family:inherit;font-weight:700;cursor:pointer;transition:opacity .2s;
+}
+.pz-submit:hover{opacity:.85;}
+.pz-result{
+  margin-top:.8rem;padding:1rem;border-radius:8px;
+  background:var(--bg-card-alt);border:1px solid var(--border);display:none;line-height:2.2;
+  font-size:1.1rem;letter-spacing:.08em;text-align:center;
+}
+.pz-result.show{display:block;}
+.pz-char{display:inline-block;padding:0 .1rem;position:relative;}
+.pz-char .pz-tag{
+  display:block;font-size:.4rem;font-weight:400;line-height:1;margin-top:-2px;
+}
+.pz-char.ping{color:#3b82f6;}
+.pz-char.ze{color:var(--red-seal);}
+
+@media(max-width:600px){
+  .mp-home{grid-template-columns:1fr;padding:1rem;}
+  .mp-btn{bottom:.8rem;left:.8rem;width:46px;height:46px;}
+  .mp-btn .mp-icon{font-size:1.1rem;}
+  .game-board{height:320px;}
+}
 </style>
 </head>
 <body>
@@ -809,6 +973,371 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   document.addEventListener('click', function(e){
     if(annotMode && !e.target.closest('.poem-body')) collapseAll();
   });
+
+  /* ═══════════════════════════ MINI-PROGRAMS ═══════════════════════════ */
+
+  /* ── Navigation ── */
+  var mpBtn = document.getElementById('mpBtn');
+  var mpOverlay = document.getElementById('mpOverlay');
+  var mpBack = document.getElementById('mpBack');
+  var mpHome = document.getElementById('mpHome');
+  var appCards = document.querySelectorAll('.mp-app');
+  var mpViews = document.querySelectorAll('.mp-view');
+  var mpTitle = document.querySelector('.mp-title');
+  var viewNames = {cipu:'词谱宝库',game:'清音阁·音游',pingze:'平仄校验器'};
+
+  mpBtn.addEventListener('click', function(){
+    mpOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  function closeMp(){
+    mpOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    var av = document.querySelector('.mp-view.active');
+    if(av) av.classList.remove('active');
+    mpHome.style.display = 'grid';
+    mpBack.innerHTML = '\u2190';
+    mpTitle.innerHTML = '填词小工具 <span class="mp-sub">词学 · 格律 · 音韵</span>';
+  }
+
+  mpBack.addEventListener('click', function(){
+    var av = document.querySelector('.mp-view.active');
+    if(av){
+      av.classList.remove('active');
+      mpHome.style.display = 'grid';
+      mpBack.innerHTML = '\u2190';
+      mpTitle.innerHTML = '填词小工具 <span class="mp-sub">词学 · 格律 · 音韵</span>';
+    } else {
+      closeMp();
+    }
+  });
+
+  mpOverlay.addEventListener('click', function(e){
+    if(e.target === mpOverlay) closeMp();
+  });
+
+  for(var ci=0;ci<appCards.length;ci++){
+    (function(card){
+      card.addEventListener('click', function(){
+        var view = card.getAttribute('data-view');
+        var viewEl = document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1));
+        if(viewEl){
+          mpHome.style.display = 'none';
+          viewEl.classList.add('active');
+          mpTitle.textContent = viewNames[view] || '填词小工具';
+          mpBack.innerHTML = '\u2039';
+        }
+      });
+    })(ci);
+  }
+
+  /* ── 词谱宝库 ── */
+  (function(){
+    var tabs = document.querySelectorAll('.cipu-tab');
+    for(var ti=0;ti<tabs.length;ti++){
+      (function(tab){
+        tab.addEventListener('click', function(){
+          for(var ti2=0;ti2<tabs.length;ti2++) tabs[ti2].classList.remove('active');
+          tab.classList.add('active');
+          var contents = document.querySelectorAll('.cipu-content');
+          for(var ci2=0;ci2<contents.length;ci2++) contents[ci2].classList.remove('active');
+          var cipuKey = tab.getAttribute('data-cipu');
+          var id = 'cipu' + cipuKey.charAt(0).toUpperCase() + cipuKey.slice(1);
+          document.getElementById(id).classList.add('active');
+        });
+      })(ti);
+    }
+
+    var data = {
+      zhengyun: [
+        {title:'第一部 · 平声：东冬钟（－ng）', desc:'东冬钟江四韵通用。东独用，冬钟通用，江独用。', body:'东韵：东同铜桐筒童僮瞳衷中虫冲终戎崇嵩弓躬宫融雄熊穹穷冯风枫丰充隆空公功工攻蒙笼聋珑洪红鸿虹丛翁葱聪骢通蓬篷胧砻胧<br>冬韵：冬彤农宗钟龙舂松冲蓉容庸封胸凶汹匈雍<br>钟韵：钟龙松容封胸凶汹匈邕雍'},
+        {title:'第二部 · 平声：江阳唐（－ng）', desc:'江阳唐三韵通用。', body:'江韵：江缸窗邦降双庞撞<br>阳韵：阳扬香乡光昌章彰璋张王房芳长塘妆常凉霜藏场央泱鸯秧嫱床方浆觞梁娘庄黄仓皇装殇襄骧相湘缃箱创亡忘芒望杭吭<br>唐韵：唐堂棠糖塘郎廊狂强康苍皇潢簧璜遑'
+      ],
+      qinding: [
+        {title:'忆江南 · 单调二十七字', desc:'白居易体，五句三平韵。又名《梦江南》《望江南》。', body:'平⊙仄，⊙仄仄平平。<br>⊙仄⊙平平仄仄，⊙平平仄仄平平。<br>平仄仄平平。<br><br>（⊙可平可仄，△韵脚）'},
+        {title:'菩萨蛮 · 双调四十四字', desc:'李白体，上下片各四句，两仄韵两平韵。', body:'⊙平⊙仄平平仄，⊙平⊙仄平平仄。<br>⊙仄仄平平，⊙平⊙仄平。<br>⊙平平仄仄，⊙仄平平仄。<br>⊙仄仄平平，⊙平⊙仄平。'},
+        {title:'浣溪沙 · 双调四十二字', desc:'韩偓体，上片三句三平韵，下片三句两平韵。', body:'⊙仄⊙平⊙仄平，⊙平⊙仄仄平平，⊙平⊙仄仄平平。<br>⊙仄⊙平平仄仄，⊙平⊙仄仄平平，⊙平⊙仄仄平平。'},
+        {title:'西江月 · 双调五十字', desc:'柳永体，上下片各四句，两平韵一仄韵。', body:'⊙仄⊙平⊙仄，⊙平⊙仄平平。<br>⊙平⊙仄仄平平，⊙仄⊙平⊙仄。<br>⊙仄⊙平⊙仄，⊙平⊙仄平平。<br>⊙平⊙仄仄平平，⊙仄⊙平⊙仄。'},
+        {title:'满江红 · 双调九十三字', desc:'柳永体，上片四仄韵，下片五仄韵。入声韵专用。', body:'⊙仄平平，⊙⊙仄、⊙平⊙仄。<br>⊙仄⊙、⊙平⊙仄，⊙平⊙仄。<br>⊙仄⊙平平仄仄，⊙平⊙仄平平仄。<br>仄⊙⊙、⊙仄仄平平，平平仄。<br>⊙⊙仄，平⊙仄。平⊙仄，平平仄。<br>仄⊙平⊙仄，仄⊙平仄。<br>⊙仄⊙平平仄仄，⊙平⊙仄平平仄。<br>⊙⊙⊙、⊙仄仄平平，平平仄。'}
+      ],
+      baixiang: [
+        {title:'忆江南 · 白居易', desc:'江南好，风景旧曾谙。○平●仄△韵', body:'○平●仄△<br>● ●○△<br>●○●●○○●<br>○○●●○△<br>● ●○△'},
+        {title:'菩萨蛮 · 李白', desc:'平林漠漠烟如织。', body:'○●○○○●▲　●○●●○○▲<br>○●●○△　●○○●△<br>○○○●▲　●○●○▲<br>○●●○△　●○○●△'},
+        {title:'浣溪沙 · 晏殊', desc:'一曲新词酒一杯。', body:'●●○○●●△　●○○●●○△　●○○●●○△<br>●●○○○●●　●○○●●○△　●○○●●○△'},
+        {title:'西江月 · 柳永', desc:'凤额绣帘高卷。', body:'●●●○○●　●○○●○△　●○○●●○△　●●○○○▲<br>●●●○○●　●○○●○△　●○○●●○△　●●○○○▲'},
+        {title:'蝶恋花 · 冯延巳', desc:'六曲阑干偎碧树。', body:'●●○○○●▲　●●○○　●●○○▲<br>●●○○○●▲　●○○●○○▲<br>●●○○○●▲　●●○○　●●○○▲<br>●●○○○●▲　●○○●○○▲'}
+      ]
+    };
+
+    function renderCipu(containerId, entries){
+      var container = document.getElementById(containerId);
+      if(!container) return;
+      container.innerHTML = '';
+      for(var ei=0;ei<entries.length;ei++){
+        var entry = document.createElement('div');
+        entry.className = 'cipu-entry';
+        entry.innerHTML = '<div class="e-title">' + entries[ei].title + '</div><div class="e-desc">' + entries[ei].desc + '</div><div class="e-body">' + entries[ei].body + '</div>';
+        entry.addEventListener('click', function(){ this.classList.toggle('open'); });
+        container.appendChild(entry);
+      }
+    }
+
+    renderCipu('cipuZhengyun', data.zhengyun);
+    renderCipu('cipuQinding', data.qinding);
+    renderCipu('cipuBaixiang', data.baixiang);
+  })();
+
+  /* ── 清音阁·音游 ── */
+  (function(){
+    var board = document.getElementById('gameBoard');
+    var scoreEl = document.getElementById('gameScore');
+    var comboEl = document.getElementById('gameCombo');
+    var overlay = document.getElementById('gameOverlay');
+    var startBtn = document.getElementById('gameStart');
+
+    var notes = [];
+    var score = 0, combo = 0, maxCombo = 0, playing = false;
+    var animFrame = null, spawnTimer = null;
+    var baseInterval = 900;
+
+    var pentatonic = [261.63, 293.66, 329.63, 392.00, 440.00];
+    var audioCtx = null;
+
+    function initAudio(){
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function playNote(lane){
+      initAudio();
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = pentatonic[lane] || 261.63;
+      gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + 0.6);
+    }
+
+    function spawnNote(){
+      var lane = Math.floor(Math.random() * 4);
+      var note = document.createElement('div');
+      note.className = 'game-note n' + (lane + 1);
+      note.style.top = '-36px';
+      note.style.left = (lane * 25) + '%';
+      note.dataset.lane = lane;
+      board.appendChild(note);
+      notes.push({el:note, lane:lane, y:-36, hit:false, missed:false});
+    }
+
+    var targetY = 0;
+
+    function getTargetY(){
+      return board.offsetHeight - 48;
+    }
+
+    function gameLoop(){
+      if(!playing) return;
+      targetY = getTargetY();
+      for(var i=notes.length-1;i>=0;i--){
+        var n = notes[i];
+        if(n.hit){ notes.splice(i,1); continue; }
+        n.y += 1.3;
+        n.el.style.top = n.y + 'px';
+        if(n.y > targetY + 20 && !n.missed){
+          n.missed = true;
+          n.el.classList.add('missed');
+          combo = 0;
+          comboEl.textContent = '连击：0';
+        }
+        if(n.y > board.offsetHeight + 50){
+          n.el.remove();
+          notes.splice(i,1);
+        }
+      }
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function hitLane(lane){
+      if(!playing) return;
+      targetY = getTargetY();
+      var best = null, bestDist = Infinity;
+      for(var i=0;i<notes.length;i++){
+        var n = notes[i];
+        if(n.hit || n.missed) continue;
+        if(parseInt(n.lane) === lane){
+          var dist = Math.abs(n.y - targetY);
+          if(dist < bestDist){ bestDist = dist; best = n; }
+        }
+      }
+      if(best && bestDist < 55){
+        best.hit = true;
+        best.el.classList.add('hit');
+        playNote(lane);
+        score += Math.max(10, 60 - bestDist);
+        combo++;
+        if(combo > maxCombo) maxCombo = combo;
+        scoreEl.textContent = '得分：' + score;
+        comboEl.textContent = '连击：' + combo;
+        setTimeout(function(){ best.el.remove(); }, 200);
+      } else if(best && bestDist >= 55){
+        combo = 0;
+        comboEl.textContent = '连击：0';
+      }
+    }
+
+    document.addEventListener('keydown', function(e){
+      var map = {68:0, 70:1, 74:2, 75:3};
+      if(e.keyCode in map){ e.preventDefault(); hitLane(map[e.keyCode]); }
+    });
+
+    for(var ki=0;ki<4;ki++){
+      (function(lane){
+        document.getElementById('gameKey'+(lane+1)).addEventListener('click', function(){ hitLane(lane); });
+      })(ki);
+    }
+
+    var spawnInterval = null;
+    startBtn.addEventListener('click', function(){
+      if(playing) return;
+      for(var si=0;si<notes.length;si++) notes[si].el.remove();
+      notes = []; score = 0; combo = 0; maxCombo = 0;
+      scoreEl.textContent = '得分：0'; comboEl.textContent = '连击：0';
+      overlay.style.display = 'none';
+      playing = true;
+      startBtn.textContent = '演奏中…';
+      initAudio();
+      baseInterval = 900;
+      spawnInterval = setInterval(function(){
+        if(!playing) return;
+        spawnNote();
+        baseInterval = Math.max(400, baseInterval - 5);
+        clearInterval(spawnInterval);
+        spawnInterval = setInterval(arguments.callee, baseInterval);
+      }, baseInterval);
+      gameLoop();
+    });
+
+    var gameView = document.getElementById('viewGame');
+    var obs = new MutationObserver(function(){
+      if(!gameView.classList.contains('active') && playing){
+        playing = false;
+        if(animFrame) cancelAnimationFrame(animFrame);
+        if(spawnInterval) clearInterval(spawnInterval);
+        overlay.style.display = '';
+        startBtn.textContent = '开始演奏';
+        for(var ci=0;ci<notes.length;ci++) notes[ci].el.remove();
+        notes = [];
+      }
+    });
+    obs.observe(gameView, {attributes:true, attributeFilter:['class']});
+  })();
+
+  /* ── 平仄校验器 ── */
+  (function(){
+    var input = document.getElementById('pzInput');
+    var select = document.getElementById('pzSelect');
+    var submit = document.getElementById('pzSubmit');
+    var result = document.getElementById('pzResult');
+
+    var pingzeMap = {};
+    var zeChars = '晚叶坠万里一古道太白欲对酒醉歌笑独自恨不国破山河在城春木深日暮岁露雨雪暗静动大尽是古道太白欲问对酒醉歌笑独自恨不有国破山河在城春草木深感时花溅泪恨别鸟惊心别鸟惊烽火连三月家书抵万金日色月落夜白碧玉翠影岸古断岸远影空尽万里此是';
+    var pingChars = '清秋霜寒流关山归梦芦雪泊孤舟残笛起高楼江南好风景旧曾谙春来水绿如蓝能不忆闲春花秋风明时香河云楼台烟月夜人何方长江天东方红飞空回千峰西林泉松梅花衣裳光斜阳塘芳尘';
+    for(var pi=0;pi<pingChars.length;pi++) pingzeMap[pingChars[pi]] = 'ping';
+    for(var zi=0;zi<zeChars.length;zi++) pingzeMap[zeChars[zi]] = 'ze';
+
+    var patterns = {
+      yijiangnan: ['平平仄，平仄仄平平。','仄仄平平平仄仄，仄平平仄仄平平。','平仄仄平平。'],
+      puziman: ['平平仄仄平平仄，平平仄仄平平仄。','仄仄仄平平，平平仄仄平。','仄平平仄仄，仄仄平平仄。','仄仄仄平平，平平仄仄平。'],
+      huanshaxi: ['仄仄平平仄仄平，平平仄仄仄平平，平平仄仄仄平平。','仄仄平平平仄仄，平平仄仄仄平平，平平仄仄仄平平。']
+    };
+
+    var rhymeChars = '流舟楼悠秋愁游留洲鸥头收休浮眸羞求州丘悠';
+
+    submit.addEventListener('click', function(){
+      var text = input.value.trim();
+      if(!text){
+        result.textContent = '请先输入词句。';
+        result.className = 'pz-result show';
+        result.style.color = 'var(--red-seal)';
+        return;
+      }
+
+      var lines = text.split(/[，。、；\n\r]+/).filter(function(l){ return l.trim(); });
+      var patternKey = select.value;
+      var pattern = patterns[patternKey];
+
+      if(pattern && patternKey !== 'custom' && lines.length !== pattern.length){
+        result.innerHTML = '该词牌应有 <strong>' + pattern.length + '</strong> 句，当前输入 <strong>' + lines.length + '</strong> 句，请核对。';
+        result.className = 'pz-result show';
+        result.style.color = 'var(--red-seal)';
+        return;
+      }
+
+      var html = '';
+      html += '<div style="margin-bottom:.8rem;font-size:.7rem;color:var(--text-faint);">【 平仄标注 | 平→蓝 仄→红 ？→未收录 】</div>';
+
+      for(var li=0;li<lines.length;li++){
+        var line = lines[li];
+        html += '<div style="margin-bottom:.4rem;">';
+        for(var cii=0;cii<line.length;cii++){
+          var ch = line[cii];
+          var pz = pingzeMap[ch];
+          var cls = 'pz-char';
+          var tag = '？';
+          if(pz === 'ping'){ cls += ' ping'; tag = '平'; }
+          else if(pz === 'ze'){ cls += ' ze'; tag = '仄'; }
+          else { cls += ' ping'; tag = '？'; }
+
+          var mismatch = false;
+          if(pattern && patternKey !== 'custom' && li < pattern.length){
+            var patLine = pattern[li];
+            var flatIdx = 0;
+            for(var tmp=0;tmp<cii;tmp++){
+              if(line[tmp] === '，' || line[tmp] === '。') continue;
+              flatIdx++;
+            }
+            if(ch !== '，' && ch !== '。'){
+              var patChar = '';
+              var patFlat = 0;
+              for(var pc=0;pc<patLine.length;pc++){
+                if(patLine[pc] === '，' || patLine[pc] === '。') continue;
+                if(patFlat === flatIdx){ patChar = patLine[pc]; break; }
+                patFlat++;
+              }
+              if(patChar === '平' && pz === 'ze') mismatch = true;
+              if(patChar === '仄' && pz === 'ping') mismatch = true;
+            }
+          }
+
+          var extra = mismatch ? ' style="border-bottom:3px solid var(--red-seal);"' : '';
+          html += '<span class="' + cls + '"' + extra + '>' + ch + '<span class="pz-tag">' + tag + '</span></span>';
+        }
+        html += '</div>';
+      }
+
+      html += '<div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--text-dim);">';
+      for(var ri=0;ri<lines.length;ri++){
+        var lc = lines[ri].replace(/[，。、]/g,'');
+        var last = lc[lc.length-1];
+        if(last){
+          var isRhyme = rhymeChars.indexOf(last) !== -1;
+          html += '句' + (ri+1) + '末「' + last + '」' + (isRhyme ? '✓' : '✗') + '&nbsp;&nbsp;';
+        }
+      }
+      html += '</div>';
+
+      if(pattern && patternKey !== 'custom'){
+        html += '<div style="margin-top:.3rem;font-size:.7rem;color:var(--text-faint);">提示：底部红色标记为疑似出律字</div>';
+      }
+
+      result.innerHTML = html;
+      result.className = 'pz-result show';
+      result.style.color = '';
+    });
+  })();
 })();
 </script>
 
@@ -821,6 +1350,91 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   <audio id="bgmAudio" loop preload="none">
     <source src="bgm.mp3" type="audio/mpeg">
   </audio>
+</div>
+
+<!-- ══ MINI-PROGRAM BUTTON ══ -->
+<button class="mp-btn" id="mpBtn" title="填词小工具">
+  <span class="mp-icon">🎋</span>
+  <span>工具</span>
+</button>
+
+<!-- ══ MINI-PROGRAM OVERLAY ══ -->
+<div class="mp-overlay" id="mpOverlay">
+  <div class="mp-header">
+    <button class="mp-back" id="mpBack" title="返回">←</button>
+    <span class="mp-title">填词小工具 <span class="mp-sub">词学 · 格律 · 音韵</span></span>
+  </div>
+
+  <!-- Home -->
+  <div class="mp-home" id="mpHome">
+    <div class="mp-app" data-view="cipu">
+      <span class="aicon">📚</span>
+      <div class="aname">词谱宝库</div>
+      <div class="adesc">《词林正韵》《钦定词谱》《白香词谱》原典</div>
+    </div>
+    <div class="mp-app" data-view="game">
+      <span class="aicon">🎵</span>
+      <div class="aname">清音阁·音游</div>
+      <div class="adesc">古典音韵节奏游戏 · 依律击拍</div>
+    </div>
+    <div class="mp-app" data-view="pingze">
+      <span class="aicon">◎</span>
+      <div class="aname">平仄校验器</div>
+      <div class="adesc">输入词句 · 即时分析平仄押韵</div>
+    </div>
+  </div>
+
+  <!-- 词谱宝库 -->
+  <div class="mp-view" id="viewCipu">
+    <div class="cipu-tabs" id="cipuTabs">
+      <div class="cipu-tab active" data-cipu="zhengyun">词林正韵</div>
+      <div class="cipu-tab" data-cipu="qinding">钦定词谱</div>
+      <div class="cipu-tab" data-cipu="baixiang">白香词谱</div>
+    </div>
+    <div id="cipuZhengyun" class="cipu-content active"></div>
+    <div id="cipuQinding" class="cipu-content"></div>
+    <div id="cipuBaixiang" class="cipu-content"></div>
+  </div>
+
+  <!-- 清音阁·音游 -->
+  <div class="mp-view" id="viewGame">
+    <div class="game-wrap">
+      <div class="game-score" id="gameScore">得分：0</div>
+      <div class="game-combo" id="gameCombo">连击：0</div>
+      <div class="game-board" id="gameBoard">
+        <div class="game-lane"></div>
+        <div class="game-lane"></div>
+        <div class="game-lane"></div>
+        <div class="game-lane"></div>
+        <div class="game-target"></div>
+        <div class="game-overlay" id="gameOverlay">
+          <div class="big">🎵 清音阁</div>
+          <div class="sub">依律击拍 · 以乐和词</div>
+          <button class="game-btn primary" id="gameStart" style="margin-top:.8rem;">开始演奏</button>
+        </div>
+      </div>
+      <div class="game-ctrl">
+        <button class="game-btn" id="gameKey1">🔵 宫</button>
+        <button class="game-btn" id="gameKey2">🟢 商</button>
+        <button class="game-btn" id="gameKey3">🟡 角</button>
+        <button class="game-btn" id="gameKey4">🔴 徵</button>
+      </div>
+      <div class="game-tip">按下 D F J K 键或点击按钮击落音符 · 宫商角徵羽五音</div>
+    </div>
+  </div>
+
+  <!-- 平仄校验器 -->
+  <div class="mp-view" id="viewPingze">
+    <textarea class="pz-input" id="pzInput" placeholder="请输入词句，如：清秋晚，霜叶坠寒流。&#10;每句用句号或逗号或换行分隔。"></textarea>
+    <select class="pz-select" id="pzSelect">
+      <option value="yijiangnan">《忆江南》（五句三平韵）</option>
+      <option value="puziman">《菩萨蛮》（双调四十四字）</option>
+      <option value="huanshaxi">《浣溪沙》（双调四十二字）</option>
+      <option value="custom">自定义（仅标注平仄）</option>
+    </select>
+    <button class="pz-submit" id="pzSubmit">开始校验</button>
+    <div class="pz-result" id="pzResult"></div>
+  </div>
 </div>
 
 </body>
