@@ -7,6 +7,9 @@
 <style>
 /* ═══════════════════════════ RESET & VARIABLES ═══════════════════════════ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+/* Touch-friendly defaults */
+html{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+button,.mp-app,.cipu-tab,.game-btn,.pz-submit,.game-note{touch-action:manipulation;}
 :root{
   --ink-900:#1a1410;--ink-800:#2f2520;--ink-700:#4a3a30;
   --ink-600:#5c4a3e;--ink-400:#9a8476;--ink-200:#d4c9bf;
@@ -335,18 +338,45 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
 /* ═══════════════════════════ RESPONSIVE ═══════════════════════════ */
 @media(max-width:768px){
-  .hero-title{letter-spacing:.2em;}
-  .hero-title .sub{letter-spacing:.4em;}
+  .hero{padding:3rem 1rem 2.5rem;}
+  .hero-title{font-size:2.4rem;letter-spacing:.15em;}
+  .hero-title .sub{font-size:1.8rem;letter-spacing:.3em;}
+  .hero-verse{font-size:.95rem;}
+  .hero-badge{font-size:.65rem;padding:.25rem .8rem;}
   .poem-card{padding:3rem 1.2rem 2rem;}
   .seal{width:36px;height:36px;font-size:.5rem;top:1rem;right:1rem;}
   .poem-line{font-size:1.15rem;line-height:2.4;}
   .line-note{font-size:.78rem;padding:0 1rem;}
   .poem-line.active+.line-note{padding:.6rem 1rem;}
-  .comparison{grid-template-columns:1fr;}
+  .comparison{grid-template-columns:1fr;gap:.8rem;}
   .pattern-grid{font-size:.75rem;}
-  .sec-title{font-size:1.25rem;}
+  .sec-title{font-size:1.1rem;letter-spacing:.12em;}
   .info-grid{grid-template-columns:1fr;}
-  .analysis-block{padding-left:1rem;}
+  .analysis-block{padding-left:.8rem;}
+  .video-grid{gap:.8rem;}
+  .video-card .v-meta{padding:.6rem .8rem .8rem;}
+  .quote-block{padding:1.2rem 1.2rem 1.2rem 1.6rem;font-size:.8rem;margin:1.2rem 0;}
+  .footer{padding:2rem 1rem;font-size:.65rem;}
+  .pattern-box{padding:1rem;}
+  .comp-card{padding:1rem;}
+  .tool-btn{font-size:.72rem;padding:.3rem .75rem;min-height:44px;}
+  .analysis-block{padding-left:.8rem;}
+  .analysis-block h4{font-size:.85rem;}
+  .analysis-block p,.analysis-block li{font-size:.78rem;line-height:1.8;}
+}
+@media(max-width:480px){
+  .hero{padding:2rem .8rem 2rem;}
+  .hero-title{font-size:1.8rem;}
+  .hero-title .sub{font-size:1.4rem;}
+  .hero-verse{font-size:.85rem;}
+  .hero-badge{font-size:.6rem;}
+  .poem-card{padding:2rem .8rem 1.5rem;}
+  .poem-line{font-size:1rem;line-height:2;}
+  .sec-title{font-size:1rem;}
+  .pattern-grid{font-size:.7rem;min-width:360px;}
+  .quote-block{font-size:.75rem;padding:1rem 1rem 1rem 1.4rem;}
+  .poem-footnote{font-size:.7rem;gap:1rem;}
+  .tool-btn{font-size:.65rem;padding:.25rem .6rem;min-height:40px;}
 }
 /* ═══════════════════════════ MINI-APPS ═══════════════════════════ */
 .mp-btn{
@@ -507,10 +537,45 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .pz-char.ze{color:var(--red-seal);}
 
 @media(max-width:600px){
-  .mp-home{grid-template-columns:1fr;padding:1rem;}
-  .mp-btn{bottom:.8rem;left:.8rem;width:46px;height:46px;}
-  .mp-btn .mp-icon{font-size:1.1rem;}
-  .game-board{height:320px;}
+  .mp-home{grid-template-columns:1fr;padding:.8rem;}
+  .mp-btn{bottom:.8rem;left:.8rem;width:48px;height:48px;}
+  .mp-btn .mp-icon{font-size:1.2rem;}
+  .game-board{height:300px;}
+  .mp-header{padding:.6rem .8rem;}
+  .mp-title{font-size:.95rem;}
+  .mp-title .mp-sub{display:block;margin-left:0;font-size:.6rem;}
+  .mp-back{width:40px;height:40px;}
+  .mp-app{padding:1.2rem .8rem;}
+  .mp-app .aicon{font-size:1.8rem;}
+  .mp-app .aname{font-size:.85rem;}
+  .mp-view{padding:.6rem .8rem 1.5rem;}
+  .cipu-tab{font-size:.7rem;padding:.4rem .3rem;}
+  .cipu-entry .e-title{font-size:.8rem;}
+  .cipu-entry .e-body{font-size:.72rem;}
+  .game-board{height:280px;}
+  .game-btn{padding:.5rem 1rem;font-size:.75rem;min-height:44px;display:flex;align-items:center;gap:.3rem;}
+  .game-ctrl{gap:.4rem;}
+  .game-tip{font-size:.65rem;}
+  .game-overlay .big{font-size:1.5rem;}
+  .game-overlay .sub{font-size:.7rem;}
+  .pz-input{font-size:.95rem;min-height:70px;}
+  .pz-result{font-size:.95rem;padding:.8rem;}
+  .pz-result .pz-tag{font-size:.35rem;}
+}
+@media(max-width:480px){
+  .game-board{height:240px;}
+  .game-note{width:28px;height:28px;}
+  .game-btn{padding:.4rem .6rem;font-size:.7rem;}
+  .game-overlay .big{font-size:1.2rem;}
+  .mp-app{padding:1rem .6rem;}
+  .cipu-tab{font-size:.65rem;padding:.35rem .2rem;}
+  .cipu-entry{padding:.5rem 0;}
+  .pz-result{font-size:.85rem;}
+}
+@media(min-width:601px) and (max-width:900px){
+  .mp-home{padding:1.2rem;gap:.8rem;}
+  .mp-app{padding:1.5rem .8rem;}
+  .game-board{height:340px;}
 }
 </style>
 </head>
