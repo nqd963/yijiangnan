@@ -536,6 +536,46 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .pz-char.ping{color:#3b82f6;}
 .pz-char.ze{color:var(--red-seal);}
 
+/* ── 音乐演奏 ── */
+.music-wrap{text-align:center;max-width:500px;margin:0 auto;}
+.music-insts{display:flex;gap:4px;overflow-x:auto;padding-bottom:.3rem;scrollbar-width:none;-ms-overflow-style:none;}
+.music-insts::-webkit-scrollbar{display:none;}
+.music-inst{
+  flex-shrink:0;padding:.3rem .7rem;border-radius:100px;border:1px solid var(--border);
+  background:var(--bg-card-alt);color:var(--text-dim);cursor:pointer;
+  font-size:.72rem;font-family:inherit;transition:all .2s;letter-spacing:.05em;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.music-inst:hover{border-color:var(--gold);color:var(--gold);}
+.music-inst.active{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
+.music-info{margin:.6rem 0 .3rem;display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;}
+.music-inst-name{font-size:.9rem;font-weight:700;color:var(--gold);letter-spacing:.08em;}
+.music-inst-desc{font-size:.65rem;color:var(--text-faint);letter-spacing:.05em;}
+.music-ctrl{display:flex;gap:.4rem;justify-content:center;margin:.5rem 0;}
+.oct-btn{
+  padding:.25rem .9rem;border-radius:100px;border:1px solid var(--border);
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  font-size:.72rem;font-family:inherit;transition:all .2s;letter-spacing:.05em;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.oct-btn:hover{border-color:var(--gold);color:var(--gold);}
+.oct-btn.active{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
+.music-keys{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:.5rem 0;}
+.music-key{
+  padding:.6rem .1rem;border-radius:10px;border:1px solid var(--border);
+  background:var(--bg-card);color:var(--text);cursor:pointer;
+  font-size:.85rem;font-weight:600;text-align:center;transition:all .1s;
+  font-family:inherit;-webkit-tap-highlight-color:transparent;user-select:none;
+  position:relative;min-height:62px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;
+}
+.music-key:hover{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold-dim);}
+.music-key:active,.music-key.pressed{transform:scale(0.93);background:var(--gold-dim);border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-dim);}
+.music-key .note-letter{font-size:.5rem;color:var(--text-faint);font-weight:400;}
+.music-key.bianyin{border-style:dashed;background:var(--bg-card-alt);}
+.music-key.bianyin:active,.music-key.bianyin.pressed{background:var(--gold-dim);border-color:var(--gold);border-style:solid;}
+.music-hint{font-size:.65rem;color:var(--text-faint);margin-top:.6rem;line-height:1.6;}
+
 @media(max-width:600px){
   .mp-home{grid-template-columns:1fr;padding:.8rem;}
   .mp-btn{bottom:.8rem;left:.8rem;width:48px;height:48px;}
@@ -561,6 +601,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .pz-input{font-size:.95rem;min-height:70px;}
   .pz-result{font-size:.95rem;padding:.8rem;}
   .pz-result .pz-tag{font-size:.35rem;}
+  .music-key{font-size:.75rem;min-height:50px;padding:.4rem .1rem;}
+  .music-inst{font-size:.65rem;padding:.25rem .55rem;}
+  .music-inst-name{font-size:.8rem;}
+  .music-keys{gap:4px;}
+  .oct-btn{font-size:.65rem;padding:.2rem .6rem;}
+  .music-hint{font-size:.6rem;}
 }
 @media(max-width:480px){
   .game-board{height:240px;}
@@ -571,6 +617,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .cipu-tab{font-size:.65rem;padding:.35rem .2rem;}
   .cipu-entry{padding:.5rem 0;}
   .pz-result{font-size:.85rem;}
+  .music-key{font-size:.7rem;min-height:44px;}
+  .music-key .note-letter{font-size:.45rem;}
+  .music-inst{font-size:.6rem;padding:.2rem .45rem;}
 }
 @media(min-width:601px) and (max-width:900px){
   .mp-home{padding:1.2rem;gap:.8rem;}
@@ -966,6 +1015,11 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <div class="aname">平仄校验器</div>
       <div class="adesc">输入词句 · 即时分析平仄押韵</div>
     </div>
+    <div class="mp-app" data-view="music">
+      <span class="aicon">🎶</span>
+      <div class="aname">音乐演奏</div>
+      <div class="adesc">十种乐器 · 宫商角徵羽 · 即时演奏</div>
+    </div>
   </div>
 
   <!-- 词谱宝库 -->
@@ -1018,6 +1072,24 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     </select>
     <button class="pz-submit" id="pzSubmit">开始校验</button>
     <div class="pz-result" id="pzResult"></div>
+  </div>
+
+  <!-- 音乐演奏 -->
+  <div class="mp-view" id="viewMusic">
+    <div class="music-wrap">
+      <div class="music-insts" id="musicInsts"></div>
+      <div class="music-info">
+        <span class="music-inst-name" id="musicInstName">古琴</span>
+        <span class="music-inst-desc" id="musicInstDesc">太古遗音 · 沉静悠远</span>
+      </div>
+      <div class="music-ctrl">
+        <button class="oct-btn active" data-octave="1">中音</button>
+        <button class="oct-btn" data-octave="2">高音</button>
+        <button class="oct-btn" data-octave="0">低音</button>
+      </div>
+      <div class="music-keys" id="musicKeys"></div>
+      <div class="music-hint">点击琴弦或按键盘 D F G H J K L 演奏 · 十种乐器可选</div>
+    </div>
   </div>
 </div>
 
@@ -1184,7 +1256,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   var appCards = document.querySelectorAll('.mp-app');
   var mpViews = document.querySelectorAll('.mp-view');
   var mpTitle = document.querySelector('.mp-title');
-  var viewNames = {cipu:'词谱宝库',game:'清音阁·音游',pingze:'平仄校验器'};
+  var viewNames = {cipu:'词谱宝库',game:'清音阁·音游',pingze:'平仄校验器',music:'音乐演奏'};
 
   mpBtn.addEventListener('click', function(){
     mpOverlay.classList.add('open');
@@ -1538,6 +1610,137 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       result.className = 'pz-result show';
       result.style.color = '';
     });
+  })();
+
+  /* ── 音乐演奏 ── */
+  (function(){
+    var currentInst = 'guqin';
+    var currentOctave = 1;
+    var audioCtx = null;
+
+    var noteNames = ['宫','商','角','变徵','徵','羽','变宫'];
+    var noteFreqs = [261.63, 293.66, 329.63, 369.99, 392.00, 440.00, 493.88];
+    var noteLetters = ['C','D','E','F♯','G','A','B'];
+    var octMul = [0.5, 1, 2];
+    var keyMap = {68:0,70:1,71:2,72:3,74:4,75:5,76:6};
+
+    var insts = {
+      guqin:{n:'古琴',t:'triangle',a:0.08,r:0.8,g:0.30,d:'太古遗音 · 沉静悠远'},
+      pipa:{n:'琵琶',t:'square',a:0.005,r:0.25,g:0.15,d:'大珠小珠落玉盘'},
+      dizi:{n:'笛子',t:'sine',a:0.05,r:0.35,g:0.22,d:'清越悠远 · 穿云裂石'},
+      xiao:{n:'箫',t:'sine',a:0.2,r:0.6,g:0.25,d:'幽咽沉静 · 如泣如诉'},
+      guzheng:{n:'古筝',t:'triangle',a:0.02,r:0.6,g:0.22,d:'行云流水 · 珠落玉盘'},
+      bianzhong:{n:'编钟',t:'sine',a:0.005,r:1.0,g:0.18,d:'金声玉振 · 庙堂之音'},
+      erhu:{n:'二胡',t:'sawtooth',a:0.1,r:0.5,g:0.15,d:'如泣如诉 · 缠绵悱恻'},
+      xun:{n:'埙',t:'sine',a:0.25,r:0.5,g:0.28,d:'苍凉古朴 · 旷古悠思'},
+      yangqin:{n:'扬琴',t:'square',a:0.005,r:0.2,g:0.12,d:'叮咚山泉 · 清脆悦耳'},
+      se:{n:'瑟',t:'triangle',a:0.03,r:0.6,g:0.20,d:'弦歌雅意 · 古韵绵长'}
+    };
+
+    function initAudio(){
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playNote(idx){
+      initAudio();
+      var inst = insts[currentInst];
+      var freq = noteFreqs[idx] * octMul[currentOctave];
+      var now = audioCtx.currentTime;
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = inst.t;
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(inst.g, now + inst.a);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + inst.a + inst.r);
+      // Erhu vibrato
+      if(inst.t === 'sawtooth'){
+        var vib = audioCtx.createOscillator();
+        var vg = audioCtx.createGain();
+        vib.connect(vg); vg.connect(osc.frequency);
+        vib.frequency.value = 5; vg.gain.value = 3;
+        vib.start(now); vib.stop(now + inst.r);
+      }
+      // Dizi shimmer
+      if(inst.t === 'sine' && inst.a < 0.1){
+        osc.detune.setValueAtTime(5, now);
+        osc.detune.linearRampToValueAtTime(0, now + 0.2);
+      }
+      osc.start(now); osc.stop(now + inst.a + inst.r + 0.05);
+    }
+
+    function renderKeys(){
+      var c = document.getElementById('musicKeys');
+      c.innerHTML = '';
+      for(var ni=0;ni<7;ni++){
+        var key = document.createElement('button');
+        key.className = 'music-key' + (ni===3||ni===6?' bianyin':'');
+        key.innerHTML = '<span>' + noteNames[ni] + '</span><span class="note-letter">' + noteLetters[ni] + ' ' + Math.round(noteFreqs[ni]*octMul[currentOctave]) + 'Hz</span>';
+        (function(idx){
+          key.addEventListener('click', function(){
+            playNote(idx);
+            this.classList.add('pressed');
+            var s=this; setTimeout(function(){ s.classList.remove('pressed'); }, 150);
+          });
+        })(ni);
+        c.appendChild(key);
+      }
+    }
+    renderKeys();
+
+    // Keyboard trigger
+    document.addEventListener('keydown', function(e){
+      if(e.keyCode in keyMap){
+        e.preventDefault();
+        var idx = keyMap[e.keyCode];
+        playNote(idx);
+        var ks = document.getElementById('musicKeys').children;
+        if(ks[idx]){ ks[idx].classList.add('pressed'); setTimeout(function(){ ks[idx].classList.remove('pressed'); }, 150); }
+      }
+    });
+
+    // Instrument selector
+    var instContainer = document.getElementById('musicInsts');
+    var instKeys = Object.keys(insts);
+    for(var ii=0;ii<instKeys.length;ii++){
+      (function(key){
+        var btn = document.createElement('button');
+        btn.className = 'music-inst' + (ii===0?' active':'');
+        btn.textContent = insts[key].n;
+        btn.addEventListener('click', function(){
+          var all = instContainer.querySelectorAll('.music-inst');
+          for(var ai=0;ai<all.length;ai++) all[ai].classList.remove('active');
+          this.classList.add('active');
+          currentInst = key;
+          document.getElementById('musicInstName').textContent = insts[key].n;
+          document.getElementById('musicInstDesc').textContent = insts[key].d;
+        });
+        instContainer.appendChild(btn);
+      })(instKeys[ii]);
+    }
+
+    // Octave selector
+    var octBtns = document.querySelectorAll('.oct-btn');
+    for(var oi=0;oi<octBtns.length;oi++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          var all = document.querySelectorAll('.oct-btn');
+          for(var ai=0;ai<all.length;ai++) all[ai].classList.remove('active');
+          btn.classList.add('active');
+          currentOctave = idx;
+          renderKeys();
+        });
+      })(octBtns[oi], oi);
+    }
+
+    // Suspend audio when view closes
+    var musicView = document.getElementById('viewMusic');
+    var obs = new MutationObserver(function(){
+      if(!musicView.classList.contains('active') && audioCtx) audioCtx.suspend();
+    });
+    obs.observe(musicView, {attributes:true,attributeFilter:['class']});
   })();
 })();
 </script>
