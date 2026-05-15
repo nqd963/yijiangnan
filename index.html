@@ -1690,16 +1690,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
   mpOverlay.addEventListener('click', function(e){
     if(e.target === mpOverlay) {
-      // If a view is active, go back to home grid instead of closing
+      // Only the ← back button (mpBack) can close a view and return to home
       var av = document.querySelector('.mp-view.active');
-      if(av) {
-        av.classList.remove('active');
-        mpHome.style.display = 'grid';
-        mpBack.innerHTML = '\u2190';
-        mpTitle.innerHTML = '填词小工具 <span class="mp-sub">词学 · 格律 · 音韵</span>';
-      } else {
+      if(!av) {
         closeMp();
       }
+      // If a view is active, clicking the overlay background does nothing
     }
   });
 
@@ -2194,7 +2190,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         var el = document.getElementById(SCREENS[i]);
         if(el) el.style.display = (SCREENS[i]===("sg"+name.charAt(0).toUpperCase()+name.slice(1))) ? "" : "none";
       }
-      G.screen = name;
+      if(G) G.screen = name;
     }
 
     /* ══════ 地图渲染 ══════ */
