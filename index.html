@@ -7,6 +7,10 @@
 <meta name="description" content="赏《忆江南·清秋晚》，学词律格律，在线校验平仄，一键填词创作。13种古风乐器自动演奏，实时音阶可视化。最美宋词交互体验。">
 <meta name="keywords" content="宋词,忆江南,清秋晚,词律,平仄校验器,填词工具,词谱宝库,古风音乐,宋词赏析,在线填词,格律校验">
 <meta name="author" content="nqd963">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="version" content="v2.0.1-fix-gBgmLoopTimer-20260515">
 <link rel="canonical" href="https://nqd963.github.io/yijiangnan/">
 
 <!-- Open Graph -->
@@ -760,27 +764,27 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     0%,100%{box-shadow: inset 0 0 120px rgba(200,40,40,0.2);}
     50%{box-shadow: inset 0 0 160px rgba(200,40,40,0.35);}
   }
-.sg-wrap{max-width:500px;margin:0 auto;min-height:450px;}
-.sg-screen{animation:sgFade .3s ease;}
-@keyframes sgFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.sg-wrap{max-width:720px;margin:0 auto;min-height:450px;}
+.sg-screen{animation:sgFade .35s ease forwards;}
+@keyframes sgFade{from{opacity:0;transform:translateY(8px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 /* ── 通用 ── */
 .sg-btn{
-  padding:.5rem 1.2rem;border:1px solid var(--border);border-radius:100px;
-  background:transparent;color:var(--text-dim);cursor:pointer;font-size:.8rem;
+  padding:.6rem 1.4rem;border:1px solid var(--border);border-radius:100px;
+  background:transparent;color:var(--text-dim);cursor:pointer;font-size:.9rem;
   font-family:inherit;transition:all .2s;letter-spacing:.05em;
   -webkit-tap-highlight-color:transparent;user-select:none;
 }
 .sg-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
 .sg-btn-primary{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
 .sg-btn-primary:hover{opacity:.85;color:#fff;}
-.sg-btn-small{padding:.3rem .8rem;font-size:.7rem;}
+.sg-btn-small{padding:.35rem 1rem;font-size:.8rem;}
 
 /* ── 标题 ── */
-.sg-title-icon{font-size:3rem;text-align:center;padding-top:2rem;}
-.sg-title-text{font-size:2rem;font-weight:900;text-align:center;color:var(--gold);letter-spacing:.15em;margin-top:.5rem;}
-.sg-title-sub{font-size:.8rem;text-align:center;color:var(--text-faint);letter-spacing:.3em;margin-top:.2rem;}
-.sg-title-desc{font-size:.75rem;text-align:center;color:var(--text-dim);line-height:1.8;margin:1rem 0 1.5rem;padding:0 1rem;}
+.sg-title-icon{font-size:3.5rem;text-align:center;padding-top:2.5rem;}
+.sg-title-text{font-size:2.4rem;font-weight:900;text-align:center;color:var(--gold);letter-spacing:.15em;margin-top:.5rem;}
+.sg-title-sub{font-size:.9rem;text-align:center;color:var(--text-faint);letter-spacing:.3em;margin-top:.2rem;}
+.sg-title-desc{font-size:.85rem;text-align:center;color:var(--text-dim);line-height:2;margin:1rem 0 2rem;padding:0 1.5rem;}
 
 /* ── 角色选择 ── */
 .sg-cs-title{font-size:1.2rem;font-weight:700;text-align:center;color:var(--gold);padding:1.5rem 0 1rem;}
@@ -798,28 +802,42 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-cs-card .sg-cs-char-cards{font-size:.55rem;color:var(--text-dim);}
 
 /* ── 地图 ── */
-.sg-map-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;font-size:.85rem;color:var(--text-dim);}
-.sg-map{display:flex;flex-direction:column;align-items:center;gap:6px;padding:.5rem 0;}
+.sg-map-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;font-size:1rem;color:var(--text-dim);}
+.sg-map{display:flex;flex-direction:column;align-items:center;gap:8px;padding:.5rem 0;}
 .sg-map-row{display:flex;gap:12px;justify-content:center;}
 .sg-map-node{
-  width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;cursor:pointer;transition:all .2s;
+  width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;cursor:pointer;transition:all .2s;
   border:2px solid var(--border);background:var(--bg-card-alt);
   position:relative;
 }
-.sg-map-node:hover{transform:scale(1.1);border-color:var(--gold);}
+.sg-map-node:hover{transform:scale(1.12);border-color:var(--gold);}
 .sg-map-node.completed{opacity:.4;border-color:var(--text-faint);cursor:default;pointer-events:none;}
-.sg-map-node.current{border-color:var(--gold);box-shadow:0 0 12px rgba(201,168,76,.4);}
-.sg-map-node.current:hover{transform:scale(1.15)}
-.sg-map-node.reachable{border-color:var(--gold);border-style:dashed;opacity:.85;}
-.sg-map-node.reachable:hover{transform:scale(1.1);border-style:solid;border-color:var(--gold);background:var(--gold-dim);}
-.sg-map-node .sg-node-label{position:absolute;bottom:-16px;font-size:.5rem;color:var(--text-faint);white-space:nowrap;}
+.sg-map-node.current{border-color:var(--gold);box-shadow:0 0 16px rgba(201,168,76,.5);}
+.sg-map-node.current:hover{transform:scale(1.18)}
+.sg-map-node.reachable{border-color:var(--gold);border-style:dashed;opacity:.9;}
+.sg-map-node.reachable:hover{transform:scale(1.12);border-style:solid;border-color:var(--gold);background:var(--gold-dim);}
+.sg-map-node .sg-node-label{position:absolute;bottom:-18px;font-size:.6rem;color:var(--text-faint);white-space:nowrap;}
 .sg-map-node.boss{border-color:var(--red-seal);}
-.sg-map-node.boss.current{box-shadow:0 0 12px rgba(194,58,43,.4);}
+.sg-map-node.boss.current{box-shadow:0 0 16px rgba(194,58,43,.5);}
 .sg-map-node.elite{border-color:#a855f7;}
-.sg-map-node.elite.current{box-shadow:0 0 12px rgba(168,85,247,.4);}
+.sg-map-node.elite.current{box-shadow:0 0 16px rgba(168,85,247,.5);}
 .sg-map-connector{width:2px;height:12px;background:var(--border);}
 .sg-map-connector.active{background:var(--gold);}
+/* 地图：网格布局，保证各层节点对齐 */
+.sg-map-floor{display:grid;gap:6px;justify-items:center;align-items:center;padding:4px 2px;}
+.sg-map-floor-active{background:rgba(201,168,76,0.08);border-radius:8px;}
+/* SVG 网状连接线 — 覆盖在地图上 */
+.sg-mesh-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible;}
+.sg-mesh-svg line{stroke-linecap:round;}
+/* 不可到达节点 */
+.sg-node-blocked{opacity:0.3;border-color:var(--text-faint);cursor:default;pointer-events:none;}
+/* 空占位节点 */
+.sg-node-empty{visibility:hidden;border-color:transparent;pointer-events:none;}
+/* 已走路径节点 */
+.sg-node-path{border-color:var(--gold);box-shadow:0 0 8px rgba(201,168,76,.3);}
+.sg-node-avail{animation:sgNodePulse 2s ease-in-out infinite;border-color:var(--gold);}
+@keyframes sgNodePulse{0%,100%{box-shadow:0 0 0 rgba(201,168,76,0.4)}50%{box-shadow:0 0 10px rgba(201,168,76,0.7)}}
 
 /* ── 战斗 ── */
 .sg-battle-bg{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%, rgba(180,120,60,0.08) 0%, transparent 70%);pointer-events:none;z-index:-1;}
@@ -1004,12 +1022,31 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-deck-grid .sg-card:hover{transform:none;}
 
 /* 响应式 */
+@media(max-width:768px){
+  #sgBattle{padding:0.3rem!important}
+  #sgHand .sg-card{min-width:70px;padding:4px;font-size:0.6rem}
+  .sg-card-cost{width:18px;height:18px;font-size:0.6rem}
+  .sg-card-name{font-size:0.6rem}
+  .sg-card-desc{font-size:0.55rem}
+  .sg-card-type{font-size:0.5rem}
+  #sgPlayerArea{flex-direction:row;flex-wrap:wrap;gap:0.2rem}
+  #sgEnemyArea{padding:0.3rem}
+  .sg-btn{font-size:0.65rem;padding:0.3rem 0.6rem}
+  .sg-rest-title{font-size:1.2rem}
+  .sg-enemy-portrait{width:60px;height:60px;font-size:1.4rem}
+  .sg-player-portrait{width:50px;height:50px;font-size:1.2rem}
+  .sg-shop-items{grid-template-columns:repeat(2,1fr)}
+  #sgMap{padding:0.3rem}
+  .sg-map-node{width:38px;height:38px;font-size:.85rem;min-width:38px;}
+  .sg-reward-cards{flex-wrap:wrap}
+  .sg-reward-cards .sg-card{min-width:90px}
+  #sgPillsArea button{font-size:0.55rem!important;padding:0.15rem 0.3rem!important}
+}
 @media(max-width:480px){
   .sg-card{width:95px;padding:.4rem .3rem;}
   .sg-card .sg-card-name{font-size:.58rem;}
   .sg-card .sg-card-desc{font-size:.45rem;}
-  .sg-map-node{width:40px;height:40px;font-size:.9rem;}
-  .sg-map-node .sg-node-label{font-size:.45rem;bottom:-14px;}
+  .sg-map-node{width:34px;height:34px;font-size:.8rem;}
   .sg-status{font-size:.6rem;gap:.35rem;}
   .sg-status-item{padding:.15rem .4rem;}
   .sg-title-text{font-size:1.6rem;}
@@ -1017,39 +1054,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .sg-enemy{min-width:140px;padding:.6rem 1rem;}
   .sg-enemy-portrait{font-size:1.8rem;}
   .sg-shop-item{padding:.4rem .6rem;flex-wrap:wrap;}
-
-  /* 移动端优化 */
-  @media (max-width: 768px) {
-    #sgBattle{padding:0.3rem!important}
-    #sgHand .sg-card{min-width:70px;padding:4px;font-size:0.6rem}
-    .sg-card-cost{width:18px;height:18px;font-size:0.6rem}
-    .sg-card-name{font-size:0.6rem}
-    .sg-card-desc{font-size:0.55rem}
-    .sg-card-type{font-size:0.5rem}
-    #sgPlayerArea{flex-direction:row;flex-wrap:wrap;gap:0.2rem}
-    #sgEnemyArea{padding:0.3rem}
-    .sg-btn{font-size:0.65rem;padding:0.3rem 0.6rem}
-    .sg-rest-title{font-size:1.2rem}
-    .sg-enemy-portrait{width:60px;height:60px;font-size:1.4rem}
-    .sg-player-portrait{width:50px;height:50px;font-size:1.2rem}
-    .sg-shop-items{grid-template-columns:repeat(2,1fr)}
-    #sgMap{padding:0.3rem}
-    .sg-map-column{gap:0.3rem}
-    .sg-map-node{padding:0.3rem 0.5rem;font-size:0.6rem;min-width:50px}
-    .sg-reward-cards{flex-wrap:wrap}
-    .sg-reward-cards .sg-card{min-width:90px}
-    #sgPillsArea button{font-size:0.55rem!important;padding:0.15rem 0.3rem!important}
-  }
-  @media (max-width: 480px) {
-    #sgHand .sg-card{min-width:60px;padding:3px;font-size:0.5rem}
-    .sg-card-cost{width:15px;height:15px;font-size:0.5rem}
-    #sgPlayerArea{flex-direction:column}
-    .sg-enemy-portrait{width:50px;height:50px;font-size:1.2rem}
-    .sg-player-portrait{width:40px;height:40px;font-size:1rem}
-    .sg-shop-items{grid-template-columns:1fr}
-  }
+  #sgHand .sg-card{min-width:60px;padding:3px;font-size:0.5rem}
+  .sg-card-cost{width:15px;height:15px;font-size:0.5rem}
+  #sgPlayerArea{flex-direction:column}
+  .sg-enemy-portrait{width:50px;height:50px;font-size:1.2rem}
+  .sg-player-portrait{width:40px;height:40px;font-size:1rem}
+  .sg-shop-items{grid-template-columns:1fr}
 }
-</style>
+
+  @keyframes sg-particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+.sg-fade-out{animation:sgFadeOut .25s ease forwards;}
+@keyframes sgFadeOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-5px) scale(0.98)}}</style>
 </head>
 <body>
 
@@ -1613,6 +1628,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
             <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span> 🃏<span id="sgDrawPile">0</span> 📄<span id="sgDiscardPile">0</span></div>
             <div class="sg-status-item">🔄 <span id="sgTurnNum">0</span></div>
           </div>
+          <div id="sgPillsArea" style="text-align:center;padding:0.2rem 0;min-height:1.8rem;"></div>
           <div class="sg-hand" id="sgHand"></div>
           <div class="sg-turn-ctrl">
             <button class="sg-btn" id="sgEndTurnBtn">结束回合</button>
@@ -2294,7 +2310,6 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       liuzhou:{name:"六州歌头",cost:3,type:"attack",dmg:28,exhaust:true,desc:"少年侠气 · 28伤消耗",rarity:"rare"},
       yiqine:{name:"忆秦娥",cost:2,type:"attack",dmg:18,exhaust:true,debuff:"vuln",val:2,debuff2:"weak",val2:2,desc:"西风残照汉家陵阙 · 18伤·易伤2·虚弱2·消耗",rarity:"rare"},
       yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"},
-          // === 通用新增 ===,cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"},
       // === 通用新增 ===
       liuyachao:{name:"六幺令",cost:1,type:"attack",dmg:5,hits:3,desc:"绿阴春尽 · 5伤害×3",rarity:"common"},
       shizhouman:{name:"十洲慢",cost:1,type:"skill",block:6,desc:"十洲云水 · 6格挡",rarity:"common"},
@@ -2377,56 +2392,44 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
     var ENEMIES = {
       act1_reg:[
-        { id:'lichou', name:'离愁', baseHp:14, hpGain:5, baseDmg:5, dmgGain:1, desc:'剪不断，理还乱',
-          intentCycle:['attack_d','attack_d'] },
-        { id:'qiusi', name:'秋思', baseHp:16, hpGain:5, baseDmg:5, dmgGain:1, desc:'古道西风瘦马',
-          intentCycle:['vuln_1','attack_d'] },
-        { id:'yeyu', name:'夜雨', baseHp:12, hpGain:4, baseDmg:4, dmgGain:1, desc:'巴山夜雨涨秋池',
-          intentCycle:['attack_d','attack_d','weak_1'] },
-        { id:'guhong', name:'孤鸿', baseHp:18, hpGain:6, baseDmg:4, dmgGain:1, desc:'缥缈孤鸿影',
-          intentCycle:['attack_2x','attack_d','attack_2x'] },
-        { id:'zhuangzhi', name:'壮志', baseHp:20, hpGain:6, baseDmg:9, dmgGain:2, desc:'壮志饥餐胡虏肉',
-          intentCycle:['attack_big','defend','attack_big'] }
+        { id:"lichou", name:"离愁", baseHp:14, hpGain:5, baseDmg:5, dmgGain:1, desc:"剪不断，理还乱", intentCycle:["attack_d","attack_d"] },
+        { id:"qiusi", name:"秋思", baseHp:16, hpGain:5, baseDmg:5, dmgGain:1, desc:"古道西风瘦马", intentCycle:["vuln_1","attack_d"] },
+        { id:"yeyu", name:"夜雨", baseHp:12, hpGain:4, baseDmg:4, dmgGain:1, desc:"巴山夜雨涨秋池", intentCycle:["attack_d","attack_d","weak_1"] },
+        { id:"guhong", name:"孤鸿", baseHp:18, hpGain:6, baseDmg:4, dmgGain:1, desc:"缥缈孤鸿影", intentCycle:["attack_2x","attack_d","attack_2x"] },
+        { id:"zhuangzhi", name:"壮志", baseHp:20, hpGain:6, baseDmg:9, dmgGain:2, desc:"壮志饥餐胡虏肉", intentCycle:["attack_big","defend","attack_big"] },
+        { id:"chouchang", name:"惆怅", baseHp:15, hpGain:5, baseDmg:4, dmgGain:1, desc:"此情可待成追忆", intentCycle:["attack_d","attack_2x","attack_d"], specialAbility:"curse" },
+        { id:"piaobo", name:"漂泊", baseHp:20, hpGain:6, baseDmg:6, dmgGain:1, desc:"萍水相逢尽是他乡客", intentCycle:["attack_d","defend","attack_2x"], specialAbility:"regen" }
       ],
       act2_reg:[
-        { id:'saihong', name:'塞鸿', baseHp:20, hpGain:6, baseDmg:6, dmgGain:1, desc:'塞鸿秋影',
-          intentCycle:['defend','attack_d','defend','attack_d'] },
-        { id:'muyu', name:'暮雨', baseHp:18, hpGain:5, baseDmg:4, dmgGain:1, desc:'暮雨潇潇',
-          intentCycle:['poison_4','attack_d','poison_3'] },
-        { id:'changfeng', name:'长风', baseHp:22, hpGain:7, baseDmg:6, dmgGain:1, desc:'长风万里送秋雁',
-          intentCycle:['attack_aoe','attack_d','attack_d'] },
-        { id:'feixu', name:'飞絮', baseHp:16, hpGain:5, baseDmg:3, dmgGain:1, desc:'飞絮满天涯',
-          intentCycle:['attack_3x','attack_d','attack_2x','defend'] },
-        { id:'zhengyan', name:'征雁', baseHp:24, hpGain:7, baseDmg:10, dmgGain:2, desc:'征雁南飞',
-          intentCycle:['attack_big','defend','defend','attack_big'] }
+        { id:"saihong", name:"塞鸿", baseHp:20, hpGain:6, baseDmg:6, dmgGain:1, desc:"塞鸿秋影", intentCycle:["defend","attack_d","defend","attack_d"] },
+        { id:"muyu", name:"暮雨", baseHp:18, hpGain:5, baseDmg:4, dmgGain:1, desc:"暮雨潇潇", intentCycle:["poison_4","attack_d","poison_3"] },
+        { id:"changfeng", name:"长风", baseHp:22, hpGain:7, baseDmg:6, dmgGain:1, desc:"长风万里送秋雁", intentCycle:["attack_aoe","attack_d","attack_d"] },
+        { id:"feixu", name:"飞絮", baseHp:16, hpGain:5, baseDmg:3, dmgGain:1, desc:"飞絮满天涯", intentCycle:["attack_3x","attack_d","attack_2x","defend"] },
+        { id:"zhengyan", name:"征雁", baseHp:24, hpGain:7, baseDmg:10, dmgGain:2, desc:"征雁南飞", intentCycle:["attack_big","defend","defend","attack_big"] },
+        { id:"kuangfeng", name:"狂风", baseHp:20, hpGain:6, baseDmg:5, dmgGain:1, desc:"风急天高猿啸哀", intentCycle:["attack_3x","attack_3x","attack_3x"], specialAbility:"enrage" },
+        { id:"canhun", name:"残魂", baseHp:25, hpGain:7, baseDmg:7, dmgGain:2, desc:"千古兴亡多少事", intentCycle:["attack_d","heal","attack_d","heal"], specialAbility:"regen" }
       ],
       act3_reg:[
-        { id:'xingshuang', name:'星霜', baseHp:26, hpGain:7, baseDmg:7, dmgGain:2, desc:'星霜几度',
-          intentCycle:['buff_str','attack_d','attack_d','attack_big'] },
-        { id:'fengchen', name:'风尘', baseHp:24, hpGain:6, baseDmg:5, dmgGain:1, desc:'风尘荏苒',
-          intentCycle:['vuln_2','attack_d','weak_2','attack_d'] },
-        { id:'canghai', name:'沧海', baseHp:30, hpGain:8, baseDmg:12, dmgGain:3, desc:'沧海月明珠有泪',
-          intentCycle:['attack_big','defend','attack_big'] },
-        { id:'qingyun', name:'青云', baseHp:22, hpGain:6, baseDmg:5, dmgGain:1, desc:'青云未可期',
-          intentCycle:['attack_3x','attack_2x','attack_3x'] },
-        { id:'fusheng', name:'浮生', baseHp:28, hpGain:7, baseDmg:6, dmgGain:1, desc:'浮生若梦',
-          intentCycle:['attack_d','heal','attack_d','defend'] }
+        { id:"xingshuang", name:"星霜", baseHp:26, hpGain:7, baseDmg:7, dmgGain:2, desc:"星霜几度", intentCycle:["buff_str","attack_d","attack_d","attack_big"] },
+        { id:"fengchen", name:"风尘", baseHp:24, hpGain:6, baseDmg:5, dmgGain:1, desc:"风尘荏苒", intentCycle:["vuln_2","attack_d","weak_2","attack_d"] },
+        { id:"canghai", name:"沧海", baseHp:30, hpGain:8, baseDmg:12, dmgGain:3, desc:"沧海月明珠有泪", intentCycle:["attack_big","defend","attack_big"] },
+        { id:"qingyun", name:"青云", baseHp:22, hpGain:6, baseDmg:5, dmgGain:1, desc:"青云未可期", intentCycle:["attack_3x","attack_2x","attack_3x"] },
+        { id:"fusheng", name:"浮生", baseHp:28, hpGain:7, baseDmg:6, dmgGain:1, desc:"浮生若梦", intentCycle:["attack_d","heal","attack_d","defend"] },
+        { id:"mingshi", name:"冥士", baseHp:28, hpGain:8, baseDmg:9, dmgGain:2, desc:"幽冥之中", intentCycle:["attack_big","curse","attack_big","attack_d"], specialAbility:"curse" },
+        { id:"zhanshen", name:"战神", baseHp:35, hpGain:9, baseDmg:12, dmgGain:3, desc:"一将功成万骨枯", intentCycle:["buff_str","attack_big","attack_big","attack_aoe"], specialAbility:"enrage" },
+        { id:"wushuang", name:"无双", baseHp:30, hpGain:8, baseDmg:8, dmgGain:2, desc:"天下英雄谁敌手", intentCycle:["attack_2x","attack_2x","attack_3x","attack_big"], specialAbility:"summon" }
       ],
       elites:[
-        { id:'cimo', name:'词魔', baseHp:34, hpGain:10, baseDmg:9, dmgGain:2, desc:'词中魔障',
-          intentCycle:['attack_big','attack_d','attack_big','attack_2x'] },
-        { id:'shihun', name:'诗魂', baseHp:32, hpGain:9, baseDmg:7, dmgGain:2, desc:'千古诗魂',
-          intentCycle:['buff_str','attack_d','buff_str','attack_big'] },
-        { id:'wenqu', name:'文曲', baseHp:38, hpGain:11, baseDmg:12, dmgGain:3, desc:'文曲星君',
-          intentCycle:['attack_aoe','defend','attack_aoe','attack_big'] }
+        { id:"cimo", name:"词魔", baseHp:34, hpGain:10, baseDmg:9, dmgGain:2, desc:"词中魔障", intentCycle:["attack_big","attack_d","attack_big","attack_2x"], specialAbility:"enrage" },
+        { id:"shihun", name:"诗魂", baseHp:32, hpGain:9, baseDmg:7, dmgGain:2, desc:"千古诗魂", intentCycle:["buff_str","attack_d","buff_str","attack_big"], specialAbility:"regen" },
+        { id:"wenqu", name:"文曲", baseHp:38, hpGain:11, baseDmg:12, dmgGain:3, desc:"文曲星君", intentCycle:["attack_aoe","defend","attack_aoe","attack_big"], specialAbility:"summon" },
+        { id:"shuimo", name:"水墨", baseHp:35, hpGain:10, baseDmg:10, dmgGain:3, desc:"水墨丹青", intentCycle:["attack_d","defend","attack_big","buff_str","attack_d"], specialAbility:"curse" },
+        { id:"bihun", name:"笔魂", baseHp:36, hpGain:11, baseDmg:8, dmgGain:2, desc:"笔下有千年", intentCycle:["attack_3x","defend","attack_3x","heal"], specialAbility:"regen" }
       ],
       bosses:[
-        { id:'exam', name:'科举试', baseHp:50, hpGain:12, baseDmg:13, dmgGain:3, desc:'十年寒窗·殿试之试',
-          intentCycle:['attack_aoe','defend','attack_big','defend','attack_aoe'] },
-        { id:'master', name:'大宗师', baseHp:55, hpGain:14, baseDmg:11, dmgGain:3, desc:'文坛宗师·千古风流',
-          intentCycle:['attack_big','buff_str','attack_big','vuln_2','attack_aoe'] },
-        { id:'saint', name:'诗圣', baseHp:60, hpGain:16, baseDmg:16, dmgGain:4, desc:'诗中之圣·光耀千古',
-          intentCycle:['attack_big','attack_aoe','attack_big','heal','attack_big'] }
+        { id:"exam", name:"科举试", baseHp:50, hpGain:12, baseDmg:13, dmgGain:3, desc:"十年寒窗·殿试之试", intentCycle:["attack_aoe","defend","attack_big","defend","attack_aoe"], specialAbility:"curse" },
+        { id:"master", name:"大宗师", baseHp:55, hpGain:14, baseDmg:11, dmgGain:3, desc:"文坛宗师·千古风流", intentCycle:["attack_big","buff_str","attack_big","vuln_2","attack_aoe"], specialAbility:"enrage" },
+        { id:"saint", name:"诗圣", baseHp:60, hpGain:16, baseDmg:16, dmgGain:4, desc:"诗中之圣·光耀千古", intentCycle:["attack_big","attack_aoe","attack_big","heal","attack_big"], specialAbility:"summon" }
       ]
     };
 
@@ -2466,41 +2469,77 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     /* ═══════════════════════════════════════════════════════════════════════ */
 
     var EVENTS = [
-      { id:'old_poet', title:'老诗人', desc:'一位白发苍苍的老诗人拦住你，请求你品评他的新作……',
+      { id:"old_poet", title:"老诗人", desc:"一位白发苍苍的老诗人拦住你，请求你品评他的新作……",
         choices:[
-          {text:'"意蕴深远，好诗！"', effects:{gold:20,hp:-5}, result:'老诗人欣喜若狂，赠你20金币作为酬谢。但你因违心之言，心绪不宁。-5HP'},
-          {text:'"尚需打磨……"', effects:{maxHp:5,hp:5}, result:'老诗人虚心接受，与你探讨诗道。你感到境界有所提升。最大HP+5，回复5HP'},
-          {text:'默默绕开', effects:{}, result:'你悄悄绕道而行。什么也没有发生。'}
+          {text:"意蕴深远，好诗！", effects:{gold:20,hp:-5}, result:"老诗人欣喜若狂，赠你20金币。但你因违心之言，心绪不宁。-5HP"},
+          {text:"尚需打磨……", effects:{maxHp:5,hp:5}, result:"老诗人虚心接受，与你探讨诗道。你感到境界有所提升。最大HP+5，回复5HP"},
+          {text:"默默绕开", effects:{}, result:"你悄悄绕道而行。什么也没有发生。"}
         ]},
-      { id:'ancient_tomb', title:'古墓石刻', desc:'路边发现一座古墓，墓门上刻满诗句……',
+      { id:"ancient_tomb", title:"古墓石刻", desc:"路边发现一座古墓，墓门上刻满诗句……",
         choices:[
-          {text:'推门而入', effects:{gold:30,hp:-10}, result:'你发现了一些陪葬的金币（+30金），但触发了机关。-10HP'},
-          {text:'拓印诗句', effects:{}, result:'你仔细拓下石刻上的诗句。虽然没有实际收获，但心境平和。'}, // no effect but adds a common card
-          {text:'谨慎离开', effects:{}, result:'你选择了安全。'}
+          {text:"推门而入", effects:{gold:30,hp:-10}, result:"你发现了一些陪葬的金币（+30金），但触发了机关。-10HP"},
+          {text:"拓印诗句", effects:{}, result:"你仔细拓下石刻上的诗句。虽然没有实际收获，但心境平和。"},
+          {text:"谨慎离开", effects:{}, result:"你选择了安全。"}
         ]},
-      { id:'drunk_poet', title:'醉诗人', desc:'一个醉醺醺的诗人拉着你比试酒量……',
+      { id:"drunk_poet", title:"醉诗人", desc:"一个醉醺醺的诗人拉着你比试酒量……",
         choices:[
-          {text:'一醉方休', effects:{hp:-10,gold:20}, result:'你陪他痛饮，花掉20金买酒，宿醉后-10HP'},
-          {text:'以诗会友', effects:{}, result:'你以诗代酒，与他唱和。他大为折服，赠你一首诗。获得1张随机非基础卡'},
-          {text:'婉言谢绝', effects:{}, result:'你礼貌地推辞了。'}
+          {text:"一醉方休", effects:{hp:-10,gold:20}, result:"你陪他痛饮，花掉20金买酒，宿醉后-10HP"},
+          {text:"以诗会友", effects:{}, result:"你以诗代酒，与他唱和。他大为折服，赠你一首诗。获得一张随机非基础卡"},
+          {text:"婉言谢绝", effects:{}, result:"你礼貌地推辞了。"}
         ]},
-      { id:'book_girl', title:'卖书女', desc:'一个清秀的女子在路边摆摊卖书……',
+      { id:"book_girl", title:"卖书女", desc:"一个清秀的女子在路边摆摊卖书……",
         choices:[
-          {text:'买下古籍', effects:{gold:-15}, result:'你花15金币买了一本古籍。虽然看不懂，但感觉很有价值。获得1张随机稀有卡'},
-          {text:'帮忙吆喝', effects:{gold:10}, result:'你帮她招揽顾客，她感激地送你10金币。'},
-          {text:'翻翻就走', effects:{}, result:'你随手翻了几页，放下离开。'}
+          {text:"买下古籍", effects:{gold:-15}, result:"你花15金币买了一本古籍。虽然看不懂，但感觉很有价值。获得一张随机稀有卡"},
+          {text:"帮忙吆喝", effects:{gold:10}, result:"你帮她招揽顾客，她感激地送你10金币。"},
+          {text:"翻翻就走", effects:{}, result:"你随手翻了几页，放下离开。"}
         ]},
-      { id:'meditation', title:'静思崖', desc:'一处悬崖，云雾缭绕，是静思修行的好地方……',
+      { id:"meditation", title:"静思崖", desc:"一处悬崖，云雾缭绕，是静思修行的好地方……",
         choices:[
-          {text:'打坐冥想', effects:{maxHp:10,hp:-5}, result:'你静坐一日，感悟天地之道。最大HP+10，但因饥寒-5HP'},
-          {text:'练习剑法', effects:{}, result:'你练了一通剑法，身体舒畅。获得1张随机攻击牌'},
-          {text:'继续赶路', effects:{hp:5}, result:'短暂休息后继续上路。回复5HP'}
+          {text:"打坐冥想", effects:{maxHp:10,hp:-5}, result:"你静坐一日，感悟天地之道。最大HP+10，但因饥寒-5HP"},
+          {text:"练习剑法", effects:{}, result:"你练了一通剑法，身体舒畅。获得一张随机攻击牌"},
+          {text:"继续赶路", effects:{hp:5}, result:"短暂休息后继续上路。回复5HP"}
         ]},
-      { id:'treasure_goblin', title:'宝箱怪', desc:'一个华丽的宝箱出现在路中央，箱盖微微颤动……',
+      { id:"treasure_goblin", title:"宝箱怪", desc:"一个华丽的宝箱出现在路中央，箱盖微微颤动……",
         choices:[
-          {text:'打开宝箱', effects:{gold:40}, result:'宝箱里装满金币！+40金'},
-          {text:'小心试探', effects:{gold:20}, result:'你用树枝捅了捅，没有陷阱。获得20金币。'},
-          {text:'绕道而行', effects:{}, result:'你决定不冒这个险。'}
+          {text:"打开宝箱", effects:{gold:40}, result:"宝箱里装满金币！+40金"},
+          {text:"小心试探", effects:{gold:20}, result:"你用树枝捅了捅，没有陷阱。获得20金币。"},
+          {text:"绕道而行", effects:{}, result:"你决定不冒这个险。"}
+        ]},
+      { id:"cihua", title:"词话遗珠", desc:"你在旧书摊上发现一本泛黄的《词话》手稿……",
+        choices:[
+          {text:"潜心研读", effects:{maxHp:8}, result:"你从手稿中学到词学精髓。最大HP+8"},
+          {text:"转手卖掉", effects:{gold:25}, result:"你将手稿卖给收藏家。+25金"},
+          {text:"归还后人", effects:{}, result:"你将手稿交给当地书院。心安理得。"}
+        ]},
+      { id:"shuilian", title:"水帘洞天", desc:"瀑布后隐约有石洞，水声震耳……",
+        choices:[
+          {text:"闯入洞中", effects:{hp:-8,gold:35}, result:"你穿过瀑布进入洞中，发现前人藏金！但被水冲击受伤。-8HP +35金"},
+          {text:"在瀑布边冥想", effects:{hp:10}, result:"水声潺潺，心境澄明。回复10HP"},
+          {text:"取水解渴", effects:{hp:5}, result:"甘甜的泉水让你精神一振。回复5HP"}
+        ]},
+      { id:"mengjing", title:"梦中诗境", desc:"你在一棵古松下小憩，梦中偶入诗境……",
+        choices:[
+          {text:"追寻梦境", effects:{}, result:"你追着一只蝴蝶深入梦境，醒来后灵感泉涌。获得一张随机稀有攻击牌"},
+          {text:"吟诗记录", effects:{maxHp:5}, result:"你将梦中所得诗句录下，境界略有提升。最大HP+5"},
+          {text:"安心入眠", effects:{hp:12}, result:"你安然睡了一觉。回复12HP"}
+        ]},
+      { id:"huigui", title:"回归田园", desc:"路边一位老农请你帮忙收割庄稼……",
+        choices:[
+          {text:"热心帮忙", effects:{gold:15}, result:"你帮老农收割庄稼，他感激地送你蔬果和金币。+15金"},
+          {text:"传授诗技", effects:{}, result:"你教老农的孙子吟诗。虽然不收费，但心中愉悦。获得一张随机非基础卡"},
+          {text:"婉拒赶路", effects:{}, result:"你表示赶路匆忙，继续前行。"}
+        ]},
+      { id:"qixian", title:"棋仙对弈", desc:"山中遇到一位仙风道骨的老者，面前摆着一盘残局……",
+        choices:[
+          {text:"欣然对弈", effects:{gold:-10,maxHp:12}, result:"你与老者对弈三局，输掉10金，但悟得棋道真谛。最大HP+12"},
+          {text:"旁观学习", effects:{gold:15}, result:"你在一旁观棋，老者指点你几句。悟性大增。+15金，受益良多"},
+          {text:"不敢打扰", effects:{}, result:"你静静路过，不打扰棋局。"}
+        ]},
+      { id:"danlu", title:"炼丹炉", desc:"山间废弃道观中，一座丹炉仍在冒着热气……",
+        choices:[
+          {text:"开炉取丹", effects:{hp:-15,maxHp:15}, result:"丹药未成，你强行开炉！-15HP但体质增强。最大HP+15"},
+          {text:"添柴续炼", effects:{}, result:"你添柴续炼片刻，练成一颗灵丹。获得一颗随机灵丹"},
+          {text:"小心离开", effects:{}, result:"你不敢乱动，悄然离开。"}
         ]}
     ];
 
@@ -2532,18 +2571,18 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     /* ═══════════════════════════════════════════════════════════════════════ */
 
     var FLOOR_LAYOUT = [
-      [{type:'battle'},{type:'battle'},{type:'battle'}],
-      [{type:'battle'},{type:'event'},{type:'battle'},{type:'rest'}],
-      [{type:'battle'},{type:'shop'},{type:'battle'},{type:'event'}],
-      [{type:'elite'},{type:'battle'},{type:'event'},{type:'battle'}],
-      [{type:'rest'},{type:'battle'},{type:'shop'},{type:'battle'}],
-      [{type:'battle'},{type:'event'},{type:'battle'},{type:'rest'}],
-      [{type:'battle'},{type:'shop'},{type:'elite'},{type:'battle'}],
-      [{type:'rest'},{type:'battle'},{type:'event'},{type:'battle'}],
-      [{type:'battle'},{type:'elite'},{type:'battle'},{type:'shop'}],
-      [{type:'rest'},{type:'battle'},{type:'event'},{type:'elite'}],
-      [{type:'battle'},{type:'shop'},{type:'battle'},{type:'rest'}],
-      [{type:'boss'}]
+      [{type:"battle"},{type:"event"},{type:"battle"}],
+      [{type:"battle"},{type:"shop"},{type:"event"},{type:"battle"}],
+      [{type:"rest"},{type:"elite"},{type:"battle"}],
+      [{type:"battle"},{type:"event"},{type:"shop"},{type:"battle"},{type:"elite"}],
+      [{type:"battle"},{type:"elite"},{type:"rest"},{type:"battle"}],
+      [{type:"event"},{type:"battle"},{type:"shop"}],
+      [{type:"battle"},{type:"elite"},{type:"rest"},{type:"event"},{type:"elite"}],
+      [{type:"shop"},{type:"battle"},{type:"event"},{type:"battle"}],
+      [{type:"elite"},{type:"rest"},{type:"battle"}],
+      [{type:"battle"},{type:"event"},{type:"shop"},{type:"elite"},{type:"battle"}],
+      [{type:"elite"},{type:"battle"},{type:"rest"},{type:"event"}],
+      [{type:"boss"}],
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -2553,6 +2592,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     var G = null;
     var gMapData = [];
     var gCurNodeIdx = -1;
+    var gPrevNodeIdx = -1;
     var gIsBattling = false;
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -2568,12 +2608,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     }
 
     function showScreen(id){
-      // Hide all screens first
-      var allScreens = document.querySelectorAll(".sg-screen");
-      for(var si=0;si<allScreens.length;si++) allScreens[si].style.display = "none";
-      // Show the requested one
+      hideAllScreens();
       var el=document.getElementById(id);
-      if(el){ el.style.display=''; }
+      if(el){
+        el.style.display="block";
+        el.style.animation="none";
+        el.offsetHeight;
+        el.style.animation="";
+      }
     }
 
     function initGame(charId){
@@ -2604,7 +2646,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         floor:0,
         maxAct:3,
         enemyStrDown:0,
-        pills:["hpPill","strPill"]
+        pills:["hpPill","strPill"],
+        pillBagLimit:3,
+        easterEggs: {
+          konamiUnlocked: false,
+          titleClicks: 0,
+          titleUnlocked: false,
+          fullMoon: false
+        }
       };
 
       // Apply maxHp relics
@@ -2623,16 +2672,22 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
     function generateMap(){
       gMapData = [];
+      gPrevNodeIdx = -1;
       for(var fi=0;fi<FLOOR_LAYOUT.length;fi++){
         var floorNodes = [];
         var layoutRow = FLOOR_LAYOUT[fi];
         for(var ni=0;ni<layoutRow.length;ni++){
           var nodeType = layoutRow[ni].type;
-          var completed = false;
-          var node = { type:nodeType, completed:completed };
+          var node = { type:nodeType, completed:false, reachable:false };
           floorNodes.push(node);
         }
         gMapData.push(floorNodes);
+      }
+      // 第一层所有节点均可到达
+      if(gMapData.length > 0){
+        for(var i=0;i<gMapData[0].length;i++){
+          gMapData[0][i].reachable = true;
+        }
       }
       G.floor = 0;
     }
@@ -2660,94 +2715,118 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       }
     }
 
-    function showCharSelect(){
-      hideAllScreens();
-      showScreen('sgTitle');
-    }
-
     function renderMap(){
       var mapEl = document.getElementById('sgMap');
       if(!mapEl) return;
       var mapContent = document.getElementById('sgMapContainer');
       if(!mapContent) return;
 
-      document.getElementById('sgActNum').textContent = '第 '+G.act+' / '+G.maxAct+' 境';
+      document.getElementById('sgActNum').textContent = G.act;
       document.getElementById('sgMapGold').textContent = G.gold;
+      document.getElementById('sgFloorNum').textContent = G.floor + 1;
+      document.getElementById('sgMaxFloor').textContent = gMapData.length;
 
       var html = '';
+      var maxNodes = 0;
+      for(var fi=0;fi<gMapData.length;fi++){
+        if(gMapData[fi].length > maxNodes) maxNodes = gMapData[fi].length;
+      }
+
       for(var fi=0;fi<gMapData.length;fi++){
         var floor = gMapData[fi];
         var isCurrentFloor = (fi === G.floor);
-        html += '<div class="sg-map-floor'+(isCurrentFloor?' sg-map-floor-active':'')+'">';
-        for(var ni=0;ni<floor.length;ni++){
-          var node = floor[ni];
-          var icons = { battle:'⚔️', elite:'👹', rest:'🏕️', treasure:'💎', shop:'🏪', event:'❓', boss:'👑' };
-          var icon = icons[node.type] || '⚔️';
-          var cls = 'sg-map-node';
-          if(node.completed) cls += ' sg-node-done';
-          if(isCurrentFloor && !node.completed) cls += ' sg-node-avail';
-          if(isCurrentFloor && !node.completed && gCurNodeIdx === -1){
-            gCurNodeIdx = ni;
+        html += '<div class="sg-map-floor'+(isCurrentFloor?' sg-map-floor-active':'')+'" style="grid-template-columns:repeat('+maxNodes+',1fr)">';
+        for(var ni=0;ni<maxNodes;ni++){
+          if(ni < floor.length){
+            var node = floor[ni];
+            var icons = { battle:'⚔️', elite:'👹', rest:'🏕️', treasure:'💎', shop:'🏪', event:'❓', boss:'👑' };
+            var icon = icons[node.type] || '⚔️';
+            var cls = 'sg-map-node';
+            if(node.completed) cls += ' completed';
+            if(isCurrentFloor && node.reachable && !node.completed) cls += ' sg-node-avail';
+            if(isCurrentFloor && !node.completed && !node.reachable) cls += ' sg-node-blocked';
+            if(isCurrentFloor && !node.completed && gCurNodeIdx === -1 && node.reachable){
+              gCurNodeIdx = ni;
+            }
+            if(node.completed && gPrevNodeIdx === ni && fi > 0){
+              cls += ' sg-node-path';
+            }
+            html += '<div class="'+cls+'" data-floor="'+fi+'" data-idx="'+ni+'">'+icon+'</div>';
+          } else {
+            // 空白占位，保持对齐
+            html += '<div class="sg-map-node sg-node-empty"></div>';
           }
-          html += '<div class="'+cls+'" data-floor="'+fi+'" data-idx="'+ni+'">'+icon+'</div>';
         }
         html += '</div>';
+
+        // 网状连接由 drawMapMesh 函数在渲染后用 SVG 绘制
       }
       mapContent.innerHTML = html;
 
-      // Bind click events
+      // Bind click/touch events: 只绑定可到达的节点
       var nodes = mapContent.querySelectorAll('.sg-node-avail');
       for(var i=0;i<nodes.length;i++){
         (function(el){
-          el.addEventListener('click',function(){
+          var handled = false;
+          function handleNodeClick(e){
+            if(handled) return;
+            handled = true;
             var floor = parseInt(el.getAttribute('data-floor'));
             var idx = parseInt(el.getAttribute('data-idx'));
-            if(floor === G.floor && !gMapData[floor][idx].completed){
+            if(!isNaN(floor) && !isNaN(idx) && floor === G.floor && gMapData[floor] && gMapData[floor][idx] && !gMapData[floor][idx].completed){
               enterNode(idx);
             }
-          });
+          }
+          el.addEventListener('click', handleNodeClick);
+          el.addEventListener('touchstart', handleNodeClick, {passive:false});
         })(nodes[i]);
       }
 
       showScreen('sgMap');
+      // 使用 SVG 绘制网状连接线
+      setTimeout(function(){ drawMapMesh(mapContent); }, 30);
     }
 
     function enterNode(idx){
-      var floor = gMapData[G.floor];
-      if(!floor || floor.length <= idx) return;
-      var node = floor[idx];
-      if(node.completed) return;
+      try {
+        var floor = gMapData[G.floor];
+        if(!floor || floor.length <= idx) return;
+        var node = floor[idx];
+        if(node.completed) return;
 
-      gCurNodeIdx = idx;
+        gCurNodeIdx = idx;
 
-      switch(node.type){
-        case 'battle':
-          var pool = getEnemyPool(G.act, false);
-          var eData = pool[Math.floor(Math.random()*pool.length)];
-          startBattle(eData);
-          break;
-        case 'elite':
-          var ePool = getEnemyPool(G.act, true);
-          var eData2 = ePool[Math.floor(Math.random()*ePool.length)];
-          startBattle(eData2);
-          break;
-        case 'boss':
-          var bPool = getEnemyPool(G.act, 'boss');
-          var bData = bPool[(G.act-1) % bPool.length];
-          startBattle(bData);
-          break;
-        case 'rest':
-          showRest();
-          break;
-        case 'shop':
-          showShop();
-          break;
-        case 'treasure':
-          showTreasure();
-          break;
-        case 'event':
-          showEvent();
-          break;
+        switch(node.type){
+          case 'battle':
+            var pool = getEnemyPool(G.act, false);
+            var eData = pool[Math.floor(Math.random()*pool.length)];
+            startBattle(eData);
+            break;
+          case 'elite':
+            var ePool = getEnemyPool(G.act, true);
+            var eData2 = ePool[Math.floor(Math.random()*ePool.length)];
+            startBattle(eData2);
+            break;
+          case 'boss':
+            var bPool = getEnemyPool(G.act, 'boss');
+            var bData = bPool[(G.act-1) % bPool.length];
+            startBattle(bData);
+            break;
+          case 'rest':
+            showRest();
+            break;
+          case 'shop':
+            showShop();
+            break;
+          case 'treasure':
+            showTreasure();
+            break;
+          case 'event':
+            showEvent();
+            break;
+        }
+      } catch(e){
+        console.error('[诗境问道] enterNode 错误:', e);
       }
     }
 
@@ -2757,8 +2836,22 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(floor && floor[gCurNodeIdx]){
         floor[gCurNodeIdx].completed = true;
       }
+      gPrevNodeIdx = gCurNodeIdx;
       gCurNodeIdx = -1;
       G.floor++;
+
+      // 计算下一层哪些节点可达
+      if(G.floor < gMapData.length){
+        var nextFloor = gMapData[G.floor];
+        for(var ri=0;ri<nextFloor.length;ri++){
+          nextFloor[ri].reachable = false;
+        }
+        var minIdx = Math.max(0, gPrevNodeIdx - 1);
+        var maxIdx = Math.min(nextFloor.length - 1, gPrevNodeIdx + 1);
+        for(var ri2=minIdx;ri2<=maxIdx;ri2++){
+          nextFloor[ri2].reachable = true;
+        }
+      }
 
       // Check if all floors complete (reached boss floor)
       if(G.floor >= gMapData.length){
@@ -2766,6 +2859,71 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       } else {
         renderMap();
       }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ SVG 网状连接线 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function drawMapMesh(container){
+      var oldSvg = container.querySelector('.sg-mesh-svg');
+      if(oldSvg) oldSvg.remove();
+      var floors = container.querySelectorAll('.sg-map-floor');
+      if(floors.length < 2) return;
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('class', 'sg-mesh-svg');
+      var containerStyle = window.getComputedStyle(container);
+      if(containerStyle.position === 'static') container.style.position = 'relative';
+      var containerRect = container.getBoundingClientRect();
+      for(var f=0;f<floors.length-1;f++){
+        var curFloor = floors[f];
+        var nextFloor = floors[f+1];
+        var curAll = curFloor.querySelectorAll('.sg-map-node');
+        var nextAll = nextFloor.querySelectorAll('.sg-map-node');
+        var curCount = curAll.length;
+        var nextCount = nextAll.length;
+        for(var mi=0;mi<curCount;mi++){
+          var curNode = curAll[mi];
+          if(curNode.classList.contains('sg-node-empty')) continue;
+          var curIdx = parseInt(curNode.getAttribute('data-idx'));
+          if(isNaN(curIdx)) continue;
+          if(!gMapData[f] || curIdx >= gMapData[f].length) continue;
+          var curRect = curNode.getBoundingClientRect();
+          if(curRect.width < 1 || curRect.height < 1) continue;
+          var fromX = curRect.left + curRect.width/2 - containerRect.left;
+          var fromY = curRect.bottom - containerRect.top;
+          // 连接范围
+          var minCj, maxCj;
+          if(curIdx === 0){ minCj=0; maxCj=1; }
+          else if(curIdx >= gMapData[f].length-1){ minCj=curIdx-1; maxCj=curIdx; }
+          else { minCj=curIdx-1; maxCj=curIdx+1; }
+          for(var cj=0;cj<nextCount;cj++){
+            var nextNode = nextAll[cj];
+            if(nextNode.classList.contains('sg-node-empty')) continue;
+            var nextIdx = parseInt(nextNode.getAttribute('data-idx'));
+            if(isNaN(nextIdx) || nextIdx<minCj || nextIdx>maxCj) continue;
+            if(!gMapData[f+1] || nextIdx>=gMapData[f+1].length) continue;
+            var nextRect = nextNode.getBoundingClientRect();
+            if(nextRect.width<1 || nextRect.height<1) continue;
+            var toX = nextRect.left + nextRect.width/2 - containerRect.left;
+            var toY = nextRect.top - containerRect.top;
+            var fromData = gMapData[f] ? gMapData[f][curIdx] : null;
+            var isPath = fromData && fromData.completed && gPrevNodeIdx === curIdx;
+            var line = document.createElementNS(svgNS, 'line');
+            line.setAttribute('x1', fromX);
+            line.setAttribute('y1', fromY);
+            line.setAttribute('x2', toX);
+            line.setAttribute('y2', toY);
+            line.setAttribute('stroke', isPath ? '#c9a84c' : '#c9a84c');
+            line.setAttribute('stroke-width', isPath ? '3' : '1.5');
+            line.setAttribute('stroke-opacity', isPath ? '0.9' : '0.18');
+            svg.appendChild(line);
+          }
+        }
+      }
+      svg.setAttribute('viewBox', '0 0 '+containerRect.width+' '+containerRect.height);
+      container.appendChild(svg);
     }
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -2786,7 +2944,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         if(poolType === 'no_basic' && card.rarity === 'basic') continue;
         if(poolType === 'attack' && card.type !== 'attack') continue;
         if(poolType === 'rare' && card.rarity !== 'rare') continue;
-        if(card.rarity === 'basic') continue; // default: exclude basic
+        if(poolType === 'rare_atk' && (card.rarity !== 'rare' && card.rarity !== 'uncommon' || card.type !== 'attack')) continue;
+        if(poolType !== 'basic' && card.rarity === 'basic') continue; // default: exclude basic unless explicitly requesting basic
         pool.push(cid);
         weights.push(RARITY_WEIGHTS[card.rarity] || 10);
       }
@@ -2830,7 +2989,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       poisonPill:{name:'断肠散',desc:'敌人中毒5层',icon:'☠️',effect:function(){ gBattle.enemyPoison += 5; showEffectFloat(200,80,'中毒5'); }},
       weakPill:{name:'软筋散',desc:'敌人虚弱2层',icon:'🌀',effect:function(){ gBattle.buffs.weak += 2; showEffectFloat(200,80,'虚弱2'); }},
       energyPill:{name:'回气丹',desc:'获得2点能量',icon:'⚡',effect:function(){ gBattle.energy += 2; showEffectFloat(100,200,'能量+2'); }},
-      vulnPill:{name:'破甲散',desc:'敌人易伤2层',icon:'💔',effect:function(){ gBattle.buffs.vuln += 2; showEffectFloat(200,80,'易伤2'); }}
+      vulnPill:{name:'破甲散',desc:'敌人易伤2层',icon:'💔',effect:function(){ gBattle.buffs.vuln += 2; showEffectFloat(200,80,'易伤2'); }},
+      doubleAtkPill:{name:'暴击丹',desc:'本回合下次攻击伤害翻倍',icon:'🔥',effect:function(){ gBattle.nextAttackMul = (gBattle.nextAttackMul||1)*2; showEffectFloat(100,200,'暴击蓄力'); }},
+      healPoisonPill:{name:'以毒攻毒',desc:'回复8HP·敌人中毒3',icon:'🌿',effect:function(){ G.hp = Math.min(G.hp+8,G.maxHp); gBattle.enemyPoison += 3; showEffectFloat(100,200,'以毒攻毒'); }},
+      strBlockPill:{name:'铁骨丹',desc:'获得2力量+4格挡',icon:'⛰️',effect:function(){ gBattle.playerStr += 2; gBattle.playerBlock += 4; showEffectFloat(100,200,'铁骨铮铮'); }}
     };
 
     var gBattle = null; // { enemy, hp, maxHp, intent, buffs, turn, block, ... }
@@ -2842,6 +3004,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     }
 
     function startBattle(eData){
+      try {
       var stats = getEnemyStats(eData, G.act);
       gBattle = {
         id:eData.id,
@@ -2869,7 +3032,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         playerWeak:0,
         cardPlayedThisTurn:0,
         isElite: (eData.intentCycle.length >= 4),
-        isBoss: (eData.intentCycle.length >= 5)
+        isBoss: (eData.intentCycle.length >= 5),
+        specialAbility: eData.specialAbility || null,
+        canSummon: true
       };
 
       // Initialize draw pile
@@ -2894,11 +3059,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       pickIntent(gBattle);
 
-      switchBgmForNode('battle', gBattle.isElite, gBattle.isBoss);
+            switchBgmForNode('battle', gBattle.isElite, gBattle.isBoss);
       hideAllScreens();
       showScreen('sgBattle');
-      showScreen('sgEndTurnBtn');
-      showScreen('sgBattleActions');
+      // Show end turn button (not a .sg-screen, so set display directly)
+      var etBtn = document.getElementById('sgEndTurnBtn');
+      if(etBtn) etBtn.style.display = '';
 
       drawCards(5);
       // Set battle background based on act and enemy type
@@ -2911,6 +3077,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       }
       gIsBattling = true;
       renderBattle();
+      } catch(e){
+        console.error('[诗境问道] startBattle 错误:', e, eData);
+      }
     }
 
     function pickIntent(battle){
@@ -3192,7 +3361,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         gBattle.discardPile.push(deckIdx);
       }
 
-      renderBattle();
+      
+      var cardEl = document.querySelector('#sgHand .sg-card');
+      if(cardEl) showPlayParticles(cardEl);renderBattle();
       checkEnemyDeath();
       return true;
     }
@@ -3284,6 +3455,16 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       // Gold reward
       var goldReward = gBattle.isBoss ? 30 : (gBattle.isElite ? 20 : 10 + Math.floor(Math.random() * 10));
       G.gold += goldReward;
+
+      // Pill reward (50% chance)
+      if(Math.random() < 0.5 && G.pills.length < (G.pillBagLimit||3)){
+        var pillIds = Object.keys(PILLS);
+        var randPill = pillIds[Math.floor(Math.random()*pillIds.length)];
+        if(G.pills.indexOf(randPill) === -1 || Math.random() < 0.3){
+          G.pills.push(randPill);
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, PILLS[randPill].icon+'获得'+PILLS[randPill].name);
+        }
+      }
 
       hideAllScreens();
 
@@ -3410,7 +3591,28 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(!gBattle) return;
       if(gBattle.hp <= 0) return;
 
-      applyPoison();
+      
+
+      // Special enemy abilities
+      if(gBattle.specialAbility === "enrage" && gBattle.hp < gBattle.maxHp * 0.3){
+        gBattle.buffs.str += 3;
+        showEffectFloat(250, 60, "暴怒+3力量");
+      }
+      if(gBattle.specialAbility === "regen" && gBattle.hp < gBattle.maxHp * 0.5 && gBattle.hp > 0){
+        var regenAmt = Math.floor(gBattle.maxHp * 0.08);
+        gBattle.hp = Math.min(gBattle.hp + regenAmt, gBattle.maxHp);
+        showEffectFloat(250, 60, "再生+"+regenAmt);
+      }
+      if(gBattle.specialAbility === "summon" && gBattle.canSummon && gBattle.hp < gBattle.maxHp * 0.6){
+        gBattle.buffs.str += 2;
+        showEffectFloat(250, 60, "召唤随从+2力量");
+      }
+      if(gBattle.specialAbility === "curse" && gBattle.turn % 3 === 0){
+        gBattle.playerWeak += 1;
+        gBattle.playerVuln += 1;
+        showEffectFloat(50, 200, "诅咒：虚弱+易伤");
+      }
+applyPoison();
 
       // Enemy plays
       enemyTurn();
@@ -3484,7 +3686,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         return;
       }
       container.style.display = '';
-      container.innerHTML = '<div style="font-size:0.65rem;color:var(--text-faint,#888);margin-bottom:0.2rem;">灵丹</div>';
+      container.innerHTML = '<div style="font-size:0.65rem;color:var(--text-faint,#888);margin-bottom:0.2rem;">灵丹 ('+(G.pills.length||0)+'/'+(G.pillBagLimit||3)+')</div>';
       for(var pi=0;pi<G.pills.length;pi++){
         var pillId = G.pills[pi];
         var pill = PILLS[pillId];
@@ -3509,7 +3711,28 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════════════ *//* ══════ 战斗渲染 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    function showPlayParticles(el){
+      if(!el) return;
+      for(var pi=0;pi<6;pi++){
+        var p = document.createElement('div');
+        p.className = 'sg-particle';
+        var colors = ['#ffd700','#ff6b35','#60a5fa','#55cc55','#c9a84c','#ff4444'];
+        p.style.cssText = 'position:absolute;width:6px;height:6px;border-radius:50%;background:'+colors[pi%colors.length]+';pointer-events:none;z-index:100;';
+        var rect = el.getBoundingClientRect();
+        p.style.left = (rect.left + rect.width/2) + 'px';
+        p.style.top = (rect.top + rect.height/2) + 'px';
+        p.style.animation = 'sg-particleFly '+(0.4+Math.random()*0.3)+'s ease-out forwards';
+        var angle = Math.random() * Math.PI * 2;
+        var dist = 40 + Math.random() * 60;
+        p.style.setProperty('--dx', Math.cos(angle)*dist + 'px');
+        p.style.setProperty('--dy', Math.sin(angle)*dist + 'px');
+        document.body.appendChild(p);
+        setTimeout(function(){ if(p.parentNode) p.parentNode.removeChild(p); }, 800);
+      }
+    }
+
+/* ══════ 战斗渲染 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
 
     function renderBattle(){
@@ -3518,6 +3741,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       // Enemy name and HP
       document.getElementById('sgEnemyName').textContent = gBattle.name;
       document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
+      var abilityNames = {enrage:"🔥暴怒",regen:"💚再生",summon:"👥召唤",curse:"💀诅咒"};
+      if(gBattle.specialAbility && abilityNames[gBattle.specialAbility]){
+        document.getElementById('sgEnemyDesc').textContent += ' ['+abilityNames[gBattle.specialAbility]+']';
+      }
       var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
       document.getElementById('sgEnemyHpFill').style.width = eHpPct + '%';
       document.getElementById('sgEnemyHp').textContent = gBattle.hp; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
@@ -3719,6 +3946,25 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           }
         };
       }
+    
+      // Pill shop
+      var pBtn = document.createElement('button');
+      pBtn.id = 'sgShopPillBtn';
+      pBtn.className = 'sg-btn';
+      pBtn.textContent = '💊 买灵丹（25金）';
+      pBtn.style.cssText = 'font-size:0.75rem;margin-top:0.5rem;';
+      var pItems = document.getElementById('sgShopItems');
+      if(pItems && pItems.parentNode) pItems.parentNode.insertBefore(pBtn, pItems.nextSibling);
+      pBtn.onclick = function(){
+        if(G.gold < 25){ showEffectFloat(pBtn.offsetLeft, pBtn.offsetTop, '金币不足'); return; }
+        if(G.pills.length >= (G.pillBagLimit||3)){ showEffectFloat(pBtn.offsetLeft, pBtn.offsetTop, '灵丹已满'); return; }
+        var pIds = Object.keys(PILLS);
+        var pRp = pIds[Math.floor(Math.random()*pIds.length)];
+        G.gold -= 25;
+        G.pills.push(pRp);
+        document.getElementById('sgShopGold').textContent = G.gold;
+        showEffectFloat(pBtn.offsetLeft, pBtn.offsetTop, PILLS[pRp].icon+'获得'+PILLS[pRp].name);
+      };
     }
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -3813,7 +4059,6 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       }
       if(effects.maxHp){
         G.maxHp += effects.maxHp;
-        G.hp += effects.hp || 0;
         resultMsg += '最大HP+' + effects.maxHp + ' ';
       }
       if(G.hp > G.maxHp) G.hp = G.maxHp;
@@ -3852,6 +4097,25 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         if(atkCards.length > 0){
           addCardToDeck({id:atkCards[0].id, ...atkCards[0]});
           descEl.textContent += ' 获得卡牌：' + atkCards[0].name;
+        }
+      }
+
+      if(resultText && resultText.indexOf('随机稀有攻击牌') !== -1){
+        var rrCards = getRandomCards(1, 'rare_atk');
+        if(rrCards.length > 0){
+          addCardToDeck({id:rrCards[0].id, ...rrCards[0]});
+          descEl.textContent += ' 获得卡牌：' + rrCards[0].name;
+        }
+      }
+      if(resultText && resultText.indexOf('随机灵丹') !== -1 && G.pills.length < (G.pillBagLimit||3)){
+        var pIds2 = Object.keys(PILLS);
+        var rPill = pIds2[Math.floor(Math.random()*pIds2.length)];
+        if(G.pills.indexOf(rPill) === -1 || Math.random() < 0.3){
+          G.pills.push(rPill);
+          descEl.textContent += ' 获得灵丹：' + PILLS[rPill].name;
+        } else {
+          G.gold += 10;
+          descEl.textContent += ' 获得重复灵丹折现10金';
         }
       }
     }
@@ -3959,11 +4223,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       var goldAmt = 15 + Math.floor(Math.random() * 20);
       G.gold += goldAmt;
-      document.getElementById('sgTreasureRelic').innerHTML = '💰 +' + goldAmt + ' 金币（总计：' + G.gold + '）<br>' + document.getElementById('sgTreasureRelic').innerHTML;
-      // total gold shown already
+      var relicEl = document.getElementById('sgTreasureRelic');
+
+      // Show gold first
+      var html = '💰 +' + goldAmt + ' 金币（总计：' + G.gold + '）';
 
       // Possibly give a relic
-      var relicEl = document.getElementById('sgTreasureRelic');
       if(relicEl && Math.random() < 0.3){
         var availR = [];
         for(var ri=0;ri<RELICS.length;ri++){
@@ -3972,16 +4237,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         if(availR.length > 0){
           var newRelic = availR[Math.floor(Math.random() * availR.length)];
           G.relics.push(newRelic.id);
-          relicEl.innerHTML = '获得遗器：<strong>' + newRelic.name + '</strong> — ' + newRelic.desc;
+          html += '<br><br>获得遗器：<strong>' + newRelic.name + '</strong> — ' + newRelic.desc;
         }
       } else {
         // Give a card instead
         var tc = getRandomCards(1)[0];
         if(tc){
           addCardToDeck({id:tc.id, ...tc});
-          relicEl.innerHTML = '获得卡牌：<strong>' + tc.name + '</strong>';
+          html += '<br><br>获得卡牌：<strong>' + tc.name + '</strong>';
         }
       }
+      if(relicEl) relicEl.innerHTML = html;
     }
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -3997,7 +4263,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         el.style.color = '#ffd700';
         document.getElementById('sgResultDetail').innerHTML =
           '你成功通过全部' + G.maxAct + '境！<br>' +
-          '剩余HP：' + G.hp; document.getElementById('sgPlayerMaxHp').textContent = G.maxHp + '<br>' +
+          '剩余HP：' + G.hp + '<br>' +
           '金币：' + G.gold + '<br>' +
           '卡组：' + G.deck.length + '张<br>' +
           '遗器：' + G.relics.length + '件';
@@ -4109,9 +4375,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
     var gBgmCtx = null;
     var gBgmGain = null;
-    var gBgmOsc = null;
+    var gBgmOsc2 = null;      // 第二振荡器（和声层）
     var gBgmCurrent = '';
     var gBgmPlaying = false;
+    var gBgmLoopTimer = null;
 
     function initAudio(){
       if(gBgmCtx) return;
@@ -4123,117 +4390,138 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       } catch(e){ console.log('Audio not available'); }
     }
 
+    // 多套变体音序，每次循环随机选一套，让BGM不单调
+    var BGM_PATTERNS = {
+      explore: [
+        { notes:[0,2,4,7,9,7,4,2,0,-2,0,2,4,7,9,12], tempo:95,  base:210 },
+        { notes:[0,4,7,12,7,4,0,2,4,7,9,7,4,2,0,-3], tempo:88,  base:220 },
+        { notes:[2,4,7,9,7,4,2,0,4,7,9,12,9,7,4,2],  tempo:92,  base:215 }
+      ],
+      battle: [
+        { notes:[0,3,7,10,7,3,0,5,8,5,0,3,7,10,12,10], tempo:128, base:250 },
+        { notes:[3,7,10,8,5,3,0,3,7,10,12,10,7,5,3],   tempo:135, base:260 },
+        { notes:[0,5,8,12,8,5,3,0,5,8,10,8,5,3,0,-2],  tempo:130, base:245 }
+      ],
+      elite: [
+        { notes:[0,3,7,11,7,3,0,5,10,5,0,3,7,11,14,11], tempo:145, base:280 },
+        { notes:[3,7,11,10,7,3,0,3,7,11,14,11,7,5,3,0], tempo:155, base:290 }
+      ],
+      boss1: [
+        { notes:[0,4,7,12,7,4,0,5,9,5,0,4,7,12,16,12],  tempo:125, base:235 },
+        { notes:[4,7,12,11,9,7,4,0,5,9,12,9,5,4,0,-3],  tempo:120, base:230 }
+      ],
+      boss2: [
+        { notes:[0,3,6,10,6,3,0,2,7,11,7,2,0,5,8,12],   tempo:140, base:265 },
+        { notes:[3,6,10,8,6,3,0,2,7,11,14,11,7,5,3,0],  tempo:145, base:270 }
+      ],
+      boss3: [
+        { notes:[0,5,9,12,9,5,0,4,8,12,8,4,0,7,11,14],  tempo:155, base:295 },
+        { notes:[5,9,12,14,12,9,5,0,4,8,12,14,12,8,4,0], tempo:165, base:300 }
+      ],
+      rest: [
+        { notes:[0,2,4,7,4,2,0,-2,0,2,4,7,9,7,4,2],     tempo:78,  base:195 },
+        { notes:[2,4,7,9,7,4,2,0,2,4,7,9,7,4,2,0],      tempo:72,  base:190 }
+      ],
+      shop: [
+        { notes:[0,4,7,11,7,4,0,2,5,9,5,2,0,4,7,11],    tempo:105, base:225 },
+        { notes:[4,7,11,9,7,4,0,2,5,9,12,9,5,2,0,-1],   tempo:110, base:230 }
+      ]
+    };
+
+    function scheduleNoteBatch(osc, gainNode, baseFreq, noteArr, noteLen, nowTime, gainLevel, harmonyFlag){
+      for(var ni=0;ni<noteArr.length;ni++){
+        var n = noteArr[ni];
+        if(n === -99) continue;
+        var freq = baseFreq * Math.pow(2, n/12);
+        var swing = (ni % 2 === 1) ? (Math.random()*0.025-0.012) : 0;
+        var t = nowTime + ni * noteLen + swing;
+        gainNode.gain.setValueAtTime(0, t);
+        gainNode.gain.linearRampToValueAtTime(gainLevel, t + 0.025);
+        osc.frequency.setValueAtTime(freq, t);
+        var sustainEnd = t + noteLen * (harmonyFlag ? 0.45 : 0.55);
+        gainNode.gain.setValueAtTime(gainLevel, sustainEnd);
+        gainNode.gain.linearRampToValueAtTime(0, t + noteLen * 0.75);
+      }
+    }
+
     function playBgm(type){
       initAudio();
       if(!gBgmCtx) return;
-      if(gBgmPlaying){
-        stopBgm();
-      }
+      if(gBgmPlaying) stopBgm();
       gBgmCurrent = type || 'explore';
 
-      var notes = [];
-      var tempo = 120;
-      var baseFreq = 220;
-
-      switch(type){
-        case 'explore':
-          // 探索 - 悠远宁静
-          notes = [0,2,4,7,9,7,4,2];
-          tempo = 100;
-          baseFreq = 220;
-          break;
-        case 'battle':
-          // 普通战斗 - 紧张
-          notes = [0,3,7,10,7,3,0,5];
-          tempo = 140;
-          baseFreq = 260;
-          break;
-        case 'elite':
-          // 精英战斗 - 激烈
-          notes = [0,3,7,11,7,3,0,5,10,5,0,3];
-          tempo = 160;
-          baseFreq = 290;
-          break;
-        case 'boss1':
-          // 科举试BGM
-          notes = [0,4,7,12,7,4,0,5,9,5,0,4,7,11];
-          tempo = 130;
-          baseFreq = 240;
-          break;
-        case 'boss2':
-          // 大宗师BGM
-          notes = [0,3,6,10,6,3,0,2,7,11,7,2,0,5,8];
-          tempo = 150;
-          baseFreq = 270;
-          break;
-        case 'boss3':
-          // 诗圣BGM - 终极决战
-          notes = [0,5,9,12,9,5,0,4,8,12,8,4,0,7,11,14];
-          tempo = 170;
-          baseFreq = 300;
-          break;
-        case 'rest':
-          // 休息 - 舒缓
-          notes = [0,2,4,7,4,2,0,-2];
-          tempo = 80;
-          baseFreq = 200;
-          break;
-        case 'shop':
-          // 商店 - 轻快
-          notes = [0,4,7,11,7,4,0,2,5,9,5,2];
-          tempo = 110;
-          baseFreq = 230;
-          break;
-        default:
-          notes = [0,2,4,7,9,7,4,2];
-          tempo = 100;
-          baseFreq = 220;
-      }
-
-      // 用简单的音调序列作为BGM
-      var noteLen = 60 / tempo * 0.8;
+      var pool = BGM_PATTERNS[type] || BGM_PATTERNS.explore;
+      pool.__lastIdx = 0;
+      var v = pool[0];
+      var notes = v.notes;
+      var tempo = v.tempo;
+      var baseFreq = v.base;
+      var noteLen = 60 / tempo;
       var totalTime = notes.length * noteLen;
 
+      // 旋律层（三角波 — 温暖）
       gBgmOsc = gBgmCtx.createOscillator();
-      gBgmOsc.type = 'sine';
+      gBgmOsc.type = 'triangle';
       gBgmOsc.frequency.value = baseFreq;
-
-      var bgmGain2 = gBgmCtx.createGain();
-      bgmGain2.gain.value = 0;
-      gBgmOsc.connect(bgmGain2);
-      bgmGain2.connect(gBgmGain);
+      var melodyGain = gBgmCtx.createGain();
+      melodyGain.gain.value = 0;
+      gBgmOsc.connect(melodyGain);
+      melodyGain.connect(gBgmGain);
       gBgmOsc.start();
 
-      var now = gBgmCtx.currentTime;
-      for(var ni=0;ni<notes.length;ni++){
-        var freq = baseFreq * Math.pow(2, notes[ni]/12);
-        var t = now + ni * noteLen;
-        bgmGain2.gain.setValueAtTime(0, t);
-        bgmGain2.gain.linearRampToValueAtTime(0.6, t + 0.02);
-        gBgmOsc.frequency.setValueAtTime(freq, t);
-        bgmGain2.gain.setValueAtTime(0.6, t + noteLen * 0.6);
-        bgmGain2.gain.linearRampToValueAtTime(0, t + noteLen * 0.8);
-      }
+      // 和声层（正弦波 — 轻柔铺垫）
+      gBgmOsc2 = gBgmCtx.createOscillator();
+      gBgmOsc2.type = 'sine';
+      gBgmOsc2.frequency.value = baseFreq * 1.5;
+      var harmGain = gBgmCtx.createGain();
+      harmGain.gain.value = 0;
+      gBgmOsc2.connect(harmGain);
+      harmGain.connect(gBgmGain);
+      gBgmOsc2.start();
 
-      // 循环
-      gBgmOsc.loopingTotal = totalTime;
-      // 用 schedule 实现循环
+      // 调度第一轮音符
+      var now = gBgmCtx.currentTime;
+      scheduleNoteBatch(gBgmOsc, melodyGain, baseFreq, notes, noteLen, now, 0.5, false);
+      // 和声层仅在强拍（每4拍）奏五度音
+      var harmNotes = [];
+      for(var hi=0;hi<notes.length;hi++){
+        harmNotes.push((hi % 4 === 0) ? notes[hi]+7 : -99);
+      }
+      scheduleNoteBatch(gBgmOsc2, harmGain, baseFreq, harmNotes, noteLen, now, 0.15, true);
+
+      // 循环函数 — 每次循环随机选不同变体
       var loopFunc = function(){
         if(!gBgmPlaying || !gBgmCtx) return;
-        var now2 = gBgmCtx.currentTime;
-        for(var ni2=0;ni2<notes.length;ni2++){
-          var freq2 = baseFreq * Math.pow(2, notes[ni2]/12);
-          var t2 = now2 + ni2 * noteLen;
-          bgmGain2.gain.setValueAtTime(0, t2);
-          bgmGain2.gain.linearRampToValueAtTime(0.6, t2 + 0.02);
-          gBgmOsc.frequency.setValueAtTime(freq2, t2);
-          bgmGain2.gain.setValueAtTime(0.6, t2 + noteLen * 0.6);
-          bgmGain2.gain.linearRampToValueAtTime(0, t2 + noteLen * 0.8);
+        // 选不同的变体（避免和上次一样）
+        var p = BGM_PATTERNS[gBgmCurrent] || BGM_PATTERNS.explore;
+        var idx;
+        do {
+          idx = Math.floor(Math.random() * p.length);
+        } while(idx === p.__lastIdx && p.length > 1);
+        p.__lastIdx = idx;
+        var v2 = p[idx];
+        var n2 = v2.notes;
+        var t2 = v2.tempo;
+        var b2 = v2.base;
+        var nl2 = 60 / t2;
+        var tt2 = n2.length * nl2;
+
+        var now2 = gBgmCtx.currentTime + 0.02;
+        // 前一轮淡出，新轮淡入
+        melodyGain.gain.linearRampToValueAtTime(0, now2);
+        harmGain.gain.linearRampToValueAtTime(0, now2);
+
+        scheduleNoteBatch(gBgmOsc, melodyGain, b2, n2, nl2, now2, 0.5, false);
+        var h2 = [];
+        for(var hi2=0;hi2<n2.length;hi2++){
+          h2.push((hi2 % 4 === 0) ? n2[hi2]+7 : -99);
         }
-        gBgmLoopTimer = setTimeout(loopFunc, totalTime * 1000 * 0.9);
+        scheduleNoteBatch(gBgmOsc2, harmGain, b2, h2, nl2, now2, 0.15, true);
+
+        gBgmLoopTimer = setTimeout(loopFunc, tt2 * 1000 * 0.85);
       };
 
-      gBgmLoopTimer = setTimeout(loopFunc, totalTime * 1000 * 0.9);
+      gBgmLoopTimer = setTimeout(loopFunc, totalTime * 1000 * 0.85);
       gBgmPlaying = true;
     }
 
@@ -4241,6 +4529,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       gBgmPlaying = false;
       if(gBgmLoopTimer) { clearTimeout(gBgmLoopTimer); gBgmLoopTimer = null; }
       if(gBgmOsc) { try{ gBgmOsc.stop(); }catch(e){} gBgmOsc = null; }
+      if(gBgmOsc2) { try{ gBgmOsc2.stop(); }catch(e){} gBgmOsc2 = null; }
     }
 
     // 根据节点类型自动切换BGM
@@ -4273,6 +4562,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     }
 
     function bindUI(){
+      if(window._sgUIBound) return;
+      window._sgUIBound = true;
       // Fullscreen button
       var fsBtn = document.getElementById('sgFullscreenBtn');
       if(fsBtn){
@@ -4409,6 +4700,50 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       // Show title screen
       hideAllScreens();
       showScreen('sgTitle');
+
+      /* ── 彩蛋系统 ── */
+      var konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+      var konamiIdx = 0;
+      var today = new Date();
+      var dayOfMonth = today.getDate();
+      if(dayOfMonth >= 14 && dayOfMonth <= 17){
+        if(G && G.easterEggs) G.easterEggs.fullMoon = true;
+      }
+
+      document.addEventListener('keydown', function(ke){
+        if(konamiIdx < konamiCode.length && ke.key === konamiCode[konamiIdx]){
+          konamiIdx++;
+          if(konamiIdx === konamiCode.length){
+            if(G && G.easterEggs) G.easterEggs.konamiUnlocked = true;
+            showEffectFloat(window.innerWidth/2, window.innerHeight/2, '🎮 秘籍解锁！全卡片解锁！');
+            konamiIdx = 0;
+          }
+        } else {
+          konamiIdx = 0;
+        }
+      });
+
+      var titleEl = document.querySelector('.sg-title-text');
+      if(titleEl){
+        titleEl.addEventListener('click', function(){
+          if(!G || !G.easterEggs) return;
+          G.easterEggs.titleClicks++;
+          if(G.easterEggs.titleClicks >= 5 && !G.easterEggs.titleUnlocked){
+            G.easterEggs.titleUnlocked = true;
+            if(G.gold !== undefined) G.gold += 50;
+            showEffectFloat(window.innerWidth/2, window.innerHeight/2, '🤩 彩蛋：诗道初心！金币+50！');
+          } else if(G.easterEggs.titleClicks < 5){
+            var msgs = ['再点一下？','还差一点……','再努力一下！','马上就好！'];
+            showEffectFloat(titleEl.offsetLeft + titleEl.offsetWidth/2, titleEl.offsetTop, msgs[G.easterEggs.titleClicks-1]||'?');
+          }
+        });
+      }
+
+      if(G && G.easterEggs && G.easterEggs.fullMoon){
+        var bgEl = document.querySelector('.sg-battle-bg');
+        if(bgEl) bgEl.style.background = 'linear-gradient(135deg, #0a0a2e, #1a1a4e, #0a0a2e)';
+      }
+
     }, 500);
 
   })(); /* end of game IIFE */
