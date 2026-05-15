@@ -1343,100 +1343,6 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         <span class="music-inst-name" id="musicInstName">古琴</span>
         <span class="music-inst-desc" id="musicInstDesc">太古遗音 · 沉静悠远</span>
       </div>
-
-  <!-- 诗境问道 · 肉鸽卡牌 -->
-  <div class="mp-view" id="viewShiciGame">
-    <div class="sg-wrap">
-      <!-- 标题画面 -->
-      <div id="sgTitle" class="sg-screen">
-        <div class="sg-title-icon">🗡️📜</div>
-        <div class="sg-title-text">诗境问道</div>
-        <div class="sg-title-sub">古诗词 · 肉鸽卡牌</div>
-        <div class="sg-title-desc">以诗词为载体，攀登九重诗境。<br>收集诗篇，击败诗魔，问道于词。</div>
-        <button class="sg-btn sg-btn-primary" id="sgStartBtn">开始新旅程</button>
-      </div>
-
-      <!-- 地图画面 -->
-      <div id="sgMap" class="sg-screen" style="display:none">
-        <div class="sg-map-header">
-          <span>第 <span id="sgActNum">一</span> 境</span>
-          <span class="sg-map-floor">层 <span id="sgFloorNum">1</span>/<span id="sgMaxFloor">7</span></span>
-        </div>
-        <div class="sg-map" id="sgMapContainer"></div>
-      </div>
-
-      <!-- 战斗画面 -->
-      <div id="sgBattle" class="sg-screen" style="display:none">
-        <!-- 敌人区域 -->
-        <div class="sg-enemy-area">
-          <div class="sg-enemy" id="sgEnemy">
-            <div class="sg-enemy-name" id="sgEnemyName">诗魔</div>
-            <div class="sg-enemy-intent" id="sgEnemyIntent"></div>
-            <div class="sg-hp-bar-wrap">
-              <div class="sg-hp-fill" id="sgEnemyHpFill" style="width:100%"></div>
-            </div>
-            <div class="sg-hp-text"><span id="sgEnemyHp">40</span>/<span id="sgEnemyMaxHp">40</span></div>
-            <div class="sg-enemy-block" id="sgEnemyBlock" style="display:none">🛡️ <span id="sgEnemyBlockNum">0</span></div>
-          </div>
-        </div>
-
-        <!-- 玩家区域 -->
-        <div class="sg-player-area" id="sgPlayerArea">
-          <!-- 状态栏 -->
-          <div class="sg-status">
-            <div class="sg-status-item">❤️ <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span></div>
-            <div class="sg-status-item">⚡ <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span></div>
-            <div class="sg-status-item">🛡️ <span id="sgPlayerBlock">0</span></div>
-            <div class="sg-status-item">💪 <span id="sgPlayerStrength">0</span></div>
-            <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span></div>
-          </div>
-          <!-- 手牌 -->
-          <div class="sg-hand" id="sgHand"></div>
-          <!-- 回合控制 -->
-          <div class="sg-turn-ctrl">
-            <button class="sg-btn" id="sgEndTurnBtn">结束回合</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 奖励画面 -->
-      <div id="sgReward" class="sg-screen" style="display:none">
-        <div class="sg-reward-title">🎉 获得诗篇</div>
-        <div class="sg-reward-cards" id="sgRewardCards"></div>
-        <div class="sg-reward-actions">
-          <button class="sg-btn sg-btn-primary" id="sgRewardSkip" style="display:none">跳过</button>
-        </div>
-      </div>
-
-      <!-- 休憩画面 -->
-      <div id="sgRest" class="sg-screen" style="display:none">
-        <div class="sg-rest-icon">🏮</div>
-        <div class="sg-rest-title">书院休憩</div>
-        <div class="sg-rest-desc">静心养气，恢复体力。</div>
-        <div class="sg-rest-hp">当前 HP：<span id="sgRestHp">80</span>/<span id="sgRestMaxHp">80</span></div>
-        <button class="sg-btn sg-btn-primary" id="sgRestBtn">休息（恢复 20 HP）</button>
-        <button class="sg-btn" id="sgRestSkipBtn">继续前行</button>
-      </div>
-
-      <!-- 宝箱画面 -->
-      <div id="sgTreasure" class="sg-screen" style="display:none">
-        <div class="sg-rest-icon">📦</div>
-        <div class="sg-rest-title">词苑拾珍</div>
-        <div class="sg-rest-desc">获得一件宝物！</div>
-        <div class="sg-relic-card" id="sgTreasureRelic"></div>
-        <button class="sg-btn sg-btn-primary" id="sgTreasureTake">收下</button>
-      </div>
-
-      <!-- 结果画面 -->
-      <div id="sgResult" class="sg-screen" style="display:none">
-        <div class="sg-result-icon" id="sgResultIcon">🏆</div>
-        <div class="sg-result-title" id="sgResultTitle">胜利</div>
-        <div class="sg-result-desc" id="sgResultDesc">你已问道九重诗境！</div>
-        <button class="sg-btn sg-btn-primary" id="sgRestartBtn">再来一局</button>
-      </div>
-    </div>
-  </div>
-
       <!-- 自动演奏区 -->
       <div class="music-auto">
         <select class="music-song-select" id="musicSong">
@@ -1460,12 +1366,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           <button class="music-play-btn stop" id="musicStopBtn" style="display:none;">⏹ 停止</button>
         </div>
       </div>
-
       <!-- 音阶可视化 -->
       <div class="music-viz" id="musicViz">
         <canvas id="musicCanvas"></canvas>
       </div>
-
       <div class="music-ctrl">
         <button class="oct-btn" data-octave="0">倍低</button>
         <button class="oct-btn active" data-octave="1">低音</button>
@@ -1475,6 +1379,87 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       </div>
       <div class="music-keys" id="musicKeys"></div>
       <div class="music-hint">点击琴弦 · 键盘 A W S E D F T G Y H U J · 12音半音阶 · 音符坠落可视化</div>
+    </div>
+  </div>
+
+  <!-- 诗境问道 · 肉鸽卡牌 -->
+  <div class="mp-view" id="viewShiciGame">
+    <div class="sg-wrap">
+      <!-- 标题画面 -->
+      <div id="sgTitle" class="sg-screen">
+        <div class="sg-title-icon">🗡️📜</div>
+        <div class="sg-title-text">诗境问道</div>
+        <div class="sg-title-sub">古诗词 · 肉鸽卡牌</div>
+        <div class="sg-title-desc">以诗词为载体，攀登九重诗境。<br>收集诗篇，击败诗魔，问道于词。</div>
+        <button class="sg-btn sg-btn-primary" id="sgStartBtn">开始新旅程</button>
+      </div>
+      <!-- 地图画面 -->
+      <div id="sgMap" class="sg-screen" style="display:none">
+        <div class="sg-map-header">
+          <span>第 <span id="sgActNum">一</span> 境</span>
+          <span class="sg-map-floor">层 <span id="sgFloorNum">1</span>/<span id="sgMaxFloor">7</span></span>
+        </div>
+        <div class="sg-map" id="sgMapContainer"></div>
+      </div>
+      <!-- 战斗画面 -->
+      <div id="sgBattle" class="sg-screen" style="display:none">
+        <div class="sg-enemy-area">
+          <div class="sg-enemy" id="sgEnemy">
+            <div class="sg-enemy-name" id="sgEnemyName">诗魔</div>
+            <div class="sg-enemy-intent" id="sgEnemyIntent"></div>
+            <div class="sg-hp-bar-wrap">
+              <div class="sg-hp-fill" id="sgEnemyHpFill" style="width:100%"></div>
+            </div>
+            <div class="sg-hp-text"><span id="sgEnemyHp">40</span>/<span id="sgEnemyMaxHp">40</span></div>
+            <div class="sg-enemy-block" id="sgEnemyBlock" style="display:none">🛡️ <span id="sgEnemyBlockNum">0</span></div>
+          </div>
+        </div>
+        <div class="sg-player-area" id="sgPlayerArea">
+          <div class="sg-status">
+            <div class="sg-status-item">❤️ <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span></div>
+            <div class="sg-status-item">⚡ <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span></div>
+            <div class="sg-status-item">🛡️ <span id="sgPlayerBlock">0</span></div>
+            <div class="sg-status-item">💪 <span id="sgPlayerStrength">0</span></div>
+            <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span></div>
+          </div>
+          <div class="sg-hand" id="sgHand"></div>
+          <div class="sg-turn-ctrl">
+            <button class="sg-btn" id="sgEndTurnBtn">结束回合</button>
+          </div>
+        </div>
+      </div>
+      <!-- 奖励画面 -->
+      <div id="sgReward" class="sg-screen" style="display:none">
+        <div class="sg-reward-title">🎉 获得诗篇</div>
+        <div class="sg-reward-cards" id="sgRewardCards"></div>
+        <div class="sg-reward-actions">
+          <button class="sg-btn sg-btn-primary" id="sgRewardSkip" style="display:none">跳过</button>
+        </div>
+      </div>
+      <!-- 休憩画面 -->
+      <div id="sgRest" class="sg-screen" style="display:none">
+        <div class="sg-rest-icon">🏮</div>
+        <div class="sg-rest-title">书院休憩</div>
+        <div class="sg-rest-desc">静心养气，恢复体力。</div>
+        <div class="sg-rest-hp">当前 HP：<span id="sgRestHp">80</span>/<span id="sgRestMaxHp">80</span></div>
+        <button class="sg-btn sg-btn-primary" id="sgRestBtn">休息（恢复 20 HP）</button>
+        <button class="sg-btn" id="sgRestSkipBtn">继续前行</button>
+      </div>
+      <!-- 宝箱画面 -->
+      <div id="sgTreasure" class="sg-screen" style="display:none">
+        <div class="sg-rest-icon">📦</div>
+        <div class="sg-rest-title">词苑拾珍</div>
+        <div class="sg-rest-desc">获得一件宝物！</div>
+        <div class="sg-relic-card" id="sgTreasureRelic"></div>
+        <button class="sg-btn sg-btn-primary" id="sgTreasureTake">收下</button>
+      </div>
+      <!-- 结果画面 -->
+      <div id="sgResult" class="sg-screen" style="display:none">
+        <div class="sg-result-icon" id="sgResultIcon">🏆</div>
+        <div class="sg-result-title" id="sgResultTitle">胜利</div>
+        <div class="sg-result-desc" id="sgResultDesc">你已问道九重诗境！</div>
+        <button class="sg-btn sg-btn-primary" id="sgRestartBtn">再来一局</button>
+      </div>
     </div>
   </div>
 </div>
