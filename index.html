@@ -801,9 +801,57 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-cs-card .sg-cs-char-desc{font-size:.6rem;color:var(--text-faint);line-height:1.3;}
 .sg-cs-card .sg-cs-char-cards{font-size:.55rem;color:var(--text-dim);}
 
+/* ── 角色立绘卡片（Item 6） ── */
+.sg-cs-portrait-card{
+  width:160px;padding:1rem .6rem .8rem;border-radius:14px;cursor:pointer;
+  text-align:center;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:5px;
+  position:relative;overflow:hidden;
+}
+.sg-cs-portrait-card:hover{transform:translateY(-6px) scale(1.02);}
+.sg-cs-portrait-card .sg-cs-avatar{
+  width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:2.2rem;position:relative;z-index:1;transition:all .3s;
+}
+.sg-cs-portrait-card:hover .sg-cs-avatar{transform:scale(1.08);}
+.sg-cs-portrait-card .sg-cs-char-name{font-size:.95rem;font-weight:700;letter-spacing:.1em;position:relative;z-index:1;}
+.sg-cs-portrait-card .sg-cs-char-title{font-size:.65rem;font-weight:400;letter-spacing:.05em;position:relative;z-index:1;}
+.sg-cs-portrait-card .sg-cs-hp{font-size:.7rem;position:relative;z-index:1;}
+.sg-cs-portrait-card .sg-cs-desc{font-size:.6rem;line-height:1.3;position:relative;z-index:1;}
+.sg-cs-portrait-card .sg-cs-ability{font-size:.55rem;color:var(--gold);position:relative;z-index:1;}
+/* 李白 - 月/酒 主题 */
+.sg-char-lizhi{background:linear-gradient(145deg,#1a0a0a,#2d1510);border:2px solid #c9a84c;color:#e8d48b;}
+.sg-char-lizhi .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#ffd700,#b8860b);border:2px solid #c9a84c;box-shadow:0 0 20px rgba(201,168,76,.4);}
+.sg-char-lizhi .sg-cs-char-name{color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,.3);}
+.sg-char-lizhi .sg-cs-char-title{color:#d4a94b;}
+.sg-char-lizhi::before{content:'';position:absolute;top:-30%;right:-30%;width:100px;height:100px;background:radial-gradient(circle,rgba(255,215,0,.08),transparent);border-radius:50%;}
+/* 苏轼 - 江/风 主题 */
+.sg-char-sush{background:linear-gradient(145deg,#0a1628,#15203a);border:2px solid #6b9bc4;color:#b0d0e8;}
+.sg-char-sush .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#60a5fa,#1e4b7a);border:2px solid #6b9bc4;box-shadow:0 0 20px rgba(96,165,250,.3);}
+.sg-char-sush .sg-cs-char-name{color:#93c5fd;text-shadow:0 0 10px rgba(147,197,253,.3);}
+.sg-char-sush .sg-cs-char-title{color:#7ab0d8;}
+.sg-char-sush::before{content:'';position:absolute;bottom:-20%;left:-20%;width:90px;height:90px;background:radial-gradient(circle,rgba(96,165,250,.08),transparent);}
+/* 李清照 - 花/秋 主题 */
+.sg-char-liqing{background:linear-gradient(145deg,#1a0a1e,#2d1530);border:2px solid #c084b0;color:#e8c0d8;}
+.sg-char-liqing .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#e879b0,#8b3a6a);border:2px solid #c084b0;box-shadow:0 0 20px rgba(192,132,176,.4);}
+.sg-char-liqing .sg-cs-char-name{color:#f0b8d8;text-shadow:0 0 10px rgba(240,184,216,.3);}
+.sg-char-liqing .sg-cs-char-title{color:#d4a0c4;}
+.sg-char-liqing::before{content:'';position:absolute;top:-20%;left:50%;width:80px;height:80px;background:radial-gradient(circle,rgba(232,121,176,.08),transparent);}
+/* 战斗中玩家肖像（Item 6） */
+.sg-player-portrait-frame{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--bg-card-alt);border:1px solid var(--border);border-radius:12px;
+  padding:.3rem .6rem .3rem .3rem;margin:0 auto;width:auto;
+}
+.sg-player-portrait-icon{
+  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;border:2px solid var(--gold);
+}
+.sg-player-portrait-icon.lizhi{background:radial-gradient(circle at 30% 30%,#ffd700,#b8860b);border-color:#c9a84c;}
+.sg-player-portrait-icon.sush{background:radial-gradient(circle at 30% 30%,#60a5fa,#1e4b7a);border-color:#6b9bc4;}
+.sg-player-portrait-icon.liqing{background:radial-gradient(circle at 30% 30%,#e879b0,#8b3a6a);border-color:#c084b0;}
+
 /* ── 地图 ── */
 .sg-map-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;font-size:1rem;color:var(--text-dim);}
-.sg-map{display:flex;flex-direction:column;align-items:center;gap:8px;padding:.5rem 0;}
 .sg-map-row{display:flex;gap:12px;justify-content:center;}
 .sg-map-node{
   width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -825,11 +873,15 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-map-connector{width:2px;height:12px;background:var(--border);}
 .sg-map-connector.active{background:var(--gold);}
 /* 地图：网格布局，保证各层节点对齐 */
-.sg-map-floor{display:grid;gap:6px;justify-items:center;align-items:center;padding:4px 2px;}
-.sg-map-floor-active{background:rgba(201,168,76,0.08);border-radius:8px;}
+.sg-map-floor{display:grid;gap:16px;justify-items:center;align-items:center;padding:10px 4px;}
+.sg-map-floor-active{background:rgba(201,168,76,0.08);border-radius:12px;}
 /* SVG 网状连接线 — 覆盖在地图上 */
 .sg-mesh-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible;}
 .sg-mesh-svg line{stroke-linecap:round;}
+/* 地图容器必须relative以适配SVG定位 */
+.sg-map{display:flex;flex-direction:column;align-items:center;gap:2px;padding:.5rem 0;position:relative;}
+/* 层数徽章 */
+.sg-floor-badge{display:inline-block;background:rgba(201,168,76,0.12);padding:0.15rem 0.7rem;border-radius:100px;font-size:0.8rem;color:var(--gold);border:1px solid rgba(201,168,76,0.3);letter-spacing:0.05em;}
 /* 不可到达节点 */
 .sg-node-blocked{opacity:0.3;border-color:var(--text-faint);cursor:default;pointer-events:none;}
 /* 空占位节点 */
@@ -860,7 +912,48 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   animation:sgDmgFloat .8s ease-out forwards;
 }
 @keyframes sgDmgFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
-.sg-enemy-portrait{font-size:2.2rem;margin-bottom:.2rem;}
+.sg-enemy-portrait{font-size:2.2rem;margin-bottom:.2rem;position:relative;z-index:1;}
+/* ── 敌人立绘增强（Item 10） ── */
+.sg-enemy-portrait.sg-enemy-enhanced{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:60px;height:60px;border-radius:50%;margin:0 auto .3rem;
+  background:radial-gradient(circle at 40% 35%, rgba(120,60,60,0.5), rgba(30,10,10,0.8)) !important;
+  border:2px solid rgba(180,80,80,0.4);box-shadow:0 0 20px rgba(180,60,60,0.2),inset 0 0 15px rgba(120,40,40,0.2);
+  overflow:hidden;font-size:2rem;line-height:1;
+}
+.sg-enemy-portrait.sg-enemy-enhanced::before{
+  content:'';position:absolute;inset:-4px;
+  background:conic-gradient(from 0deg, transparent, rgba(180,60,60,0.2), transparent, rgba(180,60,60,0.2), transparent);
+  animation:sgEnemyGlow 4s linear infinite;
+}
+@keyframes sgEnemyGlow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+/* 敌人登场闪白 */
+/* 敌人登场闪白 */
+.sg-enemy-intro-flash{
+  position:absolute;inset:0;border-radius:12px;pointer-events:none;z-index:5;
+  background:radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), transparent);
+  animation:sgEnemyIntro .8s ease-out forwards;
+}
+@keyframes sgEnemyIntro{
+  0%{opacity:0;transform:scale(.5)}
+  30%{opacity:1;transform:scale(1.15)}
+  60%{opacity:.6;transform:scale(1)}
+  100%{opacity:0;transform:scale(1)}
+}
+/* 敌人HP条强化 */
+.sg-hp-bar-wrap.sg-hp-bar-enhanced{height:10px;border-radius:5px;margin:.3rem 0 .1rem;}
+.sg-hp-bar-wrap.sg-hp-bar-enhanced .sg-hp-fill{background:linear-gradient(90deg,#c23a2b,#ef4444,#ff6b35);border-radius:5px;position:relative;}
+.sg-hp-bar-wrap.sg-hp-bar-enhanced .sg-hp-fill::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
+  border-radius:5px 5px 0 0;
+}
+.sg-hp-dmg-anim{animation:sgHpDmg .5s ease-out;}
+@keyframes sgHpDmg{
+  0%{opacity:1;background:rgba(255,60,60,0.6)}
+  100%{opacity:0;background:transparent}
+}
 
 /* ── 战斗特效 ── */
 .sg-hit-flash{position:absolute;inset:0;border-radius:12px;pointer-events:none;animation:sgHitFlash .25s ease-out forwards;}
@@ -1051,6 +1144,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .sg-status-item{padding:.15rem .4rem;}
   .sg-title-text{font-size:1.6rem;}
   .sg-cs-card{width:120px;padding:.8rem .4rem;}
+  .sg-cs-portrait-card{width:130px;padding:.8rem .4rem;}
+  .sg-cs-portrait-card .sg-cs-avatar{width:56px;height:56px;font-size:1.8rem;}
   .sg-enemy{min-width:140px;padding:.6rem 1rem;}
   .sg-enemy-portrait{font-size:1.8rem;}
   .sg-shop-item{padding:.4rem .6rem;flex-wrap:wrap;}
@@ -1059,6 +1154,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   #sgPlayerArea{flex-direction:column}
   .sg-enemy-portrait{width:50px;height:50px;font-size:1.2rem}
   .sg-player-portrait{width:40px;height:40px;font-size:1rem}
+  .sg-player-portrait-icon{width:32px;height:32px;font-size:1rem;}
+  .sg-enemy-portrait.sg-enemy-enhanced{width:44px;height:44px;font-size:1.4rem;}
   .sg-shop-items{grid-template-columns:1fr}
 }
 
@@ -1585,10 +1682,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <!-- 地图画面 -->
       <div id="sgMap" class="sg-screen" style="display:none">
         <div class="sg-map-header">
-          <span>第 <span id="sgActNum">一</span> 境</span>
-          <span class="sg-map-floor">层 <span id="sgFloorNum">1</span>/<span id="sgMaxFloor">12</span></span>
+          <span><span class="sg-floor-badge">第 <span id="sgActNum">一</span> 境</span></span>
+          <span><span class="sg-floor-badge">层 <span id="sgFloorNum">1</span> / <span id="sgMaxFloor">12</span></span></span>
         </div>
-        <div style="text-align:center;padding:0.3rem 0;font-size:0.8rem;color:var(--gold);">💰 <span id="sgMapGold">0</span> 金币</div>
+        <div style="text-align:center;padding:0.3rem 0;font-size:0.8rem;color:var(--gold);letter-spacing:0.05em;">💰 <span id="sgMapGold">0</span> 金币</div>
         <div class="sg-map" id="sgMapContainer"></div>
         <div style="text-align:center;padding:0.3rem 0;"><button class="sg-btn sg-btn-small" id="sgMapBack">返回</button></div>
       </div>
@@ -2332,6 +2429,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       lizhi_tianmu:{name:"天姥吟",cost:3,type:"attack",dmg:15,aoe:true,exhaust:true,desc:"安能摧眉折腰 · 全体15伤·消耗",rarity:"rare",char:"lizhi"},
       lizhi_changfeng:{name:"长风破浪",cost:2,type:"skill",gainEnergy:3,exhaust:true,desc:"直挂云帆济沧海 · 3能量·消耗",rarity:"rare",char:"lizhi"},
       lizhi_zuoxian:{name:"醉仙",cost:1,type:"power",desc:"每回合+1能量",rarity:"rare",power:"energy",char:"lizhi"},
+      // === 新增 李白专属卡片（Item 8）===
+      lizhi_zuixian:{name:"醉仙狂歌",cost:1,type:"attack",dmg:10,enemyHalf:true,desc:"醉仙狂歌 · 10伤·敌半血翻倍",rarity:"uncommon",char:"lizhi"},
+      lizhi_tianhe:{name:"天河流水",cost:2,type:"attack",dmg:8,hits:3,desc:"疑是银河落九天 · 8伤×3",rarity:"uncommon",char:"lizhi"},
+      lizhi_yueying:{name:"月影剑",cost:1,type:"attack",dmg:8,killEnergy:2,desc:"月下剑影 · 8伤·击杀+2能量",rarity:"common",char:"lizhi"},
       // === 苏轼专属 ===
       sush_dajiang:{name:"大江东去",cost:2,type:"attack",dmg:14,aoe:true,desc:"浪淘尽 · 全体14伤",rarity:"uncommon",char:"sush"},
       sush_dingfeng:{name:"也无风雨",cost:1,type:"skill",block:10,desc:"也无风雨也无晴 · 10格挡",rarity:"common",char:"sush"},
@@ -2345,6 +2446,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       sush_liying:{name:"流莺",cost:1,type:"attack",dmg:4,hits:3,desc:"百啭无人能解 · 4伤×3",rarity:"uncommon",char:"sush"},
       sush_shuiyun:{name:"水云间",cost:2,type:"skill",block:15,desc:"一蓑烟雨任平生 · 15格挡",rarity:"uncommon",char:"sush"},
       sush_kuangda:{name:"旷达",cost:2,type:"power",desc:"每回合+3格挡",rarity:"rare",power:"block",char:"sush"},
+      // === 新增 苏轼专属卡片（Item 8）===
+      sush_kuangda2:{name:"旷达",cost:1,type:"skill",block:10,draw:2,desc:"也无风雨也无晴 · 10格挡·抽2",rarity:"common",char:"sush"},
+      sush_jianghai:{name:"江海余生",cost:2,type:"skill",block:15,debuff:"strDown",val:3,desc:"江海寄余生 · 15格挡·减敌力3",rarity:"uncommon",char:"sush"},
+      sush_songfeng:{name:"松风",cost:1,type:"skill",block:6,nextAtkBonus:5,desc:"松风吹解带 · 6格挡·下次攻击+5",rarity:"common",char:"sush"},
       // === 李清照专属 ===
       liqing_xunmi:{name:"寻寻觅觅",cost:0,type:"skill",debuff:"weak",val:2,desc:"冷冷清清 · 虚弱2层",rarity:"common",char:"liqing"},
       liqing_mandu:{name:"满地黄花",cost:1,type:"attack",dmg:12,desc:"憔悴损 · 12伤",rarity:"common",char:"liqing"},
@@ -2358,6 +2463,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       liqing_xianglian:{name:"香帘",cost:1,type:"skill",block:6,gainEnergy:1,desc:"帘卷西风 · 6格挡·+1能量",rarity:"common",char:"liqing"},
       liqing_jingmeng:{name:"惊梦",cost:2,type:"attack",dmg:10,debuff:"vuln",val:2,desc:"剪不断理还乱 · 10伤·易伤2",rarity:"uncommon",char:"liqing"},
       liqing_wanque:{name:"婉约",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal",char:"liqing"},
+      // === 新增 李清照专属卡片（Item 8）===
+      liqing_wanque2:{name:"婉约",cost:1,type:"skill",block:5,debuff:"vuln",val:2,desc:"帘卷西风 · 5格挡·易伤2",rarity:"common",char:"liqing"},
+      liqing_hehua2:{name:"荷花渡",cost:2,type:"attack",dmg:6,heal:4,desc:"误入藕花深处 · 6伤·回4HP",rarity:"uncommon",char:"liqing"},
+      liqing_xianglian2:{name:"香帘",cost:0,type:"skill",draw:1,debuff:"strDown",val:1,desc:"帘卷西风 · 抽1·减敌力1",rarity:"common",char:"liqing"},
       // === 无色牌（事件获得） ===
       wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,desc:"万物静观皆自得 · 5格挡",rarity:"common"},
       wuse_liuguang:{name:"流光",cost:1,type:"attack",dmg:14,exhaust:true,desc:"流光容易把人抛 · 14伤·消耗",rarity:"uncommon"},
@@ -2375,15 +2484,15 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       { id:'lizhi', name:'李 白', title:'诗仙', maxHp:80, energy:3,
         desc:'豪放飘逸，以酒入诗',
         ability:'每回合第一张攻击牌伤害+3',
-        deck:['yinyong','yinyong','mosong','mosong','jingyesi','jingyesi','jiangjin','wanglu','dingfeng','shuidiao','lizhi_jiutian','lizhi_baixue','lizhi_wangyue','lizhi_bailu','lizhi_shuidao','lizhi_jiangnan','lizhi_yanbo','lizhi_taohua'] },
+        deck:['yinyong','yinyong','mosong','mosong','jingyesi','jingyesi','jiangjin','wanglu','dingfeng','shuidiao','lizhi_jiutian','lizhi_baixue','lizhi_wangyue','lizhi_bailu','lizhi_shuidao','lizhi_jiangnan','lizhi_yanbo','lizhi_taohua','lizhi_zuixian','lizhi_tianhe','lizhi_yueying'] },
       { id:'sush', name:'苏 轼', title:'词圣', maxHp:100, energy:3,
         desc:'旷达洒脱，随遇而安',
         ability:'每场战斗首次受伤-3',
-        deck:['yinyong','yinyong','mosong','mosong','mansha','nangezi','jiangcheng','niannu','shuidiao','yujia','sush_dajiang','sush_dingfeng','sush_liyue','sush_chiqiang','sush_sangyu','sush_shipo','sush_yangzhou','sush_xiyu'] },
+        deck:['yinyong','yinyong','mosong','mosong','mansha','nangezi','jiangcheng','niannu','shuidiao','yujia','sush_dajiang','sush_dingfeng','sush_liyue','sush_chiqiang','sush_sangyu','sush_shipo','sush_yangzhou','sush_xiyu','sush_kuangda2','sush_jianghai','sush_songfeng'] },
       { id:'liqing', name:'李清照', title:'易安居士', maxHp:70, energy:3,
         desc:'婉约细腻，以情入词',
         ability:'每回合第一张技能牌效果+50%',
-        deck:['yinyong','yinyong','mosong','mosong','dianjiang','shengsheng','diehua','yumeiren','ruanlang','zhegu','liqing_xunmi','liqing_mandu','liqing_wutong','liqing_yanzi','liqing_lianxin','liqing_chunyi','liqing_hehua','liqing_xianglian'] }
+        deck:['yinyong','yinyong','mosong','mosong','dianjiang','shengsheng','diehua','yumeiren','ruanlang','zhegu','liqing_xunmi','liqing_mandu','liqing_wutong','liqing_yanzi','liqing_lianxin','liqing_chunyi','liqing_hehua','liqing_xianglian','liqing_wanque2','liqing_hehua2','liqing_xianglian2'] }
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -2461,7 +2570,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       { id:'zijinguan', name:'紫金冠', desc:'获得1点初始格挡', effect:'startBlock', val:1 },
       { id:'yinjiazhou', name:'银甲胄', desc:'格挡效果+2', effect:'blockBonus', val:2 },
       { id:'qingtongjing', name:'青铜镜', desc:'查看敌人意图', effect:'seeIntents', val:1 },
-      { id:'yuruyi', name:'玉如意', desc:'商店物品打8折', effect:'shopDiscount', val:0.8 }
+      { id:'yuruyi', name:'玉如意', desc:'商店物品打8折', effect:'shopDiscount', val:0.8 },
+      // === 李白专属遗器（Item 8）===
+      { id:'qinglianjiu', name:'青莲酒', desc:'每回合首次攻击额外+5伤害', effect:'firstAttackBonusPlus', val:5, char:'lizhi' },
+      { id:'jinxing', name:'金星砚', desc:'攻击牌有30%概率不消耗能量', effect:'attackFreeChance', val:30, char:'lizhi' },
+      { id:'bailuyi', name:'白露衣', desc:'战斗开始时获得5点格挡+2力量', effect:'battleStartBlockStr', val:5, char:'lizhi' },
+      // === 苏轼专属遗器（Item 8）===
+      { id:'dongpoyin', name:'东坡印', desc:'每回合首次格挡额外+3', effect:'firstBlockBonus', val:3, char:'sush' },
+      { id:'xuejiancha', name:'雪煎茶', desc:'战斗开始时获得8点格挡', effect:'battleStartBlock', val:8, char:'sush' },
+      { id:'tengzhang', name:'竹杖', desc:'每回合回复2HP', effect:'turnHeal', val:2, char:'sush' },
+      // === 李清照专属遗器（Item 8）===
+      { id:'huanhuashi', name:'浣花石', desc:'使用技能牌时回复1HP', effect:'skillHeal', val:1, char:'liqing' },
+      { id:'lianyezhou', name:'莲叶舟', desc:'每回合第一张牌额外抽1张', effect:'firstCardExtraDraw', val:1, char:'liqing' },
+      { id:'qiuyunpa', name:'秋云帕', desc:'中毒/叠毒效果+2', effect:'poisonBonus', val:2, char:'liqing' }
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -2915,9 +3036,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
             line.setAttribute('y1', fromY);
             line.setAttribute('x2', toX);
             line.setAttribute('y2', toY);
-            line.setAttribute('stroke', isPath ? '#c9a84c' : '#c9a84c');
-            line.setAttribute('stroke-width', isPath ? '3' : '1.5');
-            line.setAttribute('stroke-opacity', isPath ? '0.9' : '0.18');
+            line.setAttribute('stroke', '#c9a84c');
+            line.setAttribute('stroke-width', isPath ? '4' : '2.5');
+            line.setAttribute('stroke-opacity', isPath ? '1' : '0.35');
             svg.appendChild(line);
           }
         }
@@ -2992,7 +3113,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       vulnPill:{name:'破甲散',desc:'敌人易伤2层',icon:'💔',effect:function(){ gBattle.buffs.vuln += 2; showEffectFloat(200,80,'易伤2'); }},
       doubleAtkPill:{name:'暴击丹',desc:'本回合下次攻击伤害翻倍',icon:'🔥',effect:function(){ gBattle.nextAttackMul = (gBattle.nextAttackMul||1)*2; showEffectFloat(100,200,'暴击蓄力'); }},
       healPoisonPill:{name:'以毒攻毒',desc:'回复8HP·敌人中毒3',icon:'🌿',effect:function(){ G.hp = Math.min(G.hp+8,G.maxHp); gBattle.enemyPoison += 3; showEffectFloat(100,200,'以毒攻毒'); }},
-      strBlockPill:{name:'铁骨丹',desc:'获得2力量+4格挡',icon:'⛰️',effect:function(){ gBattle.playerStr += 2; gBattle.playerBlock += 4; showEffectFloat(100,200,'铁骨铮铮'); }}
+      strBlockPill:{name:'铁骨丹',desc:'获得2力量+4格挡',icon:'⛰️',effect:function(){ gBattle.playerStr += 2; gBattle.playerBlock += 4; showEffectFloat(100,200,'铁骨铮铮'); }},
+      // === 李白专属灵丹（Item 8）===
+      lizhiWinePill:{name:'醉仙酿',desc:'本回合获得4力量',icon:'🍶',effect:function(){ gBattle.playerStr += 4; showEffectFloat(100,200,'酒力+4'); }},
+      lizhiMoonPill:{name:'月光丸',desc:'获得2能量+4格挡',icon:'🌙',effect:function(){ gBattle.energy += 2; gBattle.playerBlock += 4; showEffectFloat(100,200,'月华+2能'); }},
+      lizhiSwordPill:{name:'剑意丹',desc:'本回合下次攻击伤害翻倍',icon:'⚔️',effect:function(){ gBattle.nextAttackMul = (gBattle.nextAttackMul||1)*2; showEffectFloat(100,200,'剑意蓄力'); }},
+      // === 苏轼专属灵丹（Item 8）===
+      sushRiverPill:{name:'江海丹',desc:'获得12格挡',icon:'🌊',effect:function(){ gBattle.playerBlock += 12; showEffectFloat(100,200,'江海+12格挡'); }},
+      sushWindPill:{name:'天风散',desc:'获得2力量+6格挡',icon:'🌅',effect:function(){ gBattle.playerStr += 2; gBattle.playerBlock += 6; showEffectFloat(100,200,'风骨+2'); }},
+      sushBambooPill:{name:'竹韵丸',desc:'回复12HP',icon:'🎋',effect:function(){ G.hp = Math.min(G.hp+12, G.maxHp); showEffectFloat(100,200,'竹韵+12HP'); }},
+      // === 李清照专属灵丹（Item 8）===
+      liqingFlowerPill:{name:'花魂丹',desc:'敌人虚弱2层·中毒3层',icon:'🌸',effect:function(){ gBattle.buffs.weak += 2; gBattle.enemyPoison += 3; showEffectFloat(200,80,'花魂毒3'); }},
+      liqingAutumnPill:{name:'秋意散',desc:'敌人易伤2层·获得6格挡',icon:'🍂',effect:function(){ gBattle.buffs.vuln += 2; gBattle.playerBlock += 6; showEffectFloat(200,80,'秋意浓'); }},
+      liqingHeartPill:{name:'莲心丹',desc:'回复8HP',icon:'💗',effect:function(){ G.hp = Math.min(G.hp+8, G.maxHp); showEffectFloat(100,200,'莲心+8HP'); }}
     };
 
     var gBattle = null; // { enemy, hp, maxHp, intent, buffs, turn, block, ... }
@@ -3057,11 +3190,34 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         G.hp = Math.min(G.hp + 10, G.maxHp);
       }
 
+      // === 新增遗器效果（Item 8） ===
+      if(hasRelic('qinglianjiu')){ gBattle.firstAttackBonusPlus = true; }
+      if(hasRelic('bailuyi')){ gBattle.playerBlock += 5; gBattle.playerStr += 2; }
+      if(hasRelic('xuejiancha')){ gBattle.playerBlock += 8; }
+      if(hasRelic('tengzhang')){ gBattle.turnHealAmt = 2; }
+      if(hasRelic('qiuyunpa')){ gBattle.poisonBonus = 2; }
+      if(hasRelic('dongpoyin')){ gBattle.firstBlockBonus = 3; }
+      if(hasRelic('jinxing')){ gBattle.attackFreeChance = 30; }
+      if(hasRelic('huanhuashi')){ gBattle.skillHealAmt = 1; }
+      if(hasRelic('lianyezhou')){ gBattle.firstCardExtraDraw = 1; }
+
       pickIntent(gBattle);
 
-            switchBgmForNode('battle', gBattle.isElite, gBattle.isBoss);
       hideAllScreens();
       showScreen('sgBattle');
+      // 敌人登场闪白特效（Item 10）
+      setTimeout(function(){
+        var introEl = document.getElementById('sgEnemy');
+        if(introEl){
+          var flash = document.createElement('div');
+          flash.className = 'sg-enemy-intro-flash';
+          introEl.appendChild(flash);
+          setTimeout(function(){ if(flash.parentNode) flash.parentNode.removeChild(flash); }, 900);
+        }
+      }, 100);
+
+      // 先切换画面，再启动BGM（避免音频失败阻塞画面切换）
+      switchBgmForNode('battle', gBattle.isElite, gBattle.isBoss);
       // Show end turn button (not a .sg-screen, so set display directly)
       var etBtn = document.getElementById('sgEndTurnBtn');
       if(etBtn) etBtn.style.display = '';
@@ -3169,6 +3325,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     function drawCards(n){
       if(!gBattle) return;
       var extra = hasRelic('shizhen') ? 1 : 0;
+      if(hasRelic('lianyezhou')) extra += 1;
       n = n + extra;
 
       for(var i=0;i<n;i++){
@@ -3212,6 +3369,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         cost = Math.max(0, cost - 1);
       }
 
+      // jinxing: 攻击牌有30%概率不消耗能量
+      if(hasRelic('jinxing') && card.type === 'attack' && Math.random() * 100 < 30 && cost > 0){
+        cost = 0;
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '金星砚免费');
+      }
+
       if(gBattle.energy < cost) return false;
 
       gBattle.energy -= cost;
@@ -3228,6 +3391,11 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(hasRelic('moling') && gBattle.firstAttackBonus && card.type === 'attack'){
         finalDmg += 5;
         gBattle.firstAttackBonus = false;
+      }
+      // qinglianjiu: 青莲酒每回合首次攻击额外+5
+      if(hasRelic('qinglianjiu') && gBattle.cardPlayedThisTurn === 1 && card.type === 'attack'){
+        finalDmg += 5;
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '青莲酒+5');
       }
 
       // Character ability: 李白 first attack +3
@@ -3252,6 +3420,26 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(card.dmgPerMissingHp){
         var missing = G.maxHp - G.hp;
         finalDmg += Math.floor(missing / 20);
+      }
+
+      // 新增特殊效果：敌半血翻倍
+      if(card.enemyHalf && gBattle.hp < gBattle.maxHp / 2){
+        finalDmg = Math.floor(finalDmg * 2);
+      }
+
+      // 新增特殊效果：下次攻击+5
+      if(card.nextAtkBonus && !gBattle.nextAtkBonus){
+        gBattle.nextAtkBonus = card.nextAtkBonus;
+      }
+
+      // nextAtkBonus
+      if(gBattle.nextAtkBonus && card.type === 'attack'){
+        finalDmg += gBattle.nextAtkBonus;
+        if(gBattle.nextAtkBonus > 0){
+          var bonusAmt = gBattle.nextAtkBonus;
+          gBattle.nextAtkBonus = 0;
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-60, '松风惠+'+bonusAmt);
+        }
       }
 
       finalDmg += strBonus;
@@ -3280,6 +3468,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         }
       }
 
+      // killEnergy: 如果此卡击杀敌人，获得能量
+      if(card.killEnergy && gBattle.hp <= 0){
+        gBattle.energy += card.killEnergy;
+        showEffectFloat(window.innerWidth/2, 60, '月影剑+'+card.killEnergy+'能量');
+      }
+
       // Block
       if(card.block){
         var blockVal = card.block;
@@ -3288,12 +3482,18 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         if(G.charId === 'liqing' && card.type === 'skill' && gBattle.cardPlayedThisTurn === 1){
           blockVal = Math.floor(blockVal * 1.5);
         }
+        // dongpoyin: 东坡印首次格挡额外+3
+        if(hasRelic('dongpoyin') && gBattle.cardPlayedThisTurn === 1){
+          blockVal += 3;
+        }
         gBattle.playerBlock += blockVal;
       }
 
       // Poison
       if(card.poison){
-        gBattle.enemyPoison += card.poison;
+        var poisonAmt = card.poison;
+        if(hasRelic('qiuyunpa')) poisonAmt += 2;
+        gBattle.enemyPoison += poisonAmt;
       }
 
       // Debuffs
@@ -3348,6 +3548,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       // Relic: skill energy chance
       if(hasRelic('fengliu') && card.type === 'skill' && Math.random() * 100 < 25){
         gBattle.energy++;
+      }
+      // huanhuashi: 洗花石使用技能牌回复1HP
+      if(hasRelic('huanhuashi') && card.type === 'skill'){
+        G.hp = Math.min(G.hp + 1, G.maxHp);
       }
 
       // Power cards
@@ -3612,6 +3816,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         gBattle.playerVuln += 1;
         showEffectFloat(50, 200, "诅咒：虚弱+易伤");
       }
+// tengzhang: 竹杖每回合回复2HP
+      if(hasRelic('tengzhang') && G.hp < G.maxHp){
+        G.hp = Math.min(G.hp + 2, G.maxHp);
+        showEffectFloat(100, 200, '竹杖+2HP');
+      }
+
 applyPoison();
 
       // Enemy plays
@@ -3739,6 +3949,17 @@ applyPoison();
       if(!gBattle) return;
 
       // Enemy name and HP
+      // 敌人立绘emoji映射（Item 10）
+      var enemyEmojis = {
+        lichou:'💔',qiusi:'🍂',yeyu:'🌧️',guhong:'🦅',zhuangzhi:'🔥',chouchang:'😔',piaobo:'🍃',
+        saihong:'🕊️',muyu:'☔',changfeng:'🌪️',feixu:'🌿',zhengyan:'🐦',kuangfeng:'💨',canhun:'👻',
+        xingshuang:'❄️',fengchen:'🌫️',canghai:'🌊',qingyun:'☁️',fusheng:'🫧',mingshi:'💀',zhanshen:'⚔️',wushuang:'🏆',
+        cimo:'📿',shihun:'📜',wenqu:'⭐',shuimo:'🖌️',bihun:'✒️',
+        exam:'📖',master:'👑',saint:'✨'
+      };
+      var enemyEmoji = enemyEmojis[gBattle.id] || '👹';
+      document.getElementById('sgEnemyPortrait').textContent = enemyEmoji;
+      document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
       document.getElementById('sgEnemyName').textContent = gBattle.name;
       document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
       var abilityNames = {enrage:"🔥暴怒",regen:"💚再生",summon:"👥召唤",curse:"💀诅咒"};
@@ -3746,6 +3967,8 @@ applyPoison();
         document.getElementById('sgEnemyDesc').textContent += ' ['+abilityNames[gBattle.specialAbility]+']';
       }
       var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
+      var hpBarWrap = document.querySelector('.sg-enemy .sg-hp-bar-wrap');
+      if(hpBarWrap) hpBarWrap.className = 'sg-hp-bar-wrap sg-hp-bar-enhanced';
       document.getElementById('sgEnemyHpFill').style.width = eHpPct + '%';
       document.getElementById('sgEnemyHp').textContent = gBattle.hp; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
       document.getElementById('sgEnemyBlockNum').textContent = gBattle.block; document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
@@ -3764,6 +3987,19 @@ applyPoison();
 
       // Enemy poison
       document.getElementById('sgEnemyPoison').textContent = gBattle.enemyPoison;
+
+      // Player Portrait (Item 6)
+      var charPortraits = {lizhi:'🌙',sush:'🌊',liqing:'🌸'};
+      var pEmoji = charPortraits[G.charId] || '🍶';
+      var pClass = G.charId || '';
+      var portraitEl = document.getElementById('sgPlayerPortrait');
+      if(portraitEl){
+        portraitEl.textContent = pEmoji;
+        portraitEl.className = 'sg-player-portrait-icon ' + pClass;
+        var wrap = portraitEl.closest('.sg-player-portrait-wrap');
+        if(wrap) wrap.className = 'sg-player-portrait-frame sg-player-portrait-wrap';
+      }
+      document.getElementById('sgPlayerName').textContent = G.charName;
 
       // Player HP
       var pHpPct = Math.max(0, Math.floor(G.hp / G.maxHp * 100));
@@ -3851,7 +4087,9 @@ applyPoison();
       var availRelics = [];
       for(var ri=0;ri<RELICS.length;ri++){
         if(G.relics.indexOf(RELICS[ri].id) === -1){
-          availRelics.push(RELICS[ri]);
+          if(!RELICS[ri].char || RELICS[ri].char === G.charId){
+            availRelics.push(RELICS[ri]);
+          }
         }
       }
       shuffle(availRelics);
@@ -4036,7 +4274,9 @@ applyPoison();
         (function(ch, resultText){
           btn.addEventListener('click', function(){
             applyEventEffect(ch.effects, resultText);
-            completeNode();
+            // 显示结果文字1.5秒后自动继续
+            btn.textContent = '✅ ' + (resultText || '继续');
+            setTimeout(function(){ completeNode(); }, 1500);
           });
         })(choice, choice.result || '');
         choicesEl.appendChild(btn);
@@ -4232,7 +4472,7 @@ applyPoison();
       if(relicEl && Math.random() < 0.3){
         var availR = [];
         for(var ri=0;ri<RELICS.length;ri++){
-          if(G.relics.indexOf(RELICS[ri].id) === -1) availR.push(RELICS[ri]);
+          if(G.relics.indexOf(RELICS[ri].id) === -1 && (!RELICS[ri].char || RELICS[ri].char === G.charId)) availR.push(RELICS[ri]);
         }
         if(availR.length > 0){
           var newRelic = availR[Math.floor(Math.random() * availR.length)];
@@ -4583,10 +4823,16 @@ applyPoison();
             var html2 = '';
             for(var ci=0;ci<CHARACTERS.length;ci++){
               var ch = CHARACTERS[ci];
-              html2 += '<div class="sg-cs-card" data-char="'+ch.id+'">' +
+              // 根据角色选择emoji和立绘样式
+var charEmojis = {lizhi:'🌙',sush:'🌊',liqing:'🌸'};
+var charClasses = {lizhi:'sg-char-lizhi',sush:'sg-char-sush',liqing:'sg-char-liqing'};
+var emoji = charEmojis[ch.id] || '📜';
+var cssClass = charClasses[ch.id] || '';
+html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' +
+                '<div class="sg-cs-avatar">'+emoji+'</div>' +
                 '<div class="sg-cs-char-name">'+ch.name+'</div>' +
-                '<div class="sg-cs-title">「'+ch.title+'」</div>' +
-                '<div class="sg-cs-hp">❤️'+ch.maxHp+'</div>' +
+                '<div class="sg-cs-char-title">「'+ch.title+'」</div>' +
+                '<div class="sg-cs-hp">❤️ '+ch.maxHp+'</div>' +
                 '<div class="sg-cs-desc">'+ch.desc+'</div>' +
                 '<div class="sg-cs-ability">'+ch.ability+'</div>' +
                 '</div>';
