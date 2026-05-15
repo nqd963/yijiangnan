@@ -474,7 +474,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .mp-app .adesc{font-size:.7rem;color:var(--text-faint);line-height:1.4;}
 
 /* app views */
-.mp-view{display:none;padding:1rem 1.2rem 2rem;max-width:600px;margin:0 auto;}
+.mp-view{display:none;padding:1rem 1.2rem 2rem;max-width:1200px;margin:0 auto;}
 .mp-view.active{display:block;}
 
 /* ── 词谱宝库 ── */
@@ -764,7 +764,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     0%,100%{box-shadow: inset 0 0 120px rgba(200,40,40,0.2);}
     50%{box-shadow: inset 0 0 160px rgba(200,40,40,0.35);}
   }
-.sg-wrap{max-width:720px;margin:0 auto;min-height:450px;}
+.sg-wrap{max-width:1200px;margin:0 auto;min-height:450px;}
 .sg-screen{animation:sgFade .35s ease forwards;}
 @keyframes sgFade{from{opacity:0;transform:translateY(8px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 
@@ -1115,6 +1115,32 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-deck-grid .sg-card:hover{transform:none;}
 
 /* 响应式 */
+@media(min-width:1200px){
+  .sg-card{width:150px;padding:.7rem .5rem .5rem;font-size:1.1rem;}
+  .sg-card .sg-card-name{font-size:.85rem;}
+  .sg-card .sg-card-desc{font-size:.65rem;}
+  .sg-card-cost{width:26px;height:26px;font-size:.75rem;line-height:26px;}
+  #sgHand{gap:10px;min-height:150px;}
+  #sgHand .sg-card{min-width:130px;}
+  .sg-enemy-portrait{width:90px;height:90px;font-size:2.5rem;}
+  .sg-player-portrait{width:70px;height:70px;font-size:1.8rem;}
+  .sg-map-node{width:56px;height:56px;font-size:1.2rem;min-width:56px;}
+  .sg-btn{font-size:.95rem;padding:.7rem 1.6rem;}
+  .sg-title-text{font-size:2.8rem;}
+  .sg-screen{font-size:1.05rem;}
+  .sg-status{font-size:.85rem;}
+  .sg-cs-title{font-size:1.4rem;}
+  .sg-cs-portrait-card{width:220px;padding:1.2rem 1rem;}
+  .sg-cs-portrait-card .sg-cs-avatar{width:80px;height:80px;font-size:2.5rem;}
+  .sg-cs-portrait-card .sg-cs-char-name{font-size:1.2rem;}
+  .sg-enemy{min-width:260px;padding:1rem 1.5rem;}
+  .sg-enemy-name{font-size:1.2rem;}
+  .sg-hand{gap:10px;}
+  .sg-shop-items{grid-template-columns:repeat(3,1fr);}
+  .sg-floor-badge{font-size:.9rem;padding:.3rem .8rem;}
+  .sg-map-header{padding:.8rem 1rem;}
+  .sg-map-floor{gap:20px;padding:14px 8px;}
+}
 @media(max-width:768px){
   #sgBattle{padding:0.3rem!important}
   #sgHand .sg-card{min-width:70px;padding:4px;font-size:0.6rem}
@@ -1157,6 +1183,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .sg-player-portrait-icon{width:32px;height:32px;font-size:1rem;}
   .sg-enemy-portrait.sg-enemy-enhanced{width:44px;height:44px;font-size:1.4rem;}
   .sg-shop-items{grid-template-columns:1fr}
+  .sg-hand{gap:4px;}
+  .sg-map-floor{gap:8px;padding:6px 2px;}
+  .sg-turn-ctrl{padding:0.2rem;}
+  #sgPillsArea{min-height:1.2rem;}
+  #sgPillsArea button{font-size:0.5rem!important;padding:0.12rem 0.25rem!important;}
+  .sg-enemy-area{padding:.3rem 0 .5rem;}
+  .sg-player-area{padding:.15rem 0;}
+  .sg-cs-cards{gap:.5rem;}
 }
 
   @keyframes sg-particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
@@ -3250,6 +3284,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       gIsBattling = true;
       renderBattle();
+      // 回合宣告：第1回合
+      setTimeout(function(){ showTurnAnnounce('第 1 回合'); }, 400);
       } catch(e){
         console.error('[诗境问道] startBattle 错误:', e, eData);
       }
@@ -3582,9 +3618,22 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         gBattle.discardPile.push(deckIdx);
       }
 
-      
+      // 出牌特效：全屏微闪 + 粒子
       var cardEl = document.querySelector('#sgHand .sg-card');
-      if(cardEl) showPlayParticles(cardEl);renderBattle();
+      if(cardEl){
+        showPlayParticles(cardEl);
+        // 卡片飞出动画
+        cardEl.style.animation = 'sgCardPlay 0.25s ease forwards';
+      }
+      // 屏幕微闪
+      var battleEl = document.getElementById('sgBattle');
+      if(battleEl){
+        var flashOverlay = document.createElement('div');
+        flashOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(255,255,255,0.06);pointer-events:none;z-index:50;animation:sgFadeOut 0.3s ease forwards;';
+        document.body.appendChild(flashOverlay);
+        setTimeout(function(){ if(flashOverlay.parentNode) flashOverlay.parentNode.removeChild(flashOverlay); }, 350);
+      }
+      renderBattle();
       checkEnemyDeath();
       return true;
     }
@@ -3615,6 +3664,37 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           el.offsetTop + 60,
           dmg
         );
+      }
+
+      // 击中特效：敌人生成粒子 + 闪红
+      if(dmg > 0){
+        var enemyPortrait = document.getElementById('sgEnemyPortrait');
+        if(enemyPortrait){
+          enemyPortrait.style.transition = 'transform 0.08s';
+          enemyPortrait.style.transform = 'scale(1.15)';
+          setTimeout(function(){
+            enemyPortrait.style.transform = 'scale(1)';
+          }, 80);
+        }
+        // 粒子爆发
+        var pCount = Math.min(8, Math.floor(dmg / 3) + 3);
+        for(var pi=0; pi<pCount; pi++){
+          var p = document.createElement('div');
+          p.style.cssText = 'position:fixed;width:'+(4+Math.random()*4)+'px;height:'+(4+Math.random()*4)+'px;border-radius:50%;background:rgb(255,'+Math.floor(150+Math.random()*80)+',0);pointer-events:none;z-index:200;';
+          var rect2 = (enemyPortrait||el).getBoundingClientRect();
+          var cx = rect2.left + rect2.width/2;
+          var cy = rect2.top + rect2.height/2;
+          p.style.left = cx+'px'; p.style.top = cy+'px';
+          var a = Math.random()*Math.PI*2;
+          var dist2 = 30+Math.random()*50;
+          p.style.transition = 'all '+(0.3+Math.random()*0.2)+'s ease-out';
+          document.body.appendChild(p);
+          requestAnimationFrame(function(){
+            p.style.transform = 'translate('+Math.cos(a)*dist2+'px,'+Math.sin(a)*dist2+'px) scale(0)';
+            p.style.opacity = '0';
+          });
+          setTimeout(function(){ if(p.parentNode) p.parentNode.removeChild(p); }, 600);
+        }
       }
 
       if(hasRelic('longquanjian') && gBattle.isElite && gBattle.hp <= 0){
@@ -3858,6 +3938,8 @@ applyPoison();
 
       // Reset for next turn
       gBattle.turn++;
+      // 回合宣告
+      setTimeout(function(){ showTurnAnnounce('第 ' + (gBattle.turn + 1) + ' 回合'); }, 300);
       gBattle.energy = G.maxEnergy;
       if(G.powers && G.powers.energy){
         gBattle.energy += G.powers.energy;
@@ -4644,11 +4726,15 @@ applyPoison();
     var gBgmLoopTimer = null;
 
     function initAudio(){
-      if(gBgmCtx) return;
+      if(gBgmCtx){
+        if(gBgmCtx.state === 'suspended') gBgmCtx.resume();
+        return;
+      }
       try {
         var ctx = new (window.AudioContext || window.webkitAudioContext)();
         gBgmCtx = ctx;
         audioCtx = ctx;   // 同时设置 audioCtx，兼容钢琴小游戏
+        if(ctx.state === 'suspended') ctx.resume();
         gBgmGain = gBgmCtx.createGain();
         gBgmGain.gain.value = 0.08;
         gBgmGain.connect(gBgmCtx.destination);
