@@ -2293,8 +2293,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       qinyuan:{name:"沁园春",cost:3,type:"skill",heal:10,maxHp:2,exhaust:true,desc:"北国风光千里雪 · 回10HP·+2最大HP·消耗",rarity:"rare"},
       liuzhou:{name:"六州歌头",cost:3,type:"attack",dmg:28,exhaust:true,desc:"少年侠气 · 28伤消耗",rarity:"rare"},
       yiqine:{name:"忆秦娥",cost:2,type:"attack",dmg:18,exhaust:true,debuff:"vuln",val:2,debuff2:"weak",val2:2,desc:"西风残照汉家陵阙 · 18伤·易伤2·虚弱2·消耗",rarity:"rare"},
-      yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"}
-          yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"},
+      yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"},
+          // === 通用新增 ===,cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"},
       // === 通用新增 ===
       liuyachao:{name:"六幺令",cost:1,type:"attack",dmg:5,hits:3,desc:"绿阴春尽 · 5伤害×3",rarity:"common"},
       shizhouman:{name:"十洲慢",cost:1,type:"skill",block:6,desc:"十洲云水 · 6格挡",rarity:"common"},
@@ -2894,7 +2894,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       pickIntent(gBattle);
 
-      switchBgmForNode('explore');
+      switchBgmForNode('battle', gBattle.isElite, gBattle.isBoss);
       hideAllScreens();
       showScreen('sgBattle');
       showScreen('sgEndTurnBtn');
@@ -2902,15 +2902,6 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       drawCards(5);
       // Set battle background based on act and enemy type
-      var bgEl = document.getElementById('sgBattle');
-      if(bgEl){
-        var bgClass = 'switchBgmForNode('battle', gBattle.isElite, gBattle.isBoss);
-      sg-bg-act' + (G.act || 1);
-        if(gBattle.isBoss) bgClass += ' sg-bg-boss';
-        else if(gBattle.isElite) bgClass += ' sg-bg-elite';
-        bgEl.className = bgEl.className.replace(/sg-bg-\S+/g,'').trim() + ' ' + bgClass;
-      }
-            // Set battle background based on act and enemy type
       var bgEl = document.getElementById('sgBattle');
       if(bgEl){
         var bgClass = 'sg-bg-act' + (G.act || 1);
