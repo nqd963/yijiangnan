@@ -1659,7 +1659,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   var appCards = document.querySelectorAll('.mp-app');
   var mpViews = document.querySelectorAll('.mp-view');
   var mpTitle = document.querySelector('.mp-title');
-  var viewNames = {cipu:'词谱宝库',game:'清音阁·音游',pingze:'平仄校验器',music:'音乐演奏'};
+  var viewNames = {cipu:'词谱宝库',game:'清音阁·音游',pingze:'平仄校验器',music:'音乐演奏',shiciGame:'诗境问道'};
 
   mpBtn.addEventListener('click', function(){
     mpOverlay.classList.add('open');
@@ -1689,7 +1689,18 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   });
 
   mpOverlay.addEventListener('click', function(e){
-    if(e.target === mpOverlay) closeMp();
+    if(e.target === mpOverlay) {
+      // If a view is active, go back to home grid instead of closing
+      var av = document.querySelector('.mp-view.active');
+      if(av) {
+        av.classList.remove('active');
+        mpHome.style.display = 'grid';
+        mpBack.innerHTML = '\u2190';
+        mpTitle.innerHTML = '填词小工具 <span class="mp-sub">词学 · 格律 · 音韵</span>';
+      } else {
+        closeMp();
+      }
+    }
   });
 
   for(var ci=0;ci<appCards.length;ci++){
@@ -1698,6 +1709,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         var view = card.getAttribute('data-view');
         var viewEl = document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1));
         if(viewEl){
+          // Deactivate any previously active view first
+          var prev = document.querySelector('.mp-view.active');
+          if(prev) prev.classList.remove('active');
           mpHome.style.display = 'none';
           viewEl.classList.add('active');
           mpTitle.textContent = viewNames[view] || '填词小工具';
