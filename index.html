@@ -777,12 +777,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-map-node .sg-node-label{position:absolute;bottom:-16px;font-size:.5rem;color:var(--text-faint);white-space:nowrap;}
 .sg-map-node.boss{border-color:var(--red-seal);}
 .sg-map-node.boss.current{box-shadow:0 0 12px rgba(194,58,43,.4);}
+.sg-map-node.elite{border-color:#a855f7;}
+.sg-map-node.elite.current{box-shadow:0 0 12px rgba(168,85,247,.4);}
 .sg-map-connector{width:2px;height:12px;background:var(--border);}
 .sg-map-connector.active{background:var(--gold);}
 
 /* ── 战斗 ── */
 .sg-enemy-area{text-align:center;padding:.5rem 0 .8rem;}
-.sg-enemy{display:inline-block;padding:.8rem 1.5rem;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:160px;}
+.sg-enemy{display:inline-block;padding:.8rem 1.5rem;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:160px;position:relative;overflow:hidden;}
 .sg-enemy-name{font-size:1rem;font-weight:700;color:var(--red-seal);margin-bottom:.3rem;}
 .sg-enemy-intent{font-size:.65rem;color:var(--text-faint);margin-bottom:.3rem;min-height:1.2em;}
 .sg-hp-bar-wrap{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin:.2rem 0;}
@@ -794,6 +796,28 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   animation:sgDmgFloat .8s ease-out forwards;
 }
 @keyframes sgDmgFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
+
+/* ── 战斗特效 ── */
+.sg-hit-flash{position:absolute;inset:0;border-radius:12px;pointer-events:none;animation:sgHitFlash .25s ease-out forwards;}
+@keyframes sgHitFlash{0%{background:rgba(255,60,60,.5);box-shadow:inset 0 0 30px rgba(255,60,60,.6);}100%{background:transparent;box-shadow:inset 0 0 0 transparent;}}
+.sg-shake{animation:sgShake .2s ease;}
+@keyframes sgShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-3px)}}
+.sg-turn-announce{
+  position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);
+  font-size:1.6rem;font-weight:900;color:var(--gold);text-shadow:0 2px 12px rgba(0,0,0,.5);
+  pointer-events:none;z-index:20;
+  animation:sgTurnAnnounce .8s ease-out forwards;
+}
+@keyframes sgTurnAnnounce{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}60%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-60%) scale(.9)}}
+.sg-block-float{
+  position:absolute;font-size:.9rem;font-weight:700;pointer-events:none;z-index:10;color:#3b82f6;
+  animation:sgBlockFloat .7s ease-out forwards;
+}
+@keyframes sgBlockFloat{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-30px)}}
+.sg-heal-float{
+  position:absolute;font-size:.9rem;font-weight:700;pointer-events:none;z-index:10;color:#22c55e;
+  animation:sgBlockFloat .7s ease-out forwards;
+}
 
 /* ── 玩家状态 ── */
 .sg-player-area{padding:.3rem 0;}
@@ -830,6 +854,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-card.power{border-color:#a855f7;}
 .sg-card.power:hover{border-color:#c084fc;}
 .sg-card .sg-card-type{font-size:.45rem;color:var(--text-faint);}
+.sg-card.playing{animation:sgCardPlay .25s ease forwards;}
+@keyframes sgCardPlay{0%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}100%{transform:scale(.8);opacity:0}}
 
 /* ── 回合控制 ── */
 .sg-turn-ctrl{text-align:center;padding:.3rem 0;}
@@ -2085,7 +2111,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       G = {
         screen:"title",
-        floor:0, maxFloor:7,
+        floor:0, maxFloor:14,
         nodeIdx:0, path:[], mapNodes:[],
         player:{
           hp:80, maxHp:80, block:0,
@@ -2110,8 +2136,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
     /* ══════ 地图生成 ══════ */
     function generateMap() {
-      var types = ["battle","battle","rest","battle","treasure","battle","boss"];
-      var branches = [1,2,2,2,2,1,1];
+      var types = ["battle","battle","rest","battle","treasure","battle","battle","rest","elite","battle","treasure","rest","battle","battle","boss"];
+      var branches = [1,2,2,2,2,2,2,1,2,2,2,1,1,1,1];
       var nodes = [];
       var enemies = ["lichou","qiusi","yeyu","guhong","zhuangzhi"];
       var eliteEnemies = ["cimo"];
@@ -2119,12 +2145,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       // Floor 0 (always single battle)
       nodes.push({floor:0,col:0,type:"battle",enemy:enemies[Math.floor(Math.random()*enemies.length)],done:false,connections:[]});
 
-      for(var f=1;f<7;f++){
+      for(var f=1;f<types.length;f++){
         var cols = branches[f];
         var rowEnemies = shuffle(enemies.slice());
         for(var c=0;c<cols;c++){
           var node = {floor:f,col:c,type:types[f],done:false,connections:[]};
           if(node.type==="battle") node.enemy = rowEnemies[c % rowEnemies.length];
+          if(node.type==="elite") node.enemy = "cimo";
           if(node.type==="boss") node.enemy = "shisheng";
           if(node.type==="treasure") node.enemy = null;
           if(node.type==="rest") node.enemy = null;
@@ -2186,7 +2213,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       var curNode = getCurrentNode();
       document.getElementById("sgFloorNum").textContent = curNode.done ? (G.floor + 2) : (G.floor + 1);
       document.getElementById("sgMaxFloor").textContent = G.maxFloor;
-      var actNames = ["一","二","三","四","五","六","七"];
+      var actNames = ["一","二","三","四","五","六","七","八","九","十","十一","十二","十三","十四","末"];
       var actEl = document.getElementById("sgActNum");
       if(actEl) actEl.textContent = actNames[curNode.done ? G.floor+1 : G.floor] || "末";
 
@@ -2204,7 +2231,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       // Build set of reachable nodes from current
       var reachable = {};
-      if(!curNode.done && curNode.connections) {
+      if(curNode.connections) {
         for(var ci=0;ci<curNode.connections.length;ci++) reachable[curNode.connections[ci]] = true;
       }
 
@@ -2234,7 +2261,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           if(node.type==="battle") icon = "⚔️";
           if(node.type==="rest") icon = "🏮";
           if(node.type==="treasure") icon = "📦";
-          if(node.type==="boss") { icon = "👹"; nd.classList.add("boss"); }
+          if(node.type==="elite") { icon = "💀"; nd.classList.add("elite"); }
+        if(node.type==="boss") { icon = "👹"; nd.classList.add("boss"); }
           if(node.done) nd.classList.add("completed");
           // Current node or reachable from current
           if(idx === G.nodeIdx && !node.done) {
@@ -2274,7 +2302,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       var node = G.mapNodes[idx];
       G.nodeIdx = idx;
       G.floor = node.floor;
-      if(node.type==="battle" || node.type==="boss") startBattle(node.enemy);
+      if(node.type==="battle" || node.type==="elite" || node.type==="boss") startBattle(node.enemy);
       else if(node.type==="rest") showRest();
       else if(node.type==="treasure") showTreasure();
     }
@@ -2334,6 +2362,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       G.enemy.intent = pickIntent();
       showScreen("battle");
       renderBattle();
+      showTurnAnnounce("你的回合");
       drawCards(G.player.drawPerTurn + (hasRelic("extraDraw")?1:0));
     }
 
@@ -2404,9 +2433,11 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         if(block > 0) {
           var extra = hasRelic("extraBlock") ? 2 : 0;
           G.player.block += block + extra;
+          showEffectFloat("+" + block + " 格挡", document.getElementById("sgPlayerArea"), "sg-block-float");
         }
         if(card.heal) {
           G.player.hp = Math.min(G.player.maxHp, G.player.hp + card.heal);
+          showEffectFloat("+" + card.heal + " HP", document.getElementById("sgPlayerArea"), "sg-heal-float");
         }
         if(card.maxHp) {
           G.player.maxHp += card.maxHp;
@@ -2454,6 +2485,44 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       setTimeout(function(){ try{el.removeChild(f);}catch(e){} }, 900);
     }
 
+    function showEffectFloat(text, el, className) {
+      if(!el) return;
+      var f = document.createElement("div");
+      f.className = className;
+      f.textContent = text;
+      f.style.left = "50%";
+      f.style.top = "20%";
+      el.style.position = "relative";
+      el.appendChild(f);
+      setTimeout(function(){ try{el.removeChild(f);}catch(e){} }, 800);
+    }
+
+    function showHitFlash() {
+      var el = document.getElementById("sgEnemy");
+      if(!el) return;
+      var flash = document.createElement("div");
+      flash.className = "sg-hit-flash";
+      el.appendChild(flash);
+      setTimeout(function(){ try{el.removeChild(flash);}catch(e){} }, 300);
+    }
+
+    function shakeScreen() {
+      var wrap = document.querySelector(".sg-wrap");
+      if(!wrap) return;
+      wrap.classList.add("sg-shake");
+      setTimeout(function(){ try{wrap.classList.remove("sg-shake");}catch(e){} }, 300);
+    }
+
+    function showTurnAnnounce(text) {
+      var wrap = document.querySelector(".sg-wrap");
+      if(!wrap) return;
+      var el = document.createElement("div");
+      el.className = "sg-turn-announce";
+      el.textContent = text;
+      wrap.appendChild(el);
+      setTimeout(function(){ try{wrap.removeChild(el);}catch(e){} }, 900);
+    }
+
     function damageEnemy(dmg) {
       var e = G.enemy;
       // 玩家虚弱则伤害降低
@@ -2467,13 +2536,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         else { blocked = e.block; dmg -= e.block; e.block = 0; }
       }
       e.hp = Math.max(0, e.hp - dmg);
-      if(dmg > 0) showDmgFloat(dmg, document.getElementById("sgEnemy"), "#ef4444");
+      if(dmg > 0) {
+        showDmgFloat(dmg, document.getElementById("sgEnemy"), "#ef4444");
+        showHitFlash();
+        if(dmg >= 8) shakeScreen();
+      }
     }
 
     function checkEnemyDeath() {
       if(G.enemy.hp <= 0) {
         // Victory!
-        showCardReward();
+        showTurnAnnounce("胜利！");
+        setTimeout(function(){ showCardReward(); }, 600);
+        return;
       }
     }
 
@@ -2481,6 +2556,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     function enemyTurn() {
       G.isPlayerTurn = false;
       var e = G.enemy;
+      showTurnAnnounce("敌人回合");
       var intent = e.intent;
       if(!intent) { G.isPlayerTurn = true; return; }
 
@@ -2495,13 +2571,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           if(G.player.block >= hitDmg) { G.player.block -= hitDmg; hitDmg = 0; }
           else { hitDmg -= G.player.block; G.player.block = 0; }
           G.player.hp = Math.max(0, G.player.hp - hitDmg);
-	          if(hitDmg > 0) showDmgFloat(hitDmg, document.getElementById("sgPlayerArea"), "#60a5fa");
+	          if(hitDmg > 0) { showDmgFloat(hitDmg, document.getElementById("sgPlayerArea"), "#60a5fa"); shakeScreen(); }
         }
       }
       if(intent.t === "aoe") {
         var dmg = intent.v;
         if(G.player.block >= dmg) { G.player.block -= dmg; }
-        else { dmg -= G.player.block; G.player.block = 0; G.player.hp = Math.max(0, G.player.hp - dmg); if(dmg > 0) showDmgFloat(dmg, document.getElementById("sgPlayerArea"), "#60a5fa"); }
+        else { dmg -= G.player.block; G.player.block = 0; G.player.hp = Math.max(0, G.player.hp - dmg); if(dmg > 0) { showDmgFloat(dmg, document.getElementById("sgPlayerArea"), "#60a5fa"); shakeScreen(); } }
       }
       if(intent.t === "defend") {
         e.block += intent.v;
@@ -2603,11 +2679,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           "<div class='sg-card-name'>" + card.name + "</div>" +
           "<div class='sg-card-desc'>" + card.desc + "</div>" +
           "<div class='sg-card-type'>" + card.type + "</div>";
-        (function(i){
-          el.addEventListener("click", function(){
-            if(!this.classList.contains("disabled")) playCard(i);
+        (function(i, cardEl){
+          cardEl.addEventListener("click", function(){
+            if(!this.classList.contains("disabled")) {
+              this.classList.add("playing");
+              playCard(i);
+            }
           });
-        })(hi);
+        })(hi, el);
         handEl.appendChild(el);
       }
     }
@@ -2615,6 +2694,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     /* ══════ 结束回合 ══════ */
     function endTurn() {
       if(!G.isPlayerTurn) return;
+      if(G.enemy && G.enemy.hp <= 0) return;
       // Discard hand
       for(var hi=0;hi<G.player.hand.length;hi++) G.player.discard.push(G.player.hand[hi]);
       G.player.hand = [];
