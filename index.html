@@ -2516,10 +2516,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         var el = document.createElement("div");
         el.className = "sg-card " + card.type;
         if(!canPlayCard(cid) || !G.isPlayerTurn) el.classList.add("disabled");
-        el.innerHTML = "<div class="sg-card-cost">" + card.cost + "</div>" +
-          "<div class="sg-card-name">" + card.name + "</div>" +
-          "<div class="sg-card-desc">" + card.desc + "</div>" +
-          "<div class="sg-card-type">" + card.type + "</div>";
+        el.innerHTML = "<div class='sg-card-cost'>" + card.cost + "</div>" +
+          "<div class='sg-card-name'>" + card.name + "</div>" +
+          "<div class='sg-card-desc'>" + card.desc + "</div>" +
+          "<div class='sg-card-type'>" + card.type + "</div>";
         (function(i){
           el.addEventListener("click", function(){
             if(!this.classList.contains("disabled")) playCard(i);
@@ -2562,10 +2562,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         var el = document.createElement("div");
         el.className = "sg-card " + card.type;
         el.style.cursor = "pointer";
-        el.innerHTML = "<div class="sg-card-cost">" + card.cost + "</div>" +
-          "<div class="sg-card-name">" + card.name + "</div>" +
-          "<div class="sg-card-desc">" + card.desc + "</div>" +
-          "<div class="sg-card-type">" + card.rarity + "</div>";
+        el.innerHTML = "<div class='sg-card-cost'>" + card.cost + "</div>" +
+          "<div class='sg-card-name'>" + card.name + "</div>" +
+          "<div class='sg-card-desc'>" + card.desc + "</div>" +
+          "<div class='sg-card-type'>" + card.rarity + "</div>";
         (function(ci){
           el.addEventListener("click", function(){
             G.player.deck.push(ci);
@@ -2601,7 +2601,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       var pick = avail[Math.floor(Math.random()*avail.length)];
       var r = RELICS[pick];
       var el = document.getElementById("sgTreasureRelic");
-      el.innerHTML = "<div class="sg-relic-name">" + r.name + "</div><div class="sg-relic-desc">" + r.desc + "</div>";
+      el.innerHTML = "<div class='sg-relic-name'>" + r.name + "</div><div class='sg-relic-desc'>" + r.desc + "</div>";
       document.getElementById("sgTreasureTake").onclick = function(){
         G.player.relics.push(pick);
         completeNode();
@@ -2647,17 +2647,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       for(var i=0;i<allCards.length;i++){
         counts[allCards[i]] = (counts[allCards[i]]||0) + 1;
       }
-      var html = "<div class="sg-deck-panel"><h3>📚 卡组 (" + allCards.length + "张)</h3><div class="sg-deck-grid">";
+      var html = "<div class='sg-deck-panel'><h3>📚 卡组 (" + allCards.length + "张)</h3><div class='sg-deck-grid'>";
       for(var cid in counts) {
         var card = CARDS[cid];
         if(!card) continue;
-        html += "<div class="sg-card " + card.type + "" style="cursor:default">" +
-          "<div class="sg-card-cost">" + card.cost + "</div>" +
-          "<div class="sg-card-name">" + card.name + "</div>" +
-          "<div class="sg-card-desc">×" + counts[cid] + "</div>" +
+        html += "<div class='sg-card " + card.type + "' style='cursor:default'>" +
+          "<div class='sg-card-cost'>" + card.cost + "</div>" +
+          "<div class='sg-card-name'>" + card.name + "</div>" +
+          "<div class='sg-card-desc'>×" + counts[cid] + "</div>" +
           "</div>";
       }
-      html += "</div><button class="sg-btn sg-btn-small" style="margin-top:.5rem" id="sgDeckClose">关闭</button></div>";
+      html += "</div><button class='sg-btn sg-btn-small' style='margin-top:.5rem' id='sgDeckClose'>关闭</button></div>";
       overlay.innerHTML = html;
       document.body.appendChild(overlay);
       document.getElementById("sgDeckClose").addEventListener("click", function(){ document.body.removeChild(overlay); });
