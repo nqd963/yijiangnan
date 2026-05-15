@@ -4637,6 +4637,7 @@ applyPoison();
 
     var gBgmCtx = null;
     var gBgmGain = null;
+    var gBgmOsc = null;      // 第一振荡器（旋律层）
     var gBgmOsc2 = null;      // 第二振荡器（和声层）
     var gBgmCurrent = '';
     var gBgmPlaying = false;
@@ -4651,7 +4652,7 @@ applyPoison();
         gBgmGain = gBgmCtx.createGain();
         gBgmGain.gain.value = 0.08;
         gBgmGain.connect(gBgmCtx.destination);
-      } catch(e){ console.log('Audio not available'); }
+      } catch(e){ gBgmCtx = null; console.log('Audio not available'); }
     }
 
     // 多套变体音序，每次循环随机选一套，让BGM不单调
