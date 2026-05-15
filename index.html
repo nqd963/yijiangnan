@@ -734,6 +734,145 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .music-key .note-letter{font-size:.35rem;}
   .music-keys{gap:2px;}
 }
+
+/* ═══════════════════════════ 诗境问道 · 肉鸽卡牌 ═══════════════════════════ */
+.sg-wrap{max-width:500px;margin:0 auto;min-height:450px;}
+.sg-screen{animation:sgFade .3s ease;}
+@keyframes sgFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── 通用 ── */
+.sg-btn{
+  padding:.5rem 1.2rem;border:1px solid var(--border);border-radius:100px;
+  background:transparent;color:var(--text-dim);cursor:pointer;font-size:.8rem;
+  font-family:inherit;transition:all .2s;letter-spacing:.05em;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.sg-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.sg-btn-primary{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
+.sg-btn-primary:hover{opacity:.85;color:#fff;}
+.sg-btn-small{padding:.3rem .8rem;font-size:.7rem;}
+
+/* ── 标题 ── */
+.sg-title-icon{font-size:3rem;text-align:center;padding-top:2rem;}
+.sg-title-text{font-size:2rem;font-weight:900;text-align:center;color:var(--gold);letter-spacing:.15em;margin-top:.5rem;}
+.sg-title-sub{font-size:.8rem;text-align:center;color:var(--text-faint);letter-spacing:.3em;margin-top:.2rem;}
+.sg-title-desc{font-size:.75rem;text-align:center;color:var(--text-dim);line-height:1.8;margin:1rem 0 1.5rem;padding:0 1rem;}
+
+/* ── 地图 ── */
+.sg-map-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;font-size:.85rem;color:var(--text-dim);}
+.sg-map{display:flex;flex-direction:column;align-items:center;gap:6px;padding:.5rem 0;}
+.sg-map-row{display:flex;gap:12px;justify-content:center;}
+.sg-map-node{
+  width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;cursor:pointer;transition:all .2s;
+  border:2px solid var(--border);background:var(--bg-card-alt);
+  position:relative;
+}
+.sg-map-node:hover{transform:scale(1.1);border-color:var(--gold);}
+.sg-map-node.completed{opacity:.4;border-color:var(--text-faint);cursor:default;pointer-events:none;}
+.sg-map-node.current{border-color:var(--gold);box-shadow:0 0 12px rgba(201,168,76,.4);}
+.sg-map-node.current:hover{transform:scale(1.15)}
+.sg-map-node .sg-node-label{position:absolute;bottom:-16px;font-size:.5rem;color:var(--text-faint);white-space:nowrap;}
+.sg-map-node.boss{border-color:var(--red-seal);}
+.sg-map-node.boss.current{box-shadow:0 0 12px rgba(194,58,43,.4);}
+.sg-map-connector{width:2px;height:12px;background:var(--border);}
+.sg-map-connector.active{background:var(--gold);}
+
+/* ── 战斗 ── */
+.sg-enemy-area{text-align:center;padding:.5rem 0 .8rem;}
+.sg-enemy{display:inline-block;padding:.8rem 1.5rem;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:160px;}
+.sg-enemy-name{font-size:1rem;font-weight:700;color:var(--red-seal);margin-bottom:.3rem;}
+.sg-enemy-intent{font-size:.65rem;color:var(--text-faint);margin-bottom:.3rem;min-height:1.2em;}
+.sg-hp-bar-wrap{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin:.2rem 0;}
+.sg-hp-fill{height:100%;border-radius:3px;background:var(--red-seal);transition:width .3s;}
+.sg-hp-text{font-size:.65rem;color:var(--text-dim);}
+.sg-enemy-block{font-size:.65rem;color:#3b82f6;margin-top:.2rem;}
+
+/* ── 玩家状态 ── */
+.sg-player-area{padding:.3rem 0;}
+.sg-status{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;padding:.3rem 0;font-size:.7rem;color:var(--text-dim);}
+.sg-status-item{background:var(--bg-card-alt);padding:.2rem .6rem;border-radius:6px;border:1px solid var(--border);}
+
+/* ── 手牌 ── */
+.sg-hand{
+  display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
+  min-height:100px;padding:.4rem 0;overflow-y:auto;
+}
+.sg-card{
+  width:110px;padding:.5rem .4rem .4rem;border-radius:8px;
+  background:var(--bg-card);border:1px solid var(--border);cursor:pointer;
+  text-align:center;transition:all .15s;
+  display:flex;flex-direction:column;gap:2px;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+  position:relative;
+}
+.sg-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 4px 16px var(--shadow);z-index:2;}
+.sg-card.disabled{opacity:.4;cursor:not-allowed;transform:none!important;}
+.sg-card.disabled:hover{transform:none!important;border-color:var(--border);box-shadow:none;}
+.sg-card .sg-card-cost{
+  position:absolute;top:-6px;left:-6px;width:22px;height:22px;border-radius:50%;
+  background:var(--gold);color:#fff;font-size:.65rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.sg-card .sg-card-name{font-size:.65rem;font-weight:700;color:var(--text);letter-spacing:.03em;}
+.sg-card .sg-card-desc{font-size:.5rem;color:var(--text-faint);line-height:1.3;}
+.sg-card.attack{border-color:var(--red-seal);}
+.sg-card.attack:hover{border-color:#ef4444;}
+.sg-card.skill{border-color:#3b82f6;}
+.sg-card.skill:hover{border-color:#60a5fa;}
+.sg-card.power{border-color:#a855f7;}
+.sg-card.power:hover{border-color:#c084fc;}
+.sg-card .sg-card-type{font-size:.45rem;color:var(--text-faint);}
+
+/* ── 回合控制 ── */
+.sg-turn-ctrl{text-align:center;padding:.3rem 0;}
+
+/* ── 奖励 ── */
+.sg-reward-title{font-size:1.1rem;font-weight:700;text-align:center;color:var(--gold);padding:1.5rem 0 .8rem;}
+.sg-reward-cards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.sg-reward-actions{text-align:center;padding:.8rem 0;}
+
+/* ── 休息/宝箱 ── */
+.sg-rest-icon{font-size:2.5rem;text-align:center;padding-top:2rem;}
+.sg-rest-title{font-size:1.2rem;font-weight:700;text-align:center;color:var(--gold);margin-top:.5rem;}
+.sg-rest-desc{font-size:.75rem;text-align:center;color:var(--text-dim);margin:.3rem 0 .8rem;}
+.sg-rest-hp{text-align:center;font-size:.8rem;color:var(--text-dim);margin-bottom:.5rem;}
+
+/* ── 遗物 ── */
+.sg-relic-card{
+  display:inline-block;padding:.6rem 1rem;border-radius:8px;
+  background:var(--bg-card-alt);border:1px solid var(--gold);
+  margin:.5rem auto;text-align:center;
+}
+.sg-relic-card .sg-relic-name{font-size:.85rem;font-weight:700;color:var(--gold);}
+.sg-relic-card .sg-relic-desc{font-size:.65rem;color:var(--text-dim);margin-top:.2rem;}
+
+/* ── 结果 ── */
+.sg-result-icon{font-size:3rem;text-align:center;padding-top:2.5rem;}
+.sg-result-title{font-size:1.5rem;font-weight:900;text-align:center;color:var(--gold);margin-top:.5rem;}
+.sg-result-desc{font-size:.75rem;text-align:center;color:var(--text-dim);margin:.3rem 0 1.5rem;}
+
+/* ── deck弹窗 ── */
+.sg-deck-overlay{
+  position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+}
+.sg-deck-panel{
+  background:var(--bg);border:1px solid var(--border);border-radius:12px;
+  padding:1rem;max-width:400px;width:90%;max-height:80vh;overflow-y:auto;
+}
+.sg-deck-panel h3{font-size:.9rem;color:var(--gold);margin-bottom:.5rem;}
+.sg-deck-grid{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.sg-deck-grid .sg-card{width:100px;cursor:default;}
+.sg-deck-grid .sg-card:hover{transform:none;}
+
+/* 响应式 */
+@media(max-width:480px){
+  .sg-card{width:95px;padding:.4rem .3rem;}
+  .sg-map-node{width:44px;height:44px;font-size:1rem;}
+  .sg-status{font-size:.65rem;gap:.4rem;}
+  .sg-title-text{font-size:1.6rem;}
+}
 </style>
 </head>
 <body>
@@ -1130,6 +1269,11 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <div class="aname">音乐演奏</div>
       <div class="adesc">十种乐器 · 宫商角徵羽 · 即时演奏</div>
     </div>
+    <div class="mp-app" data-view="shiciGame">
+      <span class="aicon">🗡️</span>
+      <div class="aname">诗境问道</div>
+      <div class="adesc">古诗词肉鸽卡牌 · 仿《杀戮尖塔》</div>
+    </div>
   </div>
 
   <!-- 词谱宝库 -->
@@ -1192,6 +1336,99 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         <span class="music-inst-name" id="musicInstName">古琴</span>
         <span class="music-inst-desc" id="musicInstDesc">太古遗音 · 沉静悠远</span>
       </div>
+
+  <!-- 诗境问道 · 肉鸽卡牌 -->
+  <div class="mp-view" id="viewShiciGame">
+    <div class="sg-wrap">
+      <!-- 标题画面 -->
+      <div id="sgTitle" class="sg-screen">
+        <div class="sg-title-icon">🗡️📜</div>
+        <div class="sg-title-text">诗境问道</div>
+        <div class="sg-title-sub">古诗词 · 肉鸽卡牌</div>
+        <div class="sg-title-desc">以诗词为载体，攀登九重诗境。<br>收集诗篇，击败诗魔，问道于词。</div>
+        <button class="sg-btn sg-btn-primary" id="sgStartBtn">开始新旅程</button>
+      </div>
+
+      <!-- 地图画面 -->
+      <div id="sgMap" class="sg-screen" style="display:none">
+        <div class="sg-map-header">
+          <span>第 <span id="sgActNum">一</span> 境</span>
+          <span class="sg-map-floor">层 <span id="sgFloorNum">1</span>/<span id="sgMaxFloor">7</span></span>
+        </div>
+        <div class="sg-map" id="sgMapContainer"></div>
+      </div>
+
+      <!-- 战斗画面 -->
+      <div id="sgBattle" class="sg-screen" style="display:none">
+        <!-- 敌人区域 -->
+        <div class="sg-enemy-area">
+          <div class="sg-enemy" id="sgEnemy">
+            <div class="sg-enemy-name" id="sgEnemyName">诗魔</div>
+            <div class="sg-enemy-intent" id="sgEnemyIntent"></div>
+            <div class="sg-hp-bar-wrap">
+              <div class="sg-hp-fill" id="sgEnemyHpFill" style="width:100%"></div>
+            </div>
+            <div class="sg-hp-text"><span id="sgEnemyHp">40</span>/<span id="sgEnemyMaxHp">40</span></div>
+            <div class="sg-enemy-block" id="sgEnemyBlock" style="display:none">🛡️ <span id="sgEnemyBlockNum">0</span></div>
+          </div>
+        </div>
+
+        <!-- 玩家区域 -->
+        <div class="sg-player-area">
+          <!-- 状态栏 -->
+          <div class="sg-status">
+            <div class="sg-status-item">❤️ <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span></div>
+            <div class="sg-status-item">⚡ <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span></div>
+            <div class="sg-status-item">🛡️ <span id="sgPlayerBlock">0</span></div>
+            <div class="sg-status-item">💪 <span id="sgPlayerStrength">0</span></div>
+            <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span></div>
+          </div>
+          <!-- 手牌 -->
+          <div class="sg-hand" id="sgHand"></div>
+          <!-- 回合控制 -->
+          <div class="sg-turn-ctrl">
+            <button class="sg-btn" id="sgEndTurnBtn">结束回合</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 奖励画面 -->
+      <div id="sgReward" class="sg-screen" style="display:none">
+        <div class="sg-reward-title">🎉 获得诗篇</div>
+        <div class="sg-reward-cards" id="sgRewardCards"></div>
+        <div class="sg-reward-actions">
+          <button class="sg-btn sg-btn-primary" id="sgRewardSkip" style="display:none">跳过</button>
+        </div>
+      </div>
+
+      <!-- 休憩画面 -->
+      <div id="sgRest" class="sg-screen" style="display:none">
+        <div class="sg-rest-icon">🏮</div>
+        <div class="sg-rest-title">书院休憩</div>
+        <div class="sg-rest-desc">静心养气，恢复体力。</div>
+        <div class="sg-rest-hp">当前 HP：<span id="sgRestHp">80</span>/<span id="sgRestMaxHp">80</span></div>
+        <button class="sg-btn sg-btn-primary" id="sgRestBtn">休息（恢复 20 HP）</button>
+        <button class="sg-btn" id="sgRestSkipBtn">继续前行</button>
+      </div>
+
+      <!-- 宝箱画面 -->
+      <div id="sgTreasure" class="sg-screen" style="display:none">
+        <div class="sg-rest-icon">📦</div>
+        <div class="sg-rest-title">词苑拾珍</div>
+        <div class="sg-rest-desc">获得一件宝物！</div>
+        <div class="sg-relic-card" id="sgTreasureRelic"></div>
+        <button class="sg-btn sg-btn-primary" id="sgTreasureTake">收下</button>
+      </div>
+
+      <!-- 结果画面 -->
+      <div id="sgResult" class="sg-screen" style="display:none">
+        <div class="sg-result-icon" id="sgResultIcon">🏆</div>
+        <div class="sg-result-title" id="sgResultTitle">胜利</div>
+        <div class="sg-result-desc" id="sgResultDesc">你已问道九重诗境！</div>
+        <button class="sg-btn sg-btn-primary" id="sgRestartBtn">再来一局</button>
+      </div>
+    </div>
+  </div>
 
       <!-- 自动演奏区 -->
       <div class="music-auto">
@@ -1771,6 +2008,672 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     });
   })();
 
+
+  /* ═══════════════════════════ 诗境问道 · 肉鸽卡牌 ═══════════════════════════ */
+  (function(){
+    "use strict";
+
+    /* ══════ 卡牌数据 ══════ */
+    var CARDS = {
+      yinyong:{name:"吟咏",cost:0,type:"attack",dmg:5,desc:"基础诗咏 · 造成5点伤害",rarity:"basic"},
+      mosong:{name:"默诵",cost:0,type:"skill",block:4,desc:"基础默诵 · 获得4点格挡",rarity:"basic"},
+      qingci:{name:"清词",cost:1,type:"attack",dmg:9,desc:"清词丽句 · 造成9点伤害",rarity:"common"},
+      mansha:{name:"浣溪沙",cost:1,type:"skill",block:8,desc:"护体清溪 · 获得8点格挡",rarity:"common"},
+      puziman:{name:"菩萨蛮",cost:1,type:"attack",dmg:6,hits:2,desc:"双叠句 · 造成6点伤害×2",rarity:"common"},
+      jiangcheng:{name:"江城子",cost:1,type:"attack",dmg:12,half:true,desc:"十年生死 · 目标HP≤50%时造成12伤",rarity:"uncommon"},
+      ruman:{name:"如梦令",cost:1,type:"skill",block:6,draw:1,desc:"昨夜雨疏 · 获得6格挡，抽1牌",rarity:"uncommon"},
+      qingping:{name:"清平乐",cost:1,type:"skill",block:6,debuff:"vuln",desc:"清平祥和 · 6格挡，易伤1层",rarity:"uncommon"},
+      shengsheng:{name:"声声慢",cost:1,type:"skill",debuff:"weak",val:2,desc:"寻寻觅觅 · 虚弱2层",rarity:"uncommon"},
+      diehua:{name:"蝶恋花",cost:1,type:"skill",desc:"庭院深深 · 抽2张牌",rarity:"uncommon",draw:2},
+      yujia:{name:"渔家傲",cost:1,type:"skill",block:8,gainEnergy:1,desc:"塞上秋来 · 8格挡+1能量",rarity:"uncommon"},
+      dianjiang:{name:"点绛唇",cost:1,type:"skill",debuff:"vuln",val:2,desc:"蹴罢秋千 · 易伤2层",rarity:"common"},
+      linjiang:{name:"临江仙",cost:0,type:"skill",heal:8,exhaust:true,desc:"梦后楼台 · 回复8HP，消耗",rarity:"uncommon"},
+      dingfeng:{name:"定风波",cost:1,type:"skill",buff:"str",val:2,desc:"莫听穿林 · 获得2点力量",rarity:"uncommon"},
+      niannu:{name:"念奴娇",cost:2,type:"attack",dmg:12,aoe:true,desc:"大江东去 · 全体12点伤害",rarity:"uncommon"},
+      pozhen:{name:"破阵子",cost:2,type:"attack",dmg:20,desc:"醉里挑灯 · 造成20点伤害",rarity:"common"},
+      manjiang:{name:"满江红",cost:2,type:"attack",dmg:16,desc:"壮怀激烈 · 造成16点伤害",rarity:"common"},
+      jiangjin:{name:"将进酒",cost:1,type:"attack",dmg:8,gainEnergy:1,desc:"杯莫停 · 8伤+1能量",rarity:"uncommon"},
+      tasha:{name:"踏莎行",cost:1,type:"attack",dmg:4,hits:3,desc:"雾失楼台 · 4点伤害×3",rarity:"uncommon"},
+      yulin:{name:"雨霖铃",cost:2,type:"skill",block:15,desc:"寒蝉凄切 · 获得15点格挡",rarity:"uncommon"},
+      shuidiao:{name:"水调歌头",cost:2,type:"power",desc:"每回合+1能量",rarity:"rare",power:"energy"},
+      xijiang:{name:"西江月",cost:1,type:"power",desc:"每回合+3格挡",rarity:"rare",power:"block"},
+      zhegu:{name:"鹧鸪天",cost:1,type:"power",desc:"每回合+1力量",rarity:"rare",power:"strength"},
+      qinyuan:{name:"沁园春",cost:3,type:"skill",heal:10,maxHp:2,exhaust:true,desc:"北国风光 · 回复10HP+2最大HP，消耗",rarity:"rare"}
+    };
+
+    /* ══════ 敌人数据 ══════ */
+    var ENEMIES = {
+      lichou:{name:"离愁",hp:36,dmg:7,intents:[{t:"attack",v:7}],desc:"剪不断，理还乱"},
+      qiusi:{name:"秋思",hp:30,dmg:8,intents:[{t:"attack",v:8},{t:"defend",v:6}],desc:"古道西风瘦马"},
+      yeyu:{name:"夜雨",hp:25,dmg:5,intents:[{t:"attack",v:5,hits:2}],desc:"巴山夜雨涨秋池"},
+      guhong:{name:"孤鸿",hp:20,dmg:12,intents:[{t:"attack",v:12}],desc:"缥缈孤鸿影"},
+      zhuangzhi:{name:"壮志",hp:44,dmg:9,intents:[{t:"attack",v:9},{t:"buff",b:"str",v:2}],desc:"壮士饥餐胡虏肉"},
+      cimo:{name:"词魔",hp:65,dmg:11,intents:[{t:"attack",v:11},{t:"debuff",b:"weak",v:2},{t:"defend",v:10}],desc:"文章憎命达"},
+      shisheng:{name:"诗圣",hp:80,dmg:13,intents:[{t:"attack",v:13,hits:2},{t:"buff",b:"str",v:3},{t:"aoe",v:9}],desc:"会当凌绝顶"}
+    };
+
+    /* ══════ 遗物数据 ══════ */
+    var RELICS = {
+      qingyu:{name:"青玉案",desc:"战斗开始时获得3点格挡",effect:"startBlock"},
+      chaitou:{name:"钗头凤",desc:"每回合首次攻击伤害+3",effect:"firstAtkBoost"},
+      changxiang:{name:"长相思",desc:"每回合多抽1张牌",effect:"extraDraw"},
+      zuihua:{name:"醉花阴",desc:"战斗开始时+1能量",effect:"startEnergy"},
+      huanxi:{name:"浣溪纱",desc:"获得格挡时额外+2",effect:"extraBlock"},
+      jiangnan:{name:"忆江南",desc:"回合结束时回复2HP",effect:"endHeal"}
+    };
+
+    /* ══════ 游戏状态 ══════ */
+    var G = null;
+    var CARD_IDS = null;
+
+    function shuffle(arr) {
+      for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+      return arr;
+    }
+
+    function initGame() {
+      // 初始卡组
+      var deck = [];
+      for(var i=0;i<5;i++) deck.push("yinyong");
+      for(var i=0;i<5;i++) deck.push("mosong");
+      deck.push("qingci");
+      deck.push("mansha");
+      deck.push("puziman");
+      shuffle(deck);
+
+      G = {
+        screen:"title",
+        floor:0, maxFloor:7,
+        nodeIdx:0, path:[], mapNodes:[],
+        player:{
+          hp:80, maxHp:80, block:0,
+          energy:3, maxEnergy:3,
+          str:0,
+          deck:deck.slice(), hand:[], discard:[], exhaust:[],
+          drawPerTurn:5,
+          firstAtkThisTurn:true,
+          relics:[],
+          gold:0,
+          buffs:{}
+        },
+        enemy:null,
+        turn:0,
+        isPlayerTurn:true
+      };
+      CARD_IDS = Object.keys(CARDS);
+      generateMap();
+      showScreen("map");
+      renderMap();
+    }
+
+    /* ══════ 地图生成 ══════ */
+    function generateMap() {
+      var types = ["battle","battle","rest","battle","treasure","battle","boss"];
+      var branches = [1,2,2,2,2,1,1];
+      var nodes = [];
+      var enemies = ["lichou","qiusi","yeyu","guhong","zhuangzhi"];
+      var eliteEnemies = ["cimo"];
+
+      // Floor 0 (always single battle)
+      nodes.push({floor:0,col:0,type:"battle",enemy:enemies[Math.floor(Math.random()*enemies.length)],done:false});
+
+      for(var f=1;f<7;f++){
+        var cols = branches[f];
+        var rowEnemies = shuffle(enemies.slice());
+        for(var c=0;c<cols;c++){
+          var node = {floor:f,col:c,type:types[f],done:false};
+          if(node.type==="battle") node.enemy = rowEnemies[c % rowEnemies.length];
+          if(node.type==="boss") node.enemy = "shisheng";
+          if(node.type==="treasure") node.enemy = null;
+          if(node.type==="rest") node.enemy = null;
+          nodes.push(node);
+        }
+      }
+      G.mapNodes = nodes;
+      G.path = [0];
+      G.floor = 0;
+      G.nodeIdx = 0;
+    }
+
+    function getCurrentNode() {
+      return G.mapNodes[G.nodeIdx];
+    }
+
+    /* ══════ 屏幕控制 ══════ */
+    var SCREENS = ["sgTitle","sgMap","sgBattle","sgReward","sgRest","sgTreasure","sgResult"];
+    function showScreen(name) {
+      for(var i=0;i<SCREENS.length;i++){
+        var el = document.getElementById(SCREENS[i]);
+        if(el) el.style.display = (SCREENS[i]===("sg"+name.charAt(0).toUpperCase()+name.slice(1))) ? "" : "none";
+      }
+      G.screen = name;
+    }
+
+    /* ══════ 地图渲染 ══════ */
+    function renderMap() {
+      var container = document.getElementById("sgMapContainer");
+      if(!container) return;
+      container.innerHTML = "";
+      document.getElementById("sgFloorNum").textContent = G.floor + 1;
+      document.getElementById("sgMaxFloor").textContent = G.maxFloor;
+
+      var floors = {};
+      for(var i=0;i<G.mapNodes.length;i++){
+        var n = G.mapNodes[i];
+        if(!floors[n.floor]) floors[n.floor] = [];
+        floors[n.floor].push(i);
+      }
+
+      var maxCols = 0;
+      for(var f=0;f<=G.maxFloor;f++){
+        if(floors[f] && floors[f].length > maxCols) maxCols = floors[f].length;
+      }
+
+      for(var f=0;f<=G.maxFloor;f++){
+        // Connector line
+        if(f > 0) {
+          var cl = document.createElement("div");
+          cl.className = "sg-map-connector" + (f <= G.floor ? " active" : "");
+          container.appendChild(cl);
+        }
+        // Row
+        var row = document.createElement("div");
+        row.className = "sg-map-row";
+        var nodes = floors[f] || [];
+        var padLeft = Math.floor((maxCols - nodes.length) / 2);
+        for(var p=0;p<padLeft;p++){
+          var sp = document.createElement("div");
+          sp.style.width = "56px";
+          row.appendChild(sp);
+        }
+        for(var ni=0;ni<nodes.length;ni++){
+          var idx = nodes[ni];
+          var node = G.mapNodes[idx];
+          var nd = document.createElement("div");
+          nd.className = "sg-map-node";
+          var icon = "";
+          if(node.type==="battle") icon = "⚔️";
+          if(node.type==="rest") icon = "🏮";
+          if(node.type==="treasure") icon = "📦";
+          if(node.type==="boss") { icon = "👹"; nd.classList.add("boss"); }
+          if(node.done) nd.classList.add("completed");
+          if(idx === G.nodeIdx && !node.done) nd.classList.add("current");
+          nd.textContent = icon;
+          nd.dataset.idx = idx;
+          var label = document.createElement("span");
+          label.className = "sg-node-label";
+          var lnames = {battle:"诗战",rest:"书院",treasure:"词苑",boss:"诗圣"};
+          label.textContent = lnames[node.type] || node.type;
+          nd.appendChild(label);
+          nd.addEventListener("click", function(){
+            var ii = parseInt(this.dataset.idx);
+            if(ii === G.nodeIdx && !G.mapNodes[ii].done) enterNode(ii);
+          });
+          row.appendChild(nd);
+        }
+        container.appendChild(row);
+      }
+    }
+
+    /* ══════ 进入节点 ══════ */
+    function enterNode(idx) {
+      var node = G.mapNodes[idx];
+      G.nodeIdx = idx;
+      G.floor = node.floor;
+      if(node.type==="battle" || node.type==="boss") startBattle(node.enemy);
+      else if(node.type==="rest") showRest();
+      else if(node.type==="treasure") showTreasure();
+    }
+
+    function completeNode() {
+      var node = getCurrentNode();
+      node.done = true;
+      // Find next node
+      var next = -1;
+      for(var i=0;i<G.mapNodes.length;i++){
+        if(G.mapNodes[i].floor === G.floor + 1) { next = i; break; }
+      }
+      if(next >= 0) {
+        G.nodeIdx = next;
+        G.floor++;
+        showScreen("map");
+        renderMap();
+      } else {
+        // Victory
+        showResult(true);
+      }
+    }
+
+    /* ══════ 战斗系统 ══════ */
+    function startBattle(enemyId) {
+      var ed = ENEMIES[enemyId];
+      G.enemy = {
+        id:enemyId, hp:ed.hp, maxHp:ed.hp, block:0,
+        dmg:ed.dmg, intents:ed.intents,
+        intentIdx:0, intent:null, buffs:{},
+        desc:ed.desc || ""
+      };
+      G.turn = 0;
+      G.isPlayerTurn = true;
+      G.player.block = 0;
+      G.player.str = 0;
+      G.player.firstAtkThisTurn = true;
+      G.player.hand = [];
+      G.player.discard = [];
+      G.player.exhaust = [];
+      G.player.energy = G.player.maxEnergy;
+
+      // 遗物效果
+      for(var ri=0;ri<G.player.relics.length;ri++){
+        var r = RELICS[G.player.relics[ri]];
+        if(r.effect==="startBlock") G.player.block += 3;
+        if(r.effect==="startEnergy") G.player.maxEnergy += 1;
+      }
+
+      // 回合开始
+      G.enemy.intent = pickIntent();
+      showScreen("battle");
+      renderBattle();
+      drawCards(G.player.drawPerTurn + (hasRelic("extraDraw")?1:0));
+    }
+
+    function hasRelic(effect) {
+      for(var ri=0;ri<G.player.relics.length;ri++){
+        if(RELICS[G.player.relics[ri]] && RELICS[G.player.relics[ri]].effect === effect) return true;
+      }
+      return false;
+    }
+
+    function pickIntent() {
+      var e = G.enemy;
+      var pool = e.intents;
+      // Simple rotation
+      e.intentIdx = (e.intentIdx + 1) % pool.length;
+      return pool[e.intentIdx];
+    }
+
+    /* ══════ 卡牌操作 ══════ */
+    function drawCards(n) {
+      for(var i=0;i<n;i++){
+        if(G.player.deck.length === 0) {
+          if(G.player.discard.length === 0) break;
+          G.player.deck = shuffle(G.player.discard.slice());
+          G.player.discard = [];
+        }
+        G.player.hand.push(G.player.deck.pop());
+      }
+      renderBattle();
+    }
+
+    function canPlayCard(cardId) {
+      return G.player.energy >= CARDS[cardId].cost;
+    }
+
+    function playCard(idx) {
+      if(!G.isPlayerTurn) return;
+      var cardId = G.player.hand[idx];
+      if(!cardId) return;
+      var card = CARDS[cardId];
+      if(G.player.energy < card.cost) return;
+
+      G.player.energy -= card.cost;
+      // Remove from hand
+      G.player.hand.splice(idx, 1);
+
+      // Apply card effects
+      var dmg = card.dmg || 0;
+      var block = card.block || 0;
+
+      if(card.type==="attack") {
+        dmg += G.player.str;
+        // 遗物：钗头凤
+        if(hasRelic("firstAtkBoost") && G.player.firstAtkThisTurn) {
+          dmg += 3;
+          G.player.firstAtkThisTurn = false;
+        }
+        // 易伤加成（在damageEnemy中统一处理）
+        var hits = card.hits || 1;
+        for(var h=0;h<hits;h++){
+          damageEnemy(Math.floor(dmg / hits));
+        }
+      }
+
+      if(card.type==="skill" || card.type==="power") {
+        if(block > 0) {
+          var extra = hasRelic("extraBlock") ? 2 : 0;
+          G.player.block += block + extra;
+        }
+        if(card.heal) {
+          G.player.hp = Math.min(G.player.maxHp, G.player.hp + card.heal);
+        }
+        if(card.maxHp) {
+          G.player.maxHp += card.maxHp;
+          G.player.hp += card.maxHp;
+        }
+        if(card.draw) drawCards(card.draw);
+        if(card.gainEnergy) G.player.energy += card.gainEnergy;
+        if(card.buff==="str") G.player.str += (card.val || 1);
+        if(card.debuff==="vuln") { G.enemy.buffs.vuln = (G.enemy.buffs.vuln||0) + (card.val||1); }
+        if(card.debuff==="weak") { G.enemy.buffs.weak = (G.enemy.buffs.weak||0) + (card.val||1); }
+      }
+
+      // Powers
+      if(card.power==="energy") G.player.maxEnergy += 1;
+      if(card.power==="block") {
+        G._powerBlock = (G._powerBlock||0) + 3;
+      }
+      if(card.power==="strength") {
+        G._powerStr = (G._powerStr||0) + 1;
+      }
+
+      // Discard or exhaust
+      if(card.exhaust) {
+        G.player.exhaust.push(cardId);
+      } else {
+        G.player.discard.push(cardId);
+      }
+
+      renderBattle();
+      checkEnemyDeath();
+    }
+
+    function damageEnemy(dmg) {
+      var e = G.enemy;
+      // 玩家虚弱则伤害降低
+      if(G.player.buffs && G.player.buffs.weak) dmg = Math.floor(dmg * (1 - G.player.buffs.weak * 0.25));
+      // 敌人易伤则伤害增加
+      if(e.buffs.vuln) dmg = Math.floor(dmg * 1.5);
+      dmg = Math.max(0, dmg);
+      if(e.block > 0) {
+        if(dmg <= e.block) { e.block -= dmg; dmg = 0; }
+        else { dmg -= e.block; e.block = 0; }
+      }
+      e.hp = Math.max(0, e.hp - dmg);
+    }
+
+    function checkEnemyDeath() {
+      if(G.enemy.hp <= 0) {
+        // Victory!
+        showCardReward();
+      }
+    }
+
+    /* ══════ 敌人回合 ══════ */
+    function enemyTurn() {
+      G.isPlayerTurn = false;
+      var e = G.enemy;
+      var intent = e.intent;
+      if(!intent) { G.isPlayerTurn = true; return; }
+
+      if(intent.t === "attack") {
+        var dmg = intent.v + (e.buffs.str||0);
+        // 虚弱
+        if(e.buffs.weak) dmg = Math.floor(dmg * (1 - e.buffs.weak * 0.25));
+        if(G.player.buffs && G.player.buffs.vuln) dmg = Math.floor(dmg * 1.5);
+        var hits = intent.hits || 1;
+        for(var h=0;h<hits;h++){
+          var hitDmg = Math.floor(dmg / hits);
+          if(G.player.block >= hitDmg) { G.player.block -= hitDmg; hitDmg = 0; }
+          else { hitDmg -= G.player.block; G.player.block = 0; }
+          G.player.hp = Math.max(0, G.player.hp - hitDmg);
+        }
+      }
+      if(intent.t === "aoe") {
+        var dmg = intent.v;
+        if(G.player.block >= dmg) { G.player.block -= dmg; }
+        else { dmg -= G.player.block; G.player.block = 0; G.player.hp = Math.max(0, G.player.hp - dmg); }
+      }
+      if(intent.t === "defend") {
+        e.block += intent.v;
+      }
+      if(intent.t === "buff") {
+        if(intent.b==="str") e.buffs.str = (e.buffs.str||0) + intent.v;
+      }
+      if(intent.t === "debuff") {
+        if(!G.player.buffs) G.player.buffs = {};
+        if(intent.b==="weak") G.player.buffs.weak = (G.player.buffs.weak||0)+ (intent.v||1);
+        if(intent.b==="vuln") G.player.buffs.vuln = (G.player.buffs.vuln||0)+ (intent.v||1);
+      }
+
+      G.turn++;
+
+      // 回合结束遗物效果
+      if(hasRelic("endHeal")) G.player.hp = Math.min(G.player.maxHp, G.player.hp + 2);
+      if(G._powerBlock) G.player.block += G._powerBlock;
+      if(G._powerStr) G.player.str += G._powerStr;
+
+      // Start player turn
+      G.isPlayerTurn = true;
+      G.player.block = 0;
+      G.player.firstAtkThisTurn = true;
+      G.player.energy = G.player.maxEnergy;
+
+      // Discard hand, draw new
+      for(var hi=0;hi<G.player.hand.length;hi++) G.player.discard.push(G.player.hand[hi]);
+      G.player.hand = [];
+      e.intent = pickIntent();
+      drawCards(G.player.drawPerTurn + (hasRelic("extraDraw")?1:0));
+
+      if(G.player.hp <= 0) {
+        showResult(false);
+        return;
+      }
+      renderBattle();
+    }
+
+    /* ══════ 渲染战斗 ══════ */
+    function renderBattle() {
+      var e = G.enemy;
+      if(!e) return;
+
+      document.getElementById("sgEnemyName").textContent = e.desc ? e.desc : e.id;
+      var hpPct = Math.max(0, Math.min(100, e.hp/e.maxHp*100));
+      document.getElementById("sgEnemyHpFill").style.width = hpPct + "%";
+      document.getElementById("sgEnemyHp").textContent = e.hp;
+      document.getElementById("sgEnemyMaxHp").textContent = e.maxHp;
+
+      // 格挡
+      var eb = document.getElementById("sgEnemyBlock");
+      if(e.block > 0) { eb.style.display = ""; document.getElementById("sgEnemyBlockNum").textContent = e.block; }
+      else eb.style.display = "none";
+
+      // 意图
+      var intentEl = document.getElementById("sgEnemyIntent");
+      var intent = e.intent;
+      if(intent) {
+        var intentDesc = [];
+        if(intent.t==="attack") intentDesc.push("⚔️ 攻击 " + intent.v + (intent.hits?"×"+intent.hits:""));
+        if(intent.t==="aoe") intentDesc.push("💥 全体攻击 " + intent.v);
+        if(intent.t==="defend") intentDesc.push("🛡️ 防御 " + intent.v);
+        if(intent.t==="buff") intentDesc.push("⬆️ 强化 " + (intent.b||""));
+        if(intent.t==="debuff") intentDesc.push("⬇️ 虚弱");
+        intentEl.textContent = intentDesc.join(" ");
+      }
+
+      // Buffs
+      var buffText = "";
+      if(e.buffs.vuln) buffText += "易伤" + e.buffs.vuln + " ";
+      if(e.buffs.weak) buffText += "虚弱" + e.buffs.weak + " ";
+      if(e.buffs.str) buffText += "力量+" + e.buffs.str + " ";
+      if(buffText) intentEl.textContent += " [" + buffText + "]";
+
+      // 玩家状态
+      document.getElementById("sgPlayerHp").textContent = G.player.hp;
+      document.getElementById("sgPlayerMaxHp").textContent = G.player.maxHp;
+      document.getElementById("sgPlayerEnergy").textContent = G.player.energy;
+      document.getElementById("sgPlayerMaxEnergy").textContent = G.player.maxEnergy;
+      document.getElementById("sgPlayerBlock").textContent = G.player.block;
+      document.getElementById("sgPlayerStrength").textContent = G.player.str;
+      document.getElementById("sgDeckCountNum").textContent = G.player.deck.length + G.player.hand.length + G.player.discard.length;
+
+      // 手牌
+      var handEl = document.getElementById("sgHand");
+      handEl.innerHTML = "";
+      for(var hi=0;hi<G.player.hand.length;hi++){
+        var cid = G.player.hand[hi];
+        var card = CARDS[cid];
+        if(!card) continue;
+        var el = document.createElement("div");
+        el.className = "sg-card " + card.type;
+        if(!canPlayCard(cid) || !G.isPlayerTurn) el.classList.add("disabled");
+        el.innerHTML = "<div class="sg-card-cost">" + card.cost + "</div>" +
+          "<div class="sg-card-name">" + card.name + "</div>" +
+          "<div class="sg-card-desc">" + card.desc + "</div>" +
+          "<div class="sg-card-type">" + card.type + "</div>";
+        (function(i){
+          el.addEventListener("click", function(){
+            if(!this.classList.contains("disabled")) playCard(i);
+          });
+        })(hi);
+        handEl.appendChild(el);
+      }
+    }
+
+    /* ══════ 结束回合 ══════ */
+    function endTurn() {
+      if(!G.isPlayerTurn) return;
+      // Discard hand
+      for(var hi=0;hi<G.player.hand.length;hi++) G.player.discard.push(G.player.hand[hi]);
+      G.player.hand = [];
+      G.player.block = 0;
+      renderBattle();
+      enemyTurn();
+    }
+
+    /* ══════ 卡牌奖励 ══════ */
+    function getRandomCards(count, rarity) {
+      var pool = [];
+      if(rarity==="common") pool = CARD_IDS.filter(function(id){return CARDS[id].rarity==="common" || CARDS[id].rarity==="basic";});
+      else if(rarity==="uncommon") pool = CARD_IDS.filter(function(id){return CARDS[id].rarity==="uncommon"||CARDS[id].rarity==="common";});
+      else pool = CARD_IDS.filter(function(id){return id!=="yinyong"&&id!=="mosong";});
+      shuffle(pool);
+      return pool.slice(0, count);
+    }
+
+    function showCardReward() {
+      var choices = getRandomCards(3, G.floor < 3 ? "common" : G.floor < 6 ? "uncommon" : "rare");
+      showScreen("reward");
+      var container = document.getElementById("sgRewardCards");
+      container.innerHTML = "";
+      document.getElementById("sgRewardSkip").style.display = "";
+      for(var i=0;i<choices.length;i++){
+        var cid = choices[i];
+        var card = CARDS[cid];
+        var el = document.createElement("div");
+        el.className = "sg-card " + card.type;
+        el.style.cursor = "pointer";
+        el.innerHTML = "<div class="sg-card-cost">" + card.cost + "</div>" +
+          "<div class="sg-card-name">" + card.name + "</div>" +
+          "<div class="sg-card-desc">" + card.desc + "</div>" +
+          "<div class="sg-card-type">" + card.rarity + "</div>";
+        (function(ci){
+          el.addEventListener("click", function(){
+            G.player.deck.push(ci);
+            document.getElementById("sgRewardSkip").textContent = "继续";
+            this.style.borderColor = "var(--gold)";
+            // Disable further clicks
+            container.querySelectorAll(".sg-card").forEach(function(e){ e.style.pointerEvents = "none"; });
+          });
+        })(cid);
+        container.appendChild(el);
+      }
+      document.getElementById("sgRewardSkip").onclick = function(){
+        completeNode();
+      };
+    }
+
+    /* ══════ 休憩 ══════ */
+    function showRest() {
+      showScreen("rest");
+      document.getElementById("sgRestHp").textContent = G.player.hp;
+      document.getElementById("sgRestMaxHp").textContent = G.player.maxHp;
+      var canHeal = G.player.hp < G.player.maxHp;
+      document.getElementById("sgRestBtn").style.display = canHeal ? "" : "none";
+    }
+
+    /* ══════ 宝箱 ══════ */
+    function showTreasure() {
+      showScreen("treasure");
+      var relicIds = Object.keys(RELICS);
+      // Filter owned
+      var avail = relicIds.filter(function(id){return G.player.relics.indexOf(id)<0;});
+      if(avail.length===0) avail = relicIds;
+      var pick = avail[Math.floor(Math.random()*avail.length)];
+      var r = RELICS[pick];
+      var el = document.getElementById("sgTreasureRelic");
+      el.innerHTML = "<div class="sg-relic-name">" + r.name + "</div><div class="sg-relic-desc">" + r.desc + "</div>";
+      document.getElementById("sgTreasureTake").onclick = function(){
+        G.player.relics.push(pick);
+        completeNode();
+      };
+    }
+
+    /* ══════ 结果 ══════ */
+    function showResult(win) {
+      showScreen("result");
+      document.getElementById("sgResultIcon").textContent = win ? "🏆" : "💀";
+      document.getElementById("sgResultTitle").textContent = win ? "问道成功" : "道陨诗境";
+      document.getElementById("sgResultDesc").textContent = win ? "你已登顶九重诗境，得窥词道真谛！" : "诗道漫漫，下次再战...";
+    }
+
+    /* ══════ 绑定UI事件 ══════ */
+    document.getElementById("sgStartBtn").addEventListener("click", function(){
+      initGame();
+    });
+    document.getElementById("sgEndTurnBtn").addEventListener("click", function(){
+      endTurn();
+    });
+    document.getElementById("sgRestBtn").addEventListener("click", function(){
+      G.player.hp = Math.min(G.player.maxHp, G.player.hp + 20);
+      completeNode();
+    });
+    document.getElementById("sgRestSkipBtn").addEventListener("click", function(){
+      completeNode();
+    });
+    document.getElementById("sgRestartBtn").addEventListener("click", function(){
+      initGame();
+    });
+    document.getElementById("sgDeckCount").addEventListener("click", function(){
+      showDeckPopup();
+    });
+
+    /* ══════ 卡组弹窗 ══════ */
+    function showDeckPopup() {
+      var overlay = document.createElement("div");
+      overlay.className = "sg-deck-overlay";
+      var hand = G.player.hand || [];
+      var allCards = hand.concat(G.player.deck).concat(G.player.discard).concat(G.player.exhaust);
+      var counts = {};
+      for(var i=0;i<allCards.length;i++){
+        counts[allCards[i]] = (counts[allCards[i]]||0) + 1;
+      }
+      var html = "<div class="sg-deck-panel"><h3>📚 卡组 (" + allCards.length + "张)</h3><div class="sg-deck-grid">";
+      for(var cid in counts) {
+        var card = CARDS[cid];
+        if(!card) continue;
+        html += "<div class="sg-card " + card.type + "" style="cursor:default">" +
+          "<div class="sg-card-cost">" + card.cost + "</div>" +
+          "<div class="sg-card-name">" + card.name + "</div>" +
+          "<div class="sg-card-desc">×" + counts[cid] + "</div>" +
+          "</div>";
+      }
+      html += "</div><button class="sg-btn sg-btn-small" style="margin-top:.5rem" id="sgDeckClose">关闭</button></div>";
+      overlay.innerHTML = html;
+      document.body.appendChild(overlay);
+      document.getElementById("sgDeckClose").addEventListener("click", function(){ document.body.removeChild(overlay); });
+      overlay.addEventListener("click", function(e){ if(e.target===overlay) document.body.removeChild(overlay); });
+    }
+
+    /* ══════ 进入游戏时自动初始化 ══════ */
+    var gameView = document.getElementById("viewShiciGame");
+    var gameObs = new MutationObserver(function(){
+      if(gameView.classList.contains("active")){
+        if(!G) showScreen("title");
+      }
+    });
+    if(gameView) gameObs.observe(gameView, {attributes:true,attributeFilter:["class"]});
+
+  })();
   	    /* ── 音乐演奏（V3：十二音律 + 八度扩展 + 下降可视化 + 更多乐曲）── */
   (function(){
     var currentInst = 'gangqin';
@@ -1818,10 +2721,43 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         h:[{m:2,v:0.15},{m:4,v:0.06}],d:'叮咚山泉 · 清脆悦耳'},
       se:{n:'瑟',t:'triangle',a:0.03,r:0.6,g:0.20,
         h:[{m:2,v:0.12},{m:3,v:0.05}],d:'弦歌雅意 · 古韵绵长'},
-      konghou:{n:'笜笹',t:'triangle',a:0.01,r:0.7,g:0.18,
-        h:[{m:2,v:0.15},{m:3,v:0.10},{m:5,v:0.04}],d:'空灵飘渺 · 仙乐风飘'},
+      konghou:{n:'箜篌',t:'sine',a:0.015,r:0.8,g:0.16,
+        h:[{m:2,v:0.18},{m:3,v:0.08},{m:5,v:0.03},{m:7,v:0.02}],vibrato:{f:5,d:2},d:'空灵飘渺 · 仙乐风飘 · 如云出岫'},
       guanzhong:{n:'管钟',t:'sine',a:0.005,r:1.2,g:0.15,
-        h:[{m:2,v:0.20},{m:3,v:0.12},{m:5,v:0.08}],d:'清越悠扬 · 余音绕梁'}
+        h:[{m:2,v:0.20},{m:3,v:0.12},{m:5,v:0.08}],d:'清越悠扬 · 余音绕梁'},
+      matouqin:{n:'马头琴',t:'sawtooth',a:0.12,r:0.6,g:0.14,
+        h:[{m:2,v:0.08}],vibrato:{f:4.5,d:3.5},
+        f:{t:'lowpass',f:1200,q:2},
+        d:'苍茫草原 · 深沉悠远'},
+      suona:{n:'唢呐',t:'square',a:0.008,r:0.35,g:0.18,
+        h:[{m:2,v:0.20},{m:3,v:0.12},{m:4,v:0.08},{m:5,v:0.05},{m:6,v:0.03}],
+        vibrato:{f:7,d:1.2},
+        f:{t:'bandpass',f:2000,q:1.5},
+        d:'高亢嘹亮 · 穿云裂石'},
+      nanxiao:{n:'南箫',t:'sine',a:0.18,r:0.7,g:0.22,
+        h:[{m:2,v:0.12},{m:3,v:0.08},{m:5,v:0.03}],
+        vibrato:{f:2.5,d:2.5},
+        f:{t:'lowpass',f:1800,q:0.5},
+        d:'幽深沉静 · 如泣如诉 · 较箫更厚'},
+      bianqing:{n:'编磬',t:'sine',a:0.002,r:1.5,g:0.12,
+        h:[{m:2,v:0.25},{m:3,v:0.10},{m:4,v:0.06}],
+        f:{t:'bandpass',f:4000,q:3},
+        d:'金石清音 · 泠泠然有上古遗风'},
+      bili:{n:'筚篥',t:'sawtooth',a:0.03,r:0.3,g:0.12,
+        h:[{m:2,v:0.15},{m:3,v:0.10},{m:5,v:0.05}],
+        vibrato:{f:6,d:1.5},
+        f:{t:'bandpass',f:1500,q:2},
+        d:'龟兹古乐 · 悲壮苍凉'},
+      ruan:{n:'阮咸',t:'triangle',a:0.015,r:0.5,g:0.18,
+        h:[{m:2,v:0.12},{m:4,v:0.05}],
+        vibrato:{f:3.5,d:1.8},
+        d:'温润如玉 · 弦歌雅意'},
+      paiban:{n:'拍板',t:'square',a:0.001,r:0.05,g:0.10,
+        h:[],d:'节奏清脆 · 击节而歌'},
+      xun2:{n:'古埙',t:'sine',a:0.3,r:0.6,g:0.30,
+        h:[{m:2,v:0.08},{m:3,v:0.04}],vibrato:{f:2.5,d:3},
+        f:{t:'lowpass',f:800,q:1},
+        d:'苍凉古朴 · 大地之声'}
     };
 
     /* songs data [noteIdx, beats, octave] */
@@ -1873,8 +2809,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    function playNote(idx, oct){
+    function playNote(idx, oct, vel){
       initAudio();
+      if(typeof vel !== 'number') vel = 0.85;
+      vel = Math.max(0.3, Math.min(1, vel));
       var inst = insts[currentInst];
       var octVal = (typeof oct === 'number') ? oct : currentOctave;
       if(octVal < 0) octVal = 0;
@@ -1886,7 +2824,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if (inst.f) {
         masterFilter = audioCtx.createBiquadFilter();
         masterFilter.type = inst.f.t || 'lowpass';
-        masterFilter.frequency.setValueAtTime(inst.f.f, now);
+        masterFilter.frequency.setValueAtTime(inst.f.f * (0.6 + vel*0.4), now);
         if (inst.f.qe) {
           masterFilter.Q.setValueAtTime(inst.f.q || 1, now);
           masterFilter.Q.linearRampToValueAtTime(inst.f.q * 5, now + inst.f.qe);
@@ -1903,7 +2841,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         osc.connect(gain); gain.connect(dest);
         osc.type = inst.t;
         osc.frequency.setValueAtTime(freq * harm.m, now);
-        var maxG = inst.g * harm.v;
+        var maxG = inst.g * harm.v * vel;
         gain.gain.setValueAtTime(0.001, now);
         gain.gain.linearRampToValueAtTime(maxG, now + inst.a);
         gain.gain.exponentialRampToValueAtTime(0.001, now + inst.a + inst.r);
@@ -1915,7 +2853,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         var vg = audioCtx.createGain();
         vib.connect(vg); vg.connect(fundOsc.frequency);
         vib.frequency.value = inst.vibrato.f;
-        vg.gain.value = inst.vibrato.d;
+        vg.gain.value = inst.vibrato.d * (0.5 + vel*0.5);
         vib.start(now); vib.stop(now + totalDur);
       }
     }
@@ -2024,8 +2962,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       vizAnimId = requestAnimationFrame(drawViz);
     }
 
-    function triggerNote(idx, beats, oct){
-      playNote(idx, oct);
+    function triggerNote(idx, beats, oct, vel){
+      playNote(idx, oct, vel);
       addVizNote(idx, beats || 0.5);
       var ks = document.getElementById('musicKeys').children;
       if(ks[idx]){ ks[idx].classList.add('pressed');
@@ -2079,7 +3017,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       });
       activeNotes[idx] = {oscs:oscs, masterFilter:masterFilter, startTime:now};
 
-      addVizNote(idx, 999);
+      addVizNote(idx, 0.25);
       var ks = document.getElementById('musicKeys').children;
       if(ks[idx]){ ks[idx].classList.add('pressed'); }
     }
@@ -2135,6 +3073,45 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(pw) pw.style.display = 'none';
     }
 
+    /* ══════ 自然化演奏引擎 ══════ */
+    var perfPhraseIdx = 0;
+    var perfNoteAccum = 0;
+
+    function humanizeSong() {
+      var sel = document.getElementById('musicSong');
+      var songKey = sel.value;
+      var song = songs[songKey];
+      if(!song || !song.notes) return;
+      var phraseLenMin = 3, phraseLenMax = 8;
+      var remain = song.notes.length;
+      var phrases = [];
+      while(remain > 0) {
+        var plen = Math.max(phraseLenMin, Math.min(phraseLenMax,
+          phraseLenMin + Math.floor(Math.random() * (phraseLenMax - phraseLenMin + 1))));
+        if (remain - plen < phraseLenMin && remain > 0) plen = remain;
+        if (plen > remain) plen = remain;
+        phrases.push(plen);
+        remain -= plen;
+      }
+      var velArr = [];
+      var timeShiftArr = [];
+      var idx = 0;
+      for (var pi = 0; pi < phrases.length; pi++) {
+        var pl = phrases[pi];
+        for (var pj = 0; pj < pl; pj++) {
+          var t = pl <= 1 ? 1 : (pj / (pl - 1));
+          var dyn = 0.7 + 0.3 * Math.sin(Math.PI * t);
+          var rnd = 0.85 + Math.random() * 0.3;
+          var vel = Math.min(1, dyn * rnd);
+          velArr.push(vel);
+          timeShiftArr.push((Math.random() - 0.5) * 10);
+          idx++;
+        }
+      }
+      song._velocities = velArr;
+      song._timeShifts = timeShiftArr;
+    }
+
     function playSongStep(){
       if(!autoPlaying) return;
       var sel = document.getElementById('musicSong');
@@ -2142,13 +3119,34 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       var song = songs[songKey];
       if(!song || autoIdx >= song.notes.length){ stopAuto(); return; }
       var nd = song.notes[autoIdx];
-      var noteIdx = nd[0], beats = nd[1], oct = (nd.length>2)?nd[2]:currentOctave;
+      var noteIndices, beats, oct;
+      if (typeof nd[0] === 'object' && nd[0] !== null) {
+        noteIndices = nd[0];
+        beats = nd[1];
+        oct = (nd.length>2 && typeof nd[2] === 'number') ? nd[2] : currentOctave;
+      } else {
+        noteIndices = [nd[0]];
+        beats = nd[1];
+        oct = (nd.length>2 && typeof nd[2] === 'number') ? nd[2] : currentOctave;
+      }
       var pct = Math.round(autoIdx/song.notes.length*100);
       var octName = octLabels[oct]||'中音';
-      updateProgress(pct, (autoIdx+1)+'/'+song.notes.length+' · '+octName+' · '+noteNames[noteIdx]);
-      triggerNote(noteIdx, beats, oct);
+      var mainNote = noteIndices[0];
+      var vel = (song._velocities && song._velocities[autoIdx]) ? song._velocities[autoIdx] : 0.85;
+      var shift = (song._timeShifts && song._timeShifts[autoIdx]) ? song._timeShifts[autoIdx] : 0;
+      updateProgress(pct, (autoIdx+1)+'/'+song.notes.length+' · '+octName+' · '+noteNames[mainNote]);
+      for (var ni = 0; ni < noteIndices.length; ni++) {
+        var nidx = noteIndices[ni];
+        var chordVel = (ni === 0) ? vel : vel * 0.7;
+        triggerNote(nidx, beats, oct, chordVel);
+      }
       autoIdx++;
-      autoTimer = setTimeout(playSongStep, beats * 60000 / song.bpm);
+      var baseMs = beats * 60000 / song.bpm;
+      var nextMs = Math.max(50, baseMs + shift);
+      if (autoIdx < song.notes.length && autoIdx % 8 === 0) {
+        nextMs += 30;
+      }
+      autoTimer = setTimeout(playSongStep, nextMs);
     }
 
     function startAuto(){
@@ -2169,6 +3167,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       var pw = document.getElementById('musicProgressWrap');
       if(pw) pw.style.display = 'block';
       initAudio();
+      humanizeSong();
       setTimeout(function(){ if(autoPlaying) playSongStep(); }, 300);
     }
 
