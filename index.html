@@ -772,6 +772,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-map-node.completed{opacity:.4;border-color:var(--text-faint);cursor:default;pointer-events:none;}
 .sg-map-node.current{border-color:var(--gold);box-shadow:0 0 12px rgba(201,168,76,.4);}
 .sg-map-node.current:hover{transform:scale(1.15)}
+.sg-map-node.reachable{border-color:var(--gold);border-style:dashed;opacity:.85;}
+.sg-map-node.reachable:hover{transform:scale(1.1);border-style:solid;border-color:var(--gold);background:var(--gold-dim);}
 .sg-map-node .sg-node-label{position:absolute;bottom:-16px;font-size:.5rem;color:var(--text-faint);white-space:nowrap;}
 .sg-map-node.boss{border-color:var(--red-seal);}
 .sg-map-node.boss.current{box-shadow:0 0 12px rgba(194,58,43,.4);}
@@ -787,6 +789,11 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-hp-fill{height:100%;border-radius:3px;background:var(--red-seal);transition:width .3s;}
 .sg-hp-text{font-size:.65rem;color:var(--text-dim);}
 .sg-enemy-block{font-size:.65rem;color:#3b82f6;margin-top:.2rem;}
+.sg-dmg-float{
+  position:absolute;font-size:1.1rem;font-weight:900;pointer-events:none;z-index:10;
+  animation:sgDmgFloat .8s ease-out forwards;
+}
+@keyframes sgDmgFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
 
 /* ── 玩家状态 ── */
 .sg-player-area{padding:.3rem 0;}
@@ -1374,7 +1381,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         </div>
 
         <!-- 玩家区域 -->
-        <div class="sg-player-area">
+        <div class="sg-player-area" id="sgPlayerArea">
           <!-- 状态栏 -->
           <div class="sg-status">
             <div class="sg-status-item">❤️ <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span></div>
@@ -2020,7 +2027,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       qingci:{name:"清词",cost:1,type:"attack",dmg:9,desc:"清词丽句 · 造成9点伤害",rarity:"common"},
       mansha:{name:"浣溪沙",cost:1,type:"skill",block:8,desc:"护体清溪 · 获得8点格挡",rarity:"common"},
       puziman:{name:"菩萨蛮",cost:1,type:"attack",dmg:6,hits:2,desc:"双叠句 · 造成6点伤害×2",rarity:"common"},
-      jiangcheng:{name:"江城子",cost:1,type:"attack",dmg:12,half:true,desc:"十年生死 · 目标HP≤50%时造成12伤",rarity:"uncommon"},
+      jiangcheng:{name:"江城子",cost:1,type:"attack",dmg:12,half:true,desc:"十年生死 · 半血以下伤害翻倍",rarity:"uncommon"},
       ruman:{name:"如梦令",cost:1,type:"skill",block:6,draw:1,desc:"昨夜雨疏 · 获得6格挡，抽1牌",rarity:"uncommon"},
       qingping:{name:"清平乐",cost:1,type:"skill",block:6,debuff:"vuln",desc:"清平祥和 · 6格挡，易伤1层",rarity:"uncommon"},
       shengsheng:{name:"声声慢",cost:1,type:"skill",debuff:"weak",val:2,desc:"寻寻觅觅 · 虚弱2层",rarity:"uncommon"},
@@ -2115,13 +2122,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       var eliteEnemies = ["cimo"];
 
       // Floor 0 (always single battle)
-      nodes.push({floor:0,col:0,type:"battle",enemy:enemies[Math.floor(Math.random()*enemies.length)],done:false});
+      nodes.push({floor:0,col:0,type:"battle",enemy:enemies[Math.floor(Math.random()*enemies.length)],done:false,connections:[]});
 
       for(var f=1;f<7;f++){
         var cols = branches[f];
         var rowEnemies = shuffle(enemies.slice());
         for(var c=0;c<cols;c++){
-          var node = {floor:f,col:c,type:types[f],done:false};
+          var node = {floor:f,col:c,type:types[f],done:false,connections:[]};
           if(node.type==="battle") node.enemy = rowEnemies[c % rowEnemies.length];
           if(node.type==="boss") node.enemy = "shisheng";
           if(node.type==="treasure") node.enemy = null;
@@ -2129,6 +2136,33 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           nodes.push(node);
         }
       }
+
+      // Build connections: each node connects to reachable nodes on next floor
+      for(var ni=0;ni<nodes.length;ni++){
+        var n = nodes[ni];
+        if(n.floor >= 6) continue;
+        for(var nj=0;nj<nodes.length;nj++){
+          var next = nodes[nj];
+          if(next.floor !== n.floor + 1) continue;
+          // Connect if same column or adjacent column (branching)
+          if(next.col === n.col || next.col === n.col+1 || next.col === n.col-1) {
+            n.connections.push(nj);
+          }
+        }
+      }
+
+      // Ensure every node has at least one connection forward
+      for(var ni=0;ni<nodes.length;ni++){
+        var n = nodes[ni];
+        if(n.floor >= 6) continue;
+        if(n.connections.length === 0) {
+          // Find any node on next floor
+          for(var nj=0;nj<nodes.length;nj++){
+            if(nodes[nj].floor === n.floor + 1) { n.connections.push(nj); break; }
+          }
+        }
+      }
+
       G.mapNodes = nodes;
       G.path = [0];
       G.floor = 0;
@@ -2154,8 +2188,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       var container = document.getElementById("sgMapContainer");
       if(!container) return;
       container.innerHTML = "";
-      document.getElementById("sgFloorNum").textContent = G.floor + 1;
+      var curNode = getCurrentNode();
+      document.getElementById("sgFloorNum").textContent = curNode.done ? (G.floor + 2) : (G.floor + 1);
       document.getElementById("sgMaxFloor").textContent = G.maxFloor;
+      var actNames = ["一","二","三","四","五","六","七"];
+      var actEl = document.getElementById("sgActNum");
+      if(actEl) actEl.textContent = actNames[curNode.done ? G.floor+1 : G.floor] || "末";
 
       var floors = {};
       for(var i=0;i<G.mapNodes.length;i++){
@@ -2169,11 +2207,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         if(floors[f] && floors[f].length > maxCols) maxCols = floors[f].length;
       }
 
+      // Build set of reachable nodes from current
+      var reachable = {};
+      if(!curNode.done && curNode.connections) {
+        for(var ci=0;ci<curNode.connections.length;ci++) reachable[curNode.connections[ci]] = true;
+      }
+
       for(var f=0;f<=G.maxFloor;f++){
         // Connector line
         if(f > 0) {
           var cl = document.createElement("div");
-          cl.className = "sg-map-connector" + (f <= G.floor ? " active" : "");
+          var connActive = (f <= G.floor) || (!curNode.done && f <= G.floor + 1) || (curNode.done && Object.keys(reachable).length > 0 && f <= G.floor + 1); cl.className = "sg-map-connector" + (connActive ? " active" : "");
           container.appendChild(cl);
         }
         // Row
@@ -2197,7 +2241,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           if(node.type==="treasure") icon = "📦";
           if(node.type==="boss") { icon = "👹"; nd.classList.add("boss"); }
           if(node.done) nd.classList.add("completed");
-          if(idx === G.nodeIdx && !node.done) nd.classList.add("current");
+          // Current node or reachable from current
+          if(idx === G.nodeIdx && !node.done) {
+            nd.classList.add("current");
+          } else if(reachable[idx] && !node.done) {
+            nd.classList.add("reachable");
+          }
           nd.textContent = icon;
           nd.dataset.idx = idx;
           var label = document.createElement("span");
@@ -2207,7 +2256,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           nd.appendChild(label);
           nd.addEventListener("click", function(){
             var ii = parseInt(this.dataset.idx);
-            if(ii === G.nodeIdx && !G.mapNodes[ii].done) enterNode(ii);
+            var targetNode = G.mapNodes[ii];
+            var cur = getCurrentNode();
+            // Can enter: current uncompleted node (first time), or a reachable connected node
+            if(ii === G.nodeIdx && !targetNode.done) {
+              enterNode(ii);
+            } else if(reachable[ii] && !targetNode.done) {
+              // Navigate to this node
+              G.nodeIdx = ii;
+              G.floor = targetNode.floor;
+              enterNode(ii);
+            }
           });
           row.appendChild(nd);
         }
@@ -2228,19 +2287,24 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     function completeNode() {
       var node = getCurrentNode();
       node.done = true;
-      // Find next node
-      var next = -1;
-      for(var i=0;i<G.mapNodes.length;i++){
-        if(G.mapNodes[i].floor === G.floor + 1) { next = i; break; }
-      }
-      if(next >= 0) {
-        G.nodeIdx = next;
-        G.floor++;
+      // Check connections for next node choices
+      if(node.connections && node.connections.length > 0) {
         showScreen("map");
         renderMap();
       } else {
-        // Victory
-        showResult(true);
+        // No connections — check if any more floors exist
+        var next = -1;
+        for(var i=0;i<G.mapNodes.length;i++){
+          if(G.mapNodes[i].floor === G.floor + 1) { next = i; break; }
+        }
+        if(next >= 0) {
+          G.nodeIdx = next;
+          G.floor++;
+          showScreen("map");
+          renderMap();
+        } else {
+          showResult(true);
+        }
       }
     }
 
@@ -2262,6 +2326,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       G.player.discard = [];
       G.player.exhaust = [];
       G.player.energy = G.player.maxEnergy;
+      G.player.buffs = {};
 
       // 遗物效果
       for(var ri=0;ri<G.player.relics.length;ri++){
@@ -2331,6 +2396,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           dmg += 3;
           G.player.firstAtkThisTurn = false;
         }
+        // 江城子：半血以下伤害翻倍
+        if(card.half && G.enemy.hp <= G.enemy.maxHp / 2) dmg *= 2;
         // 易伤加成（在damageEnemy中统一处理）
         var hits = card.hits || 1;
         for(var h=0;h<hits;h++){
@@ -2351,11 +2418,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           G.player.hp += card.maxHp;
         }
         if(card.draw) drawCards(card.draw);
-        if(card.gainEnergy) G.player.energy += card.gainEnergy;
         if(card.buff==="str") G.player.str += (card.val || 1);
         if(card.debuff==="vuln") { G.enemy.buffs.vuln = (G.enemy.buffs.vuln||0) + (card.val||1); }
         if(card.debuff==="weak") { G.enemy.buffs.weak = (G.enemy.buffs.weak||0) + (card.val||1); }
       }
+
+      // 通用效果：能量回复（将进酒等）
+      if(card.gainEnergy) G.player.energy += card.gainEnergy;
 
       // Powers
       if(card.power==="energy") G.player.maxEnergy += 1;
@@ -2377,6 +2446,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       checkEnemyDeath();
     }
 
+    function showDmgFloat(amount, el, color) {
+      if(!el || amount <= 0) return;
+      var f = document.createElement("div");
+      f.className = "sg-dmg-float";
+      f.textContent = "-" + amount;
+      f.style.color = color || "#ef4444";
+      f.style.left = "50%";
+      f.style.top = "30%";
+      el.style.position = "relative";
+      el.appendChild(f);
+      setTimeout(function(){ try{el.removeChild(f);}catch(e){} }, 900);
+    }
+
     function damageEnemy(dmg) {
       var e = G.enemy;
       // 玩家虚弱则伤害降低
@@ -2384,11 +2466,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       // 敌人易伤则伤害增加
       if(e.buffs.vuln) dmg = Math.floor(dmg * 1.5);
       dmg = Math.max(0, dmg);
+      var blocked = 0;
       if(e.block > 0) {
-        if(dmg <= e.block) { e.block -= dmg; dmg = 0; }
-        else { dmg -= e.block; e.block = 0; }
+        if(dmg <= e.block) { blocked = dmg; e.block -= dmg; dmg = 0; }
+        else { blocked = e.block; dmg -= e.block; e.block = 0; }
       }
       e.hp = Math.max(0, e.hp - dmg);
+      if(dmg > 0) showDmgFloat(dmg, document.getElementById("sgEnemy"), "#ef4444");
     }
 
     function checkEnemyDeath() {
@@ -2416,12 +2500,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           if(G.player.block >= hitDmg) { G.player.block -= hitDmg; hitDmg = 0; }
           else { hitDmg -= G.player.block; G.player.block = 0; }
           G.player.hp = Math.max(0, G.player.hp - hitDmg);
+	          if(hitDmg > 0) showDmgFloat(hitDmg, document.getElementById("sgPlayerArea"), "#60a5fa");
         }
       }
       if(intent.t === "aoe") {
         var dmg = intent.v;
         if(G.player.block >= dmg) { G.player.block -= dmg; }
-        else { dmg -= G.player.block; G.player.block = 0; G.player.hp = Math.max(0, G.player.hp - dmg); }
+        else { dmg -= G.player.block; G.player.block = 0; G.player.hp = Math.max(0, G.player.hp - dmg); if(dmg > 0) showDmgFloat(dmg, document.getElementById("sgPlayerArea"), "#60a5fa"); }
       }
       if(intent.t === "defend") {
         e.block += intent.v;
@@ -2448,9 +2533,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       G.player.firstAtkThisTurn = true;
       G.player.energy = G.player.maxEnergy;
 
-      // Discard hand, draw new
-      for(var hi=0;hi<G.player.hand.length;hi++) G.player.discard.push(G.player.hand[hi]);
-      G.player.hand = [];
+      // Draw new hand (hand was already discarded in endTurn)
       e.intent = pickIntent();
       drawCards(G.player.drawPerTurn + (hasRelic("extraDraw")?1:0));
 
@@ -2468,7 +2551,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       document.getElementById("sgEnemyName").textContent = e.desc ? e.desc : e.id;
       var hpPct = Math.max(0, Math.min(100, e.hp/e.maxHp*100));
-      document.getElementById("sgEnemyHpFill").style.width = hpPct + "%";
+      var hpBar = document.getElementById("sgEnemyHpFill");
+      hpBar.style.width = hpPct + "%";
+      hpBar.style.background = hpPct > 60 ? "var(--red-seal)" : hpPct > 30 ? "#eab308" : "#ef4444";
       document.getElementById("sgEnemyHp").textContent = e.hp;
       document.getElementById("sgEnemyMaxHp").textContent = e.maxHp;
 
@@ -2500,6 +2585,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       // 玩家状态
       document.getElementById("sgPlayerHp").textContent = G.player.hp;
       document.getElementById("sgPlayerMaxHp").textContent = G.player.maxHp;
+      var hpColorEl = document.getElementById("sgPlayerHp");
+      var hpPctPlayer = G.player.hp / G.player.maxHp;
+      hpColorEl.style.color = hpPctPlayer > 0.6 ? "inherit" : hpPctPlayer > 0.3 ? "#eab308" : "#ef4444";
       document.getElementById("sgPlayerEnergy").textContent = G.player.energy;
       document.getElementById("sgPlayerMaxEnergy").textContent = G.player.maxEnergy;
       document.getElementById("sgPlayerBlock").textContent = G.player.block;
@@ -2565,7 +2653,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         el.innerHTML = "<div class='sg-card-cost'>" + card.cost + "</div>" +
           "<div class='sg-card-name'>" + card.name + "</div>" +
           "<div class='sg-card-desc'>" + card.desc + "</div>" +
-          "<div class='sg-card-type'>" + card.rarity + "</div>";
+          "<div class='sg-card-type'>" + card.type + "</div>";
         (function(ci){
           el.addEventListener("click", function(){
             G.player.deck.push(ci);
