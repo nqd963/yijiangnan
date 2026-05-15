@@ -87,6 +87,7 @@ body{font-family:'Noto Serif SC','STSong','SimSun',serif;background:var(--bg);co
   font-size:1.2rem;transition:all .3s;box-shadow:0 2px 12px var(--shadow);
 }
 .theme-toggle:hover{transform:scale(1.08);border-color:var(--gold);}
+#shareBtn{left:auto;right:calc(1.2rem + 48px);font-size:1rem;}
 
 /* ═══════════════════════════ HERO ═══════════════════════════ */
 .hero{
@@ -713,6 +714,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
 <!-- ══ THEME TOGGLE ══ -->
 <button class="theme-toggle" id="themeToggle" title="切换深色/浅色模式">🌙</button>
+<button class="theme-toggle" id="shareBtn" title="分享此页">🔗</button>
+
 
 <!-- ══════════════════ HERO ══════════════════ -->
 <header class="hero">
@@ -1219,7 +1222,24 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     toggle.textContent = dark ? '\u2600\uFE0F' : '\uD83C\uDF19';
     localStorage.setItem('dark', dark);
   });
-
+  /* ── Share ── */
+  var shareBtn = document.getElementById('shareBtn');
+  if(shareBtn){
+    shareBtn.addEventListener('click', function(){
+      var url = 'https://nqd963.github.io/yijiangnan/';
+      if(navigator.share){
+        navigator.share({title:'忆江南·清秋晚 — 宋词交互实验室',text:'赏词·填词·校验平厹·奏乐 —— 最美的宋词交互体验',url:url}).catch(function(){});
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position='fixed';ta.style.left='-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try{document.execCommand('copy');alert('✅ 链接已复制，可分享给好友！');}catch(e){prompt('复制链接：',url);}
+        document.body.removeChild(ta);
+      }
+    });
+  }
   /* ── Recitation (Web Speech API) ── */
   var reciteBtn = document.getElementById('reciteBtn');
   var poemFull = '\u6E05\u79CB\u665A\uFF0C\u971C\u53F6\u5760\u5BD2\u6D41\u3002\u4E07\u91CC\u5173\u5C71\u5F52\u68A6\u8FDC\uFF0C\u4E00\u5DDD\u82A6\u96EA\u6CCA\u5B64\u821F\u3002\u6B8B\u7B1B\u8D77\u9AD8\u697C\u3002';
@@ -1723,6 +1743,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 	    var autoIdx = 0;
 	    var autoPlaying = false;
 	    var currentTempo = 100;
+	    var progressBar = null;
+	    var progressLabel = null;
 
 	    var noteNames = ['宫','商','角','变徵','徵','羽','变宫'];
 	    var noteFreqs = [261.63, 293.66, 329.63, 369.99, 392.00, 440.00, 493.88];
