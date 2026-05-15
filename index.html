@@ -758,13 +758,28 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-title-sub{font-size:.8rem;text-align:center;color:var(--text-faint);letter-spacing:.3em;margin-top:.2rem;}
 .sg-title-desc{font-size:.75rem;text-align:center;color:var(--text-dim);line-height:1.8;margin:1rem 0 1.5rem;padding:0 1rem;}
 
+/* ── 角色选择 ── */
+.sg-cs-title{font-size:1.2rem;font-weight:700;text-align:center;color:var(--gold);padding:1.5rem 0 1rem;}
+.sg-cs-cards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:0 .5rem;}
+.sg-cs-card{
+  width:140px;padding:1rem .6rem;border-radius:12px;cursor:pointer;
+  background:var(--bg-card);border:2px solid var(--border);text-align:center;
+  transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.sg-cs-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 4px 16px var(--shadow);}
+.sg-cs-card .sg-cs-portrait{font-size:2.5rem;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--border);}
+.sg-cs-card .sg-cs-char-name{font-size:.9rem;font-weight:700;color:var(--text);}
+.sg-cs-card .sg-cs-char-hp{font-size:.7rem;color:var(--text-dim);}
+.sg-cs-card .sg-cs-char-desc{font-size:.6rem;color:var(--text-faint);line-height:1.3;}
+.sg-cs-card .sg-cs-char-cards{font-size:.55rem;color:var(--text-dim);}
+
 /* ── 地图 ── */
 .sg-map-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;font-size:.85rem;color:var(--text-dim);}
 .sg-map{display:flex;flex-direction:column;align-items:center;gap:6px;padding:.5rem 0;}
 .sg-map-row{display:flex;gap:12px;justify-content:center;}
 .sg-map-node{
-  width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:1.3rem;cursor:pointer;transition:all .2s;
+  width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;cursor:pointer;transition:all .2s;
   border:2px solid var(--border);background:var(--bg-card-alt);
   position:relative;
 }
@@ -783,19 +798,27 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-map-connector.active{background:var(--gold);}
 
 /* ── 战斗 ── */
+.sg-battle-bg{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%, rgba(180,120,60,0.08) 0%, transparent 70%);pointer-events:none;z-index:-1;}
 .sg-enemy-area{text-align:center;padding:.5rem 0 .8rem;}
-.sg-enemy{display:inline-block;padding:.8rem 1.5rem;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:160px;position:relative;overflow:hidden;}
-.sg-enemy-name{font-size:1rem;font-weight:700;color:var(--red-seal);margin-bottom:.3rem;}
-.sg-enemy-intent{font-size:.65rem;color:var(--text-faint);margin-bottom:.3rem;min-height:1.2em;}
+.sg-enemy{display:inline-block;padding:.8rem 1.2rem;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:160px;position:relative;overflow:hidden;}
+.sg-enemy-name{font-size:1rem;font-weight:700;color:var(--red-seal);margin-bottom:.2rem;}
+.sg-enemy-intent{font-size:.6rem;color:var(--text-faint);margin-bottom:.1rem;min-height:1.2em;}
+.sg-enemy-intent-val{font-size:.55rem;color:var(--text-dim);margin-bottom:.1rem;min-height:1em;}
+.sg-enemy-desc{font-size:.55rem;color:var(--text-faint);margin-bottom:.1rem;}
 .sg-hp-bar-wrap{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin:.2rem 0;}
 .sg-hp-fill{height:100%;border-radius:3px;background:var(--red-seal);transition:width .3s;}
 .sg-hp-text{font-size:.65rem;color:var(--text-dim);}
 .sg-enemy-block{font-size:.65rem;color:#3b82f6;margin-top:.2rem;}
+.sg-enemy-buffs{font-size:.6rem;margin-top:.2rem;min-height:1.2em;}
+.sg-enemy-poison{font-size:.6rem;color:#a855f7;margin-top:.1rem;}
+.sg-buff{display:inline-block;padding:.1rem .3rem;border-radius:4px;background:var(--gold-dim);margin:0 .1rem;font-weight:600;}
+.sg-buff.sg-debuff{background:rgba(194,58,43,0.15);color:var(--red-seal);}
 .sg-dmg-float{
   position:absolute;font-size:1.1rem;font-weight:900;pointer-events:none;z-index:10;
   animation:sgDmgFloat .8s ease-out forwards;
 }
 @keyframes sgDmgFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
+.sg-enemy-portrait{font-size:2.2rem;margin-bottom:.2rem;}
 
 /* ── 战斗特效 ── */
 .sg-hit-flash{position:absolute;inset:0;border-radius:12px;pointer-events:none;animation:sgHitFlash .25s ease-out forwards;}
@@ -818,19 +841,26 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   position:absolute;font-size:.9rem;font-weight:700;pointer-events:none;z-index:10;color:#22c55e;
   animation:sgBlockFloat .7s ease-out forwards;
 }
+.sg-poison-float{
+  position:absolute;font-size:.9rem;font-weight:700;pointer-events:none;z-index:10;color:#a855f7;
+  animation:sgBlockFloat .7s ease-out forwards;
+}
 
 /* ── 玩家状态 ── */
 .sg-player-area{padding:.3rem 0;}
-.sg-status{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;padding:.3rem 0;font-size:.7rem;color:var(--text-dim);}
-.sg-status-item{background:var(--bg-card-alt);padding:.2rem .6rem;border-radius:6px;border:1px solid var(--border);}
+.sg-player-portrait-wrap{text-align:center;padding:.3rem 0;}
+.sg-player-portrait{font-size:1.8rem;display:inline-block;}
+.sg-player-name{font-size:.75rem;color:var(--text-dim);}
+.sg-status{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;padding:.3rem 0;font-size:.68rem;color:var(--text-dim);}
+.sg-status-item{background:var(--bg-card-alt);padding:.2rem .5rem;border-radius:6px;border:1px solid var(--border);}
 
 /* ── 手牌 ── */
 .sg-hand{
   display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
-  min-height:100px;padding:.4rem 0;overflow-y:auto;
+  min-height:110px;padding:.4rem 0;overflow-y:auto;
 }
 .sg-card{
-  width:110px;padding:.5rem .4rem .4rem;border-radius:8px;
+  width:115px;padding:.5rem .4rem .4rem;border-radius:8px;
   background:var(--bg-card);border:1px solid var(--border);cursor:pointer;
   text-align:center;transition:all .15s;
   display:flex;flex-direction:column;gap:2px;
@@ -856,12 +886,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-card .sg-card-type{font-size:.45rem;color:var(--text-faint);}
 .sg-card.playing{animation:sgCardPlay .25s ease forwards;}
 @keyframes sgCardPlay{0%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}100%{transform:scale(.8);opacity:0}}
+.sg-card.primary{border-color:var(--gold);border-width:2px;}
 
 /* ── 回合控制 ── */
 .sg-turn-ctrl{text-align:center;padding:.3rem 0;}
+.sg-pile-info{text-align:center;font-size:.6rem;color:var(--text-faint);padding:.1rem 0;display:flex;gap:.5rem;justify-content:center;}
 
 /* ── 奖励 ── */
-.sg-reward-title{font-size:1.1rem;font-weight:700;text-align:center;color:var(--gold);padding:1.5rem 0 .8rem;}
+.sg-reward-title{font-size:1.1rem;font-weight:700;text-align:center;color:var(--gold);padding:1.5rem 0 .5rem;}
 .sg-reward-cards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 .sg-reward-actions{text-align:center;padding:.8rem 0;}
 
@@ -880,10 +912,58 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-relic-card .sg-relic-name{font-size:.85rem;font-weight:700;color:var(--gold);}
 .sg-relic-card .sg-relic-desc{font-size:.65rem;color:var(--text-dim);margin-top:.2rem;}
 
+/* ── 商店 ── */
+.sg-shop-items{display:flex;flex-direction:column;gap:8px;padding:.5rem;}
+.sg-shop-item{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  background:var(--bg-card-alt);border:1px solid var(--border);border-radius:8px;
+  padding:.5rem .8rem;cursor:pointer;transition:all .2s;
+}
+.sg-shop-item:hover{border-color:var(--gold);}
+.sg-shop-item .sg-shop-info{flex:1;text-align:left;}
+.sg-shop-item .sg-shop-name{font-size:.8rem;font-weight:700;color:var(--text);}
+.sg-shop-item .sg-shop-desc{font-size:.6rem;color:var(--text-faint);}
+.sg-shop-item .sg-shop-price{font-size:.75rem;color:var(--gold);font-weight:700;white-space:nowrap;}
+.sg-shop-item .sg-shop-type{font-size:.55rem;color:var(--text-dim);}
+.sg-shop-item.sold-out{opacity:.4;cursor:default;pointer-events:none;}
+.sg-shop-heal{
+  text-align:center;padding:.3rem;font-size:.75rem;color:var(--text-dim);
+  cursor:pointer;border:1px dashed var(--border);border-radius:8px;margin:0 .5rem;
+  transition:all .2s;
+}
+.sg-shop-heal:hover{border-color:var(--gold);color:var(--gold);}
+.sg-shop-relic{text-align:center;padding:.3rem 0;}
+.sg-shop-relic-icon{font-size:1.5rem;}
+.sg-shop-relic-name{font-size:.75rem;font-weight:700;color:var(--gold);}
+.sg-shop-relic-desc{font-size:.55rem;color:var(--text-faint);}
+.sg-shop-price-locked{color:var(--red-seal)!important;opacity:.5;}
+.sg-shop-price{font-size:.8rem;font-weight:700;color:var(--gold);white-space:nowrap;}
+
+/* ── 事件 ── */
+.sg-event-choices{display:flex;flex-direction:column;gap:8px;padding:.5rem 1rem;}
+.sg-event-choice{
+  background:var(--bg-card-alt);border:1px solid var(--border);border-radius:8px;
+  padding:.6rem .8rem;cursor:pointer;text-align:center;font-size:.75rem;color:var(--text-dim);
+  transition:all .2s;
+}
+.sg-event-choice:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.sg-event-choice .sg-event-effect{font-size:.6rem;color:var(--text-faint);margin-top:.2rem;}
+
+/* ── Act过渡 ── */
+.sg-act-banner{
+  text-align:center;padding:2.5rem 1rem;margin:1rem;
+  border:2px solid var(--gold);border-radius:16px;
+  background:linear-gradient(135deg, var(--gold-dim), transparent, var(--gold-dim));
+}
+.sg-act-banner-icon{font-size:3.5rem;margin-bottom:.5rem;}
+.sg-act-banner-title{font-size:1.4rem;font-weight:900;color:var(--gold);letter-spacing:.1em;}
+.sg-act-banner-sub{font-size:.8rem;color:var(--text-dim);margin-top:.5rem;}
+
 /* ── 结果 ── */
 .sg-result-icon{font-size:3rem;text-align:center;padding-top:2.5rem;}
 .sg-result-title{font-size:1.5rem;font-weight:900;text-align:center;color:var(--gold);margin-top:.5rem;}
-.sg-result-desc{font-size:.75rem;text-align:center;color:var(--text-dim);margin:.3rem 0 1.5rem;}
+.sg-result-desc{font-size:.75rem;text-align:center;color:var(--text-dim);margin:.3rem 0 .5rem;}
+.sg-result-detail{font-size:.7rem;text-align:center;color:var(--text-dim);line-height:1.6;padding:0 1rem 1rem;}
 
 /* ── deck弹窗 ── */
 .sg-deck-overlay{
@@ -892,7 +972,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 }
 .sg-deck-panel{
   background:var(--bg);border:1px solid var(--border);border-radius:12px;
-  padding:1rem;max-width:400px;width:90%;max-height:80vh;overflow-y:auto;
+  padding:1rem;max-width:420px;width:90%;max-height:80vh;overflow-y:auto;
 }
 .sg-deck-panel h3{font-size:.9rem;color:var(--gold);margin-bottom:.5rem;}
 .sg-deck-grid{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
@@ -902,9 +982,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 /* 响应式 */
 @media(max-width:480px){
   .sg-card{width:95px;padding:.4rem .3rem;}
-  .sg-map-node{width:44px;height:44px;font-size:1rem;}
-  .sg-status{font-size:.65rem;gap:.4rem;}
+  .sg-card .sg-card-name{font-size:.58rem;}
+  .sg-card .sg-card-desc{font-size:.45rem;}
+  .sg-map-node{width:40px;height:40px;font-size:.9rem;}
+  .sg-map-node .sg-node-label{font-size:.45rem;bottom:-14px;}
+  .sg-status{font-size:.6rem;gap:.35rem;}
+  .sg-status-item{padding:.15rem .4rem;}
   .sg-title-text{font-size:1.6rem;}
+  .sg-cs-card{width:120px;padding:.8rem .4rem;}
+  .sg-enemy{min-width:140px;padding:.6rem 1rem;}
+  .sg-enemy-portrait{font-size:1.8rem;}
+  .sg-shop-item{padding:.4rem .6rem;flex-wrap:wrap;}
 }
 </style>
 </head>
@@ -1413,40 +1501,62 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     <div class="sg-wrap">
       <!-- 标题画面 -->
       <div id="sgTitle" class="sg-screen">
-        <div class="sg-title-icon">🗡️📜</div>
+        <div class="sg-title-icon">🎋📜</div>
         <div class="sg-title-text">诗境问道</div>
         <div class="sg-title-sub">古诗词 · 肉鸽卡牌</div>
-        <div class="sg-title-desc">以诗词为载体，攀登九重诗境。<br>收集诗篇，击败诗魔，问道于词。</div>
-        <button class="sg-btn sg-btn-primary" id="sgStartBtn">开始新旅程</button>
+        <div class="sg-title-desc">三境九转，以诗为剑<br>攀登诗道之巅</div>
+        <button class="sg-btn sg-btn-primary" id="sgStartBtn">开始征程</button>
+      </div>
+      <!-- 角色选择 -->
+      <div id="sgCharSelect" class="sg-screen" style="display:none">
+        <div class="sg-cs-title">选择你的诗人</div>
+        <div class="sg-cs-cards" id="sgCharCards"></div>
       </div>
       <!-- 地图画面 -->
       <div id="sgMap" class="sg-screen" style="display:none">
         <div class="sg-map-header">
           <span>第 <span id="sgActNum">一</span> 境</span>
-          <span class="sg-map-floor">层 <span id="sgFloorNum">1</span>/<span id="sgMaxFloor">7</span></span>
+          <span class="sg-map-floor">层 <span id="sgFloorNum">1</span>/<span id="sgMaxFloor">12</span></span>
         </div>
+        <div style="text-align:center;padding:0.3rem 0;font-size:0.8rem;color:var(--gold);">💰 <span id="sgMapGold">0</span> 金币</div>
         <div class="sg-map" id="sgMapContainer"></div>
+        <div style="text-align:center;padding:0.3rem 0;"><button class="sg-btn sg-btn-small" id="sgMapBack">返回</button></div>
       </div>
       <!-- 战斗画面 -->
       <div id="sgBattle" class="sg-screen" style="display:none">
+        <div class="sg-battle-bg"></div>
         <div class="sg-enemy-area">
           <div class="sg-enemy" id="sgEnemy">
+            <div class="sg-enemy-portrait" id="sgEnemyPortrait">👹</div>
             <div class="sg-enemy-name" id="sgEnemyName">诗魔</div>
+            <div class="sg-enemy-desc" id="sgEnemyDesc"></div>
             <div class="sg-enemy-intent" id="sgEnemyIntent"></div>
+            <div class="sg-enemy-intent-val" id="sgIntentVal"></div>
             <div class="sg-hp-bar-wrap">
               <div class="sg-hp-fill" id="sgEnemyHpFill" style="width:100%"></div>
             </div>
             <div class="sg-hp-text"><span id="sgEnemyHp">40</span>/<span id="sgEnemyMaxHp">40</span></div>
             <div class="sg-enemy-block" id="sgEnemyBlock" style="display:none">🛡️ <span id="sgEnemyBlockNum">0</span></div>
+            <div class="sg-enemy-buffs" id="sgEnemyBuffs"></div>
+            <div class="sg-enemy-poison" id="sgEnemyPoison"></div>
           </div>
         </div>
         <div class="sg-player-area" id="sgPlayerArea">
+          <div class="sg-player-portrait-wrap">
+            <div class="sg-player-portrait" id="sgPlayerPortrait">🍶</div>
+            <div class="sg-player-name" id="sgPlayerName">诗人</div>
+            <div style="height:4px;border-radius:2px;background:var(--border);overflow:hidden;width:80px;margin:2px auto;">
+              <div class="sg-hp-fill" id="sgPlayerHpFill" style="width:100%;background:var(--gold);"></div>
+            </div>
+          </div>
           <div class="sg-status">
             <div class="sg-status-item">❤️ <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span></div>
             <div class="sg-status-item">⚡ <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span></div>
             <div class="sg-status-item">🛡️ <span id="sgPlayerBlock">0</span></div>
             <div class="sg-status-item">💪 <span id="sgPlayerStrength">0</span></div>
-            <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span></div>
+            <div class="sg-status-item">☠️ <span id="sgPlayerPoison">0</span></div>
+            <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span> 🃏<span id="sgDrawPile">0</span> 📄<span id="sgDiscardPile">0</span></div>
+            <div class="sg-status-item">🔄 <span id="sgTurnNum">0</span></div>
           </div>
           <div class="sg-hand" id="sgHand"></div>
           <div class="sg-turn-ctrl">
@@ -1457,9 +1567,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <!-- 奖励画面 -->
       <div id="sgReward" class="sg-screen" style="display:none">
         <div class="sg-reward-title">🎉 获得诗篇</div>
+        <div style="text-align:center;font-size:0.8rem;color:var(--gold);padding-bottom:0.5rem;">💰 +<span id="sgRewardGold">0</span> 金币</div>
         <div class="sg-reward-cards" id="sgRewardCards"></div>
         <div class="sg-reward-actions">
-          <button class="sg-btn sg-btn-primary" id="sgRewardSkip" style="display:none">跳过</button>
+          <button class="sg-btn sg-btn-primary" id="sgRewardSkip">继续</button>
         </div>
       </div>
       <!-- 休憩画面 -->
@@ -1468,6 +1579,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         <div class="sg-rest-title">书院休憩</div>
         <div class="sg-rest-desc">静心养气，恢复体力。</div>
         <div class="sg-rest-hp">当前 HP：<span id="sgRestHp">80</span>/<span id="sgRestMaxHp">80</span></div>
+        <div style="text-align:center;font-size:.7rem;color:var(--text-faint);display:none;">可恢复 <span id="sgRestAmt">0</span> HP</div>
         <button class="sg-btn sg-btn-primary" id="sgRestBtn">休息（恢复 20 HP）</button>
         <button class="sg-btn" id="sgRestSkipBtn">继续前行</button>
       </div>
@@ -1479,13 +1591,43 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         <div class="sg-relic-card" id="sgTreasureRelic"></div>
         <button class="sg-btn sg-btn-primary" id="sgTreasureTake">收下</button>
       </div>
+      <!-- 商店画面 -->
+      <div id="sgShop" class="sg-screen" style="display:none">
+        <div class="sg-rest-icon">🏪</div>
+        <div class="sg-rest-title">诗市</div>
+        <div class="sg-rest-desc">选购诗篇与宝物</div>
+        <div style="text-align:center;font-size:0.9rem;color:var(--gold);padding:0.3rem 0;">💰 <span id="sgShopGold">0</span> 金币</div>
+        <div class="sg-shop-items" id="sgShopItems"></div>
+        <div class="sg-shop-heal" id="sgShopHeal" style="display:none"></div>
+        <div class="sg-reward-actions">
+          <button class="sg-btn" id="sgShopLeave">离开</button>
+        </div>
+      </div>
+      <!-- 事件画面 -->
+      <div id="sgEvent" class="sg-screen" style="display:none">
+        <div class="sg-rest-icon" id="sgEventIcon">❓</div>
+        <div class="sg-rest-title" id="sgEventTitle">奇遇</div>
+        <div class="sg-rest-desc" id="sgEventDesc">你遇到了一件奇怪的事情...</div>
+        <div class="sg-event-choices" id="sgEventChoices"></div>
+      </div>
       <!-- 结果画面 -->
       <div id="sgResult" class="sg-screen" style="display:none">
         <div class="sg-result-icon" id="sgResultIcon">🏆</div>
         <div class="sg-result-title" id="sgResultTitle">胜利</div>
         <div class="sg-result-desc" id="sgResultDesc">你已问道九重诗境！</div>
+        <div class="sg-result-detail" id="sgResultDetail"></div>
         <button class="sg-btn sg-btn-primary" id="sgRestartBtn">再来一局</button>
       </div>
+      <!-- Act transition -->
+      <div id="sgActTransition" class="sg-screen" style="display:none">
+        <div class="sg-act-banner">
+          <div class="sg-act-banner-icon" id="sgActBannerIcon">🏛️</div>
+          <div class="sg-act-banner-title" id="sgActBannerTitle">第一境 · 试律</div>
+          <div class="sg-act-banner-sub" id="sgActBannerSub">科举试律，严苛无情</div>
+        </div>
+        <button class="sg-btn sg-btn-primary" id="sgActContinueBtn">进入下一境</button>
+      <!-- Deck Popup -->
+      <div id="sgDeckPopup" class="sg-screen" style="display:none;"></div>
     </div>
   </div>
 </div>
@@ -2037,806 +2179,1759 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   })();
 
 
-  /* ═══════════════════════════ 诗境问道 · 肉鸽卡牌 ═══════════════════════════ */
   (function(){
     "use strict";
 
-    /* ══════ 卡牌数据 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 数据定义 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
     var CARDS = {
       yinyong:{name:"吟咏",cost:0,type:"attack",dmg:5,desc:"基础诗咏 · 造成5点伤害",rarity:"basic"},
       mosong:{name:"默诵",cost:0,type:"skill",block:4,desc:"基础默诵 · 获得4点格挡",rarity:"basic"},
       qingci:{name:"清词",cost:1,type:"attack",dmg:9,desc:"清词丽句 · 造成9点伤害",rarity:"common"},
       mansha:{name:"浣溪沙",cost:1,type:"skill",block:8,desc:"护体清溪 · 获得8点格挡",rarity:"common"},
       puziman:{name:"菩萨蛮",cost:1,type:"attack",dmg:6,hits:2,desc:"双叠句 · 造成6点伤害×2",rarity:"common"},
-      jiangcheng:{name:"江城子",cost:1,type:"attack",dmg:12,half:true,desc:"十年生死 · 半血以下伤害翻倍",rarity:"uncommon"},
-      ruman:{name:"如梦令",cost:1,type:"skill",block:6,draw:1,desc:"昨夜雨疏 · 获得6格挡，抽1牌",rarity:"uncommon"},
-      qingping:{name:"清平乐",cost:1,type:"skill",block:6,debuff:"vuln",desc:"清平祥和 · 6格挡，易伤1层",rarity:"uncommon"},
-      shengsheng:{name:"声声慢",cost:1,type:"skill",debuff:"weak",val:2,desc:"寻寻觅觅 · 虚弱2层",rarity:"uncommon"},
-      diehua:{name:"蝶恋花",cost:1,type:"skill",desc:"庭院深深 · 抽2张牌",rarity:"uncommon",draw:2},
-      yujia:{name:"渔家傲",cost:1,type:"skill",block:8,gainEnergy:1,desc:"塞上秋来 · 8格挡+1能量",rarity:"uncommon"},
-      dianjiang:{name:"点绛唇",cost:1,type:"skill",debuff:"vuln",val:2,desc:"蹴罢秋千 · 易伤2层",rarity:"common"},
-      linjiang:{name:"临江仙",cost:0,type:"skill",heal:8,exhaust:true,desc:"梦后楼台 · 回复8HP，消耗",rarity:"uncommon"},
-      dingfeng:{name:"定风波",cost:1,type:"skill",buff:"str",val:2,desc:"莫听穿林 · 获得2点力量",rarity:"uncommon"},
-      niannu:{name:"念奴娇",cost:2,type:"attack",dmg:12,aoe:true,desc:"大江东去 · 全体12点伤害",rarity:"uncommon"},
+      dianjiang:{name:"点绛唇",cost:1,type:"skill",debuff:"vuln",val:1,desc:"蹴罢秋千 · 易伤1层",rarity:"common"},
       pozhen:{name:"破阵子",cost:2,type:"attack",dmg:20,desc:"醉里挑灯 · 造成20点伤害",rarity:"common"},
       manjiang:{name:"满江红",cost:2,type:"attack",dmg:16,desc:"壮怀激烈 · 造成16点伤害",rarity:"common"},
+      jingyesi:{name:"静夜思",cost:0,type:"attack",dmg:4,desc:"低头思故乡 · 造成4点伤害",rarity:"common"},
+      yijianmei:{name:"一剪梅",cost:1,type:"skill",block:5,debuff:"vuln",val:1,desc:"此情无计可消除 · 5格挡+易伤1",rarity:"common"},
+      guiziyao:{name:"归字谣",cost:1,type:"attack",dmg:7,debuff:"weak",val:1,desc:"归去来兮 · 7伤+虚弱1层",rarity:"common"},
+      nangezi:{name:"南歌子",cost:1,type:"skill",poison:5,desc:"凤髻金泥带 · 叠毒5",rarity:"common"},
+      ruanlang:{name:"阮郎归",cost:1,type:"attack",dmg:6,block:6,desc:"天边金掌露成霜 · 6伤+6格挡",rarity:"common"},
+      xifenfei:{name:"惜分飞",cost:1,type:"attack",dmg:5,hits:2,desc:"泪湿阑干 · 5伤害×2",rarity:"common"},
+      guomei:{name:"过梅岭",cost:1,type:"attack",dmg:8,selfDmg:3,desc:"中有行人 · 8伤自损3",rarity:"common"},
+      jiangcheng:{name:"江城子",cost:1,type:"attack",dmg:12,half:true,desc:"十年生死 · 半血以下伤害翻倍",rarity:"uncommon"},
+      ruman:{name:"如梦令",cost:1,type:"skill",block:6,draw:1,desc:"昨夜雨疏 · 6格挡抽1牌",rarity:"uncommon"},
+      qingping:{name:"清平乐",cost:1,type:"skill",block:6,debuff:"vuln",val:1,desc:"清平祥和 · 6格挡易伤1层",rarity:"uncommon"},
+      shengsheng:{name:"声声慢",cost:1,type:"skill",debuff:"weak",val:2,desc:"寻寻觅觅 · 虚弱2层",rarity:"uncommon"},
+      diehua:{name:"蝶恋花",cost:1,type:"skill",draw:2,desc:"庭院深深 · 抽2张牌",rarity:"uncommon"},
+      yujia:{name:"渔家傲",cost:1,type:"skill",block:8,gainEnergy:1,desc:"塞上秋来 · 8格挡+1能量",rarity:"uncommon"},
+      linjiang:{name:"临江仙",cost:0,type:"skill",heal:8,exhaust:true,desc:"梦后楼台 · 回复8HP消耗",rarity:"uncommon"},
+      dingfeng:{name:"定风波",cost:1,type:"skill",buff:"str",val:2,desc:"莫听穿林 · 获得2点力量",rarity:"uncommon"},
+      niannu:{name:"念奴娇",cost:2,type:"attack",dmg:12,aoe:true,desc:"大江东去 · 全体12点伤害",rarity:"uncommon"},
       jiangjin:{name:"将进酒",cost:1,type:"attack",dmg:8,gainEnergy:1,desc:"杯莫停 · 8伤+1能量",rarity:"uncommon"},
       tasha:{name:"踏莎行",cost:1,type:"attack",dmg:4,hits:3,desc:"雾失楼台 · 4点伤害×3",rarity:"uncommon"},
       yulin:{name:"雨霖铃",cost:2,type:"skill",block:15,desc:"寒蝉凄切 · 获得15点格挡",rarity:"uncommon"},
+      wanglu:{name:"望庐山瀑布",cost:1,type:"attack",dmg:10,draw:1,desc:"飞流直下三千尺 · 10伤抽1",rarity:"uncommon"},
+      busuanzi:{name:"卜算子",cost:1,type:"attack",dmgPerCard:3,desc:"我住长江头 · 每张手牌+3伤",rarity:"uncommon"},
+      caisangzi:{name:"采桑子",cost:1,type:"skill",block:6,poison:3,desc:"轻舟短棹 · 6格挡叠毒3",rarity:"uncommon"},
+      daolianzi:{name:"捣练子",cost:0,type:"skill",gainEnergy:2,exhaust:true,desc:"深院静 · 得2能量消耗",rarity:"uncommon"},
+      langtaosha:{name:"浪淘沙",cost:2,type:"attack",dmg:10,aoe:true,desc:"大浪淘沙 · 全体10伤",rarity:"uncommon"},
+      mantingfang:{name:"满庭芳",cost:2,type:"skill",heal:8,block:8,desc:"十里荷花 · 回8HP+8格挡",rarity:"uncommon"},
+      shaonian:{name:"少年游",cost:1,type:"skill",tempStr:3,desc:"长安古道 · 本回合+3力量",rarity:"uncommon"},
+      tanpo:{name:"摊破浣溪沙",cost:2,type:"skill",draw:3,desc:"菡萏香销 · 抽3张牌",rarity:"uncommon"},
+      wangjiangnan:{name:"望江南",cost:1,type:"skill",block:10,exhaust:true,desc:"梳洗罢 · 10格挡消耗",rarity:"uncommon"},
+      wulingchun:{name:"武陵春",cost:2,type:"attack",dmg:10,dmgPerMissingHp:1,desc:"载不动许多愁 · 每少20HP+1伤",rarity:"uncommon"},
+      xiaochongshan:{name:"小重山",cost:1,type:"skill",block:8,desc:"昨夜寒蛩 · 8格挡下回+2力",rarity:"uncommon",nextTurnStr:2},
+      xingxiangzi:{name:"行香子",cost:1,type:"skill",draw:1,gainEnergy:1,desc:"小园几许 · 抽1牌+1能量",rarity:"uncommon"},
+      zuihuajian:{name:"醉花间",cost:1,type:"attack",dmg:6,blockBonus:true,desc:"晴雪小园 · 每3格挡+1伤",rarity:"uncommon"},
+      jianzi:{name:"减字木兰花",cost:2,type:"attack",dmg:14,debuff:"strDown",val:2,desc:"天涯旧恨 · 14伤减敌力量2",rarity:"uncommon"},
       shuidiao:{name:"水调歌头",cost:2,type:"power",desc:"每回合+1能量",rarity:"rare",power:"energy"},
       xijiang:{name:"西江月",cost:1,type:"power",desc:"每回合+3格挡",rarity:"rare",power:"block"},
       zhegu:{name:"鹧鸪天",cost:1,type:"power",desc:"每回合+1力量",rarity:"rare",power:"strength"},
-      qinyuan:{name:"沁园春",cost:3,type:"skill",heal:10,maxHp:2,exhaust:true,desc:"北国风光 · 回复10HP+2最大HP，消耗",rarity:"rare"}
+      qinyuan:{name:"沁园春",cost:3,type:"skill",heal:10,maxHp:2,exhaust:true,desc:"北国风光 · 回10HP+2最大HP消耗",rarity:"rare"},
+      liuzhou:{name:"六州歌头",cost:3,type:"attack",dmg:28,exhaust:true,desc:"少年侠气 · 28伤消耗",rarity:"rare"},
+      yiqine:{name:"忆秦娥",cost:2,type:"attack",dmg:18,exhaust:true,debuff:"vuln",val:2,debuff2:"weak",val2:2,desc:"西风残照 · 18伤+易伤2虚弱2消耗",rarity:"rare"},
+      yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"}
     };
 
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 角色数据 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    var CHARACTERS = [
+      { id:'lizhi', name:'李 白', title:'诗仙', maxHp:80, energy:3,
+        desc:'豪放飘逸，以酒入诗',
+        ability:'每回合第一张攻击牌伤害+3',
+        deck:['yinyong','yinyong','mosong','mosong','jingyesi','jingyesi','jiangjin','wanglu','dingfeng','shuidiao'] },
+      { id:'sush', name:'苏 轼', title:'词圣', maxHp:100, energy:3,
+        desc:'旷达洒脱，随遇而安',
+        ability:'每场战斗首次受伤-3',
+        deck:['yinyong','yinyong','mosong','mosong','mansha','nangezi','jiangcheng','niannu','shuidiao','yujia'] },
+      { id:'liqing', name:'李清照', title:'易安居士', maxHp:70, energy:3,
+        desc:'婉约细腻，以情入词',
+        ability:'每回合第一张技能牌效果+50%',
+        deck:['yinyong','yinyong','mosong','mosong','dianjiang','shengsheng','diehua','yumeiren','ruanlang','zhegu'] }
+    ];
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
     /* ══════ 敌人数据 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
     var ENEMIES = {
-      lichou:{name:"离愁",hp:36,dmg:7,intents:[{t:"attack",v:7}],desc:"剪不断，理还乱"},
-      qiusi:{name:"秋思",hp:30,dmg:8,intents:[{t:"attack",v:8},{t:"defend",v:6}],desc:"古道西风瘦马"},
-      yeyu:{name:"夜雨",hp:25,dmg:5,intents:[{t:"attack",v:5,hits:2}],desc:"巴山夜雨涨秋池"},
-      guhong:{name:"孤鸿",hp:20,dmg:12,intents:[{t:"attack",v:12}],desc:"缥缈孤鸿影"},
-      zhuangzhi:{name:"壮志",hp:44,dmg:9,intents:[{t:"attack",v:9},{t:"buff",b:"str",v:2}],desc:"壮士饥餐胡虏肉"},
-      cimo:{name:"词魔",hp:65,dmg:11,intents:[{t:"attack",v:11},{t:"debuff",b:"weak",v:2},{t:"defend",v:10}],desc:"文章憎命达"},
-      shisheng:{name:"诗圣",hp:80,dmg:13,intents:[{t:"attack",v:13,hits:2},{t:"buff",b:"str",v:3},{t:"aoe",v:9}],desc:"会当凌绝顶"}
+      act1_reg:[
+        { id:'lichou', name:'离愁', baseHp:14, hpGain:5, baseDmg:5, dmgGain:1, desc:'剪不断，理还乱',
+          intentCycle:['attack_d','attack_d'] },
+        { id:'qiusi', name:'秋思', baseHp:16, hpGain:5, baseDmg:5, dmgGain:1, desc:'古道西风瘦马',
+          intentCycle:['vuln_1','attack_d'] },
+        { id:'yeyu', name:'夜雨', baseHp:12, hpGain:4, baseDmg:4, dmgGain:1, desc:'巴山夜雨涨秋池',
+          intentCycle:['attack_d','attack_d','weak_1'] },
+        { id:'guhong', name:'孤鸿', baseHp:18, hpGain:6, baseDmg:4, dmgGain:1, desc:'缥缈孤鸿影',
+          intentCycle:['attack_2x','attack_d','attack_2x'] },
+        { id:'zhuangzhi', name:'壮志', baseHp:20, hpGain:6, baseDmg:9, dmgGain:2, desc:'壮志饥餐胡虏肉',
+          intentCycle:['attack_big','defend','attack_big'] }
+      ],
+      act2_reg:[
+        { id:'saihong', name:'塞鸿', baseHp:20, hpGain:6, baseDmg:6, dmgGain:1, desc:'塞鸿秋影',
+          intentCycle:['defend','attack_d','defend','attack_d'] },
+        { id:'muyu', name:'暮雨', baseHp:18, hpGain:5, baseDmg:4, dmgGain:1, desc:'暮雨潇潇',
+          intentCycle:['poison_4','attack_d','poison_3'] },
+        { id:'changfeng', name:'长风', baseHp:22, hpGain:7, baseDmg:6, dmgGain:1, desc:'长风万里送秋雁',
+          intentCycle:['attack_aoe','attack_d','attack_d'] },
+        { id:'feixu', name:'飞絮', baseHp:16, hpGain:5, baseDmg:3, dmgGain:1, desc:'飞絮满天涯',
+          intentCycle:['attack_3x','attack_d','attack_2x','defend'] },
+        { id:'zhengyan', name:'征雁', baseHp:24, hpGain:7, baseDmg:10, dmgGain:2, desc:'征雁南飞',
+          intentCycle:['attack_big','defend','defend','attack_big'] }
+      ],
+      act3_reg:[
+        { id:'xingshuang', name:'星霜', baseHp:26, hpGain:7, baseDmg:7, dmgGain:2, desc:'星霜几度',
+          intentCycle:['buff_str','attack_d','attack_d','attack_big'] },
+        { id:'fengchen', name:'风尘', baseHp:24, hpGain:6, baseDmg:5, dmgGain:1, desc:'风尘荏苒',
+          intentCycle:['vuln_2','attack_d','weak_2','attack_d'] },
+        { id:'canghai', name:'沧海', baseHp:30, hpGain:8, baseDmg:12, dmgGain:3, desc:'沧海月明珠有泪',
+          intentCycle:['attack_big','defend','attack_big'] },
+        { id:'qingyun', name:'青云', baseHp:22, hpGain:6, baseDmg:5, dmgGain:1, desc:'青云未可期',
+          intentCycle:['attack_3x','attack_2x','attack_3x'] },
+        { id:'fusheng', name:'浮生', baseHp:28, hpGain:7, baseDmg:6, dmgGain:1, desc:'浮生若梦',
+          intentCycle:['attack_d','heal','attack_d','defend'] }
+      ],
+      elites:[
+        { id:'cimo', name:'词魔', baseHp:34, hpGain:10, baseDmg:9, dmgGain:2, desc:'词中魔障',
+          intentCycle:['attack_big','attack_d','attack_big','attack_2x'] },
+        { id:'shihun', name:'诗魂', baseHp:32, hpGain:9, baseDmg:7, dmgGain:2, desc:'千古诗魂',
+          intentCycle:['buff_str','attack_d','buff_str','attack_big'] },
+        { id:'wenqu', name:'文曲', baseHp:38, hpGain:11, baseDmg:12, dmgGain:3, desc:'文曲星君',
+          intentCycle:['attack_aoe','defend','attack_aoe','attack_big'] }
+      ],
+      bosses:[
+        { id:'exam', name:'科举试', baseHp:50, hpGain:12, baseDmg:13, dmgGain:3, desc:'十年寒窗·殿试之试',
+          intentCycle:['attack_aoe','defend','attack_big','defend','attack_aoe'] },
+        { id:'master', name:'大宗师', baseHp:55, hpGain:14, baseDmg:11, dmgGain:3, desc:'文坛宗师·千古风流',
+          intentCycle:['attack_big','buff_str','attack_big','vuln_2','attack_aoe'] },
+        { id:'saint', name:'诗圣', baseHp:60, hpGain:16, baseDmg:16, dmgGain:4, desc:'诗中之圣·光耀千古',
+          intentCycle:['attack_big','attack_aoe','attack_big','heal','attack_big'] }
+      ]
     };
 
-    /* ══════ 遗物数据 ══════ */
-    var RELICS = {
-      qingyu:{name:"青玉案",desc:"战斗开始时获得3点格挡",effect:"startBlock"},
-      chaitou:{name:"钗头凤",desc:"每回合首次攻击伤害+3",effect:"firstAtkBoost"},
-      changxiang:{name:"长相思",desc:"每回合多抽1张牌",effect:"extraDraw"},
-      zuihua:{name:"醉花阴",desc:"战斗开始时+1能量",effect:"startEnergy"},
-      huanxi:{name:"浣溪纱",desc:"获得格挡时额外+2",effect:"extraBlock"},
-      jiangnan:{name:"忆江南",desc:"回合结束时回复2HP",effect:"endHeal"}
-    };
+    function getEnemyPool(act, elite){
+      if(elite === 'boss') return ENEMIES.bosses;
+      if(elite) return ENEMIES.elites;
+      if(act===1) return ENEMIES.act1_reg;
+      if(act===2) return ENEMIES.act2_reg;
+      return ENEMIES.act3_reg;
+    }
 
-    /* ══════ 游戏状态 ══════ */
-    var G = null;
-    var CARD_IDS = null;
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 遗器数据 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
 
-    function shuffle(arr) {
-      for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+    var RELICS = [
+      { id:'yuhuruan', name:'玉壶暖', desc:'战斗开始时获得3点格挡', effect:'battleStartBlock', val:3 },
+      { id:'shizhen', name:'诗枕', desc:'每回合抽牌数+1', effect:'extraDraw', val:1 },
+      { id:'moling', name:'墨令', desc:'每场战斗首次攻击伤害+5', effect:'firstAttackDmg', val:5 },
+      { id:'fengliu', name:'风流扇', desc:'使用技能牌时25%概率获得1点能量', effect:'skillEnergy', val:25 },
+      { id:'zuihou', name:'醉猴', desc:'每回合第一张牌费用-1', effect:'firstCardDiscount', val:1 },
+      { id:'qinglian', name:'青莲', desc:'战斗结束时回复3HP', effect:'battleEndHeal', val:3 },
+      { id:'jincuodao', name:'金错刀', desc:'攻击牌伤害+2', effect:'attackDmgUp', val:2 },
+      { id:'yuhubing', name:'玉壶冰', desc:'获得2点额外能量', effect:'extraEnergy', val:2 },
+      { id:'longquanjian', name:'龙泉剑', desc:'精英战斗后获得15金币', effect:'eliteGold', val:15 },
+      { id:'qilinfu', name:'麒麟符', desc:'受伤时25%概率格挡3点', effect:'dmgBlockChance', val:3 },
+      { id:'xuanhuangdan', name:'玄黄丹', desc:'最大HP+15', effect:'maxHpUp', val:15 },
+      { id:'biyuxiao', name:'碧玉箫', desc:'每3场战斗回复10HP', effect:'every3FightHeal', val:10 },
+      { id:'zijinguan', name:'紫金冠', desc:'获得1点初始格挡', effect:'startBlock', val:1 },
+      { id:'yinjiazhou', name:'银甲胄', desc:'格挡效果+2', effect:'blockBonus', val:2 },
+      { id:'qingtongjing', name:'青铜镜', desc:'查看敌人意图', effect:'seeIntents', val:1 },
+      { id:'yuruyi', name:'玉如意', desc:'商店物品打8折', effect:'shopDiscount', val:0.8 }
+    ];
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 事件数据 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    var EVENTS = [
+      { id:'old_poet', title:'老诗人', desc:'一位白发苍苍的老诗人拦住你，请求你品评他的新作……',
+        choices:[
+          {text:'"意蕴深远，好诗！"', effects:{gold:20,hp:-5}, result:'老诗人欣喜若狂，赠你20金币作为酬谢。但你因违心之言，心绪不宁。-5HP'},
+          {text:'"尚需打磨……"', effects:{maxHp:5,hp:5}, result:'老诗人虚心接受，与你探讨诗道。你感到境界有所提升。最大HP+5，回复5HP'},
+          {text:'默默绕开', effects:{}, result:'你悄悄绕道而行。什么也没有发生。'}
+        ]},
+      { id:'ancient_tomb', title:'古墓石刻', desc:'路边发现一座古墓，墓门上刻满诗句……',
+        choices:[
+          {text:'推门而入', effects:{gold:30,hp:-10}, result:'你发现了一些陪葬的金币（+30金），但触发了机关。-10HP'},
+          {text:'拓印诗句', effects:{}, result:'你仔细拓下石刻上的诗句。虽然没有实际收获，但心境平和。'}, // no effect but adds a common card
+          {text:'谨慎离开', effects:{}, result:'你选择了安全。'}
+        ]},
+      { id:'drunk_poet', title:'醉诗人', desc:'一个醉醺醺的诗人拉着你比试酒量……',
+        choices:[
+          {text:'一醉方休', effects:{hp:-10,gold:20}, result:'你陪他痛饮，花掉20金买酒，宿醉后-10HP'},
+          {text:'以诗会友', effects:{}, result:'你以诗代酒，与他唱和。他大为折服，赠你一首诗。获得1张随机非基础卡'},
+          {text:'婉言谢绝', effects:{}, result:'你礼貌地推辞了。'}
+        ]},
+      { id:'book_girl', title:'卖书女', desc:'一个清秀的女子在路边摆摊卖书……',
+        choices:[
+          {text:'买下古籍', effects:{gold:-15}, result:'你花15金币买了一本古籍。虽然看不懂，但感觉很有价值。获得1张随机稀有卡'},
+          {text:'帮忙吆喝', effects:{gold:10}, result:'你帮她招揽顾客，她感激地送你10金币。'},
+          {text:'翻翻就走', effects:{}, result:'你随手翻了几页，放下离开。'}
+        ]},
+      { id:'meditation', title:'静思崖', desc:'一处悬崖，云雾缭绕，是静思修行的好地方……',
+        choices:[
+          {text:'打坐冥想', effects:{maxHp:10,hp:-5}, result:'你静坐一日，感悟天地之道。最大HP+10，但因饥寒-5HP'},
+          {text:'练习剑法', effects:{}, result:'你练了一通剑法，身体舒畅。获得1张随机攻击牌'},
+          {text:'继续赶路', effects:{hp:5}, result:'短暂休息后继续上路。回复5HP'}
+        ]},
+      { id:'treasure_goblin', title:'宝箱怪', desc:'一个华丽的宝箱出现在路中央，箱盖微微颤动……',
+        choices:[
+          {text:'打开宝箱', effects:{gold:40}, result:'宝箱里装满金币！+40金'},
+          {text:'小心试探', effects:{gold:20}, result:'你用树枝捅了捅，没有陷阱。获得20金币。'},
+          {text:'绕道而行', effects:{}, result:'你决定不冒这个险。'}
+        ]}
+    ];
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 辅助函数 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function shuffle(arr){
+      for(var i=arr.length-1;i>0;i--){
+        var j=Math.floor(Math.random()*(i+1));
+        var t=arr[i];arr[i]=arr[j];arr[j]=t;
+      }
       return arr;
     }
 
-    function initGame() {
-      // 初始卡组
+    function hasRelic(id){
+      return G && G.relics && G.relics.indexOf(id) !== -1;
+    }
+
+    function getRelicCount(id){
+      if(!G||!G.relics) return 0;
+      var c=0;
+      for(var i=0;i<G.relics.length;i++) if(G.relics[i]===id) c++;
+      return c;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 地图布局 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    var FLOOR_LAYOUT = [
+      [{type:'battle'},{type:'battle'},{type:'battle'}],
+      [{type:'battle'},{type:'event'},{type:'battle'},{type:'rest'}],
+      [{type:'battle'},{type:'shop'},{type:'battle'},{type:'event'}],
+      [{type:'elite'},{type:'battle'},{type:'event'},{type:'battle'}],
+      [{type:'rest'},{type:'battle'},{type:'shop'},{type:'battle'}],
+      [{type:'battle'},{type:'event'},{type:'battle'},{type:'rest'}],
+      [{type:'battle'},{type:'shop'},{type:'elite'},{type:'battle'}],
+      [{type:'rest'},{type:'battle'},{type:'event'},{type:'battle'}],
+      [{type:'battle'},{type:'elite'},{type:'battle'},{type:'shop'}],
+      [{type:'rest'},{type:'battle'},{type:'event'},{type:'elite'}],
+      [{type:'battle'},{type:'shop'},{type:'battle'},{type:'rest'}],
+      [{type:'boss'}]
+    ];
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 游戏状态 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    var G = null;
+    var gMapData = [];
+    var gCurNodeIdx = -1;
+    var gIsBattling = false;
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 核心游戏函数 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function hideAllScreens(){
+      var screens = ['sgTitle','sgMap','sgBattle','sgReward','sgShop','sgEvent','sgRest','sgTreasure','sgResult','sgCharSelect','sgActTransition'];
+      for(var i=0;i<screens.length;i++){
+        var el=document.getElementById(screens[i]);
+        if(el) el.style.display='none';
+      }
+    }
+
+    function showScreen(id){
+      // Hide all screens first
+      var allScreens = document.querySelectorAll(".sg-screen");
+      for(var si=0;si<allScreens.length;si++) allScreens[si].style.display = "none";
+      // Show the requested one
+      var el=document.getElementById(id);
+      if(el){ el.style.display=''; }
+    }
+
+    function initGame(charId){
+      var charData = null;
+      for(var i=0;i<CHARACTERS.length;i++){
+        if(CHARACTERS[i].id===charId){ charData=CHARACTERS[i]; break; }
+      }
+      if(!charData) return;
+
       var deck = [];
-      for(var i=0;i<5;i++) deck.push("yinyong");
-      for(var i=0;i<5;i++) deck.push("mosong");
-      deck.push("qingci");
-      deck.push("mansha");
-      deck.push("puziman");
-      shuffle(deck);
+      for(var di=0;di<charData.deck.length;di++){
+        var cid=charData.deck[di];
+        if(CARDS[cid]) deck.push({id:cid, ...CARDS[cid]});
+      }
 
       G = {
-        screen:"title",
-        floor:0, maxFloor:14,
-        nodeIdx:0, path:[], mapNodes:[],
-        player:{
-          hp:80, maxHp:80, block:0,
-          energy:3, maxEnergy:3,
-          str:0,
-          deck:deck.slice(), hand:[], discard:[], exhaust:[],
-          drawPerTurn:5,
-          firstAtkThisTurn:true,
-          relics:[],
-          gold:0,
-          buffs:{}
-        },
-        enemy:null,
-        turn:0,
-        isPlayerTurn:true
+        charId:charId,
+        charName:charData.name,
+        maxHp:charData.maxHp,
+        hp:charData.maxHp,
+        energy:charData.energy,
+        maxEnergy:charData.energy,
+        gold:0,
+        deck:deck,
+        relics:[],
+        fightCount:0,
+        act:1,
+        floor:0,
+        maxAct:3,
+        enemyStrDown:0
       };
-      CARD_IDS = Object.keys(CARDS);
+
+      // Apply maxHp relics
+      if(hasRelic('xuanhuangdan')) G.maxHp += 15;
+      if(hasRelic('yuhubing')) G.maxEnergy += 2;
+      G.hp = Math.min(G.hp, G.maxHp);
+
+      gMapData = [];
+      gCurNodeIdx = -1;
+      gIsBattling = false;
+
       generateMap();
-      showScreen("map");
+      showScreen('sgMap');
       renderMap();
     }
 
-    /* ══════ 地图生成 ══════ */
-    function generateMap() {
-      var types = ["battle","battle","rest","battle","treasure","battle","battle","rest","elite","battle","treasure","rest","battle","battle","boss"];
-      var branches = [1,2,2,2,2,2,2,1,2,2,2,1,1,1,1];
-      var nodes = [];
-      var enemies = ["lichou","qiusi","yeyu","guhong","zhuangzhi"];
-      var eliteEnemies = ["cimo"];
-
-      // Floor 0 (always single battle)
-      nodes.push({floor:0,col:0,type:"battle",enemy:enemies[Math.floor(Math.random()*enemies.length)],done:false,connections:[]});
-
-      for(var f=1;f<types.length;f++){
-        var cols = branches[f];
-        var rowEnemies = shuffle(enemies.slice());
-        for(var c=0;c<cols;c++){
-          var node = {floor:f,col:c,type:types[f],done:false,connections:[]};
-          if(node.type==="battle") node.enemy = rowEnemies[c % rowEnemies.length];
-          if(node.type==="elite") node.enemy = "cimo";
-          if(node.type==="boss") node.enemy = "shisheng";
-          if(node.type==="treasure") node.enemy = null;
-          if(node.type==="rest") node.enemy = null;
-          nodes.push(node);
+    function generateMap(){
+      gMapData = [];
+      for(var fi=0;fi<FLOOR_LAYOUT.length;fi++){
+        var floorNodes = [];
+        var layoutRow = FLOOR_LAYOUT[fi];
+        for(var ni=0;ni<layoutRow.length;ni++){
+          var nodeType = layoutRow[ni].type;
+          var completed = false;
+          var node = { type:nodeType, completed:completed };
+          floorNodes.push(node);
         }
+        gMapData.push(floorNodes);
       }
-
-      // Build connections: each node connects to reachable nodes on next floor
-      for(var ni=0;ni<nodes.length;ni++){
-        var n = nodes[ni];
-        if(n.floor >= 6) continue;
-        for(var nj=0;nj<nodes.length;nj++){
-          var next = nodes[nj];
-          if(next.floor !== n.floor + 1) continue;
-          // Connect if same column or adjacent column (branching)
-          if(next.col === n.col || next.col === n.col+1 || next.col === n.col-1) {
-            n.connections.push(nj);
-          }
-        }
-      }
-
-      // Ensure every node has at least one connection forward
-      for(var ni=0;ni<nodes.length;ni++){
-        var n = nodes[ni];
-        if(n.floor >= 6) continue;
-        if(n.connections.length === 0) {
-          // Find any node on next floor
-          for(var nj=0;nj<nodes.length;nj++){
-            if(nodes[nj].floor === n.floor + 1) { n.connections.push(nj); break; }
-          }
-        }
-      }
-
-      G.mapNodes = nodes;
-      G.path = [0];
       G.floor = 0;
-      G.nodeIdx = 0;
     }
 
-    function getCurrentNode() {
-      return G.mapNodes[G.nodeIdx];
+    function nextAct(){
+      if(G.act >= G.maxAct){
+        showResult(true);
+        return;
+      }
+      G.act++;
+      G.floor = 0;
+      G.hp = Math.min(G.hp + Math.floor(G.maxHp * 0.3), G.maxHp);
+      G.energy = G.maxEnergy;
+      generateMap();
+
+      // Show act transition
+      var actNames = ['','第一境 · 山水诗情','第二境 · 边塞风骨','第三境 · 千古诗圣'];
+      var actEl = document.getElementById('sgActTransition');
+      if(actEl){
+        document.getElementById('sgActBannerIcon').textContent = G.act===2?'🏔️':'🌅';
+        document.getElementById('sgActBannerTitle').textContent = actNames[G.act] || '第'+G.act+'境';
+        document.getElementById('sgActBannerSub').textContent = '获得最大HP30%的回复！';
+        hideAllScreens();
+        showScreen('sgActTransition');
+      }
     }
 
-    /* ══════ 屏幕控制 ══════ */
-    var SCREENS = ["sgTitle","sgMap","sgBattle","sgReward","sgRest","sgTreasure","sgResult"];
-    function showScreen(name) {
-      for(var i=0;i<SCREENS.length;i++){
-        var el = document.getElementById(SCREENS[i]);
-        if(el) el.style.display = (SCREENS[i]===("sg"+name.charAt(0).toUpperCase()+name.slice(1))) ? "" : "none";
-      }
-      if(G) G.screen = name;
+    function showCharSelect(){
+      hideAllScreens();
+      showScreen('sgTitle');
     }
 
-    /* ══════ 地图渲染 ══════ */
-    function renderMap() {
-      var container = document.getElementById("sgMapContainer");
-      if(!container) return;
-      container.innerHTML = "";
-      var curNode = getCurrentNode();
-      document.getElementById("sgFloorNum").textContent = curNode.done ? (G.floor + 2) : (G.floor + 1);
-      document.getElementById("sgMaxFloor").textContent = G.maxFloor;
-      var actNames = ["一","二","三","四","五","六","七","八","九","十","十一","十二","十三","十四","末"];
-      var actEl = document.getElementById("sgActNum");
-      if(actEl) actEl.textContent = actNames[curNode.done ? G.floor+1 : G.floor] || "末";
+    function renderMap(){
+      var mapEl = document.getElementById('sgMap');
+      if(!mapEl) return;
+      var mapContent = document.getElementById('sgMapContainer');
+      if(!mapContent) return;
 
-      var floors = {};
-      for(var i=0;i<G.mapNodes.length;i++){
-        var n = G.mapNodes[i];
-        if(!floors[n.floor]) floors[n.floor] = [];
-        floors[n.floor].push(i);
-      }
+      document.getElementById('sgActNum').textContent = '第 '+G.act+' / '+G.maxAct+' 境';
+      document.getElementById('sgMapGold').textContent = G.gold;
 
-      var maxCols = 0;
-      for(var f=0;f<=G.maxFloor;f++){
-        if(floors[f] && floors[f].length > maxCols) maxCols = floors[f].length;
-      }
-
-      // Build set of reachable nodes from current
-      var reachable = {};
-      if(curNode.connections) {
-        for(var ci=0;ci<curNode.connections.length;ci++) reachable[curNode.connections[ci]] = true;
-      }
-
-      for(var f=0;f<=G.maxFloor;f++){
-        // Connector line
-        if(f > 0) {
-          var cl = document.createElement("div");
-          var connActive = (f <= G.floor) || (!curNode.done && f <= G.floor + 1) || (curNode.done && Object.keys(reachable).length > 0 && f <= G.floor + 1); cl.className = "sg-map-connector" + (connActive ? " active" : "");
-          container.appendChild(cl);
-        }
-        // Row
-        var row = document.createElement("div");
-        row.className = "sg-map-row";
-        var nodes = floors[f] || [];
-        var padLeft = Math.floor((maxCols - nodes.length) / 2);
-        for(var p=0;p<padLeft;p++){
-          var sp = document.createElement("div");
-          sp.style.width = "56px";
-          row.appendChild(sp);
-        }
-        for(var ni=0;ni<nodes.length;ni++){
-          var idx = nodes[ni];
-          var node = G.mapNodes[idx];
-          var nd = document.createElement("div");
-          nd.className = "sg-map-node";
-          var icon = "";
-          if(node.type==="battle") icon = "⚔️";
-          if(node.type==="rest") icon = "🏮";
-          if(node.type==="treasure") icon = "📦";
-          if(node.type==="elite") { icon = "💀"; nd.classList.add("elite"); }
-        if(node.type==="boss") { icon = "👹"; nd.classList.add("boss"); }
-          if(node.done) nd.classList.add("completed");
-          // Current node or reachable from current
-          if(idx === G.nodeIdx && !node.done) {
-            nd.classList.add("current");
-          } else if(reachable[idx] && !node.done) {
-            nd.classList.add("reachable");
+      var html = '';
+      for(var fi=0;fi<gMapData.length;fi++){
+        var floor = gMapData[fi];
+        var isCurrentFloor = (fi === G.floor);
+        html += '<div class="sg-map-floor'+(isCurrentFloor?' sg-map-floor-active':'')+'">';
+        for(var ni=0;ni<floor.length;ni++){
+          var node = floor[ni];
+          var icons = { battle:'⚔️', elite:'👹', rest:'🏕️', treasure:'💎', shop:'🏪', event:'❓', boss:'👑' };
+          var icon = icons[node.type] || '⚔️';
+          var cls = 'sg-map-node';
+          if(node.completed) cls += ' sg-node-done';
+          if(isCurrentFloor && !node.completed) cls += ' sg-node-avail';
+          if(isCurrentFloor && !node.completed && gCurNodeIdx === -1){
+            gCurNodeIdx = ni;
           }
-          nd.textContent = icon;
-          nd.dataset.idx = idx;
-          var label = document.createElement("span");
-          label.className = "sg-node-label";
-          var lnames = {battle:"诗战",rest:"书院",treasure:"词苑",boss:"诗圣"};
-          label.textContent = lnames[node.type] || node.type;
-          nd.appendChild(label);
-          nd.addEventListener("click", function(){
-            var ii = parseInt(this.dataset.idx);
-            var targetNode = G.mapNodes[ii];
-            var cur = getCurrentNode();
-            // Can enter: current uncompleted node (first time), or a reachable connected node
-            if(ii === G.nodeIdx && !targetNode.done) {
-              enterNode(ii);
-            } else if(reachable[ii] && !targetNode.done) {
-              // Navigate to this node
-              G.nodeIdx = ii;
-              G.floor = targetNode.floor;
-              enterNode(ii);
+          html += '<div class="'+cls+'" data-floor="'+fi+'" data-idx="'+ni+'">'+icon+'</div>';
+        }
+        html += '</div>';
+      }
+      mapContent.innerHTML = html;
+
+      // Bind click events
+      var nodes = mapContent.querySelectorAll('.sg-node-avail');
+      for(var i=0;i<nodes.length;i++){
+        (function(el){
+          el.addEventListener('click',function(){
+            var floor = parseInt(el.getAttribute('data-floor'));
+            var idx = parseInt(el.getAttribute('data-idx'));
+            if(floor === G.floor && !gMapData[floor][idx].completed){
+              enterNode(idx);
             }
           });
-          row.appendChild(nd);
-        }
-        container.appendChild(row);
+        })(nodes[i]);
+      }
+
+      showScreen('sgMap');
+    }
+
+    function enterNode(idx){
+      var floor = gMapData[G.floor];
+      if(!floor || floor.length <= idx) return;
+      var node = floor[idx];
+      if(node.completed) return;
+
+      gCurNodeIdx = idx;
+
+      switch(node.type){
+        case 'battle':
+          var pool = getEnemyPool(G.act, false);
+          var eData = pool[Math.floor(Math.random()*pool.length)];
+          startBattle(eData);
+          break;
+        case 'elite':
+          var ePool = getEnemyPool(G.act, true);
+          var eData2 = ePool[Math.floor(Math.random()*ePool.length)];
+          startBattle(eData2);
+          break;
+        case 'boss':
+          var bPool = getEnemyPool(G.act, 'boss');
+          var bData = bPool[(G.act-1) % bPool.length];
+          startBattle(bData);
+          break;
+        case 'rest':
+          showRest();
+          break;
+        case 'shop':
+          showShop();
+          break;
+        case 'treasure':
+          showTreasure();
+          break;
+        case 'event':
+          showEvent();
+          break;
       }
     }
 
-    /* ══════ 进入节点 ══════ */
-    function enterNode(idx) {
-      var node = G.mapNodes[idx];
-      G.nodeIdx = idx;
-      G.floor = node.floor;
-      if(node.type==="battle" || node.type==="elite" || node.type==="boss") startBattle(node.enemy);
-      else if(node.type==="rest") showRest();
-      else if(node.type==="treasure") showTreasure();
-    }
+    function completeNode(){
+      if(gCurNodeIdx === -1) return;
+      var floor = gMapData[G.floor];
+      if(floor && floor[gCurNodeIdx]){
+        floor[gCurNodeIdx].completed = true;
+      }
+      gCurNodeIdx = -1;
+      G.floor++;
 
-    function completeNode() {
-      var node = getCurrentNode();
-      node.done = true;
-      // Check connections for next node choices
-      if(node.connections && node.connections.length > 0) {
-        showScreen("map");
+      // Check if all floors complete (reached boss floor)
+      if(G.floor >= gMapData.length){
+        nextAct();
+      } else {
         renderMap();
-      } else {
-        // No connections — check if any more floors exist
-        var next = -1;
-        for(var i=0;i<G.mapNodes.length;i++){
-          if(G.mapNodes[i].floor === G.floor + 1) { next = i; break; }
-        }
-        if(next >= 0) {
-          G.nodeIdx = next;
-          G.floor++;
-          showScreen("map");
-          renderMap();
-        } else {
-          showResult(true);
-        }
       }
     }
 
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 卡牌奖励 & 获取 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    var RARITY_WEIGHTS = { common:50, uncommon:35, rare:15 };
+
+    function getRandomCards(count, poolType){
+      var pool = [];
+      var cardIds = Object.keys(CARDS);
+      var weights = [];
+
+      for(var i=0;i<cardIds.length;i++){
+        var cid = cardIds[i];
+        var card = CARDS[cid];
+        if(poolType === 'basic' && card.rarity !== 'basic') continue;
+        if(poolType === 'no_basic' && card.rarity === 'basic') continue;
+        if(poolType === 'attack' && card.type !== 'attack') continue;
+        if(poolType === 'rare' && card.rarity !== 'rare') continue;
+        if(card.rarity === 'basic') continue; // default: exclude basic
+        pool.push(cid);
+        weights.push(RARITY_WEIGHTS[card.rarity] || 10);
+      }
+
+      var result = [];
+      var tempPool = pool.slice();
+      var tempWeight = weights.slice();
+
+      for(var ci=0;ci<count && tempPool.length>0;ci++){
+        var totalW = 0;
+        for(var wi=0;wi<tempWeight.length;wi++) totalW += tempWeight[wi];
+        var r = Math.random() * totalW;
+        var cum = 0;
+        var selected = 0;
+        for(var si=0;si<tempPool.length;si++){
+          cum += tempWeight[si];
+          if(r <= cum){ selected = si; break; }
+        }
+        var cid2 = tempPool[selected];
+        result.push({id:cid2, ...CARDS[cid2]});
+        tempPool.splice(selected,1);
+        tempWeight.splice(selected,1);
+      }
+
+      return result;
+    }
+
+    function addCardToDeck(cardObj){
+      if(G && G.deck) G.deck.push(cardObj);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
     /* ══════ 战斗系统 ══════ */
-    function startBattle(enemyId) {
-      var ed = ENEMIES[enemyId];
-      G.enemy = {
-        id:enemyId, hp:ed.hp, maxHp:ed.hp, block:0,
-        dmg:ed.dmg, intents:ed.intents,
-        intentIdx:0, intent:null, buffs:{},
-        desc:ed.desc || ""
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    var gBattle = null; // { enemy, hp, maxHp, intent, buffs, turn, block, ... }
+
+    function getEnemyStats(eData, act){
+      var hp = eData.baseHp + eData.hpGain * (act - 1);
+      var dmg = eData.baseDmg + eData.dmgGain * (act - 1);
+      return { maxHp:hp, hp:hp, dmg:dmg };
+    }
+
+    function startBattle(eData){
+      var stats = getEnemyStats(eData, G.act);
+      gBattle = {
+        id:eData.id,
+        name:eData.name,
+        maxHp:stats.maxHp,
+        hp:stats.hp,
+        dmgBase:stats.dmg,
+        desc:eData.desc,
+        intentCycle:eData.intentCycle.slice(),
+        intentIdx:0,
+        intent:'attack_d',
+        intentVal:0,
+        buffs:{str:0,vuln:0,weak:0,strDown:0},
+        block:0,
+        playerBlock:0,
+        turn:0,
+        hand:[],
+        drawPile:[],
+        discardPile:[],
+        energy:G.maxEnergy,
+        playerPoison:0,
+        enemyPoison:0,
+        playerStr:0,
+        playerVuln:0,
+        playerWeak:0,
+        cardPlayedThisTurn:0,
+        isElite: (eData.intentCycle.length >= 4),
+        isBoss: (eData.intentCycle.length >= 5)
       };
-      G.turn = 0;
-      G.isPlayerTurn = true;
-      G.player.block = 0;
-      G.player.str = 0;
-      G.player.firstAtkThisTurn = true;
-      G.player.hand = [];
-      G.player.discard = [];
-      G.player.exhaust = [];
-      G.player.energy = G.player.maxEnergy;
-      G.player.buffs = {};
 
-      // 遗物效果
-      for(var ri=0;ri<G.player.relics.length;ri++){
-        var r = RELICS[G.player.relics[ri]];
-        if(r.effect==="startBlock") G.player.block += 3;
-        if(r.effect==="startEnergy") G.player.maxEnergy += 1;
+      // Initialize draw pile
+      gBattle.drawPile = [];
+      for(var di=0;di<G.deck.length;di++){
+        gBattle.drawPile.push(di);
+      }
+      shuffle(gBattle.drawPile);
+
+      // Relic effects
+      if(hasRelic('yuhuruan')){ gBattle.playerBlock += 3; }
+      if(hasRelic('zijinguan')){ gBattle.playerBlock += 1; }
+      if(hasRelic('shizhen')){ /* extra draw handled in drawCards */ }
+      if(hasRelic('qinglian')){ gBattle.battleEndHeal = true; }
+      if(hasRelic('qingtongjing')){ gBattle.seeIntents = true; }
+
+      // First attack relic check
+      if(hasRelic('moling')){ gBattle.firstAttackBonus = true; }
+      if(hasRelic('biyuxiao') && G.fightCount > 0 && G.fightCount % 3 === 0){
+        G.hp = Math.min(G.hp + 10, G.maxHp);
       }
 
-      // 回合开始
-      G.enemy.intent = pickIntent();
-      showScreen("battle");
+      pickIntent(gBattle);
+
+      hideAllScreens();
+      showScreen('sgBattle');
+      showScreen('sgEndTurnBtn');
+      showScreen('sgBattleActions');
+
+      gIsBattling = true;
       renderBattle();
-      showTurnAnnounce("你的回合");
-      drawCards(G.player.drawPerTurn + (hasRelic("extraDraw")?1:0));
     }
 
-    function hasRelic(effect) {
-      for(var ri=0;ri<G.player.relics.length;ri++){
-        if(RELICS[G.player.relics[ri]] && RELICS[G.player.relics[ri]].effect === effect) return true;
+    function pickIntent(battle){
+      var cycle = battle.intentCycle;
+      var idx = battle.intentIdx % cycle.length;
+      var intentType = cycle[idx];
+      battle.intentIdx++;
+
+      var act = G.act;
+      var baseDmg = battle.dmgBase;
+      if(hasRelic('qingtongjing') && !battle.intentRevealed){
+        battle.intentRevealed = true;
       }
-      return false;
+
+      switch(intentType){
+        case 'attack_d':
+          battle.intent = 'attack';
+          battle.intentVal = baseDmg;
+          break;
+        case 'attack_2x':
+          battle.intent = 'attack';
+          battle.intentVal = Math.floor(baseDmg * 0.6);
+          battle.intentHits = 2;
+          break;
+        case 'attack_3x':
+          battle.intent = 'attack';
+          battle.intentVal = Math.floor(baseDmg * 0.4);
+          battle.intentHits = 3;
+          break;
+        case 'attack_big':
+          battle.intent = 'attack';
+          battle.intentVal = Math.floor(baseDmg * 1.5);
+          break;
+        case 'attack_aoe':
+          battle.intent = 'attack';
+          battle.intentVal = Math.floor(baseDmg * 0.8);
+          break;
+        case 'defend':
+          battle.intent = 'defend';
+          battle.intentVal = Math.floor(baseDmg * 0.5) + 3;
+          break;
+        case 'vuln_1':
+          battle.intent = 'debuff';
+          battle.intentVal = 'vuln';
+          battle.intentAmount = 1;
+          break;
+        case 'vuln_2':
+          battle.intent = 'debuff';
+          battle.intentVal = 'vuln';
+          battle.intentAmount = 2;
+          break;
+        case 'weak_1':
+          battle.intent = 'debuff';
+          battle.intentVal = 'weak';
+          battle.intentAmount = 1;
+          break;
+        case 'weak_2':
+          battle.intent = 'debuff';
+          battle.intentVal = 'weak';
+          battle.intentAmount = 2;
+          break;
+        case 'poison_3':
+          battle.intent = 'debuff';
+          battle.intentVal = 'poison';
+          battle.intentAmount = 3;
+          break;
+        case 'poison_4':
+          battle.intent = 'debuff';
+          battle.intentVal = 'poison';
+          battle.intentAmount = 4;
+          break;
+        case 'buff_str':
+          battle.intent = 'buff';
+          battle.intentVal = 'str';
+          battle.intentAmount = 2;
+          break;
+        case 'heal':
+          battle.intent = 'heal';
+          battle.intentVal = Math.floor(battle.maxHp * 0.15);
+          break;
+        default:
+          battle.intent = 'attack';
+          battle.intentVal = baseDmg;
+      }
     }
 
-    function pickIntent() {
-      var e = G.enemy;
-      var pool = e.intents;
-      // Simple rotation
-      e.intentIdx = (e.intentIdx + 1) % pool.length;
-      return pool[e.intentIdx];
-    }
+    function drawCards(n){
+      if(!gBattle) return;
+      var extra = hasRelic('shizhen') ? 1 : 0;
+      n = n + extra;
 
-    /* ══════ 卡牌操作 ══════ */
-    function drawCards(n) {
       for(var i=0;i<n;i++){
-        if(G.player.deck.length === 0) {
-          if(G.player.discard.length === 0) break;
-          G.player.deck = shuffle(G.player.discard.slice());
-          G.player.discard = [];
+        if(gBattle.drawPile.length === 0){
+          if(gBattle.discardPile.length === 0) break;
+          gBattle.drawPile = gBattle.discardPile.slice();
+          gBattle.discardPile = [];
+          shuffle(gBattle.drawPile);
+          gBattle.shuffledThisTurn = true;
         }
-        G.player.hand.push(G.player.deck.pop());
+        var cardIdx = gBattle.drawPile.pop();
+        gBattle.hand.push(cardIdx);
       }
-      renderBattle();
     }
 
-    function canPlayCard(cardId) {
-      return G.player.energy >= CARDS[cardId].cost;
+    function canPlayCard(cardIdx){
+      if(!gBattle || !G) return false;
+      var deckIdx = gBattle.hand[cardIdx];
+      if(deckIdx === undefined) return false;
+      var card = G.deck[deckIdx];
+      if(!card) return false;
+
+      var cost = card.cost || 0;
+      // Relic: first card discount
+      if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0){
+        cost = Math.max(0, cost - 1);
+      }
+
+      return gBattle.energy >= cost;
     }
 
-    function playCard(idx) {
-      if(!G.isPlayerTurn) return;
-      var cardId = G.player.hand[idx];
-      if(!cardId) return;
-      var card = CARDS[cardId];
-      if(G.player.energy < card.cost) return;
+    function playCard(cardIdx){
+      if(!gBattle || !G) return false;
+      var deckIdx = gBattle.hand[cardIdx];
+      if(deckIdx === undefined) return false;
+      var card = G.deck[deckIdx];
+      if(!card) return false;
 
-      G.player.energy -= card.cost;
+      var cost = card.cost || 0;
+      if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0){
+        cost = Math.max(0, cost - 1);
+      }
+
+      if(gBattle.energy < cost) return false;
+
+      gBattle.energy -= cost;
+      gBattle.cardPlayedThisTurn++;
+
       // Remove from hand
-      G.player.hand.splice(idx, 1);
+      gBattle.hand.splice(cardIdx, 1);
 
-      // Apply card effects
-      var dmg = card.dmg || 0;
-      var block = card.block || 0;
+      // Calculate damage with bonuses
+      var baseDmg = card.dmg || 0;
+      var finalDmg = baseDmg;
+      var strBonus = gBattle.playerStr + (G.enemyStrDown > 0 ? G.enemyStrDown : 0);
+      if(hasRelic('jincuodao') && card.type === 'attack') finalDmg += 2;
+      if(hasRelic('moling') && gBattle.firstAttackBonus && card.type === 'attack'){
+        finalDmg += 5;
+        gBattle.firstAttackBonus = false;
+      }
 
-      if(card.type==="attack") {
-        dmg += G.player.str;
-        // 遗物：钗头凤
-        if(hasRelic("firstAtkBoost") && G.player.firstAtkThisTurn) {
-          dmg += 3;
-          G.player.firstAtkThisTurn = false;
-        }
-        // 江城子：半血以下伤害翻倍
-        if(card.half && G.enemy.hp <= G.enemy.maxHp / 2) dmg *= 2;
-        // 易伤加成（在damageEnemy中统一处理）
-        var hits = card.hits || 1;
-        for(var h=0;h<hits;h++){
-          damageEnemy(Math.floor(dmg / hits));
+      // Character ability: 李白 first attack +3
+      if(G.charId === 'lizhi' && card.type === 'attack' && gBattle.cardPlayedThisTurn === 1){
+        finalDmg += 3;
+      }
+
+      // Card-specific effects
+      if(card.half && G.hp < G.maxHp / 2){
+        finalDmg = Math.floor(finalDmg * 2);
+      }
+
+      if(card.blockBonus && gBattle.playerBlock > 0){
+        var bonus = Math.floor(gBattle.playerBlock / 3);
+        finalDmg += bonus;
+      }
+
+      if(card.dmgPerCard){
+        finalDmg = card.dmgPerCard * gBattle.hand.length;
+      }
+
+      if(card.dmgPerMissingHp){
+        var missing = G.maxHp - G.hp;
+        finalDmg += Math.floor(missing / 20);
+      }
+
+      finalDmg += strBonus;
+      if(finalDmg < 0) finalDmg = 0;
+
+      // Enemy debuffs
+      if(gBattle.buffs.vuln > 0 && card.type === 'attack') finalDmg = Math.floor(finalDmg * 1.5);
+      if(gBattle.buffs.weak > 0 && card.type === 'attack') finalDmg = Math.floor(finalDmg * 0.75);
+      if(gBattle.buffs.strDown > 0 && card.type === 'attack'){
+        finalDmg = Math.max(0, finalDmg - gBattle.buffs.strDown);
+      }
+      G.enemyStrDown = gBattle.buffs.strDown;
+
+      // AOE
+      var isAoe = card.aoe;
+      var hits = card.hits || 1;
+
+      // Apply damage
+      if(card.type === 'attack'){
+        for(var hi=0;hi<hits;hi++){
+          var hitDmg = Math.floor(finalDmg / (hi === 0 ? 1 : 1)) - (hi > 0 ? Math.floor(finalDmg * (hits-1)/hits) : 0);
+          // Simplified: distribute damage evenly
+          hitDmg = Math.floor(finalDmg / hits);
+          if(hi === 0) hitDmg = finalDmg - hitDmg * (hits - 1);
+          damageEnemy(0, hitDmg, isAoe);
         }
       }
 
-      if(card.type==="skill" || card.type==="power") {
-        if(block > 0) {
-          var extra = hasRelic("extraBlock") ? 2 : 0;
-          G.player.block += block + extra;
-          showEffectFloat("+" + block + " 格挡", document.getElementById("sgPlayerArea"), "sg-block-float");
+      // Block
+      if(card.block){
+        var blockVal = card.block;
+        if(hasRelic('yinjiazhou')) blockVal += 2;
+        // 李清照 ability: first skill +50%
+        if(G.charId === 'liqing' && card.type === 'skill' && gBattle.cardPlayedThisTurn === 1){
+          blockVal = Math.floor(blockVal * 1.5);
         }
-        if(card.heal) {
-          G.player.hp = Math.min(G.player.maxHp, G.player.hp + card.heal);
-          showEffectFloat("+" + card.heal + " HP", document.getElementById("sgPlayerArea"), "sg-heal-float");
-        }
-        if(card.maxHp) {
-          G.player.maxHp += card.maxHp;
-          G.player.hp += card.maxHp;
-        }
-        if(card.draw) drawCards(card.draw);
-        if(card.buff==="str") G.player.str += (card.val || 1);
-        if(card.debuff==="vuln") { G.enemy.buffs.vuln = (G.enemy.buffs.vuln||0) + (card.val||1); }
-        if(card.debuff==="weak") { G.enemy.buffs.weak = (G.enemy.buffs.weak||0) + (card.val||1); }
+        gBattle.playerBlock += blockVal;
       }
 
-      // 通用效果：能量回复（将进酒等）
-      if(card.gainEnergy) G.player.energy += card.gainEnergy;
-
-      // Powers
-      if(card.power==="energy") G.player.maxEnergy += 1;
-      if(card.power==="block") {
-        G._powerBlock = (G._powerBlock||0) + 3;
-      }
-      if(card.power==="strength") {
-        G._powerStr = (G._powerStr||0) + 1;
+      // Poison
+      if(card.poison){
+        gBattle.enemyPoison += card.poison;
       }
 
-      // Discard or exhaust
-      if(card.exhaust) {
-        G.player.exhaust.push(cardId);
-      } else {
-        G.player.discard.push(cardId);
+      // Debuffs
+      if(card.debuff){
+        if(card.debuff === 'vuln') gBattle.buffs.vuln += (card.val || 1);
+        if(card.debuff === 'weak') gBattle.buffs.weak += (card.val || 1);
+        if(card.debuff === 'strDown') gBattle.buffs.strDown += (card.val || 1);
+      }
+      if(card.debuff2){
+        if(card.debuff2 === 'vuln') gBattle.buffs.vuln += (card.val2 || 1);
+        if(card.debuff2 === 'weak') gBattle.buffs.weak += (card.val2 || 1);
+      }
+
+      // Self damage
+      if(card.selfDmg){
+        damagePlayer(card.selfDmg);
+      }
+
+      // Heal
+      if(card.heal){
+        var healAmt = card.heal;
+        if(G.charId === 'liqing' && card.type === 'skill' && gBattle.cardPlayedThisTurn === 1){
+          healAmt = Math.floor(healAmt * 1.5);
+        }
+        G.hp = Math.min(G.hp + healAmt, G.maxHp);
+      }
+      if(card.maxHp){
+        G.maxHp += card.maxHp;
+      }
+
+      // Draw
+      if(card.draw){
+        drawCards(card.draw);
+      }
+
+      // Energy gain
+      if(card.gainEnergy){
+        gBattle.energy += card.gainEnergy;
+      }
+
+      // Temp strength
+      if(card.tempStr){
+        gBattle.playerStr += card.tempStr;
+      }
+
+      // nextTurnStr
+      if(card.nextTurnStr){
+        if(!gBattle.nextStr) gBattle.nextStr = 0;
+        gBattle.nextStr += card.nextTurnStr;
+      }
+
+      // Relic: skill energy chance
+      if(hasRelic('fengliu') && card.type === 'skill' && Math.random() * 100 < 25){
+        gBattle.energy++;
+      }
+
+      // Power cards
+      if(card.type === 'power' && card.power){
+        G.powers = G.powers || {};
+        G.powers[card.power] = (G.powers[card.power] || 0) + 1;
+      }
+
+      // Exhaust
+      if(!card.exhaust){
+        gBattle.discardPile.push(deckIdx);
       }
 
       renderBattle();
       checkEnemyDeath();
+      return true;
     }
 
-    function showDmgFloat(amount, el, color) {
-      if(!el || amount <= 0) return;
-      var f = document.createElement("div");
-      f.className = "sg-dmg-float";
-      f.textContent = "-" + amount;
-      f.style.color = color || "#ef4444";
-      f.style.left = "50%";
-      f.style.top = "30%";
-      el.style.position = "relative";
-      el.appendChild(f);
-      setTimeout(function(){ try{el.removeChild(f);}catch(e){} }, 900);
-    }
+    function damageEnemy(enemyIdx, dmg, isAoe){
+      if(!gBattle) return;
+      if(gBattle.hp <= 0) return;
 
-    function showEffectFloat(text, el, className) {
-      if(!el) return;
-      var f = document.createElement("div");
-      f.className = className;
-      f.textContent = text;
-      f.style.left = "50%";
-      f.style.top = "20%";
-      el.style.position = "relative";
-      el.appendChild(f);
-      setTimeout(function(){ try{el.removeChild(f);}catch(e){} }, 800);
-    }
-
-    function showHitFlash() {
-      var el = document.getElementById("sgEnemy");
-      if(!el) return;
-      var flash = document.createElement("div");
-      flash.className = "sg-hit-flash";
-      el.appendChild(flash);
-      setTimeout(function(){ try{el.removeChild(flash);}catch(e){} }, 300);
-    }
-
-    function shakeScreen() {
-      var wrap = document.querySelector(".sg-wrap");
-      if(!wrap) return;
-      wrap.classList.add("sg-shake");
-      setTimeout(function(){ try{wrap.classList.remove("sg-shake");}catch(e){} }, 300);
-    }
-
-    function showTurnAnnounce(text) {
-      var wrap = document.querySelector(".sg-wrap");
-      if(!wrap) return;
-      var el = document.createElement("div");
-      el.className = "sg-turn-announce";
-      el.textContent = text;
-      wrap.appendChild(el);
-      setTimeout(function(){ try{wrap.removeChild(el);}catch(e){} }, 900);
-    }
-
-    function damageEnemy(dmg) {
-      var e = G.enemy;
-      // 玩家虚弱则伤害降低
-      if(G.player.buffs && G.player.buffs.weak) dmg = Math.floor(dmg * (1 - G.player.buffs.weak * 0.25));
-      // 敌人易伤则伤害增加
-      if(e.buffs.vuln) dmg = Math.floor(dmg * 1.5);
-      dmg = Math.max(0, dmg);
-      var blocked = 0;
-      if(e.block > 0) {
-        if(dmg <= e.block) { blocked = dmg; e.block -= dmg; dmg = 0; }
-        else { blocked = e.block; dmg -= e.block; e.block = 0; }
-      }
-      e.hp = Math.max(0, e.hp - dmg);
-      if(dmg > 0) {
-        showDmgFloat(dmg, document.getElementById("sgEnemy"), "#ef4444");
-        showHitFlash();
-        if(dmg >= 8) shakeScreen();
-      }
-    }
-
-    function checkEnemyDeath() {
-      if(G.enemy.hp <= 0) {
-        // Victory!
-        showTurnAnnounce("胜利！");
-        setTimeout(function(){ showCardReward(); }, 600);
-        return;
-      }
-    }
-
-    /* ══════ 敌人回合 ══════ */
-    function enemyTurn() {
-      G.isPlayerTurn = false;
-      var e = G.enemy;
-      showTurnAnnounce("敌人回合");
-      var intent = e.intent;
-      if(!intent) { G.isPlayerTurn = true; return; }
-
-      if(intent.t === "attack") {
-        var dmg = intent.v + (e.buffs.str||0);
-        // 虚弱
-        if(e.buffs.weak) dmg = Math.floor(dmg * (1 - e.buffs.weak * 0.25));
-        if(G.player.buffs && G.player.buffs.vuln) dmg = Math.floor(dmg * 1.5);
-        var hits = intent.hits || 1;
-        for(var h=0;h<hits;h++){
-          var hitDmg = Math.floor(dmg / hits);
-          if(G.player.block >= hitDmg) { G.player.block -= hitDmg; hitDmg = 0; }
-          else { hitDmg -= G.player.block; G.player.block = 0; }
-          G.player.hp = Math.max(0, G.player.hp - hitDmg);
-	          if(hitDmg > 0) { showDmgFloat(hitDmg, document.getElementById("sgPlayerArea"), "#60a5fa"); shakeScreen(); }
+      // Enemy block
+      if(gBattle.block > 0){
+        if(gBattle.block >= dmg){
+          gBattle.block -= dmg;
+          dmg = 0;
+        } else {
+          dmg -= gBattle.block;
+          gBattle.block = 0;
         }
       }
-      if(intent.t === "aoe") {
-        var dmg = intent.v;
-        if(G.player.block >= dmg) { G.player.block -= dmg; }
-        else { dmg -= G.player.block; G.player.block = 0; G.player.hp = Math.max(0, G.player.hp - dmg); if(dmg > 0) { showDmgFloat(dmg, document.getElementById("sgPlayerArea"), "#60a5fa"); shakeScreen(); } }
-      }
-      if(intent.t === "defend") {
-        e.block += intent.v;
-      }
-      if(intent.t === "buff") {
-        if(intent.b==="str") e.buffs.str = (e.buffs.str||0) + intent.v;
-      }
-      if(intent.t === "debuff") {
-        if(!G.player.buffs) G.player.buffs = {};
-        if(intent.b==="weak") G.player.buffs.weak = (G.player.buffs.weak||0)+ (intent.v||1);
-        if(intent.b==="vuln") G.player.buffs.vuln = (G.player.buffs.vuln||0)+ (intent.v||1);
+
+      gBattle.hp -= dmg;
+      if(gBattle.hp < 0) gBattle.hp = 0;
+
+      // Float damage
+      var el = document.getElementById('sgBattle');
+      if(el){
+        showDmgFloat(
+          el.offsetLeft + el.offsetWidth/2 + (Math.random()-0.5)*60,
+          el.offsetTop + 60,
+          dmg
+        );
       }
 
-      G.turn++;
+      if(hasRelic('longquanjian') && gBattle.isElite && gBattle.hp <= 0){
+        G.gold += 15;
+      }
+    }
 
-      // 回合结束遗物效果
-      if(hasRelic("endHeal")) G.player.hp = Math.min(G.player.maxHp, G.player.hp + 2);
-      if(G._powerBlock) G.player.block += G._powerBlock;
-      if(G._powerStr) G.player.str += G._powerStr;
+    function damagePlayer(dmg){
+      if(!gBattle) return;
 
-      // Start player turn
-      G.isPlayerTurn = true;
-      G.player.block = 0;
-      G.player.firstAtkThisTurn = true;
-      G.player.energy = G.player.maxEnergy;
+      // 苏轼 ability: first damage -3
+      if(G.charId === 'sush' && !gBattle.sushFirstHitUsed){
+        dmg = Math.max(0, dmg - 3);
+        gBattle.sushFirstHitUsed = true;
+      }
 
-      // Draw new hand (hand was already discarded in endTurn)
-      e.intent = pickIntent();
-      drawCards(G.player.drawPerTurn + (hasRelic("extraDraw")?1:0));
+      // Relic:麒麟符 block chance
+      if(hasRelic('qilinfu') && Math.random() * 100 < 25 && dmg > 0){
+        dmg = Math.max(0, dmg - 3);
+        showEffectFloat(document.getElementById('sgBattle').offsetLeft + 100, document.getElementById('sgBattle').offsetTop + 100, '麒麟护体');
+      }
 
-      if(G.player.hp <= 0) {
+      // Player block
+      if(gBattle.playerBlock > 0){
+        if(gBattle.playerBlock >= dmg){
+          gBattle.playerBlock -= dmg;
+          dmg = 0;
+        } else {
+          dmg -= gBattle.playerBlock;
+          gBattle.playerBlock = 0;
+        }
+      }
+
+      if(gBattle.playerVuln > 0) dmg = Math.floor(dmg * 1.5);
+
+      G.hp -= dmg;
+      if(G.hp < 0) G.hp = 0;
+
+      shakeScreen();
+      showHitFlash(document.getElementById('sgPlayerPortrait'));
+
+      var el = document.getElementById('sgBattle');
+      if(el){
+        showDmgFloat(el.offsetLeft + 50, el.offsetTop + 200, dmg);
+      }
+    }
+
+    function checkEnemyDeath(){
+      if(!gBattle || gBattle.hp > 0) return;
+      // Enemy defeated
+      gIsBattling = false;
+      G.fightCount++;
+
+      // Relic: battle end heal
+      if(hasRelic('qinglian')){
+        G.hp = Math.min(G.hp + 3, G.maxHp);
+      }
+
+      // Gold reward
+      var goldReward = gBattle.isBoss ? 30 : (gBattle.isElite ? 20 : 10 + Math.floor(Math.random() * 10));
+      G.gold += goldReward;
+
+      hideAllScreens();
+
+      // Show reward screen
+      var rewardEl = document.getElementById('sgReward');
+      if(rewardEl){
+        document.getElementById('sgRewardGold').textContent = goldReward;
+        document.getElementById('sgRewardCards').innerHTML = '';
+
+        var rewardCards = getRandomCards(3);
+        var cardHtml = '';
+        for(var ri=0;ri<rewardCards.length;ri++){
+          var rc = rewardCards[ri];
+          var rarityColor = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+          var color = rarityColor[rc.rarity] || '#a8a8a8';
+          cardHtml += '<div class="sg-card" data-card-id="'+rc.id+'" style="border-color:'+color+'">' +
+            '<div class="sg-card-cost">'+(rc.cost||0)+'</div>' +
+            '<div class="sg-card-name">'+rc.name+'</div>' +
+            '<div class="sg-card-desc">'+(rc.desc||'')+'</div>' +
+            '<div class="sg-card-type">'+rc.type+(rc.rarity==='rare'?' ★':'')+'</div>' +
+            '</div>';
+        }
+        document.getElementById('sgRewardCards').innerHTML = cardHtml;
+
+        // Bind card click to add to deck
+        var cardEls = document.getElementById('sgRewardCards').querySelectorAll('.sg-card');
+        for(var ci=0;ci<cardEls.length;ci++){
+          (function(cel){
+            cel.addEventListener('click',function(){
+              var cid = cel.getAttribute('data-card-id');
+              if(CARDS[cid]){
+                addCardToDeck({id:cid, ...CARDS[cid]});
+                showEffectFloat(cel.offsetLeft, cel.offsetTop, '已加入卡组');
+                setTimeout(function(){ completeNode(); }, 500);
+              }
+            });
+          })(cardEls[ci]);
+        }
+
+        showScreen('sgReward');
+      }
+    }
+
+    function applyPoison(){
+      if(!gBattle) return;
+      // Enemy poison
+      if(gBattle.enemyPoison > 0){
+        var poisonDmg = gBattle.enemyPoison;
+        gBattle.hp -= poisonDmg;
+        if(gBattle.hp < 0) gBattle.hp = 0;
+        var el = document.getElementById('sgBattle');
+        if(el) showDmgFloat(el.offsetLeft + el.offsetWidth/2, el.offsetTop + 80, '毒' + poisonDmg);
+      }
+      gBattle.enemyPoison = 0;
+
+      // Player poison
+      if(gBattle.playerPoison > 0){
+        var pDmg = gBattle.playerPoison;
+        G.hp -= pDmg;
+        if(G.hp < 0) G.hp = 0;
+        var el2 = document.getElementById('sgBattle');
+        if(el2) showDmgFloat(el2.offsetLeft + 80, el2.offsetTop + 180, '毒' + pDmg);
+      }
+      gBattle.playerPoison = 0;
+    }
+
+    function enemyTurn(){
+      if(!gBattle || gBattle.hp <= 0) return;
+
+      // Enemy block
+      if(gBattle.intent === 'defend'){
+        gBattle.block += gBattle.intentVal;
+        showEffectFloat(document.getElementById('sgBattle').offsetLeft + 200, 60, '格挡+' + gBattle.intentVal);
+      }
+
+      // Enemy buff
+      if(gBattle.intent === 'buff'){
+        if(gBattle.intentVal === 'str'){
+          gBattle.buffs.str += gBattle.intentAmount || 2;
+          showEffectFloat(document.getElementById('sgBattle').offsetLeft + 200, 60, '力量+' + (gBattle.intentAmount || 2));
+        }
+      }
+
+      // Enemy heal
+      if(gBattle.intent === 'heal'){
+        gBattle.hp = Math.min(gBattle.hp + gBattle.intentVal, gBattle.maxHp);
+        showEffectFloat(document.getElementById('sgBattle').offsetLeft + 200, 60, '回复+' + gBattle.intentVal);
+      }
+
+      // Enemy debuff
+      if(gBattle.intent === 'debuff'){
+        if(gBattle.intentVal === 'vuln'){
+          gBattle.playerVuln += gBattle.intentAmount || 1;
+          showEffectFloat(50, 200, '易伤' + (gBattle.intentAmount || 1));
+        }
+        if(gBattle.intentVal === 'weak'){
+          gBattle.playerWeak += gBattle.intentAmount || 1;
+          showEffectFloat(50, 200, '虚弱' + (gBattle.intentAmount || 1));
+        }
+        if(gBattle.intentVal === 'poison'){
+          gBattle.playerPoison += gBattle.intentAmount || 3;
+          showEffectFloat(50, 200, '中毒' + (gBattle.intentAmount || 3));
+        }
+      }
+
+      // Enemy attack
+      if(gBattle.intent === 'attack'){
+        var atkDmg = gBattle.intentVal + (gBattle.buffs.str || 0);
+        var hits2 = gBattle.intentHits || 1;
+        if(gBattle.buffs.vuln > 0) atkDmg = Math.floor(atkDmg * 1.5);
+        if(gBattle.buffs.weak > 0) atkDmg = Math.floor(atkDmg * 0.75);
+        if(gBattle.playerWeak > 0) atkDmg = Math.floor(atkDmg * 0.75);
+
+        for(var hi2=0;hi2<hits2;hi2++){
+          damagePlayer(atkDmg);
+        }
+      }
+
+      // Pick next intent
+      pickIntent(gBattle);
+    }
+
+    function endTurn(){
+      if(!gBattle) return;
+      if(gBattle.hp <= 0) return;
+
+      applyPoison();
+
+      // Enemy plays
+      enemyTurn();
+
+      // Check if player died
+      if(G.hp <= 0){
         showResult(false);
         return;
       }
+
+      // Check if enemy died
+      if(gBattle.hp <= 0){
+        checkEnemyDeath();
+        return;
+      }
+
+      // Reset for next turn
+      gBattle.turn++;
+      gBattle.energy = G.maxEnergy;
+      if(G.powers && G.powers.energy){
+        gBattle.energy += G.powers.energy;
+      }
+      gBattle.playerBlock = 0;
+      gBattle.cardPlayedThisTurn = 0;
+
+      // Next turn strength
+      if(gBattle.nextStr && gBattle.nextStr > 0){
+        gBattle.playerStr += gBattle.nextStr;
+        gBattle.nextStr = 0;
+      }
+
+      // Power: block
+      if(G.powers && G.powers.block){
+        gBattle.playerBlock += G.powers.block * 3;
+      }
+      // Power: strength
+      if(G.powers && G.powers.strength){
+        gBattle.playerStr += G.powers.strength;
+      }
+      // Power: heal
+      if(G.powers && G.powers.heal){
+        G.hp = Math.min(G.hp + G.powers.heal * 2, G.maxHp);
+      }
+
+      // Reduce debuffs
+      if(gBattle.playerVuln > 0) gBattle.playerVuln--;
+      if(gBattle.playerWeak > 0) gBattle.playerWeak--;
+      if(gBattle.buffs.vuln > 0) gBattle.buffs.vuln--;
+      if(gBattle.buffs.weak > 0) gBattle.buffs.weak--;
+
+      // Discard hand
+      for(var hi3=0;hi3<gBattle.hand.length;hi3++){
+        gBattle.discardPile.push(gBattle.hand[hi3]);
+      }
+      gBattle.hand = [];
+
+      // Draw new hand
+      drawCards(5);
+
+      gBattle.shuffledThisTurn = false;
+
       renderBattle();
     }
 
-    /* ══════ 渲染战斗 ══════ */
-    function renderBattle() {
-      var e = G.enemy;
-      if(!e) return;
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 战斗渲染 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
 
-      document.getElementById("sgEnemyName").textContent = e.desc ? e.desc : e.id;
-      var hpPct = Math.max(0, Math.min(100, e.hp/e.maxHp*100));
-      var hpBar = document.getElementById("sgEnemyHpFill");
-      hpBar.style.width = hpPct + "%";
-      hpBar.style.background = hpPct > 60 ? "var(--red-seal)" : hpPct > 30 ? "#eab308" : "#ef4444";
-      document.getElementById("sgEnemyHp").textContent = e.hp;
-      document.getElementById("sgEnemyMaxHp").textContent = e.maxHp;
+    function renderBattle(){
+      if(!gBattle) return;
 
-      // 格挡
-      var eb = document.getElementById("sgEnemyBlock");
-      if(e.block > 0) { eb.style.display = ""; document.getElementById("sgEnemyBlockNum").textContent = e.block; }
-      else eb.style.display = "none";
+      // Enemy name and HP
+      document.getElementById('sgEnemyName').textContent = gBattle.name;
+      document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
+      var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
+      document.getElementById('sgEnemyHpFill').style.width = eHpPct + '%';
+      document.getElementById('sgEnemyHp').textContent = gBattle.hp; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
+      document.getElementById('sgEnemyBlockNum').textContent = gBattle.block; document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
 
-      // 意图
-      var intentEl = document.getElementById("sgEnemyIntent");
-      var intent = e.intent;
-      if(intent) {
-        var intentDesc = [];
-        if(intent.t==="attack") intentDesc.push("⚔️ 攻击 " + intent.v + (intent.hits?"×"+intent.hits:""));
-        if(intent.t==="aoe") intentDesc.push("💥 全体攻击 " + intent.v);
-        if(intent.t==="defend") intentDesc.push("🛡️ 防御 " + intent.v);
-        if(intent.t==="buff") intentDesc.push("⬆️ 强化 " + (intent.b||""));
-        if(intent.t==="debuff") intentDesc.push("⬇️ 虚弱");
-        intentEl.textContent = intentDesc.join(" ");
+      // Intent
+      var intentNames = { attack:'⚔️攻击', defend:'🛡️防御', debuff:'💀衰弱', buff:'⬆️强化', heal:'❤️回复' };
+      document.getElementById('sgEnemyIntent').textContent = intentNames[gBattle.intent] || '⚔️';
+      document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
+
+      // Enemy buffs
+      var ebHtml = '';
+      if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff">⬆力+' + gBattle.buffs.str + '</span>';
+      if(gBattle.buffs.vuln > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇易伤' + gBattle.buffs.vuln + '</span>';
+      if(gBattle.buffs.weak > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇虚弱' + gBattle.buffs.weak + '</span>';
+      document.getElementById('sgEnemyBuffs').innerHTML = ebHtml;
+
+      // Enemy poison
+      document.getElementById('sgEnemyPoison').textContent = gBattle.enemyPoison;
+
+      // Player HP
+      var pHpPct = Math.max(0, Math.floor(G.hp / G.maxHp * 100));
+      document.getElementById('sgPlayerHpFill').style.width = pHpPct + '%';
+      document.getElementById('sgPlayerHp').textContent = G.hp; document.getElementById('sgPlayerMaxHp').textContent = G.maxHp;
+      document.getElementById('sgPlayerBlock').textContent = gBattle.playerBlock;
+      document.getElementById('sgPlayerStrength').textContent = gBattle.playerStr;
+
+      // Player poison
+      document.getElementById('sgPlayerPoison').textContent = gBattle.playerPoison;
+
+      // Energy and turn
+      document.getElementById('sgPlayerEnergy').textContent = gBattle.energy;
+      document.getElementById('sgTurnNum').textContent = gBattle.turn;
+
+      // Draw pile
+      document.getElementById('sgDrawPile').textContent = gBattle.drawPile.length;
+      document.getElementById('sgDiscardPile').textContent = gBattle.discardPile.length;
+
+      document.getElementById('sgDeckCountNum').textContent = G.deck.length;
+      // Hand cards
+      var handEl = document.getElementById('sgHand');
+      handEl.innerHTML = '';
+      for(var hi=0;hi<gBattle.hand.length;hi++){
+        var deckIdx = gBattle.hand[hi];
+        var card = G.deck[deckIdx];
+        if(!card) continue;
+
+        var cost = card.cost || 0;
+        if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0) cost = Math.max(0, cost - 1);
+
+        var canPlay = gBattle.energy >= cost;
+        var rarityColors = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+        var borderColor = rarityColors[card.rarity] || '#a8a8a8';
+
+        var cardEl = document.createElement('div');
+        cardEl.className = 'sg-card' + (canPlay ? '' : ' disabled');
+        cardEl.style.borderColor = borderColor;
+        cardEl.innerHTML =
+          '<div class="sg-card-cost">' + (canPlay ? cost : ('<span style="color:#ff4444">' + cost + '</span>')) + '</div>' +
+          '<div class="sg-card-name">' + card.name + '</div>' +
+          '<div class="sg-card-desc">' + (card.desc || '') + '</div>' +
+          '<div class="sg-card-type">' + card.type + (card.rarity === 'rare' ? ' ★' : '') + '</div>';
+
+        if(canPlay){
+          (function(ci, el2){
+            cardEl.addEventListener('click', function(){
+              playCard(ci);
+            });
+          })(hi, cardEl);
+        }
+
+        handEl.appendChild(cardEl);
       }
 
-      // Buffs
-      var buffText = "";
-      if(e.buffs.vuln) buffText += "易伤" + e.buffs.vuln + " ";
-      if(e.buffs.weak) buffText += "虚弱" + e.buffs.weak + " ";
-      if(e.buffs.str) buffText += "力量+" + e.buffs.str + " ";
-      if(buffText) intentEl.textContent += " [" + buffText + "]";
+      // Intent reveal
+      if(gBattle.seeIntents || hasRelic('qingtongjing')){
+        document.getElementById('sgEnemyIntent').style.opacity = '1';
+      }
+    }
 
-      // 玩家状态
-      document.getElementById("sgPlayerHp").textContent = G.player.hp;
-      document.getElementById("sgPlayerMaxHp").textContent = G.player.maxHp;
-      var hpColorEl = document.getElementById("sgPlayerHp");
-      var hpPctPlayer = G.player.hp / G.player.maxHp;
-      hpColorEl.style.color = hpPctPlayer > 0.6 ? "inherit" : hpPctPlayer > 0.3 ? "#eab308" : "#ef4444";
-      document.getElementById("sgPlayerEnergy").textContent = G.player.energy;
-      document.getElementById("sgPlayerMaxEnergy").textContent = G.player.maxEnergy;
-      document.getElementById("sgPlayerBlock").textContent = G.player.block;
-      document.getElementById("sgPlayerStrength").textContent = G.player.str;
-      document.getElementById("sgDeckCountNum").textContent = G.player.deck.length + G.player.hand.length + G.player.discard.length;
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 商店 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
 
-      // 手牌
-      var handEl = document.getElementById("sgHand");
-      handEl.innerHTML = "";
-      for(var hi=0;hi<G.player.hand.length;hi++){
-        var cid = G.player.hand[hi];
-        var card = CARDS[cid];
-        if(!card) continue;
-        var el = document.createElement("div");
-        el.className = "sg-card " + card.type;
-        if(!canPlayCard(cid) || !G.isPlayerTurn) el.classList.add("disabled");
-        el.innerHTML = "<div class='sg-card-cost'>" + card.cost + "</div>" +
-          "<div class='sg-card-name'>" + card.name + "</div>" +
-          "<div class='sg-card-desc'>" + card.desc + "</div>" +
-          "<div class='sg-card-type'>" + card.type + "</div>";
-        (function(i, cardEl){
-          cardEl.addEventListener("click", function(){
-            if(!this.classList.contains("disabled")) {
-              this.classList.add("playing");
-              playCard(i);
+    function showShop(){
+      hideAllScreens();
+      showScreen('sgShop');
+      document.getElementById('sgShopGold').textContent = G.gold;
+
+      var itemsEl = document.getElementById('sgShopItems');
+      itemsEl.innerHTML = '';
+
+      // Generate random items
+      var shopCards = getRandomCards(4);
+      var shopRelics = [];
+      var availRelics = [];
+      for(var ri=0;ri<RELICS.length;ri++){
+        if(G.relics.indexOf(RELICS[ri].id) === -1){
+          availRelics.push(RELICS[ri]);
+        }
+      }
+      shuffle(availRelics);
+      for(var ri2=0;ri2<Math.min(2, availRelics.length); ri2++){
+        shopRelics.push(availRelics[ri2]);
+      }
+
+      var discount = hasRelic('yuruyi') ? 0.8 : 1;
+
+      // Cards
+      for(var si=0;si<shopCards.length;si++){
+        var sc = shopCards[si];
+        var price = Math.floor((sc.rarity === 'rare' ? 75 : (sc.rarity === 'uncommon' ? 50 : 30)) * discount);
+        var rarityColor2 = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+        var itemDiv = document.createElement('div');
+        itemDiv.className = 'sg-shop-item';
+        itemDiv.innerHTML =
+          '<div class="sg-card" style="border-color:'+(rarityColor2[sc.rarity]||'#a8a8a8')+'">' +
+          '<div class="sg-card-cost">'+(sc.cost||0)+'</div>' +
+          '<div class="sg-card-name">'+sc.name+'</div>' +
+          '<div class="sg-card-desc">'+(sc.desc||'')+'</div>' +
+          '<div class="sg-card-type">'+sc.type+'</div>' +
+          '</div>' +
+          '<div class="sg-shop-price'+(G.gold >= price ? '' : ' sg-shop-price-locked')+'">' + price + '金</div>';
+        (function(price2, cardObj){
+          itemDiv.addEventListener('click', function(){
+            if(G.gold >= price2){
+              G.gold -= price2;
+              addCardToDeck({id:cardObj.id, ...cardObj});
+              document.getElementById('sgShopGold').textContent = G.gold;
+              itemDiv.style.opacity = '0.4';
+              itemDiv.style.pointerEvents = 'none';
+              showEffectFloat(itemDiv.offsetLeft, itemDiv.offsetTop, '已购买');
             }
           });
-        })(hi, el);
-        handEl.appendChild(el);
+        })(price, sc);
+        itemsEl.appendChild(itemDiv);
       }
-    }
 
-    /* ══════ 结束回合 ══════ */
-    function endTurn() {
-      if(!G.isPlayerTurn) return;
-      if(G.enemy && G.enemy.hp <= 0) return;
-      // Discard hand
-      for(var hi=0;hi<G.player.hand.length;hi++) G.player.discard.push(G.player.hand[hi]);
-      G.player.hand = [];
-      G.player.block = 0;
-      renderBattle();
-      enemyTurn();
-    }
-
-    /* ══════ 卡牌奖励 ══════ */
-    function getRandomCards(count, rarity) {
-      var pool = [];
-      if(rarity==="common") pool = CARD_IDS.filter(function(id){return CARDS[id].rarity==="common" || CARDS[id].rarity==="basic";});
-      else if(rarity==="uncommon") pool = CARD_IDS.filter(function(id){return CARDS[id].rarity==="uncommon"||CARDS[id].rarity==="common";});
-      else pool = CARD_IDS.filter(function(id){return id!=="yinyong"&&id!=="mosong";});
-      shuffle(pool);
-      return pool.slice(0, count);
-    }
-
-    function showCardReward() {
-      var choices = getRandomCards(3, G.floor < 3 ? "common" : G.floor < 6 ? "uncommon" : "rare");
-      showScreen("reward");
-      var container = document.getElementById("sgRewardCards");
-      container.innerHTML = "";
-      document.getElementById("sgRewardSkip").style.display = "";
-      for(var i=0;i<choices.length;i++){
-        var cid = choices[i];
-        var card = CARDS[cid];
-        var el = document.createElement("div");
-        el.className = "sg-card " + card.type;
-        el.style.cursor = "pointer";
-        el.innerHTML = "<div class='sg-card-cost'>" + card.cost + "</div>" +
-          "<div class='sg-card-name'>" + card.name + "</div>" +
-          "<div class='sg-card-desc'>" + card.desc + "</div>" +
-          "<div class='sg-card-type'>" + card.type + "</div>";
-        (function(ci){
-          el.addEventListener("click", function(){
-            G.player.deck.push(ci);
-            document.getElementById("sgRewardSkip").textContent = "继续";
-            this.style.borderColor = "var(--gold)";
-            // Disable further clicks
-            container.querySelectorAll(".sg-card").forEach(function(e){ e.style.pointerEvents = "none"; });
+      // Relics
+      for(var si2=0;si2<shopRelics.length;si2++){
+        var sr = shopRelics[si2];
+        var rPrice = Math.floor(80 * discount);
+        var rDiv = document.createElement('div');
+        rDiv.className = 'sg-shop-item';
+        rDiv.innerHTML =
+          '<div class="sg-shop-relic">' +
+          '<div class="sg-shop-relic-icon">🔮</div>' +
+          '<div class="sg-shop-relic-name">'+sr.name+'</div>' +
+          '<div class="sg-shop-relic-desc">'+sr.desc+'</div>' +
+          '</div>' +
+          '<div class="sg-shop-price'+(G.gold >= rPrice ? '' : ' sg-shop-price-locked')+'">'+rPrice+'金</div>';
+        (function(rPrice2, relicId){
+          rDiv.addEventListener('click', function(){
+            if(G.gold >= rPrice2){
+              G.gold -= rPrice2;
+              G.relics.push(relicId);
+              document.getElementById('sgShopGold').textContent = G.gold;
+              rDiv.style.opacity = '0.4';
+              rDiv.style.pointerEvents = 'none';
+              showEffectFloat(rDiv.offsetLeft, rDiv.offsetTop, '已获得');
+            }
           });
-        })(cid);
-        container.appendChild(el);
+        })(rPrice, sr.id);
+        itemsEl.appendChild(rDiv);
       }
-      document.getElementById("sgRewardSkip").onclick = function(){
-        completeNode();
-      };
+
+      // Heal
+      var healAmt = 30;
+      var healCost = Math.floor(healAmt * discount);
+      var healEl = document.getElementById('sgShopHeal');
+      if(healEl){
+        healEl.style.display = '';
+        healEl.innerHTML = '<span>🛌 休息恢复（' + healAmt + 'HP）</span><span class="sg-shop-price'+(G.gold >= healCost ? '' : ' sg-shop-price-locked')+'">'+healCost+'金</span>';
+        healEl.onclick = function(){
+          if(G.gold >= healCost && G.hp < G.maxHp){
+            G.gold -= healCost;
+            G.hp = Math.min(G.hp + healAmt, G.maxHp);
+            document.getElementById('sgShopGold').textContent = G.gold;
+            healEl.style.display = 'none';
+            showEffectFloat(healEl.offsetLeft, healEl.offsetTop, '回复' + healAmt + 'HP');
+          }
+        };
+      }
     }
 
-    /* ══════ 休憩 ══════ */
-    function showRest() {
-      showScreen("rest");
-      document.getElementById("sgRestHp").textContent = G.player.hp;
-      document.getElementById("sgRestMaxHp").textContent = G.player.maxHp;
-      var canHeal = G.player.hp < G.player.maxHp;
-      document.getElementById("sgRestBtn").style.display = canHeal ? "" : "none";
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 随机事件 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function showEvent(){
+      hideAllScreens();
+      showScreen('sgEvent');
+
+      var evt = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+      document.getElementById('sgEventTitle').textContent = evt.title;
+      document.getElementById('sgEventDesc').textContent = evt.desc;
+
+      var choicesEl = document.getElementById('sgEventChoices');
+      choicesEl.innerHTML = '';
+      for(var ei=0;ei<evt.choices.length;ei++){
+        var choice = evt.choices[ei];
+        var btn = document.createElement('button');
+        btn.className = 'sg-event-choice';
+        btn.textContent = choice.text;
+        (function(ch, resultText){
+          btn.addEventListener('click', function(){
+            applyEventEffect(ch.effects, resultText);
+            completeNode();
+          });
+        })(choice, choice.result || '');
+        choicesEl.appendChild(btn);
+      }
     }
 
+    function applyEventEffect(effects, resultText){
+      if(!G) return;
+      var resultMsg = '';
+
+      if(effects.gold){
+        G.gold += effects.gold;
+        if(effects.gold > 0) resultMsg += '金币+' + effects.gold + ' ';
+        else resultMsg += '金币' + effects.gold + ' ';
+      }
+      if(effects.hp){
+        G.hp += effects.hp;
+        if(effects.hp > 0) resultMsg += 'HP+' + effects.hp + ' ';
+        else resultMsg += 'HP' + effects.hp + ' ';
+      }
+      if(effects.maxHp){
+        G.maxHp += effects.maxHp;
+        G.hp += effects.hp || 0;
+        resultMsg += '最大HP+' + effects.maxHp + ' ';
+      }
+      if(G.hp > G.maxHp) G.hp = G.maxHp;
+      if(G.hp < 0) G.hp = 0;
+
+      // Show result briefly
+      var descEl = document.getElementById('sgEventDesc');
+      if(descEl){
+        descEl.textContent = resultText || resultMsg || '什么也没有发生。';
+      }
+
+      // Disable all choices
+      var btns = document.querySelectorAll('.sg-event-choice');
+      for(var bi=0;bi<btns.length;bi++){
+        btns[bi].disabled = true;
+        btns[bi].style.opacity = '0.5';
+      }
+
+      // Include card rewards from events
+      if(resultText && resultText.indexOf('随机非基础卡') !== -1){
+        var freeCards = getRandomCards(1, 'no_basic');
+        if(freeCards.length > 0){
+          addCardToDeck({id:freeCards[0].id, ...freeCards[0]});
+          descEl.textContent += ' 获得卡牌：' + freeCards[0].name;
+        }
+      }
+      if(resultText && resultText.indexOf('随机稀有卡') !== -1){
+        var rareCards = getRandomCards(1, 'rare');
+        if(rareCards.length > 0){
+          addCardToDeck({id:rareCards[0].id, ...rareCards[0]});
+          descEl.textContent += ' 获得卡牌：' + rareCards[0].name;
+        }
+      }
+      if(resultText && resultText.indexOf('随机攻击牌') !== -1){
+        var atkCards = getRandomCards(1, 'attack');
+        if(atkCards.length > 0){
+          addCardToDeck({id:atkCards[0].id, ...atkCards[0]});
+          descEl.textContent += ' 获得卡牌：' + atkCards[0].name;
+        }
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 休息 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function showRest(){
+      hideAllScreens();
+      showScreen('sgRest');
+      document.getElementById('sgRestHp').textContent = G.hp; document.getElementById('sgRestMaxHp').textContent = G.maxHp;
+      var restAmt = Math.floor(G.maxHp * 0.3);
+      document.getElementById('sgRestBtn').textContent = '休息（恢复 ' + restAmt + ' HP）';
+      document.getElementById('sgRestAmt').textContent = restAmt;
+
+      var healBtn = document.getElementById('sgRestBtn');
+      if(healBtn){
+        healBtn.onclick = function(){
+          var amt = Math.floor(G.maxHp * 0.3);
+          G.hp = Math.min(G.hp + amt, G.maxHp);
+          document.getElementById('sgRestHp').textContent = G.hp; document.getElementById('sgPlayerMaxHp').textContent = G.maxHp;
+          document.getElementById('sgRestAmt').textContent = '0';
+          healBtn.style.opacity = '0.4';
+          healBtn.disabled = true;
+        };
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
     /* ══════ 宝箱 ══════ */
-    function showTreasure() {
-      showScreen("treasure");
-      var relicIds = Object.keys(RELICS);
-      // Filter owned
-      var avail = relicIds.filter(function(id){return G.player.relics.indexOf(id)<0;});
-      if(avail.length===0) avail = relicIds;
-      var pick = avail[Math.floor(Math.random()*avail.length)];
-      var r = RELICS[pick];
-      var el = document.getElementById("sgTreasureRelic");
-      el.innerHTML = "<div class='sg-relic-name'>" + r.name + "</div><div class='sg-relic-desc'>" + r.desc + "</div>";
-      document.getElementById("sgTreasureTake").onclick = function(){
-        G.player.relics.push(pick);
-        completeNode();
-      };
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function showTreasure(){
+      hideAllScreens();
+      showScreen('sgTreasure');
+
+      var goldAmt = 15 + Math.floor(Math.random() * 20);
+      G.gold += goldAmt;
+      document.getElementById('sgTreasureRelic').innerHTML = '💰 +' + goldAmt + ' 金币（总计：' + G.gold + '）<br>' + document.getElementById('sgTreasureRelic').innerHTML;
+      // total gold shown already
+
+      // Possibly give a relic
+      var relicEl = document.getElementById('sgTreasureRelic');
+      if(relicEl && Math.random() < 0.3){
+        var availR = [];
+        for(var ri=0;ri<RELICS.length;ri++){
+          if(G.relics.indexOf(RELICS[ri].id) === -1) availR.push(RELICS[ri]);
+        }
+        if(availR.length > 0){
+          var newRelic = availR[Math.floor(Math.random() * availR.length)];
+          G.relics.push(newRelic.id);
+          relicEl.innerHTML = '获得遗器：<strong>' + newRelic.name + '</strong> — ' + newRelic.desc;
+        }
+      } else {
+        // Give a card instead
+        var tc = getRandomCards(1)[0];
+        if(tc){
+          addCardToDeck({id:tc.id, ...tc});
+          relicEl.innerHTML = '获得卡牌：<strong>' + tc.name + '</strong>';
+        }
+      }
     }
 
-    /* ══════ 结果 ══════ */
-    function showResult(win) {
-      showScreen("result");
-      document.getElementById("sgResultIcon").textContent = win ? "🏆" : "💀";
-      document.getElementById("sgResultTitle").textContent = win ? "问道成功" : "道陨诗境";
-      document.getElementById("sgResultDesc").textContent = win ? "你已登顶九重诗境，得窥词道真谛！" : "诗道漫漫，下次再战...";
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 结束界面 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function showResult(victory){
+      hideAllScreens();
+      showScreen('sgResult');
+      var el = document.getElementById('sgResultTitle');
+      if(victory){
+        el.textContent = '🎉 通关！';
+        el.style.color = '#ffd700';
+        document.getElementById('sgResultDetail').innerHTML =
+          '你成功通过全部' + G.maxAct + '境！<br>' +
+          '剩余HP：' + G.hp; document.getElementById('sgPlayerMaxHp').textContent = G.maxHp + '<br>' +
+          '金币：' + G.gold + '<br>' +
+          '卡组：' + G.deck.length + '张<br>' +
+          '遗器：' + G.relics.length + '件';
+      } else {
+        el.textContent = '💀 陨落';
+        el.style.color = '#ff4444';
+        document.getElementById('sgResultDetail').innerHTML =
+          '你未能通过第' + G.act + '境第' + (G.floor+1) + '层<br>' +
+          '死于「' + (gBattle ? gBattle.name : '未知') + '」之手<br><br>' +
+          '卡组：' + G.deck.length + '张<br>' +
+          '遗器：' + G.relics.length + '件';
+      }
     }
 
-    /* ══════ 绑定UI事件 ══════ */
-    document.getElementById("sgStartBtn").addEventListener("click", function(){
-      initGame();
-    });
-    document.getElementById("sgEndTurnBtn").addEventListener("click", function(){
-      endTurn();
-    });
-    document.getElementById("sgRestBtn").addEventListener("click", function(){
-      G.player.hp = Math.min(G.player.maxHp, G.player.hp + 20);
-      completeNode();
-    });
-    document.getElementById("sgRestSkipBtn").addEventListener("click", function(){
-      completeNode();
-    });
-    document.getElementById("sgRestartBtn").addEventListener("click", function(){
-      initGame();
-    });
-    document.getElementById("sgDeckCount").addEventListener("click", function(){
-      showDeckPopup();
-    });
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 特效与动画 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
 
-    /* ══════ 卡组弹窗 ══════ */
-    function showDeckPopup() {
-      var overlay = document.createElement("div");
-      overlay.className = "sg-deck-overlay";
-      var hand = G.player.hand || [];
-      var allCards = hand.concat(G.player.deck).concat(G.player.discard).concat(G.player.exhaust);
-      var counts = {};
-      for(var i=0;i<allCards.length;i++){
-        counts[allCards[i]] = (counts[allCards[i]]||0) + 1;
-      }
-      var html = "<div class='sg-deck-panel'><h3>📚 卡组 (" + allCards.length + "张)</h3><div class='sg-deck-grid'>";
-      for(var cid in counts) {
-        var card = CARDS[cid];
-        if(!card) continue;
-        html += "<div class='sg-card " + card.type + "' style='cursor:default'>" +
-          "<div class='sg-card-cost'>" + card.cost + "</div>" +
-          "<div class='sg-card-name'>" + card.name + "</div>" +
-          "<div class='sg-card-desc'>×" + counts[cid] + "</div>" +
-          "</div>";
-      }
-      html += "</div><button class='sg-btn sg-btn-small' style='margin-top:.5rem' id='sgDeckClose'>关闭</button></div>";
-      overlay.innerHTML = html;
-      document.body.appendChild(overlay);
-      document.getElementById("sgDeckClose").addEventListener("click", function(){ document.body.removeChild(overlay); });
-      overlay.addEventListener("click", function(e){ if(e.target===overlay) document.body.removeChild(overlay); });
+    function showDmgFloat(x, y, val){
+      var el = document.createElement('div');
+      el.className = 'sg-dmg-float';
+      el.textContent = val;
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      document.body.appendChild(el);
+      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 800);
     }
 
-    /* ══════ 进入游戏时自动初始化 ══════ */
-    var gameView = document.getElementById("viewShiciGame");
-    var gameObs = new MutationObserver(function(){
-      if(gameView.classList.contains("active")){
-        if(!G) showScreen("title");
-      }
-    });
-    if(gameView) gameObs.observe(gameView, {attributes:true,attributeFilter:["class"]});
+    function showEffectFloat(x, y, text){
+      var el = document.createElement('div');
+      el.className = 'sg-poison-float';
+      el.textContent = text;
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      document.body.appendChild(el);
+      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1000);
+    }
 
-  })();
+    function showHitFlash(el){
+      if(!el) return;
+      var orig = el.style.opacity;
+      el.style.opacity = '0.3';
+      el.style.transition = 'opacity 0.1s';
+      setTimeout(function(){ el.style.opacity = orig || '1'; }, 100);
+    }
+
+    function shakeScreen(){
+      var el = document.getElementById('sgBattle');
+      if(!el) return;
+      el.style.animation = 'none';
+      el.offsetHeight;
+      el.style.animation = 'sg-shake 0.3s';
+    }
+
+    function showTurnAnnounce(text){
+      var el = document.createElement('div');
+      el.className = 'sg-turn-announce';
+      el.textContent = text;
+      document.getElementById('sgBattle').appendChild(el);
+      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1200);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 卡组查看 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function showDeckPopup(){
+      var popup = document.getElementById('sgDeckPopup');
+      if(!popup) return;
+      if(popup.style.display !== 'none' && popup.style.display !== ''){
+        popup.style.display = 'none';
+        return;
+      }
+      popup.style.display = '';
+      popup.className = 'sg-deck-overlay';
+      var html = '<div class="sg-deck-panel" onclick="event.stopPropagation();">';
+      html += '<h3>📜 卡组 (' + G.deck.length + '张) <span style="float:right;cursor:pointer;font-size:1rem;" onclick="document.getElementById(\'sgDeckPopup\').style.display=\'none\';">✕</span></h3>';
+      html += '<div class="sg-deck-grid">';
+      var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+      var raritySort = {basic:0, common:1, uncommon:2, rare:3};
+      var sorted = G.deck.slice().sort(function(a,b){
+        var ra = raritySort[a.rarity]||0;
+        var rb = raritySort[b.rarity]||0;
+        return ra - rb;
+      });
+      for(var di=0;di<sorted.length;di++){
+        var cd = sorted[di];
+        html += '<div class="sg-card" style="border-color:'+(rarityColors3[cd.rarity]||'#a8a8a8')+';cursor:default;">' +
+          '<div class="sg-card-cost">'+(cd.cost||0)+'</div>' +
+          '<div class="sg-card-name">'+cd.name+'</div>' +
+          '<div class="sg-card-desc">'+(cd.desc||'')+'</div>' +
+          '<div class="sg-card-type">'+cd.type+'</div>' +
+          '</div>';
+      }
+      html += '</div></div>';
+      popup.innerHTML = html;
+      // Click overlay to close
+      popup.onclick = function(){ popup.style.display = 'none'; };
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ UI 事件绑定 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    function bindUI(){
+      // Start button -> show character select
+      var startBtn = document.getElementById('sgStartBtn');
+      if(startBtn){
+        startBtn.addEventListener('click', function(){
+          hideAllScreens();
+          showScreen('sgCharSelect');
+          var container = document.getElementById('sgCharCards');
+          if(container){
+            var html2 = '';
+            for(var ci=0;ci<CHARACTERS.length;ci++){
+              var ch = CHARACTERS[ci];
+              html2 += '<div class="sg-cs-card" data-char="'+ch.id+'">' +
+                '<div class="sg-cs-char-name">'+ch.name+'</div>' +
+                '<div class="sg-cs-title">「'+ch.title+'」</div>' +
+                '<div class="sg-cs-hp">❤️'+ch.maxHp+'</div>' +
+                '<div class="sg-cs-desc">'+ch.desc+'</div>' +
+                '<div class="sg-cs-ability">'+ch.ability+'</div>' +
+                '</div>';
+            }
+            container.innerHTML = html2;
+
+            var charCards = container.querySelectorAll('.sg-cs-card');
+            for(var ci2=0;ci2<charCards.length;ci2++){
+              (function(el2){
+                el2.addEventListener('click', function(){
+                  var cid = el2.getAttribute('data-char');
+                  initGame(cid);
+                });
+              })(charCards[ci2]);
+            }
+          }
+        });
+      }
+
+      // Map button
+      var mapBtn = document.getElementById('sgMapBack');
+      if(mapBtn){
+        mapBtn.addEventListener('click', function(){
+          hideAllScreens();
+          showScreen('sgMap');
+          renderMap();
+        });
+      }
+
+      // End turn button
+      var endTurnBtn = document.getElementById('sgEndTurnBtn');
+      if(endTurnBtn){
+        endTurnBtn.addEventListener('click', function(){
+          if(gIsBattling && gBattle && gBattle.hp > 0){
+            endTurn();
+          }
+        });
+      }
+
+      // Deck popup button
+      var deckBtn = document.getElementById('sgDeckCount');
+      if(deckBtn){
+        deckBtn.addEventListener('click', showDeckPopup);
+      }
+
+      // Shop leave
+      var shopLeave = document.getElementById('sgShopLeave');
+      if(shopLeave){
+        shopLeave.addEventListener('click', completeNode);
+      }
+
+      // Rest continue
+      var restBtn = document.getElementById('sgRestSkipBtn');
+      if(restBtn){
+        restBtn.addEventListener('click', completeNode);
+      }
+
+      // Treasure continue
+      var treasureBtn = document.getElementById('sgTreasureTake');
+      if(treasureBtn){
+        treasureBtn.addEventListener('click', completeNode);
+      }
+
+      // Act transition continue
+      var actBtn = document.getElementById('sgActContinueBtn');
+      if(actBtn){
+        actBtn.addEventListener('click', function(){
+          hideAllScreens();
+          showScreen('sgMap');
+          renderMap();
+        });
+      }
+
+      // Result restart
+      var restartBtn = document.getElementById('sgRestartBtn');
+      if(restartBtn){
+        restartBtn.addEventListener('click', function(){
+          G = null;
+          gBattle = null;
+          gIsBattling = false;
+          gMapData = [];
+          hideAllScreens();
+          showScreen('sgTitle');
+        });
+      }
+
+      // Reward skip (continue after card selection)
+      var rewardContinue = document.getElementById('sgRewardSkip');
+      if(rewardContinue){
+        rewardContinue.addEventListener('click', function(){
+          // If no card selected, just continue
+          completeNode();
+        });
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+    /* ══════ 初始化 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    // Bind UI on load
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', bindUI);
+    } else {
+      bindUI();
+    }
+
+    // Also try to bind after a short delay for dynamic loading
+    setTimeout(function(){
+      bindUI();
+      // Show title screen
+      hideAllScreens();
+      showScreen('sgTitle');
+    }, 500);
+
+  })(); /* end of game IIFE */
+
   	    /* ── 音乐演奏（V3：十二音律 + 八度扩展 + 下降可视化 + 更多乐曲）── */
   (function(){
     var currentInst = 'gangqin';
