@@ -560,6 +560,35 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 }
 .oct-btn:hover{border-color:var(--gold);color:var(--gold);}
 .oct-btn.active{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
+
+/* ── 自动演奏 ── */
+.music-auto{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;justify-content:center;margin:.5rem 0 .3rem;}
+.music-song-select{
+  flex:1;min-width:140px;padding:.4rem .5rem;border:1px solid var(--border);border-radius:8px;
+  background:var(--bg-card);color:var(--text);font-size:.78rem;font-family:inherit;
+  cursor:pointer;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0,0l5,6l5-6' fill='%239a8476'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .5rem center;padding-right:1.5rem;
+}
+.music-song-select:focus{outline:none;border-color:var(--gold);}
+.music-auto-btns{display:flex;gap:.3rem;flex-shrink:0;}
+.music-play-btn{
+  padding:.4rem .8rem;border-radius:8px;border:1px solid var(--border);
+  background:var(--gold);color:#fff;cursor:pointer;font-size:.78rem;
+  font-family:inherit;font-weight:700;transition:all .2s;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.music-play-btn:hover{opacity:.85;}
+.music-play-btn.stop{background:var(--red-seal);border-color:var(--red-seal);}
+.music-play-btn.stop:hover{opacity:.85;}
+
+/* ── 音阶可视化 ── */
+.music-viz{
+  width:100%;height:130px;border-radius:8px;overflow:hidden;
+  background:var(--bg-card-alt);border:1px solid var(--border);margin:.3rem 0;
+  position:relative;
+}
+.music-viz canvas{width:100%;height:100%;display:block;}
 .music-keys{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:.5rem 0;}
 .music-key{
   padding:.6rem .1rem;border-radius:10px;border:1px solid var(--border);
@@ -607,6 +636,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .music-keys{gap:4px;}
   .oct-btn{font-size:.65rem;padding:.2rem .6rem;}
   .music-hint{font-size:.6rem;}
+  .music-song-select{font-size:.7rem;min-width:100px;padding:.35rem .4rem;}
+  .music-play-btn{font-size:.7rem;padding:.35rem .6rem;}
+  .music-auto{gap:.3rem;}
+  .music-viz{height:100px;}
 }
 @media(max-width:480px){
   .game-board{height:240px;}
@@ -620,6 +653,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .music-key{font-size:.7rem;min-height:44px;}
   .music-key .note-letter{font-size:.45rem;}
   .music-inst{font-size:.6rem;padding:.2rem .45rem;}
+  .music-viz{height:80px;}
+  .music-song-select{font-size:.65rem;min-width:80px;}
+  .music-play-btn{font-size:.65rem;padding:.3rem .5rem;}
 }
 @media(min-width:601px) and (max-width:900px){
   .mp-home{padding:1.2rem;gap:.8rem;}
@@ -1082,13 +1118,36 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         <span class="music-inst-name" id="musicInstName">古琴</span>
         <span class="music-inst-desc" id="musicInstDesc">太古遗音 · 沉静悠远</span>
       </div>
+
+      <!-- 自动演奏区 -->
+      <div class="music-auto">
+        <select class="music-song-select" id="musicSong">
+          <option value="">— 选择乐曲自动演奏 —</option>
+          <option value="xiaoxingxing">🌟 小星星</option>
+          <option value="liangzhilaohu">🐯 两只老虎</option>
+          <option value="canghai">🎬 沧海一声笑</option>
+          <option value="molihua">🌸 茉莉花</option>
+          <option value="songbie">🍂 送别</option>
+          <option value="kangding">🏔️ 康定情歌</option>
+        </select>
+        <div class="music-auto-btns">
+          <button class="music-play-btn" id="musicPlayBtn">▶ 演奏</button>
+          <button class="music-play-btn stop" id="musicStopBtn" style="display:none;">⏹ 停止</button>
+        </div>
+      </div>
+
+      <!-- 音阶可视化 -->
+      <div class="music-viz" id="musicViz">
+        <canvas id="musicCanvas"></canvas>
+      </div>
+
       <div class="music-ctrl">
         <button class="oct-btn active" data-octave="1">中音</button>
         <button class="oct-btn" data-octave="2">高音</button>
         <button class="oct-btn" data-octave="0">低音</button>
       </div>
       <div class="music-keys" id="musicKeys"></div>
-      <div class="music-hint">点击琴弦或按键盘 D F G H J K L 演奏 · 十种乐器可选</div>
+      <div class="music-hint">点击琴弦 · 键盘 D F G H J K L · 选曲自动演奏 · 可视化显示音长</div>
     </div>
   </div>
 </div>
@@ -1612,17 +1671,22 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     });
   })();
 
-  /* ── 音乐演奏 ── */
+  /* ── 音乐演奏（增强版：自动演奏 + 可视化）── */
   (function(){
     var currentInst = 'guqin';
     var currentOctave = 1;
     var audioCtx = null;
+    var autoTimer = null;
+    var autoIdx = 0;
+    var autoPlaying = false;
+    var currentTempo = 100;
 
     var noteNames = ['宫','商','角','变徵','徵','羽','变宫'];
     var noteFreqs = [261.63, 293.66, 329.63, 369.99, 392.00, 440.00, 493.88];
     var noteLetters = ['C','D','E','F♯','G','A','B'];
     var octMul = [0.5, 1, 2];
     var keyMap = {68:0,70:1,71:2,72:3,74:4,75:5,76:6};
+    var noteColors = ['#3b82f6','#22c55e','#eab308','#a855f7','#ef4444','#ec4899','#06b6d4'];
 
     var insts = {
       guqin:{n:'古琴',t:'triangle',a:0.08,r:0.8,g:0.30,d:'太古遗音 · 沉静悠远'},
@@ -1637,6 +1701,73 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       se:{n:'瑟',t:'triangle',a:0.03,r:0.6,g:0.20,d:'弦歌雅意 · 古韵绵长'}
     };
 
+    /* ═══════════ 歌曲数据 ═══════════ */
+    var songs = {
+      xiaoxingxing:{
+        title:'小星星',src:'法国童谣',bpm:100,
+        notes:[
+          [0,1],[0,1],[4,1],[4,1],[5,1],[5,1],[4,2],
+          [1,1],[1,1],[2,1],[2,1],[4,1],[4,1],[5,2],
+          [5,1],[5,1],[4,1],[4,1],[2,1],[2,1],[1,2],
+          [4,1],[4,1],[5,1],[5,1],[4,1],[2,1],[1,2],
+          [0,1],[0,1],[4,1],[4,1],[5,1],[5,1],[4,2],
+          [1,1],[1,1],[2,1],[2,1],[4,1],[4,1],[5,2],
+          [5,1],[5,1],[4,1],[4,1],[2,1],[2,1],[1,2],
+          [4,1],[4,1],[5,1],[5,1],[4,1],[2,1],[1,1],[0,1]
+        ]},
+      liangzhilaohu:{
+        title:'两只老虎',src:'法国童谣',bpm:120,
+        notes:[
+          [0,1],[1,1],[2,1],[0,1],[0,1],[1,1],[2,1],[0,1],
+          [2,1],[3,1],[4,2],[2,1],[3,1],[4,2],
+          [4,1],[5,1],[4,1],[3,1],[2,1],[0,1],
+          [4,1],[5,1],[4,1],[3,1],[2,1],[0,1],
+          [0,1],[4,1],[0,2],[0,1],[4,1],[0,1],[0,1]
+        ]},
+      canghai:{
+        title:'沧海一声笑',src:'黄霑 · 笑傲江湖',bpm:85,
+        notes:[
+          [4,1],[4,1.5],[5,0.5],[4,1],[2,2],
+          [1,1],[2,1],[4,1],[5,2],
+          [4,1],[4,1.5],[5,0.5],[4,1],[2,2],
+          [1,1],[2,1],[4,2],
+          [2,1],[2,1.5],[4,0.5],[2,1],[1,2],
+          [0,1],[1,1],[2,1],[5,2],
+          [2,1],[2,1.5],[4,0.5],[2,1],[1,2],
+          [0,1],[1,1],[2,1],[0,2]
+        ]},
+      molihua:{
+        title:'茉莉花',src:'江苏民歌',bpm:75,
+        notes:[
+          [0,1],[2,1],[4,1],[2,1],[1,1],[0,2],
+          [0,1],[2,1],[4,1],[2,1],[1,1],[0,2],
+          [0,1],[2,1],[4,1],[0,1],[2,1],[4,1],
+          [2,1.5],[1,0.5],[0,1],[2,1],[0,2],
+          [0,0.5],[2,0.5],[4,1],[5,1],[4,1],[2,1],[1,1],[0,2]
+        ]},
+      songbie:{
+        title:'送别',src:'李叔同 · 奥德威曲',bpm:80,
+        notes:[
+          [2,1.5],[4,0.5],[5,1],[4,1],[2,1],[1,1.5],[0,0.5],
+          [0,1],[2,1],[4,1],[2,2],
+          [2,1.5],[4,0.5],[5,1],[4,1],[2,1],[1,1.5],[0,0.5],
+          [4,1],[5,1],[5,1],[4,1],[2,2],
+          [4,0.5],[5,0.5],[4,1],[2,1],[4,1],[2,1],[1,1],[2,2],
+          [2,1.5],[4,0.5],[5,1],[4,1],[2,1],[1,1.5],[0,0.5],
+          [4,1],[5,1],[5,1],[4,1],[2,2],
+          [4,0.5],[5,0.5],[4,1],[2,1],[4,1],[2,1],[1,1],[0,2]
+        ]},
+      kangding:{
+        title:'康定情歌',src:'四川民歌',bpm:85,
+        notes:[
+          [2,1],[4,1],[5,2],[2,1],[4,1],[5,2],
+          [2,1],[4,1],[5,2],[2,1],[4,1],[5,2],
+          [5,1],[4,1],[2,1],[4,1],[5,1],[2,1],[4,1],[2,1.5],[0,0.5],
+          [2,1],[4,1],[5,2],[2,1],[4,1],[5,2]
+        ]}
+    };
+
+    /* ═══════════ 音频引擎 ═══════════ */
     function initAudio(){
       if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -1655,7 +1786,6 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       gain.gain.setValueAtTime(0.001, now);
       gain.gain.linearRampToValueAtTime(inst.g, now + inst.a);
       gain.gain.exponentialRampToValueAtTime(0.001, now + inst.a + inst.r);
-      // Erhu vibrato
       if(inst.t === 'sawtooth'){
         var vib = audioCtx.createOscillator();
         var vg = audioCtx.createGain();
@@ -1663,7 +1793,6 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         vib.frequency.value = 5; vg.gain.value = 3;
         vib.start(now); vib.stop(now + inst.r);
       }
-      // Dizi shimmer
       if(inst.t === 'sine' && inst.a < 0.1){
         osc.detune.setValueAtTime(5, now);
         osc.detune.linearRampToValueAtTime(0, now + 0.2);
@@ -1671,6 +1800,164 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       osc.start(now); osc.stop(now + inst.a + inst.r + 0.05);
     }
 
+    /* ═══════════ 可视化引擎 ═══════════ */
+    var vizNotes = [];
+    var vizAnimId = null;
+    var vizCtx = null;
+
+    function initViz(){
+      var canvas = document.getElementById('musicCanvas');
+      var container = document.getElementById('musicViz');
+      if(!canvas || !container) return;
+      canvas.width = container.offsetWidth;
+      canvas.height = container.offsetHeight;
+      vizCtx = canvas.getContext('2d');
+      if(vizAnimId) cancelAnimationFrame(vizAnimId);
+      drawViz();
+    }
+
+    function addVizNote(idx, beats){
+      var dur = beats * (60000 / Math.max(currentTempo, 60));
+      vizNotes.push({noteIdx:idx, startTime:performance.now(), duration:Math.max(dur,80)});
+      if(vizNotes.length > 60) vizNotes.shift();
+    }
+
+    function drawViz(){
+      if(!vizCtx) return;
+      var canvas = vizCtx.canvas;
+      var ctx = vizCtx;
+      var w = canvas.width, h = canvas.height;
+      var laneH = h / 7;
+      var now = performance.now();
+      var scrollMs = 2200;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw lane backgrounds
+      for(var i=0;i<7;i++){
+        ctx.fillStyle = (i%2===0) ? 'rgba(128,128,128,0.04)' : 'rgba(128,128,128,0.08)';
+        ctx.fillRect(0, i*laneH, w, laneH);
+        ctx.fillStyle = noteColors[i];
+        ctx.globalAlpha = 0.6;
+        ctx.font = Math.max(9, Math.round(laneH*0.45)) + 'px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(noteNames[i], 4, i*laneH + laneH/2);
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = 'rgba(128,128,128,0.1)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, (i+1)*laneH);
+        ctx.lineTo(w, (i+1)*laneH);
+        ctx.stroke();
+      }
+
+      // Draw note bars
+      var labelW = 28;
+      for(var ni=0;ni<vizNotes.length;ni++){
+        var n = vizNotes[ni];
+        var elapsed = now - n.startTime;
+        if(elapsed > scrollMs) continue;
+        var progress = elapsed / scrollMs;
+        var barW = Math.max(3, Math.min((n.duration/scrollMs)*w*0.5, w*0.5));
+        var x = w - labelW - (w - labelW) * progress;
+        var y = n.noteIdx * laneH + 1;
+        var barH = laneH - 2;
+        var alpha = Math.max(0.15, 1 - progress * 0.6);
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = noteColors[n.noteIdx];
+        var r = Math.min(3, barH * 0.3);
+        ctx.beginPath();
+        ctx.moveTo(x+r, y); ctx.lineTo(x+barW-r, y);
+        ctx.quadraticCurveTo(x+barW, y, x+barW, y+r);
+        ctx.lineTo(x+barW, y+barH-r);
+        ctx.quadraticCurveTo(x+barW, y+barH, x+barW-r, y+barH);
+        ctx.lineTo(x+r, y+barH);
+        ctx.quadraticCurveTo(x, y+barH, x, y+barH-r);
+        ctx.lineTo(x, y+r);
+        ctx.quadraticCurveTo(x, y, x+r, y);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // Beat pulse line
+      ctx.fillStyle = 'rgba(201,168,76,0.15)';
+      ctx.fillRect(w - labelW - 2, 0, 2, h);
+
+      vizAnimId = requestAnimationFrame(drawViz);
+    }
+
+    /* ═══════════ 触发音符（含可视化联动） ═══════════ */
+    function triggerNote(idx, beats){
+      playNote(idx);
+      addVizNote(idx, beats || 0.5);
+      // Highlight key button
+      var ks = document.getElementById('musicKeys').children;
+      if(ks[idx]){ ks[idx].classList.add('pressed');
+        setTimeout(function(){ ks[idx].classList.remove('pressed'); }, 150); }
+    }
+
+    /* ═══════════ 自动演奏引擎 ═══════════ */
+    function stopAuto(){
+      autoPlaying = false;
+      if(autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+      autoIdx = 0;
+      document.getElementById('musicPlayBtn').style.display = '';
+      document.getElementById('musicStopBtn').style.display = 'none';
+      document.getElementById('musicSong').disabled = false;
+    }
+
+    function playSongStep(){
+      if(!autoPlaying) return;
+      var sel = document.getElementById('musicSong');
+      var songKey = sel.value;
+      var song = songs[songKey];
+      if(!song || autoIdx >= song.notes.length){
+        stopAuto();
+        return;
+      }
+      var noteData = song.notes[autoIdx];
+      var noteIdx = noteData[0];
+      var beats = noteData[1];
+      var msPerBeat = 60000 / song.bpm;
+
+      // Update status
+      var progress = document.getElementById('musicSong');
+      var pct = Math.round(autoIdx / song.notes.length * 100);
+      progress.title = song.title + ' ' + pct + '% (' + (autoIdx+1) + '/' + song.notes.length + ')';
+
+      triggerNote(noteIdx, beats);
+      autoIdx++;
+      autoTimer = setTimeout(playSongStep, beats * msPerBeat);
+    }
+
+    function startAuto(){
+      var sel = document.getElementById('musicSong');
+      var songKey = sel.value;
+      if(!songKey || !songs[songKey]){ return; }
+      var song = songs[songKey];
+      currentTempo = song.bpm;
+
+      // Reset octave to middle for auto-play
+      currentOctave = 1;
+      var obs = document.querySelectorAll('.oct-btn');
+      for(var oi=0;oi<obs.length;oi++) obs[oi].classList.remove('active');
+      obs[1].classList.add('active');
+      renderKeys();
+
+      autoPlaying = true;
+      autoIdx = 0;
+      sel.disabled = true;
+      document.getElementById('musicPlayBtn').style.display = 'none';
+      document.getElementById('musicStopBtn').style.display = '';
+
+      initAudio();
+      // Short delay before starting
+      setTimeout(function(){ if(autoPlaying) playSongStep(); }, 300);
+    }
+
+    /* ═══════════ 界面构建 ═══════════ */
     function renderKeys(){
       var c = document.getElementById('musicKeys');
       c.innerHTML = '';
@@ -1679,25 +1966,18 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         key.className = 'music-key' + (ni===3||ni===6?' bianyin':'');
         key.innerHTML = '<span>' + noteNames[ni] + '</span><span class="note-letter">' + noteLetters[ni] + ' ' + Math.round(noteFreqs[ni]*octMul[currentOctave]) + 'Hz</span>';
         (function(idx){
-          key.addEventListener('click', function(){
-            playNote(idx);
-            this.classList.add('pressed');
-            var s=this; setTimeout(function(){ s.classList.remove('pressed'); }, 150);
-          });
+          key.addEventListener('click', function(){ triggerNote(idx, 0.5); });
         })(ni);
         c.appendChild(key);
       }
     }
     renderKeys();
 
-    // Keyboard trigger
+    // Keyboard trigger with viz
     document.addEventListener('keydown', function(e){
       if(e.keyCode in keyMap){
         e.preventDefault();
-        var idx = keyMap[e.keyCode];
-        playNote(idx);
-        var ks = document.getElementById('musicKeys').children;
-        if(ks[idx]){ ks[idx].classList.add('pressed'); setTimeout(function(){ ks[idx].classList.remove('pressed'); }, 150); }
+        triggerNote(keyMap[e.keyCode], 0.5);
       }
     });
 
@@ -1726,6 +2006,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     for(var oi=0;oi<octBtns.length;oi++){
       (function(btn, idx){
         btn.addEventListener('click', function(){
+          if(autoPlaying) return; // Lock octave during auto-play
           var all = document.querySelectorAll('.oct-btn');
           for(var ai=0;ai<all.length;ai++) all[ai].classList.remove('active');
           btn.classList.add('active');
@@ -1735,12 +2016,30 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       })(octBtns[oi], oi);
     }
 
+    // Auto-play controls
+    document.getElementById('musicPlayBtn').addEventListener('click', startAuto);
+    document.getElementById('musicStopBtn').addEventListener('click', stopAuto);
+
     // Suspend audio when view closes
     var musicView = document.getElementById('viewMusic');
     var obs = new MutationObserver(function(){
-      if(!musicView.classList.contains('active') && audioCtx) audioCtx.suspend();
+      if(!musicView.classList.contains('active')){
+        if(audioCtx) audioCtx.suspend();
+        if(autoPlaying) stopAuto();
+      } else {
+        // View opened - init visualization
+        setTimeout(initViz, 50);
+      }
     });
     obs.observe(musicView, {attributes:true,attributeFilter:['class']});
+
+    // Init viz on first render
+    setTimeout(initViz, 100);
+
+    // Handle resize
+    window.addEventListener('resize', function(){
+      if(musicView.classList.contains('active')) initViz();
+    });
   })();
 })();
 </script>
