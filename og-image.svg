@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1410"/>
+      <stop offset="50%" style="stop-color:#2f2520"/>
+      <stop offset="100%" style="stop-color:#1a1410"/>
+    </linearGradient>
+    <linearGradient id="mountain" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#3d3028;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#1a1410;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="moonGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" style="stop-color:#e8d48b;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#e8d48b;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle mountain silhouettes -->
+  <path d="M0,630 L0,420 Q100,380 200,400 Q280,350 350,370 Q420,320 500,350 Q560,300 620,330 Q700,280 780,320 Q860,290 920,310 Q1000,330 1080,360 Q1140,380 1200,400 L1200,630Z" fill="url(#mountain)" opacity="0.5"/>
+
+  <path d="M0,630 L0,480 Q150,440 250,460 Q350,420 450,440 Q520,400 600,430 Q680,390 750,420 Q830,400 900,410 Q980,430 1100,460 Q1150,470 1200,480 L1200,630Z" fill="url(#mountain)" opacity="0.3"/>
+
+  <!-- Moon circle -->
+  <circle cx="900" cy="150" r="100" fill="url(#moonGlow)"/>
+  <circle cx="900" cy="150" r="40" fill="#e8d48b" opacity="0.3"/>
+  <circle cx="900" cy="150" r="25" fill="#e8d48b" opacity="0.5"/>
+
+  <!-- Scattered stars -->
+  <circle cx="200" cy="100" r="1.5" fill="#e8d48b" opacity="0.6"/>
+  <circle cx="350" cy="80" r="1" fill="#e8d48b" opacity="0.4"/>
+  <circle cx="500" cy="120" r="1.5" fill="#e8d48b" opacity="0.5"/>
+  <circle cx="650" cy="70" r="1" fill="#e8d48b" opacity="0.3"/>
+  <circle cx="780" cy="100" r="1.5" fill="#e8d48b" opacity="0.5"/>
+  <circle cx="150" cy="170" r="1" fill="#e8d48b" opacity="0.4"/>
+  <circle cx="1100" cy="90" r="1" fill="#e8d48b" opacity="0.3"/>
+  <circle cx="1050" cy="200" r="1.5" fill="#e8d48b" opacity="0.4"/>
+  <circle cx="300" cy="200" r="1" fill="#e8d48b" opacity="0.3"/>
+  <circle cx="450" cy="170" r="1" fill="#e8d48b" opacity="0.5"/>
+
+  <!-- Decorative line -->
+  <line x1="80" y1="260" x2="280" y2="260" stroke="#c9a84c" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="300" cy="260" r="3" fill="#c9a84c" opacity="0.6"/>
+
+  <!-- Title -->
+  <text x="80" y="320" font-family="'SimSun','STSong','Noto Serif SC','Songti SC',serif" font-size="52" font-weight="700" fill="#e8d48b" letter-spacing="16">忆江南 · 清秋晚</text>
+
+  <!-- Poem lines -->
+  <text x="80" y="385" font-family="'SimSun','STSong','Noto Serif SC','Songti SC',serif" font-size="28" fill="#b8a89a" letter-spacing="8" opacity="0.8">清秋晚，霜叶坠寒流。</text>
+
+  <text x="80" y="435" font-family="'SimSun','STSong','Noto Serif SC','Songti SC',serif" font-size="24" fill="#9a8476" letter-spacing="6" opacity="0.6">赏词 · 填词 · 校验平仄 · 古风奏乐</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="500" font-family="'SimSun','STSong','Noto Serif SC','Songti SC',serif" font-size="16" fill="#5c4a3e" letter-spacing="12">宋 词 交 互 实 验 室</text>
+
+  <!-- Website URL -->
+  <text x="80" y="570" font-family="sans-serif" font-size="13" fill="#5c4a3e" letter-spacing="2">nqd963.github.io/yijiangnan</text>
+
+  <!-- Gold seal decoration -->
+  <rect x="1060" y="460" width="80" height="80" rx="40" fill="none" stroke="#c9a84c" stroke-width="1.5" opacity="0.3"/>
+  <text x="1100" y="508" font-family="serif" font-size="22" fill="#c9a84c" text-anchor="middle" opacity="0.4">词</text>
+</svg>
