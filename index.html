@@ -1722,7 +1722,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
             <div class="sg-status-item">🛡️ <span id="sgPlayerBlock">0</span></div>
             <div class="sg-status-item">💪 <span id="sgPlayerStrength">0</span></div>
             <div class="sg-status-item">☠️ <span id="sgPlayerPoison">0</span></div>
-            <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span> 🃏<span id="sgDrawPile">0</span> 📄<span id="sgDiscardPile">0</span></div>
+            <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span> 🃏<span id="sgDrawPile">0</span> ✋<span id="sgHandCount">0</span> 📄<span id="sgDiscardPile">0</span></div>
             <div class="sg-status-item">🔄 <span id="sgTurnNum">0</span></div>
           </div>
           <div id="sgPillsArea" style="text-align:center;padding:0.2rem 0;min-height:1.8rem;"></div>
@@ -3170,6 +3170,21 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         canSummon: true
       };
 
+      // Safety: rebuild deck if empty
+      if(!G.deck || G.deck.length === 0){
+        console.warn('[诗境问道] 卡组为空！尝试重新初始化...', G.charId);
+        G.deck = [];
+        for(var ci=0;ci<CHARACTERS.length;ci++){
+          if(CHARACTERS[ci].id===G.charId){
+            for(var di2=0;di2<CHARACTERS[ci].deck.length;di2++){
+              var cid2=CHARACTERS[ci].deck[di2];
+              if(CARDS[cid2]) G.deck.push({id:cid2, ...CARDS[cid2]});
+            }
+            break;
+          }
+        }
+      }
+
       // Initialize draw pile
       gBattle.drawPile = [];
       for(var di=0;di<G.deck.length;di++){
@@ -3231,6 +3246,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         else if(gBattle.isElite) bgClass += ' sg-bg-elite';
         bgEl.className = bgEl.className.replace(/sg-bg-\S+/g,'').trim() + ' ' + bgClass;
       }
+      console.log('[诗境问道] 战斗开始:', {deckSize:G.deck.length, drawPile:gBattle.drawPile.length, handSize:gBattle.hand.length, charId:G.charId});
+
       gIsBattling = true;
       renderBattle();
       } catch(e){
@@ -4017,12 +4034,17 @@ applyPoison();
 
       // Draw pile
       document.getElementById('sgDrawPile').textContent = gBattle.drawPile.length;
+      document.getElementById('sgHandCount').textContent = gBattle.hand.length;
       document.getElementById('sgDiscardPile').textContent = gBattle.discardPile.length;
 
       document.getElementById('sgDeckCountNum').textContent = G.deck.length;
       // Hand cards
       var handEl = document.getElementById('sgHand');
       handEl.innerHTML = '';
+      // Fallback: show diagnostic when hand is empty
+      if(gBattle.hand.length === 0){
+        handEl.innerHTML = '<div style="color:#ff6644;font-size:0.7rem;padding:0.5rem;">⚠️ 手牌为空<br><small>卡组: '+G.deck.length+'张 牌堆: '+gBattle.drawPile.length+'</small></div>';
+      }
       for(var hi=0;hi<gBattle.hand.length;hi++){
         var deckIdx = gBattle.hand[hi];
         var card = G.deck[deckIdx];
@@ -4623,7 +4645,9 @@ applyPoison();
     function initAudio(){
       if(gBgmCtx) return;
       try {
-        gBgmCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var ctx = new (window.AudioContext || window.webkitAudioContext)();
+        gBgmCtx = ctx;
+        audioCtx = ctx;   // 同时设置 audioCtx，兼容钢琴小游戏
         gBgmGain = gBgmCtx.createGain();
         gBgmGain.gain.value = 0.08;
         gBgmGain.connect(gBgmCtx.destination);
@@ -5124,13 +5148,13 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
     };
 
     /* 音频引擎 */
-    function initAudio(){
+    function pianoInitAudio(){
       if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if(audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    function playNote(idx, oct, vel){
-      initAudio();
+    function pianoPlayNote(idx, oct, vel){
+      pianoInitAudio();
       if(typeof vel !== 'number') vel = 0.85;
       vel = Math.max(0.3, Math.min(1, vel));
       var inst = insts[currentInst];
@@ -5283,7 +5307,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
     }
 
     function triggerNote(idx, beats, oct, vel){
-      playNote(idx, oct, vel);
+      pianoPlayNote(idx, oct, vel);
       addVizNote(idx, beats || 0.5);
       var ks = document.getElementById('musicKeys').children;
       if(ks[idx]){ ks[idx].classList.add('pressed');
@@ -5295,7 +5319,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
 
     function startNote(idx, oct){
       if(activeNotes[idx]) releaseNote(idx);
-      initAudio();
+      pianoInitAudio();
       var inst = insts[currentInst];
       var octVal = typeof oct === 'number' ? oct : currentOctave;
       if(octVal<0) octVal=0; if(octVal>4) octVal=4;
@@ -5486,7 +5510,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
       document.getElementById('musicStopBtn').style.display = '';
       var pw = document.getElementById('musicProgressWrap');
       if(pw) pw.style.display = 'block';
-      initAudio();
+      pianoInitAudio();
       humanizeSong();
       setTimeout(function(){ if(autoPlaying) playSongStep(); }, 300);
     }
