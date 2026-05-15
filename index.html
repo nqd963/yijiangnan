@@ -995,33 +995,81 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   min-height:110px;padding:.4rem 0;overflow-y:auto;
 }
 .sg-card{
-  width:115px;padding:.5rem .4rem .4rem;border-radius:8px;
-  background:var(--bg-card);border:1px solid var(--border);cursor:pointer;
+  width:115px;padding:0;border-radius:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,color-mix(in srgb,var(--bg-card),var(--text) 6%) 100%);
+  border:2px solid var(--border);cursor:pointer;
   text-align:center;transition:all .15s;
-  display:flex;flex-direction:column;gap:2px;
+  display:flex;flex-direction:column;
   -webkit-tap-highlight-color:transparent;user-select:none;
-  position:relative;
+  position:relative;overflow:hidden;
+  box-shadow:0 2px 6px var(--shadow),inset 0 1px 0 rgba(255,255,255,.08);
 }
-.sg-card:hover{transform:translateY(-8px) scale(1.04);border-color:var(--gold);box-shadow:0 8px 24px var(--shadow);z-index:2;transition:transform 0.12s,box-shadow 0.12s;}
-.sg-card.disabled{opacity:.4;cursor:not-allowed;transform:none!important;}
-.sg-card.disabled:hover{transform:none!important;border-color:var(--border);box-shadow:none;}
+/* 卡面顶部光泽 */
+.sg-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:44%;
+  background:linear-gradient(180deg,rgba(255,255,255,.07) 0%,transparent 100%);
+  pointer-events:none;border-radius:8px 8px 0 0;z-index:0;
+}
+.dark .sg-card::before{background:linear-gradient(180deg,rgba(255,255,255,.04) 0%,transparent 100%);}
+/* 卡牌悬浮立体抬起 */
+.sg-card:hover{
+  transform:translateY(-10px) scale(1.05);
+  border-color:var(--gold);
+  box-shadow:0 12px 32px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.12);
+  z-index:4;transition:transform .1s,box-shadow .1s;
+}
+.sg-card.disabled{opacity:.45;cursor:not-allowed;transform:none!important;}
+.sg-card.disabled:hover{transform:none!important;border-color:var(--border);box-shadow:0 2px 6px var(--shadow);}
+/* 费用宝石 */
 .sg-card .sg-card-cost{
-  position:absolute;top:-6px;left:-6px;width:22px;height:22px;border-radius:50%;
-  background:var(--gold);color:#fff;font-size:.65rem;font-weight:700;
+  position:absolute;top:-8px;left:-8px;width:26px;height:26px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#f5e6a0,var(--gold) 55%,#8a6a20);
+  color:#fff;font-size:.7rem;font-weight:800;line-height:26px;
   display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 4px rgba(0,0,0,.35),inset 0 1px 2px rgba(255,255,255,.45);
+  z-index:3;border:1px solid rgba(255,255,255,.25);
+  text-shadow:0 1px 2px rgba(0,0,0,.3);
 }
-.sg-card .sg-card-name{font-size:.65rem;font-weight:700;color:var(--text);letter-spacing:.03em;}
-.sg-card .sg-card-desc{font-size:.5rem;color:var(--text-faint);line-height:1.3;}
+/* 卡牌名称 — 类型色带 */
+.sg-card .sg-card-name{
+  padding:7px 8px 5px;margin:0;font-size:.65rem;font-weight:700;
+  color:var(--text);letter-spacing:.03em;
+  border-bottom:1px solid rgba(0,0,0,.08);
+  position:relative;z-index:1;
+}
+.sg-card.attack .sg-card-name{
+  background:linear-gradient(180deg,rgba(194,58,43,.18),rgba(194,58,43,.04));
+  color:color-mix(in srgb,var(--text),#c23a2b 30%);
+  border-bottom-color:rgba(194,58,43,.2);
+}
+.sg-card.skill .sg-card-name{
+  background:linear-gradient(180deg,rgba(59,130,246,.14),rgba(59,130,246,.03));
+  color:color-mix(in srgb,var(--text),#3b82f6 25%);
+  border-bottom-color:rgba(59,130,246,.18);
+}
+.sg-card.power .sg-card-name{
+  background:linear-gradient(180deg,rgba(168,85,247,.14),rgba(168,85,247,.03));
+  color:color-mix(in srgb,var(--text),#a855f7 25%);
+  border-bottom-color:rgba(168,85,247,.18);
+}
+.sg-card .sg-card-desc{
+  padding:8px 8px 6px;font-size:.5rem;color:var(--text-faint);
+  line-height:1.35;flex:1;position:relative;z-index:1;
+}
 .sg-card.attack{border-color:var(--red-seal);}
-.sg-card.attack:hover{border-color:#ef4444;}
+.sg-card.attack:hover{border-color:#ef4444;box-shadow:0 12px 28px rgba(194,58,43,.18),inset 0 1px 0 rgba(255,255,255,.1);}
 .sg-card.skill{border-color:#3b82f6;}
-.sg-card.skill:hover{border-color:#60a5fa;}
+.sg-card.skill:hover{border-color:#60a5fa;box-shadow:0 12px 28px rgba(59,130,246,.16),inset 0 1px 0 rgba(255,255,255,.1);}
 .sg-card.power{border-color:#a855f7;}
-.sg-card.power:hover{border-color:#c084fc;}
-.sg-card .sg-card-type{font-size:.45rem;color:var(--text-faint);}
-.sg-card.playing{animation:sgCardPlay .25s ease forwards;}
+.sg-card.power:hover{border-color:#c084fc;box-shadow:0 12px 28px rgba(168,85,247,.16),inset 0 1px 0 rgba(255,255,255,.1);}
+.sg-card .sg-card-type{
+  padding:3px 8px 7px;font-size:.45rem;color:var(--text-faint);
+  border-top:1px solid rgba(0,0,0,.05);position:relative;z-index:1;
+}
+.sg-card.playing{animation:sgCardPlay .25s ease forwards;z-index:5;}
 @keyframes sgCardPlay{0%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}100%{transform:scale(.8);opacity:0}}
 .sg-card.primary{border-color:var(--gold);border-width:2px;}
+.sg-card.primary .sg-card-name{background:linear-gradient(180deg,rgba(201,168,76,.2),rgba(201,168,76,.05));}
 
 /* ── 回合控制 ── */
 .sg-turn-ctrl{text-align:center;padding:.3rem 0;}
@@ -1112,14 +1160,18 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-deck-panel h3{font-size:.9rem;color:var(--gold);margin-bottom:.5rem;}
 .sg-deck-grid{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
 .sg-deck-grid .sg-card{width:100px;cursor:default;}
-.sg-deck-grid .sg-card:hover{transform:none;}
+.sg-deck-grid .sg-card .sg-card-name{padding:5px 6px 4px;font-size:.6rem;}
+.sg-deck-grid .sg-card .sg-card-desc{padding:5px 6px 4px;font-size:.45rem;}
+.sg-deck-grid .sg-card .sg-card-type{padding:2px 6px 5px;font-size:.4rem;}
+.sg-deck-grid .sg-card:hover{transform:none;box-shadow:0 2px 6px var(--shadow);border-color:var(--border);}
 
 /* 响应式 */
 @media(min-width:1200px){
-  .sg-card{width:150px;padding:.7rem .5rem .5rem;font-size:1.1rem;}
-  .sg-card .sg-card-name{font-size:.85rem;}
-  .sg-card .sg-card-desc{font-size:.65rem;}
-  .sg-card-cost{width:26px;height:26px;font-size:.75rem;line-height:26px;}
+  .sg-card{width:150px;font-size:1.1rem;}
+  .sg-card .sg-card-name{padding:9px 10px 7px;font-size:.85rem;}
+  .sg-card .sg-card-desc{padding:10px 10px 8px;font-size:.65rem;}
+  .sg-card .sg-card-cost{width:30px;height:30px;font-size:.8rem;line-height:30px;top:-9px;left:-9px;}
+  .sg-card .sg-card-type{padding:4px 10px 9px;font-size:.5rem;}
   #sgHand{gap:10px;min-height:150px;}
   #sgHand .sg-card{min-width:130px;}
   .sg-enemy-portrait{width:90px;height:90px;font-size:2.5rem;}
@@ -1143,11 +1195,11 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 }
 @media(max-width:768px){
   #sgBattle{padding:0.3rem!important}
-  #sgHand .sg-card{min-width:70px;padding:4px;font-size:0.6rem}
-  .sg-card-cost{width:18px;height:18px;font-size:0.6rem}
-  .sg-card-name{font-size:0.6rem}
-  .sg-card-desc{font-size:0.55rem}
-  .sg-card-type{font-size:0.5rem}
+  #sgHand .sg-card{min-width:70px;font-size:0.6rem}
+  .sg-card .sg-card-cost{width:20px;height:20px;font-size:.6rem;line-height:20px;top:-6px;left:-6px;}
+  .sg-card .sg-card-name{padding:5px 6px 4px;font-size:0.6rem}
+  .sg-card .sg-card-desc{padding:5px 6px 4px;font-size:0.55rem}
+  .sg-card .sg-card-type{padding:2px 6px 5px;font-size:0.5rem}
   #sgPlayerArea{flex-direction:row;flex-wrap:wrap;gap:0.2rem}
   #sgEnemyArea{padding:0.3rem}
   .sg-btn{font-size:0.65rem;padding:0.3rem 0.6rem}
@@ -1162,9 +1214,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   #sgPillsArea button{font-size:0.55rem!important;padding:0.15rem 0.3rem!important}
 }
 @media(max-width:480px){
-  .sg-card{width:95px;padding:.4rem .3rem;}
-  .sg-card .sg-card-name{font-size:.58rem;}
-  .sg-card .sg-card-desc{font-size:.45rem;}
+  .sg-card{width:95px;}
+  .sg-card .sg-card-name{padding:4px 5px 3px;font-size:.58rem;}
+  .sg-card .sg-card-desc{padding:4px 5px 3px;font-size:.45rem;}
   .sg-map-node{width:34px;height:34px;font-size:.8rem;}
   .sg-status{font-size:.6rem;gap:.35rem;}
   .sg-status-item{padding:.15rem .4rem;}
@@ -1175,8 +1227,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   .sg-enemy{min-width:140px;padding:.6rem 1rem;}
   .sg-enemy-portrait{font-size:1.8rem;}
   .sg-shop-item{padding:.4rem .6rem;flex-wrap:wrap;}
-  #sgHand .sg-card{min-width:60px;padding:3px;font-size:0.5rem}
-  .sg-card-cost{width:15px;height:15px;font-size:0.5rem}
+  #sgHand .sg-card{min-width:60px;font-size:0.5rem}
+  .sg-card .sg-card-cost{width:16px;height:16px;font-size:.5rem;line-height:16px;top:-5px;left:-5px;}
   #sgPlayerArea{flex-direction:column}
   .sg-enemy-portrait{width:50px;height:50px;font-size:1.2rem}
   .sg-player-portrait{width:40px;height:40px;font-size:1rem}
