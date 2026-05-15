@@ -1672,405 +1672,472 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     });
   })();
 
-  /* ── 音乐演奏（增强版：自动演奏 + 可视化）── */
-  (function(){
-    var currentInst = 'guqin';
-    var currentOctave = 1;
-    var audioCtx = null;
-    var autoTimer = null;
-    var autoIdx = 0;
-    var autoPlaying = false;
-    var currentTempo = 100;
+  	  /* ── 音乐演奏（V2：多八度 + 和声合成 + 新乐器）── */
+	  (function(){
+	    var currentInst = 'gangqin';
+	    var currentOctave = 1;
+	    var audioCtx = null;
+	    var autoTimer = null;
+	    var autoIdx = 0;
+	    var autoPlaying = false;
+	    var currentTempo = 100;
 
-    var noteNames = ['宫','商','角','变徵','徵','羽','变宫'];
-    var noteFreqs = [261.63, 293.66, 329.63, 369.99, 392.00, 440.00, 493.88];
-    var noteLetters = ['C','D','E','F♯','G','A','B'];
-    var octMul = [0.5, 1, 2];
-    var keyMap = {68:0,70:1,71:2,72:3,74:4,75:5,76:6};
-    var noteColors = ['#3b82f6','#22c55e','#eab308','#a855f7','#ef4444','#ec4899','#06b6d4'];
+	    var noteNames = ['宫','商','角','变徵','徵','羽','变宫'];
+	    var noteFreqs = [261.63, 293.66, 329.63, 369.99, 392.00, 440.00, 493.88];
+	    var noteLetters = ['C','D','E','F♯','G','A','B'];
+	    var octMul = [0.5, 1, 2];
+	    var octLabels = ['低音','中音','高音'];
+	    var keyMap = {68:0,70:1,71:2,72:3,74:4,75:5,76:6};
+	    var noteColors = ['#3b82f6','#22c55e','#eab308','#a855f7','#ef4444','#ec4899','#06b6d4'];
 
-    var insts = {
-      guqin:{n:'古琴',t:'triangle',a:0.08,r:0.8,g:0.30,d:'太古遗音 · 沉静悠远'},
-      pipa:{n:'琵琶',t:'square',a:0.005,r:0.25,g:0.15,d:'大珠小珠落玉盘'},
-      dizi:{n:'笛子',t:'sine',a:0.05,r:0.35,g:0.22,d:'清越悠远 · 穿云裂石'},
-      xiao:{n:'箫',t:'sine',a:0.2,r:0.6,g:0.25,d:'幽咽沉静 · 如泣如诉'},
-      guzheng:{n:'古筝',t:'triangle',a:0.02,r:0.6,g:0.22,d:'行云流水 · 珠落玉盘'},
-      bianzhong:{n:'编钟',t:'sine',a:0.005,r:1.0,g:0.18,d:'金声玉振 · 庙堂之音'},
-      erhu:{n:'二胡',t:'sawtooth',a:0.1,r:0.5,g:0.15,d:'如泣如诉 · 缠绵悱恻'},
-      xun:{n:'埙',t:'sine',a:0.25,r:0.5,g:0.28,d:'苍凉古朴 · 旷古悠思'},
-      yangqin:{n:'扬琴',t:'square',a:0.005,r:0.2,g:0.12,d:'叮咚山泉 · 清脆悦耳'},
-      se:{n:'瑟',t:'triangle',a:0.03,r:0.6,g:0.20,d:'弦歌雅意 · 古韵绵长'}
-    };
+	    /* ═══════════ 乐器定义（含和声泛音列） ═══════════ */
+	    var insts = {
+	      gangqin:{n:'钢琴',t:'sine',a:0.003,r:0.5,g:0.20,
+	        h:[{m:2,v:0.25},{m:3,v:0.10},{m:4,v:0.05},{m:5,v:0.03},{m:6,v:0.02}],
+	        f:{t:'lowpass',f:3000,q:1,qe:3},
+	        d:'清亮宽广 · 刚柔并济 · 首选自动演奏'},
+	      guqin:{n:'古琴',t:'triangle',a:0.08,r:0.8,g:0.28,
+	        h:[{m:2,v:0.15},{m:3,v:0.05}],vibrato:{f:4,d:2},
+	        d:'太古遗音 · 沉静悠远'},
+	      pipa:{n:'琵琶',t:'square',a:0.005,r:0.25,g:0.15,
+	        h:[{m:2,v:0.12},{m:3,v:0.08},{m:5,v:0.04}],
+	        d:'大珠小珠落玉盘'},
+	      dizi:{n:'笛子',t:'sine',a:0.05,r:0.35,g:0.22,
+	        h:[{m:2,v:0.08},{m:4,v:0.04}],vibrato:{f:6,d:1.5},
+	        d:'清越悠远 · 穿云裂石'},
+	      xiao:{n:'箫',t:'sine',a:0.2,r:0.6,g:0.25,
+	        h:[{m:2,v:0.1},{m:3,v:0.06}],vibrato:{f:3,d:2},
+	        d:'幽咽沉静 · 如泣如诉'},
+	      guzheng:{n:'古筝',t:'triangle',a:0.02,r:0.6,g:0.22,
+	        h:[{m:2,v:0.2},{m:3,v:0.08},{m:4,v:0.03}],
+	        d:'行云流水 · 珠落玉盘'},
+	      bianzhong:{n:'编钟',t:'sine',a:0.005,r:1.0,g:0.18,
+	        h:[{m:2,v:0.3},{m:3,v:0.15},{m:5,v:0.06}],
+	        d:'金声玉振 · 庙堂之音'},
+	      erhu:{n:'二胡',t:'sawtooth',a:0.1,r:0.5,g:0.15,
+	        h:[{m:2,v:0.12}],vibrato:{f:5,d:3},
+	        d:'如泣如诉 · 缠绵悱恻'},
+	      xun:{n:'埙',t:'sine',a:0.25,r:0.5,g:0.28,
+	        h:[{m:2,v:0.1}],
+	        d:'苍凉古朴 · 旷古悠思'},
+	      yangqin:{n:'扬琴',t:'square',a:0.005,r:0.2,g:0.12,
+	        h:[{m:2,v:0.15},{m:4,v:0.06}],
+	        d:'叮咚山泉 · 清脆悦耳'},
+	      se:{n:'瑟',t:'triangle',a:0.03,r:0.6,g:0.20,
+	        h:[{m:2,v:0.12},{m:3,v:0.05}],
+	        d:'弦歌雅意 · 古韵绵长'},
+	      konghou:{n:'箜篌',t:'triangle',a:0.01,r:0.7,g:0.18,
+	        h:[{m:2,v:0.15},{m:3,v:0.10},{m:5,v:0.04}],
+	        d:'空灵飘渺 · 仙乐风飘'},
+	      guanzhong:{n:'管钟',t:'sine',a:0.005,r:1.2,g:0.15,
+	        h:[{m:2,v:0.20},{m:3,v:0.12},{m:5,v:0.08}],
+	        d:'清越悠扬 · 余音绕梁'}
+	    };
 
-    /* ═══════════ 歌曲数据 ═══════════ */
-    var songs = {
-      xiaoxingxing:{
-        title:'小星星',src:'法国童谣',bpm:100,
-        notes:[
-          [0,1],[0,1],[4,1],[4,1],[5,1],[5,1],[4,2],
-          [1,1],[1,1],[2,1],[2,1],[4,1],[4,1],[5,2],
-          [5,1],[5,1],[4,1],[4,1],[2,1],[2,1],[1,2],
-          [4,1],[4,1],[5,1],[5,1],[4,1],[2,1],[1,2],
-          [0,1],[0,1],[4,1],[4,1],[5,1],[5,1],[4,2],
-          [1,1],[1,1],[2,1],[2,1],[4,1],[4,1],[5,2],
-          [5,1],[5,1],[4,1],[4,1],[2,1],[2,1],[1,2],
-          [4,1],[4,1],[5,1],[5,1],[4,1],[2,1],[1,1],[0,1]
-        ]},
-      liangzhilaohu:{
-        title:'两只老虎',src:'法国童谣',bpm:120,
-        notes:[
-          [0,1],[1,1],[2,1],[0,1],[0,1],[1,1],[2,1],[0,1],
-          [2,1],[3,1],[4,2],[2,1],[3,1],[4,2],
-          [4,1],[5,1],[4,1],[3,1],[2,1],[0,1],
-          [4,1],[5,1],[4,1],[3,1],[2,1],[0,1],
-          [0,1],[4,1],[0,2],[0,1],[4,1],[0,1],[0,1]
-        ]},
-      canghai:{
-        title:'沧海一声笑',src:'黄霑 · 笑傲江湖',bpm:85,
-        notes:[
-          [4,1],[4,1.5],[5,0.5],[4,1],[2,2],
-          [1,1],[2,1],[4,1],[5,2],
-          [4,1],[4,1.5],[5,0.5],[4,1],[2,2],
-          [1,1],[2,1],[4,2],
-          [2,1],[2,1.5],[4,0.5],[2,1],[1,2],
-          [0,1],[1,1],[2,1],[5,2],
-          [2,1],[2,1.5],[4,0.5],[2,1],[1,2],
-          [0,1],[1,1],[2,1],[0,2]
-        ]},
-      molihua:{
-        title:'茉莉花',src:'江苏民歌',bpm:75,
-        notes:[
-          [0,1],[2,1],[4,1],[2,1],[1,1],[0,2],
-          [0,1],[2,1],[4,1],[2,1],[1,1],[0,2],
-          [0,1],[2,1],[4,1],[0,1],[2,1],[4,1],
-          [2,1.5],[1,0.5],[0,1],[2,1],[0,2],
-          [0,0.5],[2,0.5],[4,1],[5,1],[4,1],[2,1],[1,1],[0,2]
-        ]},
-      songbie:{
-        title:'送别',src:'李叔同 · 奥德威曲',bpm:80,
-        notes:[
-          [2,1.5],[4,0.5],[5,1],[4,1],[2,1],[1,1.5],[0,0.5],
-          [0,1],[2,1],[4,1],[2,2],
-          [2,1.5],[4,0.5],[5,1],[4,1],[2,1],[1,1.5],[0,0.5],
-          [4,1],[5,1],[5,1],[4,1],[2,2],
-          [4,0.5],[5,0.5],[4,1],[2,1],[4,1],[2,1],[1,1],[2,2],
-          [2,1.5],[4,0.5],[5,1],[4,1],[2,1],[1,1.5],[0,0.5],
-          [4,1],[5,1],[5,1],[4,1],[2,2],
-          [4,0.5],[5,0.5],[4,1],[2,1],[4,1],[2,1],[1,1],[0,2]
-        ]},
-      kangding:{
-        title:'康定情歌',src:'四川民歌',bpm:85,
-        notes:[
-          [2,1],[4,1],[5,2],[2,1],[4,1],[5,2],
-          [2,1],[4,1],[5,2],[2,1],[4,1],[5,2],
-          [5,1],[4,1],[2,1],[4,1],[5,1],[2,1],[4,1],[2,1.5],[0,0.5],
-          [2,1],[4,1],[5,2],[2,1],[4,1],[5,2]
-        ]},
-      chunriying:{
-        title:'春日影',src:'CRYCHIC/MyGO!!!!! · 藤田淳平',bpm:96,
-        notes:[
-          // Intro piano motif (角商宫商角变徵角商)
-          [2,1],[1,0.5],[0,1.5],
-          [1,0.5],[2,0.5],[3,0.75],[2,0.5],[1,0.75],
-          [2,1],[1,0.5],[0,1.5],
-          [1,0.5],[2,0.5],[3,0.5],[2,0.5],[1,0.75],[0,0.75],
-          // Verse buildup
-          [0,1],[0,1],[0,0.5],[4,0.5],[5,0.5],[4,0.5],[2,1],
-          [2,0.5],[3,0.5],[5,0.5],[5,0.5],[4,1],[5,0.5],[4,0.5],
-          [4,0.5],[5,0.5],[4,0.5],[2,1],[1,1.5],[0,0.5],
-          // Pre-chorus transition
-          [0,0.5],[1,0.5],[2,0.5],[3,0.5],[5,0.5],[5,0.5],[4,0.5],[5,0.5],
-          [4,0.5],[4,0.5],[4,0.5],[5,0.5],[4,0.5],[2,0.5],[1,1.5],
-          // Chorus "雲間をぬって きらりきらり"
-          [4,0.5],[4,0.5],[4,0.5],[4,0.5],[2,0.5],[3,0.5],[2,0.5],[1,0.5],
-          [0,0.5],[1,0.5],[2,1.5],
-          // "心満たしては 溢れ"
-          [0,0.5],[1,0.5],[2,0.5],[4,0.5],[5,0.5],[4,0.5],[4,0.5],[4,0.5],
-          // "いつしか頬を きらりきらり"
-          [5,0.5],[4,0.5],[4,0.5],[4,0.5],[2,0.5],[3,0.5],[2,0.5],[1,0.5],
-          [0,0.5],[1,0.5],[2,0.5],[1,0.5],[1,0.5],[0,1.5],
-          // "熱く 熱く濡らしてゆく"
-          [0,0.5],[1,0.5],[2,0.5],[2,0.5],[1,0.5],[0,1],[4,0.5],[2,0.5],[1,1],
-          // "君の手は どうしてこんなにも"
-          [2,0.5],[4,0.5],[4,0.5],[5,0.5],[4,0.5],[3,0.5],[2,0.5],[1,0.5],
-          [2,1],[1,0.5],[0,2]
-        ]}
-    };
+	    /* ═══════════ 歌曲数据（多八度编码 [音高,拍数,八度]） ═══════════ */
+	    var songs = {
+	      xiaoxingxing:{
+	        title:'小星星',src:'法国童谣',bpm:100,
+	        notes:[
+	          [0,1,1],[0,1,1],[4,1,1],[4,1,1],[5,1,2],[5,1,2],[4,2,1],
+	          [1,1,1],[1,1,2],[2,1,1],[2,1,2],[4,1,1],[4,1,1],[5,2,1],
+	          [5,1,2],[5,0.5,2],[4,0.5,1],[4,1,1],[2,1,1],[2,1,1],[1,2,1],
+	          [4,1,1],[4,0.5,1],[5,0.5,2],[5,1,2],[4,1,1],[2,1,1],[1,2,1],
+	          [0,1,1],[0,1,0],[4,1,1],[4,1,1],[5,1,2],[5,1,2],[4,2,1],
+	          [1,1,1],[1,1,1],[2,1,1],[2,1,2],[4,1,1],[4,1,1],[5,2,1],
+	          [5,1,2],[5,1,2],[4,1,1],[4,1,1],[2,1,1],[2,1,2],[1,2,1],
+	          [4,1,1],[4,1,1],[5,1,2],[5,1,2],[4,1,1],[2,1,1],[1,1,1],[0,2,1]
+	        ]},
+	      liangzhilaohu:{
+	        title:'两只老虎',src:'法国童谣',bpm:120,
+	        notes:[
+	          [0,1,1],[1,1,1],[2,1,1],[0,1,1],[0,1,1],[1,1,2],[2,1,1],[0,1,2],
+	          [2,1,1],[3,1,1],[4,2,1],[2,1,1],[3,1,1],[4,2,2],
+	          [4,1,1],[5,1,2],[4,1,1],[3,1,1],[2,1,1],[0,1,1],
+	          [4,1,2],[5,1,2],[4,1,1],[3,1,1],[2,1,1],[0,1,1],
+	          [0,1,1],[4,1,1],[0,2,1],[0,1,0],[4,1,1],[0,1,1],[0,1,1]
+	        ]},
+	      canghai:{
+	        title:'沧海一声笑',src:'黄霑 · 笑傲江湖',bpm:85,
+	        notes:[
+	          [4,1,1],[4,1.5,1],[5,0.5,2],[4,1,1],[2,2,1],
+	          [1,1,1],[2,0.5,1],[4,0.5,1],[5,2,2],
+	          [4,1,1],[4,1.5,2],[5,0.5,2],[4,1,1],[2,2,1],
+	          [1,1,1],[2,0.5,1],[4,0.5,2],[4,2,1],
+	          [2,1,1],[2,1.5,1],[4,0.5,2],[2,1,1],[1,2,1],
+	          [0,1,1],[1,0.5,1],[2,0.5,2],[5,2,2],
+	          [2,1,1],[2,1.5,1],[4,0.5,1],[2,1,1],[1,2,0],
+	          [0,1,1],[1,0.5,1],[2,0.5,1],[0,2,0]
+	        ]},
+	      molihua:{
+	        title:'茉莉花',src:'江苏民歌',bpm:75,
+	        notes:[
+	          [0,1,1],[2,1,1],[4,1,1],[2,1,2],[1,1,1],[0,2,1],
+	          [0,1,1],[2,1,1],[4,1,2],[2,1,1],[1,1,1],[0,2,1],
+	          [0,1,1],[2,0.5,1],[4,0.5,2],[0,1,1],[2,0.5,1],[4,0.5,2],
+	          [2,1.5,1],[1,0.5,1],[0,1,1],[2,1,2],[0,2,1],
+	          [0,0.5,1],[2,0.5,1],[4,1,1],[5,1,2],[4,1,1],[2,0.5,1],[1,0.5,1],[0,2,0]
+	        ]},
+	      songbie:{
+	        title:'送别',src:'李叔同 · 奥德威曲',bpm:80,
+	        notes:[
+	          [2,1.5,1],[4,0.5,1],[5,1,2],[4,1,1],[2,1,1],[1,1.5,1],[0,0.5,1],
+	          [0,1,1],[2,0.5,1],[4,0.5,2],[2,2,1],
+	          [2,1.5,1],[4,0.5,1],[5,1,2],[4,1,1],[2,1,1],[1,1.5,1],[0,0.5,1],
+	          [4,1,2],[5,1,2],[5,1,2],[4,1,1],[2,2,1],
+	          [4,0.5,2],[5,0.5,2],[4,1,1],[2,1,1],[4,1,2],[2,1,1],[1,1,1],[2,2,1],
+	          [2,1.5,1],[4,0.5,1],[5,1,2],[4,1,1],[2,1,1],[1,1.5,1],[0,0.5,1],
+	          [4,1,2],[5,1,2],[5,1,2],[4,1,1],[2,2,1],
+	          [4,0.5,2],[5,0.5,2],[4,1,1],[2,1,1],[4,1,1],[2,1,2],[1,1,1],[0,2,1]
+	        ]},
+	      kangding:{
+	        title:'康定情歌',src:'四川民歌',bpm:85,
+	        notes:[
+	          [2,1,1],[4,0.5,1],[5,0.5,2],[5,2,2],[2,1,1],[4,0.5,1],[5,0.5,2],[5,2,2],
+	          [2,1,1],[4,1,1],[5,2,1],[2,1,1],[4,1,2],[5,2,2],
+	          [5,1,2],[4,0.5,1],[2,0.5,1],[4,0.5,1],[5,0.5,2],[2,1,1],[4,0.5,1],[5,0.5,2],
+	          [2,1.5,1],[0,0.5,1],[2,1,1],[4,1,1],[5,2,2],[2,1,1],[4,1,1],[5,2,2]
+	        ]},
+	      chunriying:{
+	        title:'春日影',src:'CRYCHIC/MyGO!!!!! · 藤田淳平',bpm:96,
+	        notes:[
+	          [2,1,1],[1,0.5,1],[0,1.5,1],
+	          [1,0.5,1],[2,0.5,1],[3,0.75,1],[2,0.5,1],[1,0.75,1],
+	          [2,1,1],[1,0.5,1],[0,1.5,0],
+	          [1,0.5,0],[2,0.5,1],[3,0.5,1],[2,0.5,2],[1,0.75,1],[0,0.75,1],
+	          [0,1,1],[0,1,0],[0,0.5,1],[4,0.5,1],[5,0.5,2],[4,0.5,1],[2,1,1],
+	          [2,0.5,1],[3,0.5,2],[5,0.5,2],[5,0.5,2],[4,1,1],[5,0.5,2],[4,0.5,1],
+	          [4,0.5,1],[5,0.5,2],[4,0.5,1],[2,1,1],[1,1.5,1],[0,0.5,1],
+	          [0,0.5,1],[1,0.5,1],[2,0.5,2],[3,0.5,2],[5,0.5,2],[5,0.5,2],[4,0.5,1],[5,0.5,2],
+	          [4,0.5,1],[4,0.5,1],[4,0.5,1],[5,0.5,2],[4,0.5,1],[2,0.5,1],[1,1.5,1],
+	          [4,0.5,1],[4,0.5,2],[4,0.5,1],[4,0.5,2],[2,0.5,1],[3,0.5,2],[2,0.5,1],[1,0.5,1],
+	          [0,0.5,1],[1,0.5,1],[2,1.5,2],
+	          [0,0.5,1],[1,0.5,1],[2,0.5,1],[4,0.5,2],[5,0.5,2],[4,0.5,1],[4,0.5,1],[4,0.5,1],
+	          [5,0.5,2],[4,0.5,1],[4,0.5,1],[4,0.5,2],[2,0.5,1],[3,0.5,2],[2,0.5,1],[1,0.5,1],
+	          [0,0.5,1],[1,0.5,1],[2,0.5,2],[1,0.5,1],[1,0.5,1],[0,1.5,1],
+	          [0,0.5,1],[1,0.5,1],[2,0.5,2],[2,0.5,2],[1,0.5,1],[0,1,1],
+	          [4,0.5,1],[2,0.5,2],[1,1,1],
+	          [2,0.5,1],[4,0.5,2],[4,0.5,2],[5,0.5,2],[4,0.5,1],[3,0.5,2],[2,0.5,1],[1,0.5,1],
+	          [2,1,1],[1,0.5,1],[0,2,0]
+	        ]}
+	    };
 
-    /* ═══════════ 音频引擎 ═══════════ */
-    function initAudio(){
-      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if(audioCtx.state === 'suspended') audioCtx.resume();
-    }
+	    /* ═══════════ 音频引擎（多振荡器和声合成） ═══════════ */
+	    function initAudio(){
+	      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+	      if(audioCtx.state === 'suspended') audioCtx.resume();
+	    }
 
-    function playNote(idx){
-      initAudio();
-      var inst = insts[currentInst];
-      var freq = noteFreqs[idx] * octMul[currentOctave];
-      var now = audioCtx.currentTime;
-      var osc = audioCtx.createOscillator();
-      var gain = audioCtx.createGain();
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.type = inst.t;
-      osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(inst.g, now + inst.a);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + inst.a + inst.r);
-      if(inst.t === 'sawtooth'){
-        var vib = audioCtx.createOscillator();
-        var vg = audioCtx.createGain();
-        vib.connect(vg); vg.connect(osc.frequency);
-        vib.frequency.value = 5; vg.gain.value = 3;
-        vib.start(now); vib.stop(now + inst.r);
-      }
-      if(inst.t === 'sine' && inst.a < 0.1){
-        osc.detune.setValueAtTime(5, now);
-        osc.detune.linearRampToValueAtTime(0, now + 0.2);
-      }
-      osc.start(now); osc.stop(now + inst.a + inst.r + 0.05);
-    }
+	    function playNote(idx, oct){
+	      initAudio();
+	      var inst = insts[currentInst];
+	      var octVal = (typeof oct === 'number') ? oct : currentOctave;
+	      var freq = noteFreqs[idx] * octMul[octVal];
+	      var now = audioCtx.currentTime;
+	      var totalDur = inst.a + inst.r + 0.08;
 
-    /* ═══════════ 可视化引擎 ═══════════ */
-    var vizNotes = [];
-    var vizAnimId = null;
-    var vizCtx = null;
+	      // Master filter
+	      var masterFilter = null;
+	      if (inst.f) {
+	        masterFilter = audioCtx.createBiquadFilter();
+	        masterFilter.type = inst.f.t || 'lowpass';
+	        masterFilter.frequency.setValueAtTime(inst.f.f, now);
+	        if (inst.f.qe) {
+	          masterFilter.Q.setValueAtTime(inst.f.q || 1, now);
+	          masterFilter.Q.linearRampToValueAtTime(inst.f.q * 5, now + inst.f.qe);
+	        }
+	        masterFilter.connect(audioCtx.destination);
+	      }
 
-    function initViz(){
-      var canvas = document.getElementById('musicCanvas');
-      var container = document.getElementById('musicViz');
-      if(!canvas || !container) return;
-      canvas.width = container.offsetWidth;
-      canvas.height = container.offsetHeight;
-      vizCtx = canvas.getContext('2d');
-      if(vizAnimId) cancelAnimationFrame(vizAnimId);
-      drawViz();
-    }
+	      // Harmonic series: fundamental + overtones
+	      var harmonics = [{m:1,v:1}];
+	      if (inst.h) inst.h.forEach(function(h){ harmonics.push(h); });
+	      var fundOsc = null;
 
-    function addVizNote(idx, beats){
-      var dur = beats * (60000 / Math.max(currentTempo, 60));
-      vizNotes.push({noteIdx:idx, startTime:performance.now(), duration:Math.max(dur,80)});
-      if(vizNotes.length > 60) vizNotes.shift();
-    }
+	      harmonics.forEach(function(harm, hi){
+	        var osc = audioCtx.createOscillator();
+	        var gain = audioCtx.createGain();
+	        var dest = masterFilter || audioCtx.destination;
+	        osc.connect(gain);
+	        gain.connect(dest);
+	        osc.type = inst.t;
+	        osc.frequency.setValueAtTime(freq * harm.m, now);
+	        var maxG = inst.g * harm.v;
+	        gain.gain.setValueAtTime(0.001, now);
+	        gain.gain.linearRampToValueAtTime(maxG, now + inst.a);
+	        gain.gain.exponentialRampToValueAtTime(0.001, now + inst.a + inst.r);
+	        osc.start(now);
+	        osc.stop(now + totalDur);
+	        if (hi === 0) fundOsc = osc;
+	      });
 
-    function drawViz(){
-      if(!vizCtx) return;
-      var canvas = vizCtx.canvas;
-      var ctx = vizCtx;
-      var w = canvas.width, h = canvas.height;
-      var laneH = h / 7;
-      var now = performance.now();
-      var scrollMs = 2200;
+	      // Vibrato on fundamental
+	      if (inst.vibrato && fundOsc) {
+	        var vib = audioCtx.createOscillator();
+	        var vg = audioCtx.createGain();
+	        vib.connect(vg);
+	        vg.connect(fundOsc.frequency);
+	        vib.frequency.value = inst.vibrato.f;
+	        vg.gain.value = inst.vibrato.d;
+	        vib.start(now);
+	        vib.stop(now + totalDur);
+	      }
+	    }
 
-      ctx.clearRect(0, 0, w, h);
+	    /* ═══════════ 可视化引擎 ═══════════ */
+	    var vizNotes = [];
+	    var vizAnimId = null;
+	    var vizCtx = null;
 
-      // Draw lane backgrounds
-      for(var i=0;i<7;i++){
-        ctx.fillStyle = (i%2===0) ? 'rgba(128,128,128,0.04)' : 'rgba(128,128,128,0.08)';
-        ctx.fillRect(0, i*laneH, w, laneH);
-        ctx.fillStyle = noteColors[i];
-        ctx.globalAlpha = 0.6;
-        ctx.font = Math.max(9, Math.round(laneH*0.45)) + 'px sans-serif';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(noteNames[i], 4, i*laneH + laneH/2);
-        ctx.globalAlpha = 1;
-        ctx.strokeStyle = 'rgba(128,128,128,0.1)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(0, (i+1)*laneH);
-        ctx.lineTo(w, (i+1)*laneH);
-        ctx.stroke();
-      }
+	    function initViz(){
+	      var canvas = document.getElementById('musicCanvas');
+	      var container = document.getElementById('musicViz');
+	      if(!canvas || !container) return;
+	      canvas.width = container.offsetWidth;
+	      canvas.height = container.offsetHeight;
+	      vizCtx = canvas.getContext('2d');
+	      if(vizAnimId) cancelAnimationFrame(vizAnimId);
+	      drawViz();
+	    }
 
-      // Draw note bars
-      var labelW = 28;
-      for(var ni=0;ni<vizNotes.length;ni++){
-        var n = vizNotes[ni];
-        var elapsed = now - n.startTime;
-        if(elapsed > scrollMs) continue;
-        var progress = elapsed / scrollMs;
-        var barW = Math.max(3, Math.min((n.duration/scrollMs)*w*0.5, w*0.5));
-        var x = w - labelW - (w - labelW) * progress;
-        var y = n.noteIdx * laneH + 1;
-        var barH = laneH - 2;
-        var alpha = Math.max(0.15, 1 - progress * 0.6);
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = noteColors[n.noteIdx];
-        var r = Math.min(3, barH * 0.3);
-        ctx.beginPath();
-        ctx.moveTo(x+r, y); ctx.lineTo(x+barW-r, y);
-        ctx.quadraticCurveTo(x+barW, y, x+barW, y+r);
-        ctx.lineTo(x+barW, y+barH-r);
-        ctx.quadraticCurveTo(x+barW, y+barH, x+barW-r, y+barH);
-        ctx.lineTo(x+r, y+barH);
-        ctx.quadraticCurveTo(x, y+barH, x, y+barH-r);
-        ctx.lineTo(x, y+r);
-        ctx.quadraticCurveTo(x, y, x+r, y);
-        ctx.closePath();
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
+	    function addVizNote(idx, beats){
+	      var dur = beats * (60000 / Math.max(currentTempo, 60));
+	      vizNotes.push({noteIdx:idx, startTime:performance.now(), duration:Math.max(dur,80)});
+	      if(vizNotes.length > 60) vizNotes.shift();
+	    }
 
-      // Beat pulse line
-      ctx.fillStyle = 'rgba(201,168,76,0.15)';
-      ctx.fillRect(w - labelW - 2, 0, 2, h);
+	    function drawViz(){
+	      if(!vizCtx) return;
+	      var canvas = vizCtx.canvas;
+	      var ctx = vizCtx;
+	      var w = canvas.width, h = canvas.height;
+	      var laneH = h / 7;
+	      var now = performance.now();
+	      var scrollMs = 2200;
 
-      vizAnimId = requestAnimationFrame(drawViz);
-    }
+	      ctx.clearRect(0, 0, w, h);
 
-    /* ═══════════ 触发音符（含可视化联动） ═══════════ */
-    function triggerNote(idx, beats){
-      playNote(idx);
-      addVizNote(idx, beats || 0.5);
-      // Highlight key button
-      var ks = document.getElementById('musicKeys').children;
-      if(ks[idx]){ ks[idx].classList.add('pressed');
-        setTimeout(function(){ ks[idx].classList.remove('pressed'); }, 150); }
-    }
+	      for(var i=0;i<7;i++){
+	        ctx.fillStyle = (i%2===0) ? 'rgba(128,128,128,0.04)' : 'rgba(128,128,128,0.08)';
+	        ctx.fillRect(0, i*laneH, w, laneH);
+	        ctx.fillStyle = noteColors[i];
+	        ctx.globalAlpha = 0.6;
+	        ctx.font = Math.max(9, Math.round(laneH*0.45)) + 'px sans-serif';
+	        ctx.textAlign = 'left';
+	        ctx.textBaseline = 'middle';
+	        ctx.fillText(noteNames[i], 4, i*laneH + laneH/2);
+	        ctx.globalAlpha = 1;
+	        ctx.strokeStyle = 'rgba(128,128,128,0.1)';
+	        ctx.lineWidth = 1;
+	        ctx.beginPath();
+	        ctx.moveTo(0, (i+1)*laneH);
+	        ctx.lineTo(w, (i+1)*laneH);
+	        ctx.stroke();
+	      }
 
-    /* ═══════════ 自动演奏引擎 ═══════════ */
-    function stopAuto(){
-      autoPlaying = false;
-      if(autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
-      autoIdx = 0;
-      document.getElementById('musicPlayBtn').style.display = '';
-      document.getElementById('musicStopBtn').style.display = 'none';
-      document.getElementById('musicSong').disabled = false;
-    }
+	      var labelW = 28;
+	      for(var ni=0;ni<vizNotes.length;ni++){
+	        var n = vizNotes[ni];
+	        var elapsed = now - n.startTime;
+	        if(elapsed > scrollMs) continue;
+	        var progress = elapsed / scrollMs;
+	        var barW = Math.max(3, Math.min((n.duration/scrollMs)*w*0.5, w*0.5));
+	        var x = w - labelW - (w - labelW) * progress;
+	        var y = n.noteIdx * laneH + 1;
+	        var barH = laneH - 2;
+	        var alpha = Math.max(0.15, 1 - progress * 0.6);
+	        ctx.globalAlpha = alpha;
+	        ctx.fillStyle = noteColors[n.noteIdx];
+	        var r = Math.min(3, barH * 0.3);
+	        ctx.beginPath();
+	        ctx.moveTo(x+r, y); ctx.lineTo(x+barW-r, y);
+	        ctx.quadraticCurveTo(x+barW, y, x+barW, y+r);
+	        ctx.lineTo(x+barW, y+barH-r);
+	        ctx.quadraticCurveTo(x+barW, y+barH, x+barW-r, y+barH);
+	        ctx.lineTo(x+r, y+barH);
+	        ctx.quadraticCurveTo(x, y+barH, x, y+barH-r);
+	        ctx.lineTo(x, y+r);
+	        ctx.quadraticCurveTo(x, y, x+r, y);
+	        ctx.closePath();
+	        ctx.fill();
+	      }
+	      ctx.globalAlpha = 1;
 
-    function playSongStep(){
-      if(!autoPlaying) return;
-      var sel = document.getElementById('musicSong');
-      var songKey = sel.value;
-      var song = songs[songKey];
-      if(!song || autoIdx >= song.notes.length){
-        stopAuto();
-        return;
-      }
-      var noteData = song.notes[autoIdx];
-      var noteIdx = noteData[0];
-      var beats = noteData[1];
-      var msPerBeat = 60000 / song.bpm;
+	      ctx.fillStyle = 'rgba(201,168,76,0.15)';
+	      ctx.fillRect(w - labelW - 2, 0, 2, h);
 
-      // Update status
-      var progress = document.getElementById('musicSong');
-      var pct = Math.round(autoIdx / song.notes.length * 100);
-      progress.title = song.title + ' ' + pct + '% (' + (autoIdx+1) + '/' + song.notes.length + ')';
+	      vizAnimId = requestAnimationFrame(drawViz);
+	    }
 
-      triggerNote(noteIdx, beats);
-      autoIdx++;
-      autoTimer = setTimeout(playSongStep, beats * msPerBeat);
-    }
+	    /* ═══════════ 触发音符（含可视化联动） ═══════════ */
+	    function triggerNote(idx, beats, oct){
+	      playNote(idx, oct);
+	      addVizNote(idx, beats || 0.5);
+	      var ks = document.getElementById('musicKeys').children;
+	      if(ks[idx]){ ks[idx].classList.add('pressed');
+	        setTimeout(function(){ ks[idx].classList.remove('pressed'); }, 150); }
+	    }
 
-    function startAuto(){
-      var sel = document.getElementById('musicSong');
-      var songKey = sel.value;
-      if(!songKey || !songs[songKey]){ return; }
-      var song = songs[songKey];
-      currentTempo = song.bpm;
+	    /* ═══════════ 进度条 UI ═══════════ */
+	    function initProgressUI(){
+	      var wrap = document.querySelector('.music-auto');
+	      if(!wrap) return;
+	      if(!document.getElementById('musicProgressWrap')){
+	        var pw = document.createElement('div');
+	        pw.id = 'musicProgressWrap';
+	        pw.style.cssText = 'display:none;width:100%;margin-top:6px;';
+	        pw.innerHTML = '<div style="display:flex;align-items:center;gap:8px;">' +
+	          '<div id="musicProgressBar" style="flex:1;height:4px;border-radius:2px;background:var(--border);overflow:hidden;">' +
+	          '<div id="musicProgressFill" style="height:100%;width:0%;background:var(--gold);border-radius:2px;transition:width .15s;"></div></div>' +
+	          '<span id="musicProgressLabel" style="font-size:.6rem;color:var(--text-faint);white-space:nowrap;"></span></div>';
+	        wrap.after(pw);
+	      }
+	      progressBar = document.getElementById('musicProgressFill');
+	      progressLabel = document.getElementById('musicProgressLabel');
+	    }
+	    initProgressUI();
 
-      // Reset octave to middle for auto-play
-      currentOctave = 1;
-      var obs = document.querySelectorAll('.oct-btn');
-      for(var oi=0;oi<obs.length;oi++) obs[oi].classList.remove('active');
-      obs[1].classList.add('active');
-      renderKeys();
+	    function updateProgress(pct, label){
+	      if(progressBar) progressBar.style.width = pct + '%';
+	      if(progressLabel) progressLabel.textContent = label;
+	    }
 
-      autoPlaying = true;
-      autoIdx = 0;
-      sel.disabled = true;
-      document.getElementById('musicPlayBtn').style.display = 'none';
-      document.getElementById('musicStopBtn').style.display = '';
+	    /* ═══════════ 自动演奏引擎 ═══════════ */
+	    function stopAuto(){
+	      autoPlaying = false;
+	      if(autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+	      autoIdx = 0;
+	      document.getElementById('musicPlayBtn').style.display = '';
+	      document.getElementById('musicStopBtn').style.display = 'none';
+	      document.getElementById('musicSong').disabled = false;
+	      var pw = document.getElementById('musicProgressWrap');
+	      if(pw) pw.style.display = 'none';
+	    }
 
-      initAudio();
-      // Short delay before starting
-      setTimeout(function(){ if(autoPlaying) playSongStep(); }, 300);
-    }
+	    function playSongStep(){
+	      if(!autoPlaying) return;
+	      var sel = document.getElementById('musicSong');
+	      var songKey = sel.value;
+	      var song = songs[songKey];
+	      if(!song || autoIdx >= song.notes.length){
+	        stopAuto();
+	        return;
+	      }
+	      var noteData = song.notes[autoIdx];
+	      var noteIdx = noteData[0];
+	      var beats = noteData[1];
+	      var oct = (noteData.length > 2) ? noteData[2] : currentOctave;
+	      var msPerBeat = 60000 / song.bpm;
 
-    /* ═══════════ 界面构建 ═══════════ */
-    function renderKeys(){
-      var c = document.getElementById('musicKeys');
-      c.innerHTML = '';
-      for(var ni=0;ni<7;ni++){
-        var key = document.createElement('button');
-        key.className = 'music-key' + (ni===3||ni===6?' bianyin':'');
-        key.innerHTML = '<span>' + noteNames[ni] + '</span><span class="note-letter">' + noteLetters[ni] + ' ' + Math.round(noteFreqs[ni]*octMul[currentOctave]) + 'Hz</span>';
-        (function(idx){
-          key.addEventListener('click', function(){ triggerNote(idx, 0.5); });
-        })(ni);
-        c.appendChild(key);
-      }
-    }
-    renderKeys();
+	      var pct = Math.round(autoIdx / song.notes.length * 100);
+	      updateProgress(pct, (autoIdx+1) + '/' + song.notes.length + ' · ' + octLabels[oct]);
 
-    // Keyboard trigger with viz
-    document.addEventListener('keydown', function(e){
-      if(e.keyCode in keyMap){
-        e.preventDefault();
-        triggerNote(keyMap[e.keyCode], 0.5);
-      }
-    });
+	      triggerNote(noteIdx, beats, oct);
+	      autoIdx++;
+	      autoTimer = setTimeout(playSongStep, beats * msPerBeat);
+	    }
 
-    // Instrument selector
-    var instContainer = document.getElementById('musicInsts');
-    var instKeys = Object.keys(insts);
-    for(var ii=0;ii<instKeys.length;ii++){
-      (function(key){
-        var btn = document.createElement('button');
-        btn.className = 'music-inst' + (ii===0?' active':'');
-        btn.textContent = insts[key].n;
-        btn.addEventListener('click', function(){
-          var all = instContainer.querySelectorAll('.music-inst');
-          for(var ai=0;ai<all.length;ai++) all[ai].classList.remove('active');
-          this.classList.add('active');
-          currentInst = key;
-          document.getElementById('musicInstName').textContent = insts[key].n;
-          document.getElementById('musicInstDesc').textContent = insts[key].d;
-        });
-        instContainer.appendChild(btn);
-      })(instKeys[ii]);
-    }
+	    function startAuto(){
+	      var sel = document.getElementById('musicSong');
+	      var songKey = sel.value;
+	      if(!songKey || !songs[songKey]){ return; }
+	      var song = songs[songKey];
+	      currentTempo = song.bpm;
 
-    // Octave selector
-    var octBtns = document.querySelectorAll('.oct-btn');
-    for(var oi=0;oi<octBtns.length;oi++){
-      (function(btn, idx){
-        btn.addEventListener('click', function(){
-          if(autoPlaying) return; // Lock octave during auto-play
-          var all = document.querySelectorAll('.oct-btn');
-          for(var ai=0;ai<all.length;ai++) all[ai].classList.remove('active');
-          btn.classList.add('active');
-          currentOctave = idx;
-          renderKeys();
-        });
-      })(octBtns[oi], oi);
-    }
+	      currentOctave = 1;
+	      var obs = document.querySelectorAll('.oct-btn');
+	      for(var oi=0;oi<obs.length;oi++) obs[oi].classList.remove('active');
+	      obs[1].classList.add('active');
+	      renderKeys();
 
-    // Auto-play controls
-    document.getElementById('musicPlayBtn').addEventListener('click', startAuto);
-    document.getElementById('musicStopBtn').addEventListener('click', stopAuto);
+	      autoPlaying = true;
+	      autoIdx = 0;
+	      sel.disabled = true;
+	      document.getElementById('musicPlayBtn').style.display = 'none';
+	      document.getElementById('musicStopBtn').style.display = '';
+	      var pw = document.getElementById('musicProgressWrap');
+	      if(pw) pw.style.display = 'block';
 
-    // Suspend audio when view closes
-    var musicView = document.getElementById('viewMusic');
-    var obs = new MutationObserver(function(){
-      if(!musicView.classList.contains('active')){
-        if(audioCtx) audioCtx.suspend();
-        if(autoPlaying) stopAuto();
-      } else {
-        // View opened - init visualization
-        setTimeout(initViz, 50);
-      }
-    });
-    obs.observe(musicView, {attributes:true,attributeFilter:['class']});
+	      initAudio();
+	      setTimeout(function(){ if(autoPlaying) playSongStep(); }, 300);
+	    }
 
-    // Init viz on first render
-    setTimeout(initViz, 100);
+	    /* ═══════════ 界面构建 ═══════════ */
+	    function renderKeys(){
+	      var c = document.getElementById('musicKeys');
+	      c.innerHTML = '';
+	      for(var ni=0;ni<7;ni++){
+	        var key = document.createElement('button');
+	        key.className = 'music-key' + (ni===3||ni===6?' bianyin':'');
+	        key.innerHTML = '<span>' + noteNames[ni] + '</span><span class="note-letter">' + noteLetters[ni] + ' ' + Math.round(noteFreqs[ni]*octMul[currentOctave]) + 'Hz</span>';
+	        (function(idx){
+	          key.addEventListener('click', function(){ triggerNote(idx, 0.5, currentOctave); });
+	        })(ni);
+	        c.appendChild(key);
+	      }
+	    }
+	    renderKeys();
 
-    // Handle resize
-    window.addEventListener('resize', function(){
-      if(musicView.classList.contains('active')) initViz();
-    });
-  })();
+	    document.addEventListener('keydown', function(e){
+	      if(e.keyCode in keyMap){
+	        e.preventDefault();
+	        triggerNote(keyMap[e.keyCode], 0.5, currentOctave);
+	      }
+	    });
+
+	    // Instrument selector
+	    var instContainer = document.getElementById('musicInsts');
+	    var instKeys = Object.keys(insts);
+	    for(var ii=0;ii<instKeys.length;ii++){
+	      (function(key){
+	        var btn = document.createElement('button');
+	        btn.className = 'music-inst' + (ii===0?' active':'');
+	        btn.textContent = insts[key].n;
+	        btn.addEventListener('click', function(){
+	          var all = instContainer.querySelectorAll('.music-inst');
+	          for(var ai=0;ai<all.length;ai++) all[ai].classList.remove('active');
+	          this.classList.add('active');
+	          currentInst = key;
+	          document.getElementById('musicInstName').textContent = insts[key].n;
+	          document.getElementById('musicInstDesc').textContent = insts[key].d;
+	        });
+	        instContainer.appendChild(btn);
+	      })(instKeys[ii]);
+	    }
+
+	    // Octave selector — 自动演奏时也可切换
+	    var octBtns = document.querySelectorAll('.oct-btn');
+	    for(var oi=0;oi<octBtns.length;oi++){
+	      (function(btn, idx){
+	        btn.addEventListener('click', function(){
+	          var all = document.querySelectorAll('.oct-btn');
+	          for(var ai=0;ai<all.length;ai++) all[ai].classList.remove('active');
+	          btn.classList.add('active');
+	          currentOctave = idx;
+	          renderKeys();
+	        });
+	      })(octBtns[oi], oi);
+	    }
+
+	    document.getElementById('musicPlayBtn').addEventListener('click', startAuto);
+	    document.getElementById('musicStopBtn').addEventListener('click', stopAuto);
+
+	    var musicView = document.getElementById('viewMusic');
+	    var obs = new MutationObserver(function(){
+	      if(!musicView.classList.contains('active')){
+	        if(audioCtx) audioCtx.suspend();
+	        if(autoPlaying) stopAuto();
+	      } else {
+	        setTimeout(initViz, 50);
+	      }
+	    });
+	    obs.observe(musicView, {attributes:true,attributeFilter:['class']});
+
+	    setTimeout(initViz, 100);
+	    window.addEventListener('resize', function(){
+	      if(musicView.classList.contains('active')) initViz();
+	    });
+	  })();
 })();
 </script>
 </body>
