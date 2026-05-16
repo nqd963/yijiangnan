@@ -1,0 +1,386 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Warm parchment -->
+    <radialGradient id="parchment" cx="38%" cy="32%" r="75%">
+      <stop offset="0%" stop-color="#f8edd4"/>
+      <stop offset="55%" stop-color="#f5e6c8"/>
+      <stop offset="100%" stop-color="#ecd8b3"/>
+    </radialGradient>
+
+    <filter id="paperGrain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.16 0" in="noise" result="noiseA"/>
+      <feBlend mode="multiply" in="SourceGraphic" in2="noiseA"/>
+    </filter>
+
+    <!-- Soft ink bleeding -->
+    <filter id="inkBleed" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="0.75" result="b"/>
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.78 0" in="b" result="ba"/>
+      <feBlend mode="multiply" in="SourceGraphic" in2="ba"/>
+    </filter>
+
+    <filter id="softMist" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="m"/>
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.75 0" in="m" result="ma"/>
+      <feBlend mode="screen" in="SourceGraphic" in2="ma"/>
+    </filter>
+
+    <!-- Circular parchment mask -->
+    <mask id="circleMask">
+      <rect width="800" height="600" fill="black"/>
+      <circle cx="400" cy="300" r="285" fill="white"/>
+    </mask>
+
+    <!-- Gentle vignette inside circle -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="70%" stop-color="#000000" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.18"/>
+    </radialGradient>
+
+    <!-- Ink stroke style helpers -->
+    <linearGradient id="inkFade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#111" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#111" stop-opacity="0.2"/>
+    </linearGradient>
+
+    <linearGradient id="inkWash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#000" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.04"/>
+    </linearGradient>
+
+    <linearGradient id="riverWash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#000" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.03"/>
+    </linearGradient>
+
+    <filter id="dryBrush" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="turbulence" baseFrequency="0.018" numOctaves="2" seed="11" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+
+  <!-- Background parchment (full screen), then clip to circular painting -->
+  <rect x="0" y="0" width="800" height="600" fill="#e7d1aa"/>
+  <g mask="url(#circleMask)" filter="url(#paperGrain)">
+    <rect x="0" y="0" width="800" height="600" fill="url(#parchment)"/>
+
+    <!-- Very faint pooled wash at bottom -->
+    <path d="M50,520 C150,490 240,520 330,540 C420,560 520,540 610,520 C700,500 760,515 780,530 L780,600 L50,600 Z"
+          fill="url(#inkWash)" opacity="0.7"/>
+
+    <!-- Distant mountains (light ink) -->
+    <g filter="url(#inkBleed)" opacity="0.55">
+      <path d="M30,285
+               C85,240 140,255 175,230
+               C215,200 255,210 295,190
+               C340,168 380,180 420,160
+               C458,142 508,152 545,138
+               C592,120 635,135 675,120
+               C715,110 750,125 790,110
+               L790,265
+               C740,270 700,270 655,278
+               C610,286 575,290 530,297
+               C488,304 452,308 410,312
+               C350,318 295,318 240,316
+               C175,314 110,308 30,305 Z"
+            fill="#000" opacity="0.14"/>
+      <path d="M10,320
+               C70,300 115,310 160,290
+               C195,275 235,285 270,270
+               C310,252 355,266 390,246
+               C430,225 470,248 515,220
+               C555,196 602,214 642,194
+               C690,170 735,195 800,160
+               L800,310
+               C738,324 690,330 640,340
+               C585,352 540,360 490,366
+               C430,372 380,375 322,372
+               C250,368 185,360 120,352
+               C70,346 40,338 10,336 Z"
+            fill="#000" opacity="0.09"/>
+    </g>
+
+    <!-- Mid mountains (stronger ink, textured edges) -->
+    <g filter="url(#inkBleed)">
+      <path d="M40,360
+               C85,330 120,338 155,318
+               C190,300 230,310 270,286
+               C305,265 345,278 380,255
+               C415,232 455,252 495,225
+               C535,198 578,216 612,198
+               C655,174 700,198 742,172
+               C768,156 786,152 800,145
+               L800,420
+               C760,416 732,410 700,418
+               C662,428 628,438 590,450
+               C548,463 505,468 463,472
+               C410,476 360,474 310,470
+               C248,465 210,455 170,445
+               C125,434 92,420 40,418 Z"
+            fill="#000" opacity="0.20"/>
+      <path d="M85,410
+               C120,388 155,395 186,378
+               C222,358 260,370 292,350
+               C330,326 368,342 402,320
+               C440,296 482,318 520,292
+               C560,264 600,286 635,262
+               C680,232 728,258 780,224
+               L780,450
+               C720,468 675,482 628,496
+               C570,514 512,518 452,520
+               C385,522 330,512 270,498
+               C210,484 160,468 110,450
+               C98,446 92,442 85,438 Z"
+            fill="#000" opacity="0.18"/>
+      <!-- Ridge strokes -->
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M95,370 C130,350 160,358 190,340 C220,324 250,332 282,312" stroke-opacity="0.38" stroke-width="2.6" filter="url(#dryBrush)"/>
+        <path d="M265,305 C300,286 330,296 360,278 C388,262 420,272 452,252" stroke-opacity="0.34" stroke-width="2.3" filter="url(#dryBrush)"/>
+        <path d="M470,250 C508,226 545,240 575,220 C608,200 640,212 672,192" stroke-opacity="0.30" stroke-width="2.2" filter="url(#dryBrush)"/>
+        <path d="M610,310 C650,286 688,300 722,276 C748,258 770,255 795,240" stroke-opacity="0.24" stroke-width="2.0" filter="url(#dryBrush)"/>
+      </g>
+    </g>
+
+    <!-- Mist bands separating depth -->
+    <g filter="url(#softMist)">
+      <path d="M0,305 C120,280 210,310 320,292 C430,274 510,295 620,280 C710,268 770,280 800,288 L800,355 C720,362 670,370 585,378 C470,388 385,390 275,382 C170,374 100,360 0,350 Z"
+            fill="#fff" opacity="0.70"/>
+      <path d="M0,410 C120,392 195,420 310,404 C430,388 520,410 640,396 C715,388 770,396 800,402 L800,470 C740,482 675,490 590,500 C470,512 380,514 270,506 C165,498 95,485 0,470 Z"
+            fill="#fff" opacity="0.62"/>
+      <path d="M60,235 C140,220 220,240 305,225 C385,210 465,232 550,216 C630,202 710,214 770,210 L770,250 C705,260 635,270 545,276 C448,282 370,280 285,270 C200,260 140,252 60,248 Z"
+            fill="#fff" opacity="0.55"/>
+    </g>
+
+    <!-- Clouds hugging peaks -->
+    <g filter="url(#softMist)" opacity="0.9">
+      <path d="M90,230
+               C120,205 165,215 190,200
+               C215,186 255,194 280,180
+               C305,166 340,174 365,160
+               C395,142 435,160 465,145
+               C495,130 535,145 565,130
+               C595,114 640,130 668,114
+               C700,96 740,120 770,96
+               C760,126 735,138 712,150
+               C690,162 660,154 640,166
+               C616,182 580,172 556,186
+               C530,202 492,190 466,206
+               C440,222 402,208 378,226
+               C352,246 312,234 284,254
+               C250,278 205,255 180,272
+               C150,292 110,270 90,286
+               C70,258 70,244 90,230 Z"
+            fill="#fff" opacity="0.55"/>
+      <path d="M420,205
+               C450,186 490,198 520,186
+               C550,174 590,186 620,172
+               C650,156 700,170 735,154
+               C755,145 775,142 790,138
+               C785,160 770,172 750,182
+               C720,198 678,188 650,206
+               C625,222 585,212 558,230
+               C528,250 480,234 455,256
+               C430,278 395,262 375,280
+               C355,250 380,224 420,205 Z"
+            fill="#fff" opacity="0.45"/>
+    </g>
+
+    <!-- River (negative space with faint wash edges) -->
+    <g filter="url(#inkBleed)">
+      <path d="M140,575
+               C165,548 175,540 200,520
+               C245,485 285,476 312,454
+               C340,432 355,420 382,404
+               C420,380 468,370 500,348
+               C540,320 560,295 592,276
+               C628,255 668,246 704,222
+               C732,204 748,188 770,170
+               C735,220 720,260 700,292
+               C675,332 632,360 604,392
+               C574,426 555,450 520,476
+               C475,510 420,516 376,540
+               C322,570 255,590 190,598
+               C165,602 145,594 140,575 Z"
+            fill="#fff" opacity="0.90"/>
+      <path d="M148,573
+               C175,544 188,532 214,512
+               C255,480 292,472 322,450
+               C350,430 370,412 395,398
+               C430,376 470,368 506,345
+               C545,318 565,296 598,276
+               C640,251 678,244 720,212
+               C712,236 700,256 686,278
+               C660,318 620,354 592,386
+               C564,418 540,448 508,470
+               C468,498 412,514 368,538
+               C316,566 252,586 198,594
+               C178,597 160,590 148,573 Z"
+            fill="url(#riverWash)" opacity="0.85"/>
+      <!-- River edge strokes -->
+      <path d="M160,566 C190,538 205,526 232,506 C268,480 300,472 330,450"
+            fill="none" stroke="#000" stroke-opacity="0.14" stroke-width="2.2" stroke-linecap="round" filter="url(#dryBrush)"/>
+      <path d="M520,476 C560,444 582,418 612,388 C642,358 675,332 698,300"
+            fill="none" stroke="#000" stroke-opacity="0.14" stroke-width="2.2" stroke-linecap="round" filter="url(#dryBrush)"/>
+    </g>
+
+    <!-- Bamboo groves along lower left riverbank -->
+    <g filter="url(#inkBleed)">
+      <!-- bamboo stems -->
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-width="2.2" opacity="0.55">
+        <path d="M110,520 C112,475 110,448 116,405" filter="url(#dryBrush)" stroke-opacity="0.28"/>
+        <path d="M130,540 C132,505 130,468 138,430" filter="url(#dryBrush)" stroke-opacity="0.34"/>
+        <path d="M150,548 C154,510 154,478 162,438" filter="url(#dryBrush)" stroke-opacity="0.40"/>
+        <path d="M170,552 C176,520 180,492 188,450" filter="url(#dryBrush)" stroke-opacity="0.46"/>
+        <path d="M190,553 C198,520 205,496 214,458" filter="url(#dryBrush)" stroke-opacity="0.40"/>
+        <path d="M210,550 C222,520 230,498 244,462" filter="url(#dryBrush)" stroke-opacity="0.34"/>
+        <path d="M95,520 C98,485 96,460 100,430" filter="url(#dryBrush)" stroke-opacity="0.22"/>
+      </g>
+      <!-- nodes -->
+      <g stroke="#000" stroke-linecap="round" opacity="0.22">
+        <path d="M112,486 l10,0" stroke-width="2"/>
+        <path d="M114,448 l12,0" stroke-width="2"/>
+        <path d="M136,504 l12,0" stroke-width="2"/>
+        <path d="M140,468 l14,0" stroke-width="2"/>
+        <path d="M160,510 l14,0" stroke-width="2"/>
+        <path d="M166,476 l16,0" stroke-width="2"/>
+        <path d="M186,516 l16,0" stroke-width="2"/>
+        <path d="M192,488 l18,0" stroke-width="2"/>
+        <path d="M216,518 l16,0" stroke-width="2"/>
+        <path d="M224,496 l16,0" stroke-width="2"/>
+      </g>
+      <!-- leaves -->
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" opacity="0.35">
+        <path d="M120,438 C105,430 92,420 78,414" stroke-width="2.2" filter="url(#dryBrush)" stroke-opacity="0.22"/>
+        <path d="M125,460 C104,458 88,452 72,446" stroke-width="2.2" filter="url(#dryBrush)" stroke-opacity="0.18"/>
+        <path d="M145,452 C160,438 176,426 196,416" stroke-width="2.4" filter="url(#dryBrush)" stroke-opacity="0.20"/>
+        <path d="M152,474 C170,462 188,452 210,444" stroke-width="2.4" filter="url(#dryBrush)" stroke-opacity="0.22"/>
+        <path d="M175,468 C160,456 146,446 132,438" stroke-width="2.1" filter="url(#dryBrush)" stroke-opacity="0.18"/>
+        <path d="M200,472 C216,458 236,446 260,438" stroke-width="2.5" filter="url(#dryBrush)" stroke-opacity="0.20"/>
+        <path d="M210,490 C196,480 182,470 168,462" stroke-width="2.2" filter="url(#dryBrush)" stroke-opacity="0.18"/>
+        <path d="M232,490 C252,476 274,466 300,458" stroke-width="2.6" filter="url(#dryBrush)" stroke-opacity="0.18"/>
+      </g>
+    </g>
+
+    <!-- Foreground cliff on right with pavilion -->
+    <g filter="url(#inkBleed)">
+      <!-- cliff mass -->
+      <path d="M560,560
+               C560,520 565,490 575,462
+               C590,420 610,398 638,372
+               C664,348 700,332 728,314
+               C748,300 764,284 784,268
+               C792,330 792,392 780,450
+               C770,500 748,540 720,570
+               C680,612 620,604 560,600 Z"
+            fill="#000" opacity="0.26"/>
+      <!-- rock texture strokes -->
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M610,520 C625,496 636,476 648,458" stroke-width="2.4" stroke-opacity="0.30" filter="url(#dryBrush)"/>
+        <path d="M640,548 C662,520 680,494 700,470" stroke-width="2.6" stroke-opacity="0.28" filter="url(#dryBrush)"/>
+        <path d="M604,472 C628,450 656,428 690,408" stroke-width="2.3" stroke-opacity="0.22" filter="url(#dryBrush)"/>
+        <path d="M675,560 C694,536 708,510 724,486" stroke-width="2.4" stroke-opacity="0.22" filter="url(#dryBrush)"/>
+        <path d="M715,520 C730,494 744,468 760,438" stroke-width="2.2" stroke-opacity="0.18" filter="url(#dryBrush)"/>
+      </g>
+
+      <!-- pavilion platform -->
+      <path d="M610,338 C642,330 666,332 694,340 C690,350 682,360 668,364 C646,370 624,364 606,354 Z"
+            fill="#000" opacity="0.12"/>
+
+      <!-- pavilion (small, delicate) -->
+      <g opacity="0.75">
+        <!-- posts -->
+        <path d="M628,306 L628,342" stroke="#000" stroke-width="2.4" stroke-linecap="round" filter="url(#dryBrush)" stroke-opacity="0.55"/>
+        <path d="M652,302 L652,342" stroke="#000" stroke-width="2.4" stroke-linecap="round" filter="url(#dryBrush)" stroke-opacity="0.55"/>
+        <path d="M676,306 L676,344" stroke="#000" stroke-width="2.4" stroke-linecap="round" filter="url(#dryBrush)" stroke-opacity="0.55"/>
+        <!-- railing -->
+        <path d="M624,336 C640,330 664,330 680,338" fill="none" stroke="#000" stroke-width="2" stroke-opacity="0.35" stroke-linecap="round" filter="url(#dryBrush)"/>
+        <!-- roof -->
+        <path d="M615,304
+                 C634,286 662,280 690,292
+                 C700,296 708,302 714,310
+                 C700,312 688,314 674,314
+                 C650,314 632,312 615,304 Z"
+              fill="#000" opacity="0.22"/>
+        <path d="M618,300
+                 C642,276 676,272 704,292"
+              fill="none" stroke="#000" stroke-width="2.2" stroke-opacity="0.42" stroke-linecap="round" filter="url(#dryBrush)"/>
+        <path d="M614,306
+                 C642,292 676,292 714,312"
+              fill="none" stroke="url(#inkFade)" stroke-width="2.2" stroke-opacity="0.35" stroke-linecap="round" filter="url(#dryBrush)"/>
+        <!-- floor line -->
+        <path d="M620,344 C644,350 660,350 684,344" fill="none" stroke="#000" stroke-width="2" stroke-opacity="0.30" stroke-linecap="round" filter="url(#dryBrush)"/>
+      </g>
+
+      <!-- Hint of scholar silhouette (no facial detail) -->
+      <g opacity="0.20">
+        <path d="M655,340
+                 C650,334 650,326 656,322
+                 C664,318 670,326 666,334
+                 C664,338 660,342 655,340 Z"
+              fill="#000"/>
+        <path d="M654,342
+                 C650,352 650,362 656,370
+                 C662,362 664,354 662,346 Z"
+              fill="#000" opacity="0.8"/>
+      </g>
+    </g>
+
+    <!-- Boat on river (subtle) -->
+    <g filter="url(#inkBleed)" opacity="0.55">
+      <path d="M420,468
+               C438,462 458,462 476,470
+               C468,476 454,480 440,482
+               C430,484 422,480 420,468 Z"
+            fill="#000" opacity="0.20"/>
+      <path d="M430,466 C442,462 454,462 466,468" fill="none" stroke="#000" stroke-width="2" stroke-opacity="0.22" stroke-linecap="round" filter="url(#dryBrush)"/>
+      <path d="M452,454 C452,462 452,470 452,478" fill="none" stroke="#000" stroke-width="1.8" stroke-opacity="0.18" stroke-linecap="round"/>
+      <path d="M452,454 C446,446 442,442 438,440" fill="none" stroke="#000" stroke-width="1.6" stroke-opacity="0.14" stroke-linecap="round" filter="url(#dryBrush)"/>
+    </g>
+
+    <!-- Foreground trees/brush left-bottom for framing -->
+    <g filter="url(#inkBleed)">
+      <path d="M60,590
+               C70,560 86,540 110,526
+               C128,516 150,516 166,532
+               C182,548 188,568 190,600
+               L50,600 Z"
+            fill="#000" opacity="0.10"/>
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" opacity="0.32">
+        <path d="M78,590 C86,566 96,548 112,534" stroke-width="2.3" filter="url(#dryBrush)" stroke-opacity="0.22"/>
+        <path d="M92,598 C100,572 114,552 134,540" stroke-width="2.4" filter="url(#dryBrush)" stroke-opacity="0.24"/>
+        <path d="M112,600 C120,576 134,558 154,546" stroke-width="2.3" filter="url(#dryBrush)" stroke-opacity="0.22"/>
+      </g>
+    </g>
+
+    <!-- Final veil of mist to unify -->
+    <g filter="url(#softMist)">
+      <path d="M0,500 C140,480 240,508 360,492 C480,476 580,498 710,482 C760,476 790,480 800,484 L800,600 L0,600 Z"
+            fill="#fff" opacity="0.30"/>
+      <path d="M0,265 C150,250 260,275 385,260 C510,245 615,268 740,254 C780,250 795,252 800,254 L800,310 C720,320 650,330 560,338 C450,348 360,346 255,334 C145,322 80,306 0,300 Z"
+            fill="#fff" opacity="0.22"/>
+    </g>
+
+    <!-- Subtle vignette inside the circular parchment -->
+    <rect x="0" y="0" width="800" height="600" fill="url(#vignette)" opacity="0.55"/>
+  </g>
+
+  <!-- Outside circle: quiet surrounding field -->
+  <g opacity="0.35">
+    <circle cx="400" cy="300" r="286" fill="none" stroke="#bfa57a" stroke-width="2"/>
+    <circle cx="400" cy="300" r="290" fill="none" stroke="#7d6a4a" stroke-opacity="0.10" stroke-width="10"/>
+  </g>
+</svg>

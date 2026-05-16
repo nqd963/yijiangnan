@@ -1,5 +1,5 @@
-# Generated images
-generated_images/
+# Generated images SVGs and data files (keep for deployment)
+generated_images/*.png
 
 # Browser profiles
 browser_output/

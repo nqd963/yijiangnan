@@ -1,0 +1,417 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="parchment" cx="50%" cy="45%" r="62%">
+      <stop offset="0%" stop-color="#f8eed7"/>
+      <stop offset="65%" stop-color="#f5e6c8"/>
+      <stop offset="100%" stop-color="#ead7b4"/>
+    </radialGradient>
+
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.22"/>
+    </radialGradient>
+
+    <filter id="paperGrain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.08 0" result="grain"/>
+      <feBlend in="SourceGraphic" in2="grain" mode="multiply"/>
+    </filter>
+
+    <filter id="inkBleed" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.4" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.85 0" result="bb"/>
+      <feBlend in="SourceGraphic" in2="bb" mode="multiply"/>
+    </filter>
+
+    <filter id="softInk" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.8" result="b"/>
+      <feBlend in="SourceGraphic" in2="b" mode="multiply"/>
+    </filter>
+
+    <filter id="mistBlur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.6 0" result="bb"/>
+      <feBlend in="SourceGraphic" in2="bb" mode="screen"/>
+    </filter>
+
+    <filter id="lightningGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.55 0" result="bb"/>
+      <feMerge>
+        <feMergeNode in="bb"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <clipPath id="parchmentCircle">
+      <circle cx="400" cy="300" r="285"/>
+    </clipPath>
+
+    <linearGradient id="skyWash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0.58"/>
+      <stop offset="35%" stop-color="#000" stop-opacity="0.42"/>
+      <stop offset="75%" stop-color="#000" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.08"/>
+    </linearGradient>
+
+    <linearGradient id="rainFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#000" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.04"/>
+    </linearGradient>
+
+    <path id="dragonSpine" d="M 60 200
+      C 120 135, 210 120, 285 165
+      C 345 200, 370 165, 430 140
+      C 520 102, 590 150, 630 205
+      C 670 260, 610 280, 545 255
+      C 470 227, 460 290, 525 330
+      C 600 377, 560 445, 470 440
+      C 380 435, 360 385, 300 355
+      C 215 312, 175 340, 130 395" />
+
+    <path id="dragonBelly" d="M 75 218
+      C 135 155, 220 145, 290 186
+      C 340 215, 372 190, 438 162
+      C 520 128, 580 164, 612 214
+      C 645 267, 595 276, 540 255
+      C 470 230, 470 285, 520 318
+      C 585 361, 548 420, 468 416
+      C 392 412, 368 376, 312 346
+      C 230 302, 190 325, 145 380" />
+
+    <filter id="stormNoise" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="3" seed="12" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="
+        0 0 0 0 0
+        0 0 0 0 0
+        0 0 0 0 0
+        0 0 0 0.35 0" result="a"/>
+      <feBlend in="SourceGraphic" in2="a" mode="multiply"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="600" fill="#efe1c2"/>
+  <g filter="url(#paperGrain)">
+    <rect width="800" height="600" fill="none"/>
+  </g>
+
+  <g clip-path="url(#parchmentCircle)">
+    <circle cx="400" cy="300" r="285" fill="url(#parchment)"/>
+    <circle cx="400" cy="300" r="285" fill="url(#vignette)" opacity="0.9"/>
+
+    <!-- Sky wash -->
+    <path d="M0,0 H800 V420
+             C730,390 665,380 600,395
+             C520,413 455,405 380,380
+             C320,360 250,360 180,382
+             C120,400 65,396 0,375 Z"
+          fill="url(#skyWash)" filter="url(#stormNoise)"/>
+
+    <!-- Rolling ominous clouds -->
+    <g filter="url(#softInk)" opacity="0.96">
+      <path d="M -40 120
+               C 40 60, 120 60, 175 98
+               C 220 128, 280 112, 315 86
+               C 365 48, 460 55, 510 92
+               C 555 124, 610 118, 655 90
+               C 700 62, 780 66, 850 125
+               L 850 250
+               C 790 220, 740 228, 690 250
+               C 620 282, 560 260, 505 232
+               C 450 205, 385 205, 335 236
+               C 275 274, 215 262, 170 232
+               C 115 196, 45 195, -40 235 Z"
+            fill="#000" opacity="0.23"/>
+      <path d="M -30 175
+               C 30 135, 100 130, 160 160
+               C 205 182, 255 170, 292 150
+               C 340 124, 420 132, 468 164
+               C 520 200, 580 182, 625 156
+               C 680 124, 760 132, 840 190
+               L 840 300
+               C 790 277, 745 286, 695 305
+               C 630 330, 560 318, 508 292
+               C 455 265, 388 270, 340 300
+               C 285 335, 215 326, 165 298
+               C 105 265, 35 265, -30 295 Z"
+            fill="#000" opacity="0.18"/>
+      <path d="M 0 70
+               C 70 30, 150 35, 210 70
+               C 270 105, 340 90, 395 60
+               C 470 20, 560 45, 610 80
+               C 655 110, 705 105, 760 78
+               C 805 55, 860 70, 900 105
+               L 900 165
+               C 860 140, 815 148, 770 165
+               C 700 195, 635 178, 585 152
+               C 530 125, 470 130, 420 155
+               C 350 190, 280 178, 230 150
+               C 170 118, 90 115, 0 150 Z"
+            fill="#000" opacity="0.16"/>
+    </g>
+
+    <!-- Mist layers for depth -->
+    <g filter="url(#mistBlur)">
+      <path d="M -50 300
+               C 40 260, 140 265, 220 300
+               C 300 335, 370 330, 450 300
+               C 540 265, 650 260, 850 310
+               L 850 420
+               C 700 395, 610 415, 520 445
+               C 430 475, 320 470, 220 440
+               C 130 412, 40 410, -50 430 Z"
+            fill="#fff" opacity="0.26"/>
+      <path d="M -40 365
+               C 70 330, 175 340, 255 370
+               C 340 402, 420 395, 500 365
+               C 595 330, 705 330, 860 380
+               L 860 470
+               C 730 450, 650 470, 560 500
+               C 455 535, 330 525, 240 495
+               C 150 468, 60 465, -40 485 Z"
+            fill="#fff" opacity="0.20"/>
+    </g>
+
+    <!-- Lightning flashes -->
+    <g filter="url(#lightningGlow)" opacity="0.9">
+      <path d="M 520 68
+               L 485 150
+               L 525 150
+               L 470 262
+               L 540 170
+               L 500 170 Z"
+            fill="#fff" opacity="0.65"/>
+      <path d="M 250 95
+               L 220 155
+               L 255 155
+               L 205 245
+               L 270 170
+               L 238 170 Z"
+            fill="#fff" opacity="0.35"/>
+      <path d="M 650 120
+               L 620 175
+               L 650 175
+               L 600 250
+               L 670 185
+               L 638 185 Z"
+            fill="#fff" opacity="0.28"/>
+    </g>
+
+    <!-- Dragon: body wash -->
+    <g filter="url(#inkBleed)">
+      <use href="#dragonBelly" fill="none" stroke="#000" stroke-opacity="0.12" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#dragonSpine" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#dragonSpine" fill="none" stroke="#000" stroke-opacity="0.32" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#dragonSpine" fill="none" stroke="#000" stroke-opacity="0.55" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Dragon: head & features -->
+    <g filter="url(#inkBleed)">
+      <path d="M 108 193
+               C 92 178, 95 155, 118 146
+               C 142 137, 168 150, 180 170
+               C 192 190, 178 212, 152 220
+               C 132 226, 118 214, 108 193 Z"
+            fill="#000" opacity="0.55"/>
+      <path d="M 156 168
+               C 180 158, 205 160, 225 172"
+            fill="none" stroke="#000" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round"/>
+      <path d="M 150 178
+               C 170 175, 188 180, 202 190"
+            fill="none" stroke="#000" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 120 154
+               C 108 140, 90 132, 74 134"
+            fill="none" stroke="#000" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 132 142
+               C 123 120, 110 108, 92 98"
+            fill="none" stroke="#000" stroke-opacity="0.25" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M 173 155
+               C 193 135, 215 122, 242 118"
+            fill="none" stroke="#000" stroke-opacity="0.28" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="138" cy="178" r="3.2" fill="#000" opacity="0.7"/>
+      <path d="M 145 196
+               C 138 205, 126 208, 114 204"
+            fill="none" stroke="#000" stroke-opacity="0.55" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Dragon: dorsal spines & whiskers along body -->
+    <g filter="url(#inkBleed)" opacity="0.75">
+      <path d="M 260 165 C 255 150, 248 142, 235 135" fill="none" stroke="#000" stroke-opacity="0.25" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 325 175 C 320 160, 312 150, 300 142" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 400 145 C 395 130, 385 120, 372 112" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 500 140 C 492 125, 480 114, 465 106" fill="none" stroke="#000" stroke-opacity="0.20" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 610 210 C 602 195, 590 184, 576 176" fill="none" stroke="#000" stroke-opacity="0.20" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 560 332 C 575 332, 592 338, 605 350" fill="none" stroke="#000" stroke-opacity="0.18" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 485 442 C 500 452, 515 470, 520 488" fill="none" stroke="#000" stroke-opacity="0.16" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- Clouds wrapping dragon (negative space masking illusion) -->
+    <g filter="url(#softInk)">
+      <path d="M 210 210
+               C 250 190, 305 192, 350 215
+               C 395 238, 445 235, 490 210
+               C 540 182, 605 185, 670 230
+               C 620 240, 575 265, 525 280
+               C 465 298, 405 292, 350 270
+               C 290 245, 250 245, 210 260 Z"
+            fill="#f5e6c8" opacity="0.72"/>
+      <path d="M 300 305
+               C 355 280, 420 280, 470 308
+               C 520 336, 565 340, 620 322
+               C 592 352, 556 370, 510 380
+               C 448 392, 395 386, 345 360
+               C 322 348, 308 330, 300 305 Z"
+            fill="#f5e6c8" opacity="0.62"/>
+      <path d="M 120 235
+               C 150 225, 180 232, 210 250
+               C 190 270, 160 280, 120 275 Z"
+            fill="#f5e6c8" opacity="0.58"/>
+    </g>
+
+    <!-- Rain -->
+    <g opacity="0.95" filter="url(#softInk)">
+      <g stroke="url(#rainFade)" stroke-width="1.2" stroke-linecap="round">
+        <path d="M40 120 L28 170"/>
+        <path d="M70 140 L58 195"/>
+        <path d="M105 115 L92 170"/>
+        <path d="M135 150 L122 210"/>
+        <path d="M165 120 L150 180"/>
+        <path d="M200 150 L185 220"/>
+        <path d="M235 120 L220 190"/>
+        <path d="M270 150 L252 235"/>
+        <path d="M300 120 L282 210"/>
+        <path d="M335 150 L315 250"/>
+        <path d="M370 120 L350 220"/>
+        <path d="M405 145 L382 265"/>
+        <path d="M440 120 L418 240"/>
+        <path d="M475 150 L450 285"/>
+        <path d="M510 120 L485 260"/>
+        <path d="M545 145 L515 295"/>
+        <path d="M580 120 L550 275"/>
+        <path d="M615 150 L582 310"/>
+        <path d="M650 120 L615 295"/>
+        <path d="M685 150 L648 330"/>
+        <path d="M720 120 L680 310"/>
+        <path d="M755 145 L710 340"/>
+      </g>
+      <g stroke="url(#rainFade)" stroke-width="0.8" stroke-linecap="round" opacity="0.75">
+        <path d="M55 185 L45 225"/>
+        <path d="M120 200 L110 245"/>
+        <path d="M185 195 L170 255"/>
+        <path d="M250 200 L235 270"/>
+        <path d="M315 205 L295 290"/>
+        <path d="M380 205 L360 295"/>
+        <path d="M445 210 L420 315"/>
+        <path d="M510 215 L480 335"/>
+        <path d="M575 215 L540 350"/>
+        <path d="M640 220 L600 370"/>
+        <path d="M705 220 L660 385"/>
+      </g>
+    </g>
+
+    <!-- Ancient ruin below -->
+    <g filter="url(#inkBleed)">
+      <!-- Ground / slope -->
+      <path d="M -40 515
+               C 80 470, 175 465, 260 492
+               C 340 518, 430 515, 520 485
+               C 610 455, 710 455, 860 505
+               L 860 650 L -40 650 Z"
+            fill="#000" opacity="0.28"/>
+      <path d="M 0 540
+               C 90 510, 165 512, 235 530
+               C 320 553, 405 550, 495 525
+               C 585 500, 705 500, 820 545"
+            fill="none" stroke="#000" stroke-opacity="0.35" stroke-width="6" stroke-linecap="round"/>
+
+      <!-- Ruin structure -->
+      <path d="M 300 430
+               C 310 410, 336 404, 360 410
+               C 390 418, 420 412, 445 400
+               C 470 388, 505 392, 520 415
+               L 540 500
+               C 545 520, 530 538, 508 540
+               L 312 555
+               C 286 557, 268 538, 273 513 Z"
+            fill="#000" opacity="0.38"/>
+
+      <!-- Broken arch / doorway -->
+      <path d="M 360 505
+               C 358 470, 380 445, 410 442
+               C 442 439, 468 463, 472 498
+               L 468 548
+               L 362 556 Z"
+            fill="#000" opacity="0.55"/>
+      <path d="M 372 510
+               C 372 485, 388 466, 410 464
+               C 434 462, 453 479, 456 505
+               L 452 546
+               L 376 552 Z"
+            fill="#f5e6c8" opacity="0.18"/>
+
+      <!-- Stone blocks / cracks -->
+      <path d="M 295 470 L 530 455" fill="none" stroke="#000" stroke-opacity="0.28" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M 310 498 L 535 480" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M 305 525 L 528 510" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M 330 438 L 315 560" fill="none" stroke="#000" stroke-opacity="0.18" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M 420 430 L 410 562" fill="none" stroke="#000" stroke-opacity="0.16" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M 505 432 L 520 552" fill="none" stroke="#000" stroke-opacity="0.16" stroke-width="2.2" stroke-linecap="round"/>
+
+      <!-- Fallen pillar -->
+      <path d="M 185 520
+               C 205 505, 230 505, 255 515
+               C 290 530, 310 550, 300 566
+               C 290 582, 255 578, 220 562
+               C 195 550, 170 535, 185 520 Z"
+            fill="#000" opacity="0.3"/>
+      <path d="M 200 530 L 292 562" fill="none" stroke="#000" stroke-opacity="0.24" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 215 520 L 305 552" fill="none" stroke="#000" stroke-opacity="0.18" stroke-width="2.2" stroke-linecap="round"/>
+
+      <!-- Sparse dead brush -->
+      <path d="M 595 560
+               C 585 535, 590 515, 605 498
+               C 608 520, 610 540, 625 560"
+            fill="none" stroke="#000" stroke-opacity="0.32" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M 612 552
+               C 632 540, 645 522, 650 500"
+            fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="2.6" stroke-linecap="round"/>
+    </g>
+
+    <!-- Foreground mist pooling around ruin -->
+    <g filter="url(#mistBlur)">
+      <path d="M 110 520
+               C 170 485, 250 485, 320 515
+               C 390 545, 470 545, 540 515
+               C 610 485, 700 490, 780 525
+               L 780 590
+               C 690 568, 610 575, 530 595
+               C 455 615, 370 610, 300 595
+               C 230 580, 160 582, 110 590 Z"
+            fill="#fff" opacity="0.22"/>
+    </g>
+
+    <!-- Final edge vignette inside circle -->
+    <circle cx="400" cy="300" r="285" fill="none" stroke="#000" stroke-opacity="0.10" stroke-width="18"/>
+    <circle cx="400" cy="300" r="285" fill="none" stroke="#000" stroke-opacity="0.10" stroke-width="2"/>
+  </g>
+
+  <!-- Outside circle soften to page -->
+  <rect width="800" height="600" fill="none" filter="url(#paperGrain)"/>
+</svg>

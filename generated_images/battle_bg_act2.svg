@@ -1,0 +1,301 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Parchment + subtle fibers -->
+    <radialGradient id="parchmentGrad" cx="45%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#f7ecd4"/>
+      <stop offset="55%" stop-color="#f5e6c8"/>
+      <stop offset="100%" stop-color="#e9d3ad"/>
+    </radialGradient>
+    <filter id="paperTexture" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.12 0" in="noise" result="n2"/>
+      <feBlend in="SourceGraphic" in2="n2" mode="multiply"/>
+    </filter>
+
+    <!-- Soft ink bleed -->
+    <filter id="inkBleed" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="0.6" result="b"/>
+      <feBlend in="SourceGraphic" in2="b" mode="multiply"/>
+    </filter>
+
+    <!-- Mist -->
+    <filter id="mistBlur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+
+    <!-- Sunset wash -->
+    <linearGradient id="sunsetWash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d7b07a" stop-opacity="0.55"/>
+      <stop offset="40%" stop-color="#f0c48d" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#f5e6c8" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Ink gradients -->
+    <linearGradient id="inkFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1a1a" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#1a1a1a" stop-opacity="0.15"/>
+    </linearGradient>
+
+    <linearGradient id="inkHaze" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a1a1a" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#1a1a1a" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#1a1a1a" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Brush stroke patterns -->
+    <pattern id="brushHatch" width="18" height="18" patternUnits="userSpaceOnUse">
+      <path d="M-2 6 C 4 5, 8 7, 14 6" stroke="#111" stroke-opacity="0.12" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M0 14 C 6 13, 10 15, 18 14" stroke="#111" stroke-opacity="0.10" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M5 -1 C 7 5, 7 9, 6 20" stroke="#111" stroke-opacity="0.06" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </pattern>
+
+    <!-- Mask to keep parchment circular -->
+    <mask id="circleMask">
+      <rect width="800" height="600" fill="black"/>
+      <circle cx="400" cy="300" r="285" fill="white"/>
+    </mask>
+
+    <!-- Edge vignette inside circle -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="60%">
+      <stop offset="65%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.20"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background (outside circle left empty/white, scene inside circle) -->
+  <g mask="url(#circleMask)" filter="url(#paperTexture)">
+    <rect x="0" y="0" width="800" height="600" fill="url(#parchmentGrad)"/>
+    <rect x="0" y="0" width="800" height="280" fill="url(#sunsetWash)"/>
+
+    <!-- Subtle distant atmospheric wash -->
+    <path d="M0,210 C120,180 220,190 330,165 C450,135 560,150 690,120 C740,108 770,110 800,105 L800,270 L0,270 Z"
+          fill="#1a1a1a" fill-opacity="0.06"/>
+
+    <!-- Distant mountains (ink wash) -->
+    <g filter="url(#inkBleed)">
+      <path d="M-20,250
+               C40,210 90,220 140,195
+               C180,175 240,180 300,150
+               C350,125 420,145 470,120
+               C540,82 590,95 640,118
+               C700,145 740,118 820,140
+               L820,290 L-20,290 Z"
+            fill="url(#inkFade)" opacity="0.55"/>
+      <path d="M-20,268
+               C70,245 120,255 175,235
+               C250,208 315,220 365,200
+               C430,175 510,195 575,170
+               C650,145 710,160 820,150
+               L820,310 L-20,310 Z"
+            fill="#111" fill-opacity="0.10"/>
+      <!-- Mountain ridge strokes -->
+      <path d="M15,244 C60,220 95,230 135,205 C175,185 230,190 285,160 C330,135 385,155 435,130 C505,95 560,112 610,128 C680,150 720,130 785,145"
+            fill="none" stroke="#111" stroke-opacity="0.35" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M40,265 C95,248 130,258 190,238 C260,215 312,225 380,202 C450,177 505,198 585,170 C650,147 710,162 770,155"
+            fill="none" stroke="#111" stroke-opacity="0.18" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Great Wall in distance, snaking across mountains -->
+    <g filter="url(#inkBleed)">
+      <path d="M60,238
+               C120,220 155,232 205,214
+               C250,198 290,206 330,188
+               C380,166 415,178 460,160
+               C520,135 565,150 610,140
+               C660,130 705,138 750,130"
+            fill="none" stroke="#0d0d0d" stroke-opacity="0.45" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Wall parapet suggestion -->
+      <path d="M62,235
+               C122,218 154,228 205,210
+               C252,193 290,202 332,184
+               C380,162 417,173 462,156
+               C520,131 566,145 610,136
+               C660,126 706,134 751,126"
+            fill="none" stroke="#0d0d0d" stroke-opacity="0.22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 8"/>
+      <!-- Watchtowers as ink blocks -->
+      <g fill="#0b0b0b" fill-opacity="0.35">
+        <path d="M150,226 l8,-4 l10,2 l-2,10 l-14,2 Z"/>
+        <path d="M310,196 l7,-4 l10,2 l-2,10 l-14,2 Z"/>
+        <path d="M465,169 l7,-4 l10,2 l-2,10 l-14,2 Z"/>
+        <path d="M610,148 l7,-4 l10,2 l-2,10 l-14,2 Z"/>
+      </g>
+    </g>
+
+    <!-- Mist / clouds layering for depth -->
+    <g filter="url(#mistBlur)">
+      <path d="M-40,270 C60,240 150,270 240,250 C320,233 380,250 465,232 C560,212 640,240 740,220 C800,210 860,220 880,225 L880,330 L-40,330 Z"
+            fill="#f5e6c8" opacity="0.70"/>
+      <path d="M-60,310 C50,285 155,315 255,292 C350,270 420,300 520,275 C625,248 700,290 820,265 L820,365 L-60,365 Z"
+            fill="#f5e6c8" opacity="0.62"/>
+      <path d="M-40,350 C70,330 160,365 255,342 C350,318 450,355 540,332 C650,304 720,336 840,318 L840,420 L-40,420 Z"
+            fill="#f5e6c8" opacity="0.55"/>
+    </g>
+
+    <!-- Desert dunes (midground) -->
+    <g filter="url(#inkBleed)">
+      <path d="M-30,400
+               C80,360 180,390 260,360
+               C340,330 450,360 520,330
+               C610,292 700,330 830,295
+               L830,600 L-30,600 Z"
+            fill="#111" fill-opacity="0.10"/>
+      <path d="M-10,435
+               C90,410 190,440 275,420
+               C360,400 445,430 545,405
+               C640,382 720,410 810,395
+               L810,600 L-10,600 Z"
+            fill="url(#brushHatch)" opacity="0.55"/>
+      <path d="M-10,455
+               C120,430 170,465 280,440
+               C400,412 460,470 590,438
+               C685,414 750,450 820,440"
+            fill="none" stroke="#0f0f0f" stroke-opacity="0.22" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M20,500
+               C140,470 240,520 350,490
+               C470,457 560,512 690,475
+               C750,458 785,468 820,462"
+            fill="none" stroke="#0f0f0f" stroke-opacity="0.16" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M60,545
+               C170,520 290,560 420,535
+               C560,508 640,545 760,525"
+            fill="none" stroke="#0f0f0f" stroke-opacity="0.13" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+
+    <!-- Foreground dune crest with stronger ink -->
+    <g filter="url(#inkBleed)">
+      <path d="M-40,560
+               C90,520 170,560 270,535
+               C350,515 435,548 520,528
+               C610,506 705,545 860,505
+               L860,640 L-40,640 Z"
+            fill="#0c0c0c" fill-opacity="0.14"/>
+      <path d="M-20,548
+               C95,510 178,545 278,520
+               C360,500 440,535 520,515
+               C615,492 705,530 820,498"
+            fill="none" stroke="#0b0b0b" stroke-opacity="0.32" stroke-width="4.2" stroke-linecap="round"/>
+      <path d="M-10,570
+               C110,545 210,575 310,552
+               C420,526 520,570 635,542
+               C710,524 770,538 820,528"
+            fill="none" stroke="#0b0b0b" stroke-opacity="0.18" stroke-width="2.6" stroke-linecap="round"/>
+    </g>
+
+    <!-- Frontier fortress tower on a dune (right mid-foreground) -->
+    <g filter="url(#inkBleed)">
+      <path d="M600,330
+               C615,320 645,318 660,330
+               C675,345 678,372 670,392
+               C660,420 642,440 635,468
+               C627,500 630,520 610,540
+               C595,555 565,548 560,525
+               C555,500 570,480 575,455
+               C582,420 565,405 570,380
+               C575,355 585,342 600,330 Z"
+            fill="#0b0b0b" fill-opacity="0.16"/>
+      <path d="M585,348
+               C605,336 632,336 648,350
+               L648,420
+               C640,430 632,434 620,438
+               C605,434 597,428 588,420 Z"
+            fill="#0a0a0a" fill-opacity="0.26"/>
+      <!-- Tower edges -->
+      <path d="M588,420 L588,350 C605,338 632,338 648,350 L648,420"
+            fill="none" stroke="#070707" stroke-opacity="0.45" stroke-width="2.2" stroke-linejoin="round"/>
+      <!-- Battlements -->
+      <path d="M590,350
+               L596,342 L604,346 L612,340 L620,346 L628,340 L636,346 L644,342 L648,350"
+            fill="none" stroke="#070707" stroke-opacity="0.40" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Door void -->
+      <path d="M612,406
+               C615,395 620,392 625,392
+               C632,392 637,397 638,406
+               L638,430
+               C636,438 632,444 625,444
+               C618,444 614,438 612,430 Z"
+            fill="#050505" fill-opacity="0.30"/>
+      <!-- Banner-like stroke (tattered) -->
+      <path d="M648,360
+               C665,365 675,378 680,392
+               C670,400 660,398 652,392"
+            fill="none" stroke="#0b0b0b" stroke-opacity="0.30" stroke-width="2.8" stroke-linecap="round"/>
+    </g>
+
+    <!-- Ancient swords stuck in sand (foreground left/center) -->
+    <g filter="url(#inkBleed)" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Sword 1 -->
+      <path d="M210,520
+               C212,500 215,485 220,468
+               C226,448 232,430 235,410"
+            fill="none" stroke="#070707" stroke-opacity="0.55" stroke-width="3.2"/>
+      <path d="M231,412 L242,402" fill="none" stroke="#070707" stroke-opacity="0.55" stroke-width="3.0"/>
+      <path d="M228,416 L248,410" fill="none" stroke="#070707" stroke-opacity="0.35" stroke-width="2.0"/>
+      <path d="M215,500 C225,498 232,502 240,510" fill="none" stroke="#070707" stroke-opacity="0.22" stroke-width="2.2"/>
+      <!-- Hilt -->
+      <path d="M228,422 C220,426 212,426 205,420" fill="none" stroke="#070707" stroke-opacity="0.45" stroke-width="3.2"/>
+      <path d="M216,434 C214,440 212,446 210,452" fill="none" stroke="#070707" stroke-opacity="0.35" stroke-width="2.4"/>
+
+      <!-- Sword 2 (more tilted) -->
+      <path d="M330,565
+               C328,540 326,520 322,500
+               C317,475 308,452 300,430"
+            fill="none" stroke="#060606" stroke-opacity="0.50" stroke-width="3.0"/>
+      <path d="M302,432 L288,420" fill="none" stroke="#060606" stroke-opacity="0.45" stroke-width="2.8"/>
+      <path d="M304,438 L282,438" fill="none" stroke="#060606" stroke-opacity="0.28" stroke-width="2.0"/>
+      <path d="M315,520 C305,522 296,530 292,542" fill="none" stroke="#060606" stroke-opacity="0.18" stroke-width="2.2"/>
+      <path d="M300,440 C292,448 284,450 274,446" fill="none" stroke="#060606" stroke-opacity="0.40" stroke-width="3.0"/>
+
+      <!-- Sword 3 (shorter, near right) -->
+      <path d="M505,545
+               C508,528 512,515 518,500
+               C525,482 530,468 532,452"
+            fill="none" stroke="#070707" stroke-opacity="0.45" stroke-width="2.6"/>
+      <path d="M528,454 L538,446" fill="none" stroke="#070707" stroke-opacity="0.42" stroke-width="2.4"/>
+      <path d="M526,462 L544,460" fill="none" stroke="#070707" stroke-opacity="0.22" stroke-width="1.8"/>
+      <path d="M520,505 C527,504 533,508 538,514" fill="none" stroke="#070707" stroke-opacity="0.16" stroke-width="2.0"/>
+      <path d="M526,466 C520,470 514,470 508,466" fill="none" stroke="#070707" stroke-opacity="0.34" stroke-width="2.6"/>
+    </g>
+
+    <!-- Wind-driven sand strokes -->
+    <g filter="url(#inkBleed)">
+      <path d="M80,470 C140,452 210,468 270,450" fill="none" stroke="#111" stroke-opacity="0.10" stroke-width="2" stroke-linecap="round"/>
+      <path d="M120,492 C200,470 300,492 380,468" fill="none" stroke="#111" stroke-opacity="0.09" stroke-width="2" stroke-linecap="round"/>
+      <path d="M420,465 C500,445 610,468 700,440" fill="none" stroke="#111" stroke-opacity="0.09" stroke-width="2" stroke-linecap="round"/>
+      <path d="M470,500 C555,475 655,505 745,480" fill="none" stroke="#111" stroke-opacity="0.08" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- Low drifting mist over dunes -->
+    <g filter="url(#mistBlur)">
+      <path d="M-40,430
+               C60,410 150,435 250,420
+               C350,405 450,435 555,418
+               C660,400 735,425 860,405
+               L860,520 L-40,520 Z"
+            fill="#f5e6c8" opacity="0.48"/>
+      <path d="M-60,500
+               C40,485 150,508 260,492
+               C375,475 470,510 590,490
+               C700,472 765,495 860,480
+               L860,585 L-60,585 Z"
+            fill="#f5e6c8" opacity="0.38"/>
+    </g>
+
+    <!-- Sunset disk hint (negative/soft wash) -->
+    <g opacity="0.55">
+      <circle cx="140" cy="120" r="56" fill="#d9b47f" fill-opacity="0.35"/>
+      <circle cx="140" cy="120" r="64" fill="#d9b47f" fill-opacity="0.18"/>
+      <circle cx="140" cy="120" r="78" fill="#d9b47f" fill-opacity="0.10"/>
+    </g>
+
+    <!-- Final vignette -->
+    <rect x="0" y="0" width="800" height="600" fill="url(#vignette)" opacity="0.55"/>
+  </g>
+
+  <!-- Soft outer circle edge (parchment boundary) -->
+  <circle cx="400" cy="300" r="285" fill="none" stroke="#b9996c" stroke-opacity="0.35" stroke-width="3"/>
+  <circle cx="400" cy="300" r="283" fill="none" stroke="#6e5a3d" stroke-opacity="0.12" stroke-width="2"/>
+</svg>
