@@ -764,9 +764,32 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     0%,100%{box-shadow: inset 0 0 120px rgba(200,40,40,0.2);}
     50%{box-shadow: inset 0 0 160px rgba(200,40,40,0.35);}
   }
-.sg-wrap{max-width:1400px;width:98%;margin:0 auto;min-height:500px;}
+.sg-wrap{max-width:1400px;width:98%;margin:0 auto;min-height:500px;padding-top:2.2rem;position:relative;}
 .sg-screen{animation:sgFade .35s ease forwards;}
 @keyframes sgFade{from{opacity:0;transform:translateY(8px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* ── 持久状态栏 ── */
+.sg-status-bar{
+  position:absolute;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.25rem 0.6rem;background:rgba(10,8,20,0.88);
+  border-bottom:1px solid rgba(201,168,76,0.3);
+  font-size:0.65rem;color:var(--text);gap:0.4rem;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  min-height:1.8rem;flex-wrap:wrap;
+}
+.sg-sbar-left,.sg-sbar-center,.sg-sbar-right{
+  display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;
+}
+.sg-sbar-char{font-weight:700;color:var(--gold);white-space:nowrap;}
+.sg-sbar-hp{color:#ef4444;white-space:nowrap;}
+.sg-sbar-block{color:#60a5fa;white-space:nowrap;}
+.sg-sbar-energy{color:#fbbf24;white-space:nowrap;}
+.sg-sbar-gold{color:var(--gold);white-space:nowrap;}
+.sg-sbar-deck{color:var(--text-dim);white-space:nowrap;}
+.sg-sbar-relic{color:#a78bfa;white-space:nowrap;}
+.sg-sbar-act{color:rgba(201,168,76,0.7);white-space:nowrap;}
+.sg-sbar-floor{color:var(--text-faint);white-space:nowrap;}
 
 /* ── 通用 ── */
 .sg-btn{
@@ -1820,6 +1843,24 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   <!-- 诗境问道 · 肉鸽卡牌 -->
   <div class="mp-view" id="viewShiciGame">
     <div class="sg-wrap">
+      <!-- 持久状态栏（所有界面可见） -->
+      <div class="sg-status-bar" id="sgStatusBar" style="display:none;">
+        <div class="sg-sbar-left">
+          <span class="sg-sbar-char" id="sgSbarChar">📜 诗人</span>
+          <span class="sg-sbar-hp">❤️ <span id="sgSbarHp">80</span>/<span id="sgSbarMaxHp">80</span></span>
+          <span class="sg-sbar-block" id="sgSbarBlock" style="display:none;">🛡️ <span id="sgSbarBlockVal">0</span></span>
+        </div>
+        <div class="sg-sbar-center">
+          <span class="sg-sbar-energy">⚡ <span id="sgSbarEnergy">3</span>/<span id="sgSbarMaxEnergy">3</span></span>
+          <span class="sg-sbar-gold">💰 <span id="sgSbarGold">0</span></span>
+          <span class="sg-sbar-deck">📚 <span id="sgSbarDeck">0</span></span>
+          <span class="sg-sbar-relic">🔮 <span id="sgSbarRelic">0</span></span>
+        </div>
+        <div class="sg-sbar-right">
+          <span class="sg-sbar-act" id="sgSbarAct">🏛️ 第一境</span>
+          <span class="sg-sbar-floor" id="sgSbarFloor">层 1/12</span>
+        </div>
+      </div>
       <!-- 标题画面 -->
       <div id="sgTitle" class="sg-screen">
         <div class="sg-title-icon">🎋📜</div>
@@ -2517,61 +2558,61 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     var CARDS = {
       yinyong:{name:"吟咏",cost:0,type:"attack",dmg:5,desc:"基础诗咏 · 造成5点伤害",rarity:"basic"},
       mosong:{name:"默诵",cost:0,type:"skill",block:4,desc:"基础默诵 · 获得4点格挡",rarity:"basic"},
-      qingci:{name:"清词",cost:1,type:"attack",dmg:9,desc:"清词丽句 · 造成9点伤害",rarity:"common"},
-      mansha:{name:"浣溪沙",cost:1,type:"skill",block:8,desc:"护体清溪 · 获得8点格挡",rarity:"common"},
-      puziman:{name:"菩萨蛮",cost:1,type:"attack",dmg:6,hits:2,desc:"双叠句 · 造成6点伤害×2",rarity:"common"},
-      dianjiang:{name:"点绛唇",cost:1,type:"skill",debuff:"vuln",val:1,desc:"蹴罢秋千 · 施加易伤1层",rarity:"common"},
-      pozhen:{name:"破阵子",cost:2,type:"attack",dmg:20,desc:"醉里挑灯 · 造成20点伤害",rarity:"common"},
-      manjiang:{name:"满江红",cost:2,type:"attack",dmg:16,desc:"壮怀激烈 · 造成16点伤害",rarity:"common"},
-      jingyesi:{name:"静夜思",cost:0,type:"attack",dmg:4,desc:"低头思故乡 · 造成4点伤害",rarity:"common"},
-      yijianmei:{name:"一剪梅",cost:1,type:"skill",block:5,debuff:"vuln",val:1,desc:"此情无计可消除 · 5格挡·易伤1层",rarity:"common"},
-      guiziyao:{name:"归字谣",cost:1,type:"attack",dmg:7,debuff:"weak",val:1,desc:"归去来兮 · 7伤·虚弱1层",rarity:"common"},
-      nangezi:{name:"南歌子",cost:1,type:"skill",poison:5,desc:"凤髻金泥带 · 叠毒5",rarity:"common"},
-      ruanlang:{name:"阮郎归",cost:1,type:"attack",dmg:6,block:6,desc:"天边金掌露成霜 · 6伤·6格挡",rarity:"common"},
-      xifenfei:{name:"惜分飞",cost:1,type:"attack",dmg:5,hits:2,desc:"泪湿阑干 · 5伤害×2",rarity:"common"},
-      guomei:{name:"过梅岭",cost:1,type:"attack",dmg:8,selfDmg:3,desc:"中有行人 · 8伤·自损3",rarity:"common"},
-      jiangcheng:{name:"江城子",cost:1,type:"attack",dmg:12,half:true,desc:"十年生死两茫茫 · 半血以下伤害翻倍",rarity:"uncommon"},
-      ruman:{name:"如梦令",cost:1,type:"skill",block:6,draw:1,desc:"昨夜雨疏风骤 · 6格挡·抽1牌",rarity:"uncommon"},
-      qingping:{name:"清平乐",cost:1,type:"skill",block:6,debuff:"vuln",val:1,desc:"清平祥和 · 6格挡易伤1层",rarity:"uncommon"},
-      shengsheng:{name:"声声慢",cost:1,type:"skill",debuff:"weak",val:2,desc:"寻寻觅觅冷冷清清 · 虚弱2层",rarity:"uncommon"},
-      diehua:{name:"蝶恋花",cost:1,type:"skill",draw:2,desc:"庭院深深 · 抽2张牌",rarity:"uncommon"},
-      yujia:{name:"渔家傲",cost:1,type:"skill",block:8,gainEnergy:1,desc:"塞上秋来风景异 · 8格挡·+1能量",rarity:"uncommon"},
-      linjiang:{name:"临江仙",cost:0,type:"skill",heal:8,exhaust:true,desc:"梦后楼台高锁 · 回复8HP·消耗",rarity:"uncommon"},
-      dingfeng:{name:"定风波",cost:1,type:"skill",buff:"str",val:2,desc:"莫听穿林打叶声 · 获得2点力量",rarity:"uncommon"},
-      niannu:{name:"念奴娇",cost:2,type:"attack",dmg:12,aoe:true,desc:"大江东去浪淘尽 · 全体12点伤害",rarity:"uncommon"},
-      jiangjin:{name:"将进酒",cost:1,type:"attack",dmg:8,gainEnergy:1,desc:"杯莫停 · 8伤+1能量",rarity:"uncommon"},
-      tasha:{name:"踏莎行",cost:1,type:"attack",dmg:4,hits:3,desc:"雾失楼台 · 4点伤害×3",rarity:"uncommon"},
-      yulin:{name:"雨霖铃",cost:2,type:"skill",block:15,desc:"寒蝉凄切对长亭晚 · 获得15格挡",rarity:"uncommon"},
-      wanglu:{name:"望庐山瀑布",cost:1,type:"attack",dmg:10,draw:1,desc:"飞流直下三千尺 · 10伤·抽1牌",rarity:"uncommon"},
-      busuanzi:{name:"卜算子",cost:1,type:"attack",dmgPerCard:3,desc:"我住长江头 · 每张手牌+3伤",rarity:"uncommon"},
-      caisangzi:{name:"采桑子",cost:1,type:"skill",block:6,poison:3,desc:"轻舟短棹 · 6格挡叠毒3",rarity:"uncommon"},
-      daolianzi:{name:"捣练子",cost:0,type:"skill",gainEnergy:2,exhaust:true,desc:"深院静 · 得2能量消耗",rarity:"uncommon"},
-      langtaosha:{name:"浪淘沙",cost:2,type:"attack",dmg:10,aoe:true,desc:"大江东去浪淘尽 · 全体10伤",rarity:"uncommon"},
-      mantingfang:{name:"满庭芳",cost:2,type:"skill",heal:8,block:8,desc:"十里荷花菡萏香 · 回8HP·8格挡",rarity:"uncommon"},
-      shaonian:{name:"少年游",cost:1,type:"skill",tempStr:3,desc:"长安古道马迟迟 · 本回合+3力量",rarity:"uncommon"},
-      tanpo:{name:"摊破浣溪沙",cost:2,type:"skill",draw:3,desc:"菡萏香销翠叶残 · 抽3张牌",rarity:"uncommon"},
-      wangjiangnan:{name:"望江南",cost:1,type:"skill",block:10,exhaust:true,desc:"梳洗罢 · 10格挡消耗",rarity:"uncommon"},
-      wulingchun:{name:"武陵春",cost:2,type:"attack",dmg:10,dmgPerMissingHp:1,desc:"载不动许多愁 · 每少20HP+1伤",rarity:"uncommon"},
-      xiaochongshan:{name:"小重山",cost:1,type:"skill",block:8,desc:"昨夜寒蛩 · 8格挡下回+2力",rarity:"uncommon",nextTurnStr:2},
-      xingxiangzi:{name:"行香子",cost:1,type:"skill",draw:1,gainEnergy:1,desc:"小园几许 · 抽1牌+1能量",rarity:"uncommon"},
-      zuihuajian:{name:"醉花间",cost:1,type:"attack",dmg:6,blockBonus:true,desc:"晴雪小园 · 每3格挡+1伤",rarity:"uncommon"},
-      jianzi:{name:"减字木兰花",cost:2,type:"attack",dmg:14,debuff:"strDown",val:2,desc:"天涯旧恨 · 14伤减敌力量2",rarity:"uncommon"},
-      shuidiao:{name:"水调歌头",cost:2,type:"power",desc:"每回合+1能量",rarity:"rare",power:"energy"},
-      xijiang:{name:"西江月",cost:1,type:"power",desc:"每回合+3格挡",rarity:"rare",power:"block"},
-      zhegu:{name:"鹧鸪天",cost:1,type:"power",desc:"每回合+1力量",rarity:"rare",power:"strength"},
-      qinyuan:{name:"沁园春",cost:3,type:"skill",heal:10,maxHp:2,exhaust:true,desc:"北国风光千里雪 · 回10HP·+2最大HP·消耗",rarity:"rare"},
-      liuzhou:{name:"六州歌头",cost:3,type:"attack",dmg:28,exhaust:true,desc:"少年侠气 · 28伤消耗",rarity:"rare"},
-      yiqine:{name:"忆秦娥",cost:2,type:"attack",dmg:18,exhaust:true,debuff:"vuln",val:2,debuff2:"weak",val2:2,desc:"西风残照汉家陵阙 · 18伤·易伤2·虚弱2·消耗",rarity:"rare"},
-      yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"},
+      qingci:{name:"清词",cost:1,type:"attack",dmg:9,desc:"清词丽句 · 造成9点伤害",rarity:"common",char:"lizhi"},
+      mansha:{name:"浣溪沙",cost:1,type:"skill",block:8,desc:"护体清溪 · 获得8点格挡",rarity:"common",char:"sush"},
+      puziman:{name:"菩萨蛮",cost:1,type:"attack",dmg:6,hits:2,desc:"双叠句 · 造成6点伤害×2",rarity:"common",char:"liqing"},
+      dianjiang:{name:"点绛唇",cost:1,type:"skill",debuff:"vuln",val:1,desc:"蹴罢秋千 · 施加易伤1层",rarity:"common",char:"liqing"},
+      pozhen:{name:"破阵子",cost:2,type:"attack",dmg:20,desc:"醉里挑灯 · 造成20点伤害",rarity:"common",char:"lizhi"},
+      manjiang:{name:"满江红",cost:2,type:"attack",dmg:16,desc:"壮怀激烈 · 造成16点伤害",rarity:"common",char:"lizhi"},
+      jingyesi:{name:"静夜思",cost:0,type:"attack",dmg:4,desc:"低头思故乡 · 造成4点伤害",rarity:"common",char:"lizhi"},
+      yijianmei:{name:"一剪梅",cost:1,type:"skill",block:5,debuff:"vuln",val:1,desc:"此情无计可消除 · 5格挡·易伤1层",rarity:"common",char:"liqing"},
+      guiziyao:{name:"归字谣",cost:1,type:"attack",dmg:7,debuff:"weak",val:1,desc:"归去来兮 · 7伤·虚弱1层",rarity:"common",char:"lizhi"},
+      nangezi:{name:"南歌子",cost:1,type:"skill",poison:5,desc:"凤髻金泥带 · 叠毒5",rarity:"common",char:"liqing"},
+      ruanlang:{name:"阮郎归",cost:1,type:"attack",dmg:6,block:6,desc:"天边金掌露成霜 · 6伤·6格挡",rarity:"common",char:"sush"},
+      xifenfei:{name:"惜分飞",cost:1,type:"attack",dmg:5,hits:2,desc:"泪湿阑干 · 5伤害×2",rarity:"common",char:"lizhi"},
+      guomei:{name:"过梅岭",cost:1,type:"attack",dmg:8,selfDmg:3,desc:"中有行人 · 8伤·自损3",rarity:"common",char:"lizhi"},
+      jiangcheng:{name:"江城子",cost:1,type:"attack",dmg:12,half:true,desc:"十年生死两茫茫 · 半血以下伤害翻倍",rarity:"uncommon",char:"sush"},
+      ruman:{name:"如梦令",cost:1,type:"skill",block:6,draw:1,desc:"昨夜雨疏风骤 · 6格挡·抽1牌",rarity:"uncommon",char:"sush"},
+      qingping:{name:"清平乐",cost:1,type:"skill",block:6,debuff:"vuln",val:1,desc:"清平祥和 · 6格挡易伤1层",rarity:"uncommon",char:"sush"},
+      shengsheng:{name:"声声慢",cost:1,type:"skill",debuff:"weak",val:2,desc:"寻寻觅觅冷冷清清 · 虚弱2层",rarity:"uncommon",char:"liqing"},
+      diehua:{name:"蝶恋花",cost:1,type:"skill",draw:2,desc:"庭院深深 · 抽2张牌",rarity:"uncommon",char:"liqing"},
+      yujia:{name:"渔家傲",cost:1,type:"skill",block:8,gainEnergy:1,desc:"塞上秋来风景异 · 8格挡·+1能量",rarity:"uncommon",char:"sush"},
+      linjiang:{name:"临江仙",cost:0,type:"skill",heal:8,exhaust:true,desc:"梦后楼台高锁 · 回复8HP·消耗",rarity:"uncommon",char:"liqing"},
+      dingfeng:{name:"定风波",cost:1,type:"skill",buff:"str",val:2,desc:"莫听穿林打叶声 · 获得2点力量",rarity:"uncommon",char:"sush"},
+      niannu:{name:"念奴娇",cost:2,type:"attack",dmg:12,aoe:true,desc:"大江东去浪淘尽 · 全体12点伤害",rarity:"uncommon",char:"sush"},
+      jiangjin:{name:"将进酒",cost:1,type:"attack",dmg:8,gainEnergy:1,desc:"杯莫停 · 8伤+1能量",rarity:"uncommon",char:"lizhi"},
+      tasha:{name:"踏莎行",cost:1,type:"attack",dmg:4,hits:3,desc:"雾失楼台 · 4点伤害×3",rarity:"uncommon",char:"lizhi"},
+      yulin:{name:"雨霖铃",cost:2,type:"skill",block:15,desc:"寒蝉凄切对长亭晚 · 获得15格挡",rarity:"uncommon",char:"sush"},
+      wanglu:{name:"望庐山瀑布",cost:1,type:"attack",dmg:10,draw:1,desc:"飞流直下三千尺 · 10伤·抽1牌",rarity:"uncommon",char:"lizhi"},
+      busuanzi:{name:"卜算子",cost:1,type:"attack",dmgPerCard:3,desc:"我住长江头 · 每张手牌+3伤",rarity:"uncommon",char:"lizhi"},
+      caisangzi:{name:"采桑子",cost:1,type:"skill",block:6,poison:3,desc:"轻舟短棹 · 6格挡叠毒3",rarity:"uncommon",char:"sush"},
+      daolianzi:{name:"捣练子",cost:0,type:"skill",gainEnergy:2,exhaust:true,desc:"深院静 · 得2能量消耗",rarity:"uncommon",char:"sush"},
+      langtaosha:{name:"浪淘沙",cost:2,type:"attack",dmg:10,aoe:true,desc:"大江东去浪淘尽 · 全体10伤",rarity:"uncommon",char:"sush"},
+      mantingfang:{name:"满庭芳",cost:2,type:"skill",heal:8,block:8,desc:"十里荷花菡萏香 · 回8HP·8格挡",rarity:"uncommon",char:"sush"},
+      shaonian:{name:"少年游",cost:1,type:"skill",tempStr:3,desc:"长安古道马迟迟 · 本回合+3力量",rarity:"uncommon",char:"sush"},
+      tanpo:{name:"摊破浣溪沙",cost:2,type:"skill",draw:3,desc:"菡萏香销翠叶残 · 抽3张牌",rarity:"uncommon",char:"sush"},
+      wangjiangnan:{name:"望江南",cost:1,type:"skill",block:10,exhaust:true,desc:"梳洗罢 · 10格挡消耗",rarity:"uncommon",char:"liqing"},
+      wulingchun:{name:"武陵春",cost:2,type:"attack",dmg:10,dmgPerMissingHp:1,desc:"载不动许多愁 · 每少20HP+1伤",rarity:"uncommon",char:"lizhi"},
+      xiaochongshan:{name:"小重山",cost:1,type:"skill",block:8,desc:"昨夜寒蛩 · 8格挡下回+2力",rarity:"uncommon",char:"liqing",nextTurnStr:2},
+      xingxiangzi:{name:"行香子",cost:1,type:"skill",draw:1,gainEnergy:1,desc:"小园几许 · 抽1牌+1能量",rarity:"uncommon",char:"liqing"},
+      zuihuajian:{name:"醉花间",cost:1,type:"attack",dmg:6,blockBonus:true,desc:"晴雪小园 · 每3格挡+1伤",rarity:"uncommon",char:"lizhi"},
+      jianzi:{name:"减字木兰花",cost:2,type:"attack",dmg:14,debuff:"strDown",val:2,desc:"天涯旧恨 · 14伤减敌力量2",rarity:"uncommon",char:"lizhi"},
+      shuidiao:{name:"水调歌头",cost:2,type:"power",desc:"每回合+1能量",rarity:"rare",power:"energy",char:"lizhi"},
+      xijiang:{name:"西江月",cost:1,type:"power",desc:"每回合+3格挡",rarity:"rare",power:"block",char:"sush"},
+      zhegu:{name:"鹧鸪天",cost:1,type:"power",desc:"每回合+1力量",rarity:"rare",power:"strength",char:"liqing"},
+      qinyuan:{name:"沁园春",cost:3,type:"skill",heal:10,maxHp:2,exhaust:true,desc:"北国风光千里雪 · 回10HP·+2最大HP·消耗",rarity:"rare",char:"sush"},
+      liuzhou:{name:"六州歌头",cost:3,type:"attack",dmg:28,exhaust:true,desc:"少年侠气 · 28伤消耗",rarity:"rare",char:"lizhi"},
+      yiqine:{name:"忆秦娥",cost:2,type:"attack",dmg:18,exhaust:true,debuff:"vuln",val:2,debuff2:"weak",val2:2,desc:"西风残照汉家陵阙 · 18伤·易伤2·虚弱2·消耗",rarity:"rare",char:"lizhi"},
+      yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal",char:"liqing"},
       // === 通用新增 ===
-      liuyachao:{name:"六幺令",cost:1,type:"attack",dmg:5,hits:3,desc:"绿阴春尽 · 5伤害×3",rarity:"common"},
-      shizhouman:{name:"十洲慢",cost:1,type:"skill",block:6,desc:"十洲云水 · 6格挡",rarity:"common"},
-      qingyu:{name:"青玉案",cost:2,type:"attack",dmg:10,debuff:"vuln",val:2,desc:"东风夜放花千树 · 10伤·易伤2",rarity:"uncommon"},
-      yulouchun:{name:"玉楼春",cost:1,type:"skill",block:8,poison:2,desc:"绿杨芳草 · 8格挡·叠毒2",rarity:"common"},
-      xijiangyue:{name:"西江月·夜",cost:0,type:"attack",dmg:6,desc:"明月惊鹊 · 6伤",rarity:"common"},
-      zuiweng:{name:"醉翁操",cost:2,type:"attack",dmg:12,heal:5,desc:"醉翁之意 · 12伤·回5HP",rarity:"uncommon"},
-      chengfeng:{name:"乘风",cost:0,type:"skill",gainEnergy:1,exhaust:true,desc:"乘风归去 · 1能量·消耗",rarity:"common"},
-      shenzui:{name:"深醉",cost:1,type:"skill",draw:1,gainEnergy:1,desc:"沉醉不知归路 · 抽1·+1能量",rarity:"uncommon"},
+      liuyachao:{name:"六幺令",cost:1,type:"attack",dmg:5,hits:3,desc:"绿阴春尽 · 5伤害×3",rarity:"common",char:"lizhi"},
+      shizhouman:{name:"十洲慢",cost:1,type:"skill",block:6,desc:"十洲云水 · 6格挡",rarity:"common",char:"sush"},
+      qingyu:{name:"青玉案",cost:2,type:"attack",dmg:10,debuff:"vuln",val:2,desc:"东风夜放花千树 · 10伤·易伤2",rarity:"uncommon",char:"liqing"},
+      yulouchun:{name:"玉楼春",cost:1,type:"skill",block:8,poison:2,desc:"绿杨芳草 · 8格挡·叠毒2",rarity:"common",char:"sush"},
+      xijiangyue:{name:"西江月·夜",cost:0,type:"attack",dmg:6,desc:"明月惊鹊 · 6伤",rarity:"common",char:"lizhi"},
+      zuiweng:{name:"醉翁操",cost:2,type:"attack",dmg:12,heal:5,desc:"醉翁之意 · 12伤·回5HP",rarity:"uncommon",char:"sush"},
+      chengfeng:{name:"乘风",cost:0,type:"skill",gainEnergy:1,exhaust:true,desc:"乘风归去 · 1能量·消耗",rarity:"common",char:"lizhi"},
+      shenzui:{name:"深醉",cost:1,type:"skill",draw:1,gainEnergy:1,desc:"沉醉不知归路 · 抽1·+1能量",rarity:"uncommon",char:"lizhi"},
       // === 李白专属 ===
       lizhi_jiutian:{name:"九天揽月",cost:2,type:"attack",dmg:18,desc:"欲上青天揽明月 · 18伤",rarity:"uncommon",char:"lizhi"},
       lizhi_baixue:{name:"阳春白雪",cost:1,type:"skill",block:8,desc:"曲高和寡 · 8格挡",rarity:"common",char:"lizhi"},
@@ -2640,15 +2681,15 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       { id:'lizhi', name:'李 白', title:'诗仙', maxHp:80, energy:3,
         desc:'豪放飘逸，以酒入诗',
         ability:'每回合第一张攻击牌伤害+3',
-        deck:['yinyong','yinyong','mosong','mosong','jingyesi','jingyesi','jiangjin','wanglu','dingfeng','shuidiao','lizhi_jiutian','lizhi_baixue','lizhi_wangyue','lizhi_bailu','lizhi_shuidao','lizhi_jiangnan','lizhi_yanbo','lizhi_taohua','lizhi_zuixian','lizhi_tianhe','lizhi_yueying'] },
+        deck:['yinyong','yinyong','yinyong','yinyong','mosong','mosong','mosong','mosong','lizhi_jiutian','lizhi_tianhe'] },
       { id:'sush', name:'苏 轼', title:'词圣', maxHp:100, energy:3,
         desc:'旷达洒脱，随遇而安',
         ability:'每场战斗首次受伤-3',
-        deck:['yinyong','yinyong','mosong','mosong','mansha','nangezi','jiangcheng','niannu','shuidiao','yujia','sush_dajiang','sush_dingfeng','sush_liyue','sush_chiqiang','sush_sangyu','sush_shipo','sush_yangzhou','sush_xiyu','sush_kuangda2','sush_jianghai','sush_songfeng'] },
+        deck:['yinyong','yinyong','yinyong','yinyong','mosong','mosong','mosong','mosong','sush_dajiang','sush_shuiyun'] },
       { id:'liqing', name:'李清照', title:'易安居士', maxHp:70, energy:3,
         desc:'婉约细腻，以情入词',
         ability:'每回合第一张技能牌效果+50%',
-        deck:['yinyong','yinyong','mosong','mosong','dianjiang','shengsheng','diehua','yumeiren','ruanlang','zhegu','liqing_xunmi','liqing_mandu','liqing_wutong','liqing_yanzi','liqing_lianxin','liqing_chunyi','liqing_hehua','liqing_xianglian','liqing_wanque2','liqing_hehua2','liqing_xianglian2'] }
+        deck:['yinyong','yinyong','yinyong','yinyong','mosong','mosong','mosong','mosong','liqing_mandu','liqing_xunmi'] }
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -2657,13 +2698,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
     var ENEMIES = {
       act1_reg:[
-        { id:"lichou", name:"离愁", baseHp:14, hpGain:5, baseDmg:5, dmgGain:1, desc:"剪不断，理还乱", intentCycle:["attack_d","attack_d"] },
-        { id:"qiusi", name:"秋思", baseHp:16, hpGain:5, baseDmg:5, dmgGain:1, desc:"古道西风瘦马", intentCycle:["vuln_1","attack_d"] },
-        { id:"yeyu", name:"夜雨", baseHp:12, hpGain:4, baseDmg:4, dmgGain:1, desc:"巴山夜雨涨秋池", intentCycle:["attack_d","attack_d","weak_1"] },
-        { id:"guhong", name:"孤鸿", baseHp:18, hpGain:6, baseDmg:4, dmgGain:1, desc:"缥缈孤鸿影", intentCycle:["attack_2x","attack_d","attack_2x"] },
-        { id:"zhuangzhi", name:"壮志", baseHp:20, hpGain:6, baseDmg:9, dmgGain:2, desc:"壮志饥餐胡虏肉", intentCycle:["attack_big","defend","attack_big"] },
-        { id:"chouchang", name:"惆怅", baseHp:15, hpGain:5, baseDmg:4, dmgGain:1, desc:"此情可待成追忆", intentCycle:["attack_d","attack_2x","attack_d"], specialAbility:"curse" },
-        { id:"piaobo", name:"漂泊", baseHp:20, hpGain:6, baseDmg:6, dmgGain:1, desc:"萍水相逢尽是他乡客", intentCycle:["attack_d","defend","attack_2x"], specialAbility:"regen" }
+        { id:"lichou", name:"离愁", baseHp:20, hpGain:6, baseDmg:6, dmgGain:2, desc:"剪不断，理还乱", intentCycle:["attack_d","attack_d"] },
+        { id:"qiusi", name:"秋思", baseHp:22, hpGain:6, baseDmg:6, dmgGain:2, desc:"古道西风瘦马", intentCycle:["vuln_1","attack_d"] },
+        { id:"yeyu", name:"夜雨", baseHp:18, hpGain:5, baseDmg:5, dmgGain:1, desc:"巴山夜雨涨秋池", intentCycle:["attack_d","attack_d","weak_1"] },
+        { id:"guhong", name:"孤鸿", baseHp:24, hpGain:7, baseDmg:5, dmgGain:2, desc:"缥缈孤鸿影", intentCycle:["attack_2x","attack_d","attack_2x"] },
+        { id:"zhuangzhi", name:"壮志", baseHp:26, hpGain:7, baseDmg:11, dmgGain:3, desc:"壮志饥餐胡虏肉", intentCycle:["attack_big","defend","attack_big"] },
+        { id:"chouchang", name:"惆怅", baseHp:20, hpGain:6, baseDmg:5, dmgGain:2, desc:"此情可待成追忆", intentCycle:["attack_d","attack_2x","attack_d"], specialAbility:"curse" },
+        { id:"piaobo", name:"漂泊", baseHp:26, hpGain:7, baseDmg:7, dmgGain:2, desc:"萍水相逢尽是他乡客", intentCycle:["attack_d","defend","attack_2x"], specialAbility:"regen" },
+        // === 群体活动的小怪（低HP高伤害，复数出现）===
+        { id:"qun_maque", name:"麻雀诗群", baseHp:12, hpGain:3, baseDmg:5, dmgGain:1, desc:"两个黄鹂鸣翠柳", intentCycle:["attack_d","attack_d"], isGroup:true },
+        { id:"qun_yinghuo", name:"流萤阵", baseHp:10, hpGain:3, baseDmg:4, dmgGain:1, desc:"轻罗小扇扑流萤", intentCycle:["attack_d","attack_2x"], isGroup:true },
+        { id:"qun_luanshi", name:"乱石阵", baseHp:14, hpGain:4, baseDmg:6, dmgGain:1, desc:"乱石穿空", intentCycle:["attack_d","defend","attack_d"], isGroup:true }
       ],
       act2_reg:[
         { id:"saihong", name:"塞鸿", baseHp:20, hpGain:6, baseDmg:6, dmgGain:1, desc:"塞鸿秋影", intentCycle:["defend","attack_d","defend","attack_d"] },
@@ -2672,7 +2717,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         { id:"feixu", name:"飞絮", baseHp:16, hpGain:5, baseDmg:3, dmgGain:1, desc:"飞絮满天涯", intentCycle:["attack_3x","attack_d","attack_2x","defend"] },
         { id:"zhengyan", name:"征雁", baseHp:24, hpGain:7, baseDmg:10, dmgGain:2, desc:"征雁南飞", intentCycle:["attack_big","defend","defend","attack_big"] },
         { id:"kuangfeng", name:"狂风", baseHp:20, hpGain:6, baseDmg:5, dmgGain:1, desc:"风急天高猿啸哀", intentCycle:["attack_3x","attack_3x","attack_3x"], specialAbility:"enrage" },
-        { id:"canhun", name:"残魂", baseHp:25, hpGain:7, baseDmg:7, dmgGain:2, desc:"千古兴亡多少事", intentCycle:["attack_d","heal","attack_d","heal"], specialAbility:"regen" }
+        { id:"canhun", name:"残魂", baseHp:25, hpGain:7, baseDmg:7, dmgGain:2, desc:"千古兴亡多少事", intentCycle:["attack_d","heal","attack_d","heal"], specialAbility:"regen" },
+        // === 群体活动敌人（二境）===
+        { id:"qun_shuangye", name:"霜叶阵", baseHp:14, hpGain:4, baseDmg:6, dmgGain:2, desc:"霜叶红于二月花", intentCycle:["attack_d","attack_d"], isGroup:true },
+        { id:"qun_fengdie", name:"风蝶群", baseHp:12, hpGain:3, baseDmg:5, dmgGain:2, desc:"穿花蛱蝶深深见", intentCycle:["vuln_1","attack_2x"], isGroup:true }
       ],
       act3_reg:[
         { id:"xingshuang", name:"星霜", baseHp:26, hpGain:7, baseDmg:7, dmgGain:2, desc:"星霜几度", intentCycle:["buff_str","attack_d","attack_d","attack_big"] },
@@ -2682,7 +2730,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         { id:"fusheng", name:"浮生", baseHp:28, hpGain:7, baseDmg:6, dmgGain:1, desc:"浮生若梦", intentCycle:["attack_d","heal","attack_d","defend"] },
         { id:"mingshi", name:"冥士", baseHp:28, hpGain:8, baseDmg:9, dmgGain:2, desc:"幽冥之中", intentCycle:["attack_big","curse","attack_big","attack_d"], specialAbility:"curse" },
         { id:"zhanshen", name:"战神", baseHp:35, hpGain:9, baseDmg:12, dmgGain:3, desc:"一将功成万骨枯", intentCycle:["buff_str","attack_big","attack_big","attack_aoe"], specialAbility:"enrage" },
-        { id:"wushuang", name:"无双", baseHp:30, hpGain:8, baseDmg:8, dmgGain:2, desc:"天下英雄谁敌手", intentCycle:["attack_2x","attack_2x","attack_3x","attack_big"], specialAbility:"summon" }
+        { id:"wushuang", name:"无双", baseHp:30, hpGain:8, baseDmg:8, dmgGain:2, desc:"天下英雄谁敌手", intentCycle:["attack_2x","attack_2x","attack_3x","attack_big"], specialAbility:"summon" },
+        // === 群体活动敌人（三境）===
+        { id:"qun_jianyu", name:"剑雨阵", baseHp:16, hpGain:5, baseDmg:8, dmgGain:3, desc:"男儿何不带吴钩", intentCycle:["attack_d","attack_d","attack_d"], isGroup:true },
+        { id:"qun_yanwu", name:"烟舞群", baseHp:14, hpGain:4, baseDmg:6, dmgGain:2, desc:"烟笼寒水月笼沙", intentCycle:["attack_2x","defend","attack_2x"], isGroup:true }
       ],
       elites:[
         { id:"cimo", name:"词魔", baseHp:34, hpGain:10, baseDmg:9, dmgGain:2, desc:"词中魔障", intentCycle:["attack_big","attack_d","attack_big","attack_2x"], specialAbility:"enrage" },
@@ -2876,6 +2927,39 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     /* ══════ 核心游戏函数 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
 
+    function updateStatusBar(){
+      var bar = document.getElementById('sgStatusBar');
+      if(!bar) return;
+      if(!G){ bar.style.display='none'; return; }
+      bar.style.display='flex';
+
+      var cName = '';
+      for(var i=0;i<CHARACTERS.length;i++){
+        if(CHARACTERS[i].id===G.charId){ cName=CHARACTERS[i].name; break; }
+      }
+      document.getElementById('sgSbarChar').textContent = '📜 ' + (cName||'诗人');
+      document.getElementById('sgSbarHp').textContent = G.hp;
+      document.getElementById('sgSbarMaxHp').textContent = G.maxHp;
+
+      var blockEl = document.getElementById('sgSbarBlock');
+      if(gBattle && gBattle.playerBlock > 0){
+        blockEl.style.display = '';
+        document.getElementById('sgSbarBlockVal').textContent = gBattle.playerBlock;
+      } else {
+        blockEl.style.display = 'none';
+      }
+
+      document.getElementById('sgSbarEnergy').textContent = (gBattle ? gBattle.energy : G.energy||G.maxEnergy);
+      document.getElementById('sgSbarMaxEnergy').textContent = G.maxEnergy;
+      document.getElementById('sgSbarGold').textContent = G.gold;
+      document.getElementById('sgSbarDeck').textContent = (G.deck||[]).length;
+      document.getElementById('sgSbarRelic').textContent = (G.relics||[]).length;
+
+      var actNames = ['','第一境 · 山水诗情','第二境 · 边塞风骨','第三境 · 千古诗圣'];
+      document.getElementById('sgSbarAct').textContent = '🏛️ ' + (actNames[G.act]||'第'+G.act+'境');
+      document.getElementById('sgSbarFloor').textContent = '层 ' + (G.floor+1) + '/' + (gMapData ? gMapData.length : '?');
+    }
+
     function hideAllScreens(){
       var screens = ['sgTitle','sgMap','sgBattle','sgReward','sgShop','sgEvent','sgRest','sgTreasure','sgResult','sgCharSelect','sgActTransition'];
       for(var i=0;i<screens.length;i++){
@@ -2893,6 +2977,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         el.offsetHeight;
         el.style.animation="";
       }
+      updateStatusBar();
     }
 
     function initGame(charId){
@@ -3076,8 +3161,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         switch(node.type){
           case 'battle':
             var pool = getEnemyPool(G.act, false);
-            var eData = pool[Math.floor(Math.random()*pool.length)];
+            // 30%概率遭遇群体敌人（isGroup标记）
+            var groupPool = pool.filter(function(e){ return e.isGroup; });
+            var eData;
+            if(groupPool.length > 0 && Math.random() < 0.3){
+              eData = groupPool[Math.floor(Math.random()*groupPool.length)];
+            } else {
+              eData = pool[Math.floor(Math.random()*pool.length)];
+            }
             startBattle(eData);
+            // 群体战额外金币标记
+            if(eData && eData.isGroup){
+              gBattle._isGroup = true;
+            }
             break;
           case 'elite':
             var ePool = getEnemyPool(G.act, true);
@@ -3223,6 +3319,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         if(poolType === 'rare' && card.rarity !== 'rare') continue;
         if(poolType === 'rare_atk' && (card.rarity !== 'rare' && card.rarity !== 'uncommon' || card.type !== 'attack')) continue;
         if(poolType !== 'basic' && card.rarity === 'basic') continue; // default: exclude basic unless explicitly requesting basic
+        if(G && G.charId && card.char && card.char !== G.charId) continue; // filter by character
         pool.push(cid);
         weights.push(RARITY_WEIGHTS[card.rarity] || 10);
       }
@@ -3911,8 +4008,22 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       }
 
       // Gold reward
-      var goldReward = gBattle.isBoss ? 30 : (gBattle.isElite ? 20 : 10 + Math.floor(Math.random() * 10));
+      var goldReward = gBattle.isBoss ? 40 : (gBattle.isElite ? 25 : 10 + Math.floor(Math.random() * 10));
+      if(gBattle._isGroup) goldReward += 8; // 群体战额外金币
       G.gold += goldReward;
+
+      // 精英/Boss必定掉落遗物
+      if(gBattle.isElite || gBattle.isBoss){
+        var availR = [];
+        for(var ri=0;ri<RELICS.length;ri++){
+          if(G.relics.indexOf(RELICS[ri].id) === -1 && (!RELICS[ri].char || RELICS[ri].char === G.charId)) availR.push(RELICS[ri]);
+        }
+        if(availR.length > 0){
+          var newRelic = availR[Math.floor(Math.random() * availR.length)];
+          G.relics.push(newRelic.id);
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-80, '🔮 获得遗器：' + newRelic.name);
+        }
+      }
 
       // Pill reward (50% chance)
       if(Math.random() < 0.5 && G.pills.length < (G.pillBagLimit||3)){
@@ -4206,6 +4317,7 @@ applyPoison();
 
       // 记录动画标志
       gBattle._animDraw = animated;
+      updateStatusBar();
 
       // Enemy name and HP
       // 敌人立绘emoji映射（Item 10）
@@ -4214,12 +4326,15 @@ applyPoison();
         saihong:'🕊️',muyu:'☔',changfeng:'🌪️',feixu:'🌿',zhengyan:'🐦',kuangfeng:'💨',canhun:'👻',
         xingshuang:'❄️',fengchen:'🌫️',canghai:'🌊',qingyun:'☁️',fusheng:'🫧',mingshi:'💀',zhanshen:'⚔️',wushuang:'🏆',
         cimo:'📿',shihun:'📜',wenqu:'⭐',shuimo:'🖌️',bihun:'✒️',
-        exam:'📖',master:'👑',saint:'✨'
+        exam:'📖',master:'👑',saint:'✨',
+        qun_maque:'🐦🐦',qun_yinghuo:'✨✨',qun_luanshi:'🪨🪨',
+        qun_shuangye:'🍂🍂',qun_fengdie:'🦋🦋',
+        qun_jianyu:'⚔️⚔️',qun_yanwu:'🌫️🌫️'
       };
       var enemyEmoji = enemyEmojis[gBattle.id] || '👹';
       document.getElementById('sgEnemyPortrait').textContent = enemyEmoji;
       document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
-      document.getElementById('sgEnemyName').textContent = gBattle.name;
+      document.getElementById('sgEnemyName').textContent = gBattle.name + (gBattle._isGroup ? ' ⚔️群' : '');
       document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
       var abilityNames = {enrage:"🔥暴怒",regen:"💚再生",summon:"👥召唤",curse:"💀诅咒"};
       if(gBattle.specialAbility && abilityNames[gBattle.specialAbility]){
