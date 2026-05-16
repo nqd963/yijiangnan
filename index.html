@@ -984,19 +984,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
 /* ── 战斗 ── */
 .sg-battle-bg{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%, rgba(180,120,60,0.08) 0%, transparent 70%);pointer-events:none;z-index:-1;}
-.sg-enemy-area{text-align:center;padding:.5rem 0 .8rem;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.sg-enemy-area{text-align:center;padding:.3rem 0 .4rem;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
 .sg-enemy-area.sg-group-battle .sg-enemy{flex:1;max-width:280px;min-width:140px;}
-.sg-enemy{display:inline-block;padding:.8rem 1.2rem;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:160px;position:relative;overflow:hidden;transition:all .3s;}
-.sg-enemy-name{font-size:1rem;font-weight:700;color:var(--red-seal);margin-bottom:.2rem;}
-.sg-enemy-intent{font-size:.6rem;color:var(--text-faint);margin-bottom:.1rem;min-height:1.2em;}
-.sg-enemy-intent-val{font-size:.55rem;color:var(--text-dim);margin-bottom:.1rem;min-height:1em;}
-.sg-enemy-desc{font-size:.55rem;color:var(--text-faint);margin-bottom:.1rem;}
-.sg-hp-bar-wrap{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin:.2rem 0;}
+.sg-enemy{display:inline-block;padding:.5rem .8rem;border-radius:10px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:140px;position:relative;overflow:hidden;transition:all .3s;}
+.sg-enemy-name{font-size:.85rem;font-weight:700;color:var(--red-seal);margin-bottom:.1rem;}
+.sg-enemy-intent{font-size:.5rem;color:var(--text-faint);margin-bottom:0;min-height:1em;}
+.sg-enemy-intent-val{font-size:.5rem;color:var(--text-dim);margin-bottom:0;min-height:.9em;}
+.sg-enemy-desc{font-size:.5rem;color:var(--text-faint);margin-bottom:0;}
+.sg-hp-bar-wrap{height:5px;border-radius:3px;background:var(--border);overflow:hidden;margin:.1rem 0;}
 .sg-hp-fill{height:100%;border-radius:3px;background:var(--red-seal);transition:width .3s;}
-.sg-hp-text{font-size:.65rem;color:var(--text-dim);}
-.sg-enemy-block{font-size:.65rem;color:#3b82f6;margin-top:.2rem;}
-.sg-enemy-buffs{font-size:.6rem;margin-top:.2rem;min-height:1.2em;}
-.sg-enemy-poison{font-size:.6rem;color:#a855f7;margin-top:.1rem;}
+.sg-hp-text{font-size:.58rem;color:var(--text-dim);}
+.sg-enemy-block{font-size:.55rem;color:#3b82f6;margin-top:.1rem;}
+.sg-enemy-buffs{font-size:.5rem;margin-top:.1rem;min-height:1em;}
+.sg-enemy-poison{font-size:.5rem;color:#a855f7;margin-top:0;}
 .sg-buff{display:inline-block;padding:.1rem .3rem;border-radius:4px;background:var(--gold-dim);margin:0 .1rem;font-weight:600;}
 .sg-buff.sg-debuff{background:rgba(194,58,43,0.15);color:var(--red-seal);}
 .sg-dmg-float{
@@ -1013,7 +1013,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 /* ── 敌人立绘增强（Item 10） ── */
 .sg-enemy-portrait.sg-enemy-enhanced{
   position:relative;display:inline-flex;align-items:center;justify-content:center;
-  width:82px;height:82px;border-radius:50%;margin:0 auto .3rem;
+  width:68px;height:68px;border-radius:50%;margin:0 auto .2rem;
   background:radial-gradient(circle at 35% 30%, rgba(201,168,76,0.25), rgba(60,40,20,0.5) 60%, rgba(20,12,8,0.7)) !important;
   border:2px solid rgba(201,168,76,0.5);box-shadow:0 0 20px rgba(201,168,76,0.15),inset 0 0 15px rgba(201,168,76,0.1);
   overflow:hidden;font-size:2rem;line-height:1;
@@ -1045,6 +1045,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 @keyframes sgEnemyGlow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
 /* 水墨SVG敌人立绘容器 */
+.sg-enemy-svg-portrait{width:100%;height:100%;}
 .sg-enemy-svg-portrait svg{width:100%;height:100%;display:block;}
 
 /* 敌人登场闪白 */
@@ -1105,17 +1106,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 }
 
 /* ── 玩家状态 ── */
-.sg-player-area{padding:.3rem 0;}
-.sg-player-portrait-wrap{text-align:center;padding:.3rem 0;}
-.sg-player-portrait{font-size:1.8rem;display:inline-block;position:relative;width:48px;height:48px;line-height:48px;text-align:center;}
-.sg-player-name{font-size:.75rem;color:var(--text-dim);}
-.sg-status{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;padding:.3rem 0;font-size:.68rem;color:var(--text-dim);}
-.sg-status-item{background:var(--bg-card-alt);padding:.2rem .5rem;border-radius:6px;border:1px solid var(--border);}
+.sg-player-area{padding:.15rem 0;}
+.sg-player-portrait-wrap{text-align:center;padding:.15rem 0;}
+.sg-player-portrait{font-size:1.5rem;display:inline-block;position:relative;width:42px;height:42px;line-height:42px;text-align:center;}
+.sg-player-name{font-size:.65rem;color:var(--text-dim);}
+.sg-status{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center;padding:.15rem 0;font-size:.62rem;color:var(--text-dim);}
+.sg-status-item{background:var(--bg-card-alt);padding:.15rem .35rem;border-radius:4px;border:1px solid var(--border);}
 
 /* ── 手牌 ── */
 .sg-hand{
-  display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
-  min-height:110px;padding:.4rem 0;overflow-y:auto;
+  display:flex;gap:5px;flex-wrap:wrap;justify-content:center;
+  min-height:95px;padding:.2rem 0;overflow-y:auto;
 }
 .sg-card{
   width:115px;padding:0;border-radius:var(--radius-sm);
@@ -1369,7 +1370,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 .sg-event-result{font-size:.7rem;color:var(--text-faint);padding:.3rem 0;}
 
 /* ── 回合控制 ── */
-.sg-turn-ctrl{text-align:center;padding:.3rem 0;}
+.sg-turn-ctrl{text-align:center;padding:.15rem 0;}
 .sg-pile-info{text-align:center;font-size:.6rem;color:var(--text-faint);padding:.1rem 0;display:flex;gap:.5rem;justify-content:center;}
 
 /* ── 奖励 ── */
@@ -1498,11 +1499,17 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   .sg-card .sg-card-desc{padding:5px 6px 4px;font-size:0.55rem}
   .sg-card .sg-card-type{padding:2px 6px 5px;font-size:0.5rem}
   #sgPlayerArea{flex-direction:row;flex-wrap:wrap;gap:0.2rem}
-  #sgEnemyArea{padding:0.3rem}
+  #sgEnemyArea{padding:0.2rem;gap:6px}
   .sg-btn{font-size:0.65rem;padding:0.3rem 0.6rem}
   .sg-rest-title{font-size:1.2rem}
-  .sg-enemy-portrait{width:72px;height:72px;font-size:1.6rem}
-  .sg-player-portrait{width:60px;height:60px;font-size:1.4rem}
+  .sg-enemy-portrait{width:56px;height:56px;font-size:1.3rem}
+  .sg-enemy-portrait.sg-enemy-enhanced{width:56px;height:56px;font-size:1.3rem}
+  .sg-player-portrait{width:40px;height:40px;font-size:1.2rem}
+  .sg-enemy{padding:.4rem .6rem;min-width:120px}
+  .sg-enemy-name{font-size:.85rem}
+  .sg-enemy-desc,.sg-enemy-intent,.sg-enemy-intent-val{font-size:.5rem}
+  .sg-status{font-size:.58rem;gap:.25rem}
+  .sg-status-item{padding:.15rem .35rem}
   .sg-shop-items{grid-template-columns:repeat(2,1fr)}
   #sgMap{padding:0.3rem}
   .sg-map-node{width:38px;height:38px;font-size:.85rem;min-width:38px;}
@@ -1515,30 +1522,30 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   .sg-card .sg-card-name{padding:4px 5px 3px;font-size:.58rem;}
   .sg-card .sg-card-desc{padding:4px 5px 3px;font-size:.45rem;}
   .sg-map-node{width:34px;height:34px;font-size:.8rem;}
-  .sg-status{font-size:.6rem;gap:.35rem;}
-  .sg-status-item{padding:.15rem .4rem;}
+  .sg-status{font-size:.55rem;gap:.2rem;}
+  .sg-status-item{padding:.12rem .3rem;}
   .sg-title-text{font-size:1.6rem;}
   .sg-cs-card{width:120px;padding:.8rem .4rem;}
   .sg-cs-portrait-card{width:130px;padding:.8rem .4rem;}
   .sg-cs-portrait-card .sg-cs-avatar{width:56px;height:56px;font-size:1.8rem;}
-  .sg-enemy{min-width:140px;padding:.6rem 1rem;}
-  .sg-enemy-portrait{font-size:1.8rem;}
+  .sg-enemy{min-width:100px;padding:.4rem .5rem;}
+  .sg-enemy-portrait{font-size:1.4rem;}
   .sg-shop-item{padding:.4rem .6rem;flex-wrap:wrap;}
   #sgHand .sg-card{min-width:60px;font-size:0.5rem}
   .sg-card .sg-card-cost{width:16px;height:16px;font-size:.5rem;line-height:16px;top:-5px;left:-5px;}
   #sgPlayerArea{flex-direction:column}
-  .sg-enemy-portrait{width:60px;height:60px;font-size:1.4rem}
-  .sg-player-portrait{width:44px;height:44px;font-size:1.2rem}
-  .sg-player-portrait-icon{width:40px;height:40px;font-size:1.1rem;}
-  .sg-enemy-portrait.sg-enemy-enhanced{width:44px;height:44px;font-size:1.4rem;}
+  .sg-enemy-portrait{width:48px;height:48px;font-size:1.1rem}
+  .sg-player-portrait{width:36px;height:36px;font-size:1rem}
+  .sg-player-portrait-icon{width:36px;height:36px;font-size:1rem;}
+  .sg-enemy-portrait.sg-enemy-enhanced{width:48px;height:48px;font-size:1.1rem;}
   .sg-shop-items{grid-template-columns:1fr}
   .sg-hand{gap:4px;}
   .sg-map-floor{gap:8px;padding:6px 2px;}
   .sg-turn-ctrl{padding:0.2rem;}
   #sgPillsArea{min-height:1.2rem;}
   #sgPillsArea button{font-size:0.5rem!important;padding:0.12rem 0.25rem!important;}
-  .sg-enemy-area{padding:.3rem 0 .5rem;}
-  .sg-player-area{padding:.15rem 0;}
+  .sg-enemy-area{padding:.2rem 0 .3rem;gap:4px;}
+  .sg-player-area{padding:.1rem 0;}
   .sg-cs-cards{gap:.5rem;}
 }
 
@@ -2530,7 +2537,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
             <div class="sg-status-item" id="sgDeckCount"><span class="sg-ico sg-ico-deck sg-ico-sm">典</span> <span id="sgDeckCountNum">0</span> <span class="sg-stat-tip" id="sgDrawPileBtn" style="cursor:pointer"><span class="sg-ico sg-ico-deck sg-ico-sm">牌</span><span id="sgDrawPile">0</span><span class="sg-stat-tooltip">抽牌堆：点击查看剩余卡牌</span></span> <span class="sg-ico sg-ico-deck sg-ico-sm">手</span><span id="sgHandCount">0</span> <span class="sg-stat-tip" id="sgDiscardPileBtn" style="cursor:pointer"><span class="sg-ico sg-ico-deck sg-ico-sm">笺</span><span id="sgDiscardPile">0</span><span class="sg-stat-tooltip">弃牌堆：点击查看已弃卡牌</span></span></div>
             <div class="sg-status-item sg-stat-tip" id="sgStatusTurn"><span class="sg-ico sg-ico-turn">回</span> <span id="sgTurnNum">0</span><span class="sg-stat-tooltip">当前回合数</span></div>
           </div>
-          <div id="sgPillsArea" style="text-align:center;padding:0.2rem 0;min-height:1.8rem;"></div>
+          <div id="sgPillsArea" style="text-align:center;padding:0.1rem 0;min-height:1.4rem;"></div>
           <div class="sg-hand" id="sgHand"></div>
           <div class="sg-turn-ctrl">
             <button class="sg-btn" id="sgEndTurnBtn">结束回合</button>
