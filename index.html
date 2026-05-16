@@ -474,7 +474,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .mp-app .adesc{font-size:.7rem;color:var(--text-faint);line-height:1.4;}
 
 /* app views */
-.mp-view{display:none;padding:1rem 1.2rem 2rem;max-width:1200px;margin:0 auto;}
+.mp-view{display:none;padding:1rem 1.2rem 2rem;max-width:100%;width:100%;margin:0 auto;}
 .mp-view.active{display:block;}
 
 /* ── 词谱宝库 ── */
@@ -764,7 +764,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
     0%,100%{box-shadow: inset 0 0 120px rgba(200,40,40,0.2);}
     50%{box-shadow: inset 0 0 160px rgba(200,40,40,0.35);}
   }
-.sg-wrap{max-width:1200px;margin:0 auto;min-height:450px;}
+.sg-wrap{max-width:1400px;width:98%;margin:0 auto;min-height:500px;}
 .sg-screen{animation:sgFade .35s ease forwards;}
 @keyframes sgFade{from{opacity:0;transform:translateY(8px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 
@@ -1001,8 +1001,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   text-align:center;transition:all .15s;
   display:flex;flex-direction:column;
   -webkit-tap-highlight-color:transparent;user-select:none;
-  position:relative;overflow:hidden;
+  position:relative;overflow:visible;
   box-shadow:0 2px 6px var(--shadow),inset 0 1px 0 rgba(255,255,255,.08);
+  margin:8px 4px 4px;
 }
 /* 卡面顶部光泽 */
 .sg-card::before{
@@ -1070,6 +1071,70 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 @keyframes sgCardPlay{0%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}100%{transform:scale(.8);opacity:0}}
 .sg-card.primary{border-color:var(--gold);border-width:2px;}
 .sg-card.primary .sg-card-name{background:linear-gradient(180deg,rgba(201,168,76,.2),rgba(201,168,76,.05));}
+/* 稀有/金色卡牌微光浮动 */
+.sg-card[style*="#ffcc00"],.sg-card.primary{animation:sgRareGlow 2s ease-in-out infinite;}
+@keyframes sgRareGlow{0%,100%{box-shadow:0 2px 6px var(--shadow),inset 0 1px 0 rgba(255,255,255,.08);}50%{box-shadow:0 2px 12px rgba(255,204,0,.2),inset 0 1px 0 rgba(255,255,255,.1);}}
+
+/* ── 术语浮层提示 ── */
+.sg-tooltip-wrap{position:relative;display:inline;}
+.sg-term{cursor:help;border-bottom:1px dashed var(--gold);color:var(--gold);}
+.sg-term:hover+.sg-tooltip,.sg-tooltip:hover{opacity:1;visibility:visible;transform:translateX(0);}
+.sg-tooltip{
+  position:absolute;bottom:130%;left:50%;transform:translateX(-50%) translateY(4px);
+  background:var(--bg-card);color:var(--text);border:1px solid var(--gold);border-radius:6px;
+  padding:.4rem .6rem;font-size:.6rem;line-height:1.4;white-space:nowrap;
+  opacity:0;visibility:hidden;transition:all .15s;z-index:100;
+  pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2);
+  max-width:220px;white-space:normal;
+}
+.sg-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--gold);}
+
+/* ── 抽牌动画 ── */
+@keyframes sgDrawCard{
+  0%{transform:scale(.3) rotate(-15deg) translateY(-60px);opacity:0;}
+  60%{transform:scale(1.05) rotate(2deg) translateY(0);opacity:1;}
+  100%{transform:scale(1) rotate(0) translateY(0);opacity:1;}
+}
+
+/* ── 确认按钮 ── */
+.sg-confirm-btn{display:inline-block;margin-top:.6rem;padding:.4rem 1.2rem;font-size:.8rem;
+  background:var(--gold);color:#fff;border:none;border-radius:6px;cursor:pointer;
+  opacity:.85;transition:opacity .15s;font-family:inherit;font-weight:700;}
+.sg-confirm-btn:hover{opacity:1;}
+
+/* ── 战斗中重开按钮 ── */
+.sg-battle-restart{position:absolute;top:.3rem;right:.3rem;font-size:.6rem;
+  padding:.2rem .5rem;background:rgba(194,58,43,.15);color:var(--red-seal);
+  border:1px solid var(--red-seal);border-radius:4px;cursor:pointer;z-index:10;
+  opacity:.5;transition:opacity .15s;font-family:inherit;}
+.sg-battle-restart:hover{opacity:1;}
+
+/* ── 附魔系统 ── */
+.sg-enchant-overlay{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);
+  display:flex;align-items:center;justify-content:center;}
+.sg-enchant-panel{background:var(--bg);border:2px solid var(--gold);border-radius:12px;
+  padding:1.2rem;max-width:520px;width:92%;max-height:80vh;overflow-y:auto;}
+.sg-enchant-title{font-size:1rem;font-weight:700;color:var(--gold);text-align:center;margin-bottom:.5rem;}
+.sg-enchant-dust{text-align:center;font-size:.75rem;color:var(--text-faint);margin-bottom:.8rem;}
+.sg-enchant-card{width:120px;margin:0 auto .6rem;}
+.sg-enchant-effects{display:flex;flex-direction:column;gap:.3rem;margin:.6rem 0;}
+.sg-enchant-effect{padding:.4rem .6rem;background:var(--bg-card-alt);border-radius:6px;
+  font-size:.65rem;cursor:pointer;border:1px solid transparent;transition:all .12s;}
+.sg-enchant-effect:hover{border-color:var(--gold);background:var(--gold-dim);}
+.sg-enchant-effect.selected{border-color:var(--gold);background:var(--gold-dim);}
+.sg-enchant-effect .ee-name{font-weight:700;color:var(--gold);}
+.sg-enchant-effect .ee-desc{color:var(--text-faint);font-size:.55rem;margin-top:2px;}
+.sg-enchant-btn{display:block;margin:.8rem auto 0;padding:.4rem 1.2rem;
+  background:var(--gold);color:#fff;border:none;border-radius:6px;
+  cursor:pointer;font-family:inherit;font-weight:700;font-size:.75rem;}
+.sg-enchant-btn:disabled{opacity:.4;cursor:not-allowed;}
+.sg-enchant-close{display:block;margin:.4rem auto 0;padding:.25rem .8rem;
+  background:transparent;color:var(--text-faint);border:1px solid var(--border);
+  border-radius:4px;cursor:pointer;font-family:inherit;font-size:.6rem;}
+
+/* ── 确认后继续（事件用） ── */
+.sg-event-result{font-size:.7rem;color:var(--text-faint);padding:.3rem 0;}
 
 /* ── 回合控制 ── */
 .sg-turn-ctrl{text-align:center;padding:.3rem 0;}
@@ -1727,6 +1792,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         <option value="yelaixiang">🌙 夜来香</option>
         <option value="zizhu">🎋 紫竹调</option>
         <option value="caiyun">☁️ 彩云追月</option>
+        <option value="guanyu">⚔️ 关羽之歌（赵季平）</option>
+        <option value="shuihu">🌊 好汉歌（水浒传）</option>
+        <option value="xianjian">💫 蝶恋（仙剑奇侠传）</option>
         </select>
         <div class="music-auto-btns">
           <button class="music-play-btn" id="musicPlayBtn">▶ 演奏</button>
@@ -1817,6 +1885,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
             <button class="sg-btn" id="sgEndTurnBtn">结束回合</button>
           </div>
         </div>
+        <button class="sg-battle-restart" id="sgBattleRestartBtn">↺ 重开战斗</button>
       </div>
       <!-- 奖励画面 -->
       <div id="sgReward" class="sg-screen" style="display:none">
@@ -1836,6 +1905,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         <div style="text-align:center;font-size:.7rem;color:var(--text-faint);display:none;">可恢复 <span id="sgRestAmt">0</span> HP</div>
         <button class="sg-btn sg-btn-primary" id="sgRestBtn">休息（恢复 20 HP）</button>
         <button class="sg-btn sg-btn-danger" id="sgRestUpgradeBtn" style="display:none">强化（选择一张牌升级）</button>
+        <button class="sg-btn" id="sgRestEnchantBtn" style="display:none">✨ 附魔（80金币）</button>
         <button class="sg-btn" id="sgRestSkipBtn">继续前行</button>
       </div>
       <!-- 宝箱画面 -->
@@ -3306,14 +3376,21 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
       hideAllScreens();
       showScreen('sgBattle');
-      // 敌人登场闪白特效（Item 10）
+      // 敌人登场闪白特效 + 震屏
       setTimeout(function(){
         var introEl = document.getElementById('sgEnemy');
+        var battleEl = document.getElementById('sgBattle');
         if(introEl){
           var flash = document.createElement('div');
           flash.className = 'sg-enemy-intro-flash';
           introEl.appendChild(flash);
           setTimeout(function(){ if(flash.parentNode) flash.parentNode.removeChild(flash); }, 900);
+        }
+        // 精英/Boss登场震屏
+        if(gBattle && (gBattle.isElite || gBattle.isBoss) && battleEl){
+          battleEl.style.animation = 'none';
+          battleEl.offsetHeight;
+          battleEl.style.animation = 'sgShake 0.3s';
         }
       }, 100);
 
@@ -3323,7 +3400,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       var etBtn = document.getElementById('sgEndTurnBtn');
       if(etBtn) etBtn.style.display = '';
 
-      drawCards(5);
+      drawCards(5, true);
       // Set battle background based on act and enemy type
       var bgEl = document.getElementById('sgBattle');
       if(bgEl){
@@ -3427,7 +3504,32 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       }
     }
 
-    function drawCards(n){
+    /* ── 术语系统 ── */
+    var KEYWORD_DEFS = {
+      '消耗':{short:'消',tip:'打出后从战斗中移除，本场战斗不再出现'},
+      '易伤':{short:'易',tip:'受到攻击伤害增加 50%，每层持续1回合'},
+      '虚弱':{short:'虚',tip:'造成的攻击伤害减少 25%，每层持续1回合'},
+      '力量':{short:'力',tip:'每层增加攻击伤害 3 点'},
+      '格挡':{short:'挡',tip:'抵消等量的攻击伤害，每回合重置'},
+      '中毒':{short:'毒',tip:'每回合结束时受到层数伤害，层数减半'},
+      '附魔':{short:'魔',tip:'卡牌获得额外效果，可叠加'},
+      '抽牌':{short:'抽',tip:'从抽牌堆抽取卡牌到手牌'},
+      '升级':{short:'升',tip:'永久强化此卡牌'},
+      '回复':{short:'回',tip:'恢复生命值'},
+    };
+    function parseKeywords(text){
+      if(!text) return text;
+      var keys = Object.keys(KEYWORD_DEFS).sort(function(a,b){return b.length-a.length;});
+      var result = text;
+      for(var ki=0;ki<keys.length;ki++){
+        var kw = keys[ki];
+        var def = KEYWORD_DEFS[kw];
+        result = result.split(kw).join('<span class="sg-tooltip-wrap"><span class="sg-term">'+kw+'</span><span class="sg-tooltip">'+def.tip+'</span></span>');
+      }
+      return result;
+    }
+
+    function drawCards(n, animated){
       if(!gBattle) return;
       var extra = hasRelic('shizhen') ? 1 : 0;
       if(hasRelic('lianyezhou')) extra += 1;
@@ -3443,6 +3545,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         }
         var cardIdx = gBattle.drawPile.pop();
         gBattle.hand.push(cardIdx);
+      }
+      if(animated){
+        setTimeout(function(){ renderBattle(true); }, 60);
       }
     }
 
@@ -4031,7 +4136,7 @@ applyPoison();
       gBattle.hand = [];
 
       // Draw new hand
-      drawCards(5);
+      drawCards(5, true);
 
       gBattle.shuffledThisTurn = false;
 
@@ -4096,8 +4201,11 @@ applyPoison();
 /* ══════ 战斗渲染 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
 
-    function renderBattle(){
+    function renderBattle(animated){
       if(!gBattle) return;
+
+      // 记录动画标志
+      gBattle._animDraw = animated;
 
       // Enemy name and HP
       // 敌人立绘emoji映射（Item 10）
@@ -4197,7 +4305,7 @@ applyPoison();
         cardEl.innerHTML =
           '<div class="sg-card-cost">' + (canPlay ? cost : ('<span style="color:#ff4444">' + cost + '</span>')) + '</div>' +
           '<div class="sg-card-name">' + card.name + '</div>' +
-          '<div class="sg-card-desc">' + (card.desc || '') + '</div>' +
+          '<div class="sg-card-desc">' + parseKeywords(card.desc || '') + (card.enchantDesc ? '<br><span style="color:var(--gold);font-size:.45rem;">✦ '+card.enchantDesc+'</span>' : '') + '</div>' +
           '<div class="sg-card-type">' + card.type + (card.rarity === 'rare' ? ' ★' : '') + '</div>';
 
         if(canPlay){
@@ -4208,11 +4316,17 @@ applyPoison();
           })(hi, cardEl);
         }
 
-        cardEl.style.animation = 'sg-cardAppear 0.25s ease-out';
-        cardEl.style.animationDelay = (hi * 0.05) + 's';
+        if(gBattle._animDraw){
+          cardEl.style.animation = 'sgDrawCard 0.3s ease-out';
+          cardEl.style.animationDelay = (hi * 0.07) + 's';
+        } else {
+          cardEl.style.animation = 'sg-cardAppear 0.25s ease-out';
+          cardEl.style.animationDelay = (hi * 0.05) + 's';
+        }
         cardEl.style.animationFillMode = 'both';
         handEl.appendChild(cardEl);
       }
+      gBattle._animDraw = false;
 
       // Intent reveal
       if(gBattle.seeIntents || hasRelic('qingtongjing')){
@@ -4430,9 +4544,15 @@ applyPoison();
         (function(ch, resultText){
           btn.addEventListener('click', function(){
             applyEventEffect(ch.effects, resultText);
-            // 显示结果文字1.5秒后自动继续
-            btn.textContent = '✅ ' + (resultText || '继续');
-            setTimeout(function(){ completeNode(); }, 1500);
+            // 显示结果 + 确认按钮
+            btn.textContent = '✅ ' + (resultText || '已选择');
+            var confirmBtn = document.createElement('button');
+            confirmBtn.className = 'sg-confirm-btn';
+            confirmBtn.textContent = '确认继续';
+            confirmBtn.addEventListener('click', function(){
+              completeNode();
+            });
+            choicesEl.appendChild(confirmBtn);
           });
         })(choice, choice.result || '');
         choicesEl.appendChild(btn);
@@ -4556,6 +4676,19 @@ applyPoison();
       } else if(upgradeBtn) {
         upgradeBtn.style.display = 'none';
       }
+
+      // 附魔按钮
+      var enchantBtn = document.getElementById('sgRestEnchantBtn');
+      if(enchantBtn && G.gold >= 80 && G.deck && G.deck.length > 0){
+        var hasUnenchanted = false;
+        for(var edi=0;edi<G.deck.length;edi++){ if(!G.deck[edi].enchanted){ hasUnenchanted = true; break; } }
+        if(hasUnenchanted){
+          enchantBtn.style.display = '';
+          enchantBtn.onclick = function(){
+            showEnchantDialog();
+          };
+        } else { enchantBtn.style.display = 'none'; }
+      } else if(enchantBtn) { enchantBtn.style.display = 'none'; }
     }
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -4610,7 +4743,93 @@ applyPoison();
       if(typeof showRest === 'function') showRest();
     }
 
-/* ══════ 宝箱 ══════ */
+/* ── 附魔系统 ── */
+    var ENCHANTMENTS = [
+      {id:'sharp',name:'锋锐',desc:'攻击伤害+3',icon:'⚔️',apply:function(c){if(c.dmg)c.dmg+=3;}},
+      {id:'fort',name:'铁壁',desc:'格挡值+2',icon:'🛡️',apply:function(c){if(c.block)c.block+=2;}},
+      {id:'swift',name:'灵动',desc:'费用-1（最低0）',icon:'💨',apply:function(c){if(c.cost&&c.cost>0)c.cost=Math.max(0,c.cost-1);}},
+      {id:'leech',name:'汲取',desc:'打出时回复1HP',icon:'❤️',apply:function(c){c.enchantDesc='打出回复1HP';}},
+      {id:'echo',name:'回响',desc:'50%概率不消耗',icon:'♻️',apply:function(c){c.enchantDesc='50%回手';}},
+      {id:'double',name:'连击',desc:'伤害翻倍',icon:'💥',apply:function(c){if(c.dmg)c.dmg*=2;}},
+    ];
+
+    function showEnchantDialog(){
+      if(!G || !G.deck || G.deck.length === 0) return;
+      if(G.gold < 80){ showEffectFloat(window.innerWidth/2,window.innerHeight/2,'金币不足'); return; }
+      // 找出可附魔的卡牌（未附魔的）
+      var eligible = [];
+      for(var di=0;di<G.deck.length;di++){
+        if(!G.deck[di].enchanted) eligible.push(di);
+      }
+      if(eligible.length === 0){ showEffectFloat(window.innerWidth/2,window.innerHeight/2,'所有卡牌已附魔'); return; }
+
+      var overlay = document.createElement('div');
+      overlay.className = 'sg-enchant-overlay';
+      var panel = document.createElement('div');
+      panel.className = 'sg-enchant-panel';
+      panel.innerHTML = '<div class="sg-enchant-title">✨ 卡牌附魔</div>' +
+        '<div class="sg-enchant-dust">💰 80 金币 · 选择一张卡牌进行附魔</div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-height:200px;overflow-y:auto;padding:.3rem 0;" id="sgEnchantCardList"></div>' +
+        '<div id="sgEnchantEffectArea" style="display:none;"></div>' +
+        '<button class="sg-enchant-close" id="sgEnchantCloseBtn">取消</button>';
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+
+      var listEl = document.getElementById('sgEnchantCardList');
+      for(var ei=0;ei<eligible.length;ei++){
+        var idx = eligible[ei];
+        var card = G.deck[idx];
+        var cardEl = document.createElement('div');
+        cardEl.className = 'sg-card';
+        var rC = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+        cardEl.style.cssText = 'border-color:'+(rC[card.rarity]||'#a8a8a8')+';cursor:pointer;width:100px;';
+        cardEl.innerHTML = '<div class="sg-card-cost">'+(card.cost||0)+'</div><div class="sg-card-name">'+card.name+'</div><div class="sg-card-desc">'+(card.desc||'')+'</div>';
+        (function(idx2){
+          cardEl.addEventListener('click', function(){
+            showEnchantEffects(idx2, overlay);
+          });
+        })(idx);
+        listEl.appendChild(cardEl);
+      }
+
+      document.getElementById('sgEnchantCloseBtn').onclick = function(){ document.body.removeChild(overlay); };
+    }
+
+    function showEnchantEffects(deckIdx, overlay){
+      var area = document.getElementById('sgEnchantEffectArea');
+      if(!area) return;
+      area.style.display = '';
+      area.innerHTML = '<div style="font-size:.65rem;color:var(--text-faint);text-align:center;margin:.3rem 0;">为「'+G.deck[deckIdx].name+'」选择附魔效果：</div><div class="sg-enchant-effects"></div>';
+      var list = area.querySelector('.sg-enchant-effects');
+
+      for(var i=0;i<ENCHANTMENTS.length;i++){
+        var ench = ENCHANTMENTS[i];
+        var eDiv = document.createElement('div');
+        eDiv.className = 'sg-enchant-effect';
+        eDiv.innerHTML = '<div class="ee-name">'+ench.icon+' '+ench.name+'</div><div class="ee-desc">'+ench.desc+'</div>';
+        (function(ench2){
+          eDiv.addEventListener('click', function(){
+            G.gold -= 80;
+            ench2.apply(G.deck[deckIdx]);
+            G.deck[deckIdx].enchanted = true;
+            if(!G.deck[deckIdx].enchantDesc) G.deck[deckIdx].enchantDesc = ench2.desc;
+            G.deck[deckIdx].name += ' ✦';
+            showEffectFloat(window.innerWidth/2, window.innerHeight/2, '✦ 附魔成功！'+ench2.name);
+            document.body.removeChild(overlay);
+            if(typeof showRest === 'function') showRest();
+          });
+        })(ench);
+        list.appendChild(eDiv);
+      }
+
+      var cancelBtn = document.createElement('button');
+      cancelBtn.className = 'sg-enchant-close';
+      cancelBtn.textContent = '返回';
+      cancelBtn.onclick = function(){ area.style.display = 'none'; };
+      area.appendChild(cancelBtn);
+    }
+
+    /* ══════ 宝箱 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
 
     function showTreasure(){
@@ -5069,16 +5288,42 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
         });
       }
 
+      // Global restart helper
+      function restartGame(){
+        G = null;
+        gBattle = null;
+        gIsBattling = false;
+        gMapData = [];
+        hideAllScreens();
+        showScreen('sgTitle');
+      }
+
       // Result restart
       var restartBtn = document.getElementById('sgRestartBtn');
       if(restartBtn){
-        restartBtn.addEventListener('click', function(){
-          G = null;
-          gBattle = null;
-          gIsBattling = false;
-          gMapData = [];
-          hideAllScreens();
-          showScreen('sgTitle');
+        restartBtn.addEventListener('click', restartGame);
+      }
+
+      // Battle restart
+      var battleRestartBtn = document.getElementById('sgBattleRestartBtn');
+      if(battleRestartBtn){
+        battleRestartBtn.addEventListener('click', function(){
+          if(!gBattle || !G) { restartGame(); return; }
+          if(confirm('确认要重开本场战斗吗？')){
+            // 保留角色和卡组，重置战斗
+            gBattle = null;
+            gIsBattling = false;
+            // 重新触发当前节点的战斗
+            if(G.curNode && G.mapData){
+              var node = G.mapData[G.curNode];
+              if(node && node.type === 'battle'){
+                hideAllScreens();
+                startBattle(node.data);
+                return;
+              }
+            }
+            restartGame();
+          }
         });
       }
 
@@ -5283,7 +5528,16 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
         notes:[[4,0.5,2],[2,0.5,2],[0,1,2],[2,0.5,2],[4,0.5,2],[2,1,2],[0,0.5,2],[2,0.5,2],[0,0.5,2],[2,0.5,2],[4,1,2],[7,0.5,2],[4,0.5,2],[2,1,2],[4,0.5,2],[7,0.5,2],[9,1,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,1,2],[0,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,2],[9,1.5,3],[4,0.5,2],[7,0.5,2],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[0,1.5,2],[0,0.5,2],[2,0.5,2],[4,1,2],[2,0.5,2],[4,0.5,2],[7,1,2],[4,0.5,2],[2,0.5,2],[11,0.5,3],[9,0.5,3],[7,0.5,2],[4,1.5,2],[4,0.5,2],[7,0.5,2],[9,1,3],[9,0.5,3],[11,0.5,3],[9,0.5,3],[7,0.5,2],[9,0.5,3],[7,0.5,2],[4,1,2],[0,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,2],[4,0.5,2],[2,0.5,2],[0,2,2]]},
       caiyun:{
         title:'彩云追月',src:'任光曲 · 广东音乐',bpm:76,
-        notes:[[4,0.5,2],[2,0.5,2],[0,0.5,2],[2,0.5,2],[4,1,2],[2,0.5,2],[0,0.5,2],[2,1,2],[2,0.5,2],[4,0.5,2],[7,0.5,2],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,1.5,2],[0,0.5,2],[2,0.5,2],[4,1,2],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[11,0.5,3],[9,1.5,3],[7,0.5,2],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[2,0.5,2],[0,1,2],[4,1,2],[2,0.5,2],[0,0.5,2],[2,1.5,2],[4,0.5,2],[7,0.5,2],[4,0.5,2],[2,0.5,2],[0,1,2],[0,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,2],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[11,0.5,3],[9,0.5,3],[7,0.5,2],[4,2,2]]}
+        notes:[[4,0.5,2],[2,0.5,2],[0,0.5,2],[2,0.5,2],[4,1,2],[2,0.5,2],[0,0.5,2],[2,1,2],[2,0.5,2],[4,0.5,2],[7,0.5,2],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,1.5,2],[0,0.5,2],[2,0.5,2],[4,1,2],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[11,0.5,3],[9,1.5,3],[7,0.5,2],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[2,0.5,2],[0,1,2],[4,1,2],[2,0.5,2],[0,0.5,2],[2,1.5,2],[4,0.5,2],[7,0.5,2],[4,0.5,2],[2,0.5,2],[0,1,2],[0,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,2],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[11,0.5,3],[9,0.5,3],[7,0.5,2],[4,2,2]]},
+      guanyu:{
+        title:'关羽之歌',src:'赵季平 · 三国演义',bpm:80,
+        notes:[[7,1,3],[4,1,2],[2,1,2],[0,2,2],[4,1,2],[2,0.5,2],[0,0.5,2],[2,1,2],[4,1,3],[7,2,2],[7,1,3],[9,1,3],[4,1,2],[2,1,2],[0,2,2],[0,1,2],[2,1,2],[4,1,2],[7,2,3],[7,1,2],[4,1,2],[2,2,2],[2,1,2],[4,1,2],[7,2,3],[9,1,3],[7,1,2],[4,1,2],[2,2,2],[4,1,3],[2,1,2],[0,2,2],[0,1,2],[2,1,2],[4,2,3],[7,2,3],[9,1,3],[7,1,2],[4,1,2],[2,2,2],[0,1,2],[2,2,2],[4,1,2],[7,2,3],[7,1,2],[4,1,2],[2,2,2],[4,1,2],[7,1,3],[9,1,3],[4,2,2],[2,1,2],[0,2,2],[0,0.5,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,1,3],[7,1.5,2],[4,1.5,2],[2,2,2]]},
+      shuihu:{
+        title:'好汉歌',src:'赵季平 · 水浒传',bpm:112,
+        notes:[[7,0.5,3],[7,0.5,3],[7,0.5,3],[4,0.5,2],[2,0.5,2],[4,1,2],[4,0.5,2],[7,0.5,3],[7,0.5,3],[9,0.5,3],[4,0.5,2],[2,0.5,2],[4,2,2],[7,0.5,3],[7,0.5,3],[7,0.5,3],[4,1,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,1,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[0,2,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,2,2],[2,0.5,2],[4,0.5,2],[7,0.5,3],[9,0.5,3],[7,0.5,2],[4,0.5,2],[2,0.5,2],[4,1,2],[4,0.5,2],[7,0.5,3],[7,0.5,3],[9,0.5,3],[4,0.5,2],[2,0.5,2],[0,2,2]]},
+      xianjian:{
+        title:'蝶恋',src:'林坤信 · 仙剑奇侠传',bpm:72,
+        notes:[[4,1,3],[7,0.5,3],[9,0.5,3],[7,1,2],[4,1,2],[2,1.5,2],[0,0.5,2],[2,1,2],[4,1,2],[7,2,3],[4,1,3],[7,0.5,3],[9,0.5,3],[7,1,2],[4,1,2],[2,1.5,2],[0,0.5,2],[2,1,2],[0,2,2],[0,1,2],[2,1,2],[4,2,3],[7,1,3],[9,0.5,3],[7,0.5,2],[4,1,2],[2,1.5,2],[0,0.5,2],[2,1,3],[4,1,2],[7,2,3],[7,1,3],[9,1,3],[4,1,2],[2,1,2],[4,1.5,2],[0,0.5,2],[2,1,2],[4,1,2],[2,2,2],[2,1,2],[4,1,2],[7,1,3],[9,1,3],[4,1,2],[2,1.5,2],[0,0.5,2],[7,1,3],[4,2,2],[0,1,2],[2,1,2],[4,2,3],[7,1,3],[9,0.5,3],[7,0.5,2],[4,1,2],[2,1.5,2],[0,0.5,2],[2,1,2],[7,2,3],[4,1,3],[7,1,3],[9,1,3],[4,1,2],[2,1.5,2],[0,0.5,2],[2,1,2],[0,2,2]]}
     };
 
     /* 音频引擎 */
