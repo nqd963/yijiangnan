@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="v2.1.2-deck-mgmt-drawfx-20260516">
+<meta name="version" content="v2.2.0-ancient-icons-dragdrop-20260516">
 <link rel="canonical" href="https://nqd963.github.io/yijiangnan/">
 
 <!-- Open Graph -->
@@ -1157,6 +1157,39 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   30%{transform:scale(1.15) rotate(3deg);opacity:1;filter:brightness(1.3);}
   100%{transform:scale(1.3) rotate(5deg) translateY(-60px);opacity:0;filter:brightness(2);}
 }
+/* ── 手牌拖拽排序 ── */
+.sg-card.dragging{opacity:.5;transform:scale(.95)!important;z-index:100!important;}
+.sg-hand.drag-over .sg-card:not(.dragging){transform:translateY(-4px);}
+.sg-card.drag-hover{border-color:var(--gold)!important;box-shadow:0 0 20px rgba(201,168,76,.4)!important;transform:translateY(-6px) scale(1.03)!important;}
+.sg-card[draggable=true]{cursor:grab;}
+.sg-card[draggable=true]:active{cursor:grabbing;}
+/* ── 古风图标系统（替换emoji） ── */
+.sg-ico{display:inline-flex;align-items:center;justify-content:center;
+  width:1.4em;height:1.4em;border-radius:50%;
+  font-family:"KaiTi","STKaiti","SimSun","Noto Serif SC",serif;
+  font-size:.7rem;font-weight:700;line-height:1;
+  background:radial-gradient(circle at 35% 30%, #f6edd6, #e7d2a6);
+  border:1px solid rgba(17,17,17,.25);box-shadow:0 1px 3px rgba(0,0,0,.15);
+  vertical-align:middle;margin:-.15em .08em 0;
+  position:relative;overflow:hidden;text-shadow:0 0 2px rgba(0,0,0,.1);}
+.sg-ico::after{content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='32' height='32' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+  pointer-events:none;}
+.sg-ico-hp{color:#c53030;border-color:rgba(197,48,48,.3);text-shadow:0 0 4px rgba(197,48,48,.2);}
+.sg-ico-energy{color:#b8860b;border-color:rgba(184,134,11,.3);text-shadow:0 0 4px rgba(184,134,11,.2);}
+.sg-ico-block{color:#2563eb;border-color:rgba(37,99,235,.3);text-shadow:0 0 4px rgba(37,99,235,.2);}
+.sg-ico-str{color:#b91c1c;border-color:rgba(185,28,28,.3);}
+.sg-ico-poison{color:#7c3aed;border-color:rgba(124,58,237,.3);}
+.sg-ico-deck{color:#6b4f2e;border-color:rgba(107,79,46,.25);}
+.sg-ico-gold{color:#b8860b;border-color:rgba(184,134,11,.25);}
+.sg-ico-turn{color:#4a6741;border-color:rgba(74,103,65,.3);}
+/* 小尺寸图标 */
+.sg-ico-sm{width:1.1em;height:1.1em;font-size:.55rem;margin:-.1em .04em 0;}
+.sg-ico-lg{width:1.8em;height:1.8em;font-size:.9rem;}
+/* 古风icon函数替换标签 */
+.sg-e{display:inline-block;white-space:nowrap;}
+/* 按钮内图标替换 */
+.sg-ico-btn{display:inline-flex;align-items:center;gap:.25rem;}
 .sg-card.primary{border-color:var(--gold);border-width:2px;}
 .sg-card.primary .sg-card-name{background:linear-gradient(180deg,rgba(201,168,76,.2),rgba(201,168,76,.05));}
 /* 稀有/金色卡牌微光浮动 */
@@ -1993,29 +2026,29 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <!-- 持久状态栏（所有界面可见） -->
       <div class="sg-status-bar" id="sgStatusBar" style="display:none;">
         <div class="sg-sbar-left">
-          <span class="sg-sbar-char sg-stat-tip" id="sgSbarChar">📜 诗人<span class="sg-stat-tooltip">当前角色</span></span>
-          <span class="sg-sbar-hp sg-stat-tip">❤️ <span id="sgSbarHp">80</span>/<span id="sgSbarMaxHp">80</span><span class="sg-stat-tooltip">当前生命值</span></span>
-          <span class="sg-sbar-block sg-stat-tip" id="sgSbarBlock" style="display:none;">🛡️ <span id="sgSbarBlockVal">0</span><span class="sg-stat-tooltip">护盾值</span></span>
+          <span class="sg-sbar-char sg-stat-tip" id="sgSbarChar"><span class="sg-ico sg-ico-deck sg-ico-sm">卷</span> 诗人<span class="sg-stat-tooltip">当前角色</span></span>
+          <span class="sg-sbar-hp sg-stat-tip"><span class="sg-ico sg-ico-hp sg-ico-sm">心</span> <span id="sgSbarHp">80</span>/<span id="sgSbarMaxHp">80</span><span class="sg-stat-tooltip">当前生命值</span></span>
+          <span class="sg-sbar-block sg-stat-tip" id="sgSbarBlock" style="display:none;"><span class="sg-ico sg-ico-block sg-ico-sm">盾</span> <span id="sgSbarBlockVal">0</span><span class="sg-stat-tooltip">护盾值</span></span>
         </div>
         <div class="sg-sbar-center">
-          <span class="sg-sbar-energy sg-stat-tip">⚡ <span id="sgSbarEnergy">3</span>/<span id="sgSbarMaxEnergy">3</span><span class="sg-stat-tooltip">每回合可用能量</span></span>
-          <span class="sg-sbar-gold sg-stat-tip">💰 <span id="sgSbarGold">0</span><span class="sg-stat-tooltip">当前金币</span></span>
-          <span class="sg-sbar-deck sg-stat-tip">📚 <span id="sgSbarDeck">0</span><span class="sg-stat-tooltip">卡组总张数</span></span>
-          <span class="sg-sbar-relic sg-stat-tip">🔮 <span id="sgSbarRelic">0</span><span class="sg-stat-tooltip">遗器数量</span></span>
+          <span class="sg-sbar-energy sg-stat-tip"><span class="sg-ico sg-ico-energy sg-ico-sm">气</span> <span id="sgSbarEnergy">3</span>/<span id="sgSbarMaxEnergy">3</span><span class="sg-stat-tooltip">每回合可用能量</span></span>
+          <span class="sg-sbar-gold sg-stat-tip"><span class="sg-ico sg-ico-gold sg-ico-sm">金</span> <span id="sgSbarGold">0</span><span class="sg-stat-tooltip">当前金币</span></span>
+          <span class="sg-sbar-deck sg-stat-tip"><span class="sg-ico sg-ico-deck sg-ico-sm">典</span> <span id="sgSbarDeck">0</span><span class="sg-stat-tooltip">卡组总张数</span></span>
+          <span class="sg-sbar-relic sg-stat-tip"><span class="sg-ico sg-ico-energy sg-ico-sm">光</span> <span id="sgSbarRelic">0</span><span class="sg-stat-tooltip">遗器数量</span></span>
         </div>
         <div class="sg-sbar-right">
-          <span class="sg-sbar-act sg-stat-tip" id="sgSbarAct">🏛️ 第一境<span class="sg-stat-tooltip">当前所在境</span></span>
-          <span class="sg-sbar-floor sg-stat-tip" id="sgSbarFloor">层 1/12<span class="sg-stat-tooltip">当前层数</span></span>
+          <span class="sg-sbar-act sg-stat-tip" id="sgSbarAct"><span class="sg-ico sg-ico-gold sg-ico-sm">灯</span> 第一境<span class="sg-stat-tooltip">当前所在境</span></span>
+          <span class="sg-sbar-floor sg-stat-tip" id="sgSbarFloor"><span class="sg-ico sg-ico-turn sg-ico-sm">回</span> 层 1/12<span class="sg-stat-tooltip">当前层数</span></span>
         </div>
       </div>
       <!-- 标题画面 -->
       <div id="sgTitle" class="sg-screen">
-        <div class="sg-title-icon">🎋📜</div>
+        <div class="sg-title-icon"><span class="sg-ico sg-ico-gold sg-ico-lg">竹</span><span class="sg-ico sg-ico-deck sg-ico-lg" style="margin-left:-.3rem;">卷</span></div>
         <div class="sg-title-text">诗境问道</div>
         <div class="sg-title-sub">古诗词 · 肉鸽卡牌</div>
         <div class="sg-title-desc">三境九转，以诗为剑<br>攀登诗道之巅</div>
-        <button class="sg-btn sg-btn-primary" id="sgStartBtn">开始征程</button>
-        <button class="sg-btn" id="sgCollectionBtn" style="margin-top:.5rem;font-size:.7rem;">📖 诗境图鉴</button>
+        <button class="sg-btn sg-btn-primary" id="sgStartBtn"><span class="sg-ico sg-ico-str sg-ico-sm">剑</span> 开始征程</button>
+        <button class="sg-btn" id="sgCollectionBtn" style="margin-top:.5rem;font-size:.7rem;"><span class="sg-ico sg-ico-deck sg-ico-sm">典</span> 诗境图鉴</button>
       </div>
       <!-- 角色选择 -->
       <div id="sgCharSelect" class="sg-screen" style="display:none">
@@ -2028,7 +2061,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           <span><span class="sg-floor-badge">第 <span id="sgActNum">一</span> 境</span></span>
           <span><span class="sg-floor-badge">层 <span id="sgFloorNum">1</span> / <span id="sgMaxFloor">12</span></span></span>
         </div>
-        <div style="text-align:center;padding:0.3rem 0;font-size:0.8rem;color:var(--gold);letter-spacing:0.05em;">💰 <span id="sgMapGold">0</span> 金币</div>
+        <div style="text-align:center;padding:0.3rem 0;font-size:0.8rem;color:var(--gold);letter-spacing:0.05em;"><span class="sg-ico sg-ico-gold sg-ico-sm">金</span> <span id="sgMapGold">0</span> 金币</div>
         <div class="sg-map" id="sgMapContainer"></div>
         <div style="text-align:center;padding:0.3rem 0;"><button class="sg-btn sg-btn-small" id="sgMapBack">返回</button></div>
       </div>
@@ -2046,7 +2079,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
               <div class="sg-hp-fill" id="sgEnemyHpFill" style="width:100%"></div>
             </div>
             <div class="sg-hp-text"><span id="sgEnemyHp">40</span>/<span id="sgEnemyMaxHp">40</span></div>
-            <div class="sg-enemy-block" id="sgEnemyBlock" style="display:none">🛡️ <span id="sgEnemyBlockNum">0</span></div>
+            <div class="sg-enemy-block" id="sgEnemyBlock" style="display:none"><span class="sg-ico sg-ico-block sg-ico-sm">盾</span> <span id="sgEnemyBlockNum">0</span></div>
             <div class="sg-enemy-buffs" id="sgEnemyBuffs"></div>
             <div class="sg-enemy-poison" id="sgEnemyPoison"></div>
           </div>
@@ -2061,7 +2094,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
               <div class="sg-hp-fill" id="sgEnemyHpFill2" style="width:100%"></div>
             </div>
             <div class="sg-hp-text"><span id="sgEnemyHp2">0</span>/<span id="sgEnemyMaxHp2">0</span></div>
-            <div class="sg-enemy-block" id="sgEnemyBlock2" style="display:none">🛡️ <span id="sgEnemyBlockNum2">0</span></div>
+            <div class="sg-enemy-block" id="sgEnemyBlock2" style="display:none"><span class="sg-ico sg-ico-block sg-ico-sm">盾</span> <span id="sgEnemyBlockNum2">0</span></div>
             <div class="sg-enemy-buffs" id="sgEnemyBuffs2"></div>
             <div class="sg-enemy-poison" id="sgEnemyPoison2"></div>
           </div>
@@ -2075,13 +2108,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
             </div>
           </div>
           <div class="sg-status">
-            <div class="sg-status-item sg-stat-tip">❤️ <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span><span class="sg-stat-tooltip">当前生命值，归零则落败</span></div>
-            <div class="sg-status-item sg-stat-tip">⚡ <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span><span class="sg-stat-tooltip">行动能量，打出卡牌需要消耗能量</span></div>
-            <div class="sg-status-item sg-stat-tip">🛡️ <span id="sgPlayerBlock">0</span><span class="sg-stat-tooltip">护盾，抵消等量攻击伤害，每回合重置</span></div>
-            <div class="sg-status-item sg-stat-tip">💪 <span id="sgPlayerStrength">0</span><span class="sg-stat-tooltip">力量，每层使攻击伤害+3</span></div>
-            <div class="sg-status-item sg-stat-tip">☠️ <span id="sgPlayerPoison">0</span><span class="sg-stat-tooltip">中毒，每回合结束时受到层数伤害</span></div>
-            <div class="sg-status-item" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span> <span class="sg-stat-tip" id="sgDrawPileBtn" style="cursor:pointer">🃏<span id="sgDrawPile">0</span><span class="sg-stat-tooltip">抽牌堆：点击查看剩余卡牌</span></span> ✋<span id="sgHandCount">0</span> <span class="sg-stat-tip" id="sgDiscardPileBtn" style="cursor:pointer">📄<span id="sgDiscardPile">0</span><span class="sg-stat-tooltip">弃牌堆：点击查看已弃卡牌</span></span></div>
-            <div class="sg-status-item sg-stat-tip">🔄 <span id="sgTurnNum">0</span><span class="sg-stat-tooltip">当前回合数</span></div>
+            <div class="sg-status-item sg-stat-tip" id="sgStatusHp"><span class="sg-ico sg-ico-hp">心</span> <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span><span class="sg-stat-tooltip">当前生命值，归零则落败</span></div>
+            <div class="sg-status-item sg-stat-tip" id="sgStatusEnergy"><span class="sg-ico sg-ico-energy">气</span> <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span><span class="sg-stat-tooltip">行动能量，打出卡牌需要消耗能量</span></div>
+            <div class="sg-status-item sg-stat-tip" id="sgStatusBlock"><span class="sg-ico sg-ico-block">盾</span> <span id="sgPlayerBlock">0</span><span class="sg-stat-tooltip">护盾，抵消等量攻击伤害，每回合重置</span></div>
+            <div class="sg-status-item sg-stat-tip" id="sgStatusStr"><span class="sg-ico sg-ico-str">力</span> <span id="sgPlayerStrength">0</span><span class="sg-stat-tooltip">力量，每层使攻击伤害+3</span></div>
+            <div class="sg-status-item sg-stat-tip" id="sgStatusPoison"><span class="sg-ico sg-ico-poison">毒</span> <span id="sgPlayerPoison">0</span><span class="sg-stat-tooltip">中毒，每回合结束时受到层数伤害</span></div>
+            <div class="sg-status-item" id="sgDeckCount"><span class="sg-ico sg-ico-deck sg-ico-sm">典</span> <span id="sgDeckCountNum">0</span> <span class="sg-stat-tip" id="sgDrawPileBtn" style="cursor:pointer"><span class="sg-ico sg-ico-deck sg-ico-sm">牌</span><span id="sgDrawPile">0</span><span class="sg-stat-tooltip">抽牌堆：点击查看剩余卡牌</span></span> <span class="sg-ico sg-ico-deck sg-ico-sm">手</span><span id="sgHandCount">0</span> <span class="sg-stat-tip" id="sgDiscardPileBtn" style="cursor:pointer"><span class="sg-ico sg-ico-deck sg-ico-sm">笺</span><span id="sgDiscardPile">0</span><span class="sg-stat-tooltip">弃牌堆：点击查看已弃卡牌</span></span></div>
+            <div class="sg-status-item sg-stat-tip" id="sgStatusTurn"><span class="sg-ico sg-ico-turn">回</span> <span id="sgTurnNum">0</span><span class="sg-stat-tooltip">当前回合数</span></div>
           </div>
           <div id="sgPillsArea" style="text-align:center;padding:0.2rem 0;min-height:1.8rem;"></div>
           <div class="sg-hand" id="sgHand"></div>
@@ -2089,13 +2122,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
             <button class="sg-btn" id="sgEndTurnBtn">结束回合</button>
           </div>
         </div>
-        <button class="sg-battle-restart" id="sgBattleRestartBtn">↺ 重开战斗</button>
-        <button class="sg-battle-restart" id="sgAllCardsBtn" style="right:6rem;font-size:.55rem;">📜 所有牌</button>
+        <button class="sg-battle-restart" id="sgBattleRestartBtn"><span class="sg-ico sg-ico-turn sg-ico-sm">回</span> 重开</button>
+        <button class="sg-battle-restart" id="sgAllCardsBtn" style="right:6rem;font-size:.55rem;"><span class="sg-ico sg-ico-deck sg-ico-sm">卷</span> 所有牌</button>
       </div>
       <!-- 奖励画面 -->
       <div id="sgReward" class="sg-screen" style="display:none">
-        <div class="sg-reward-title">🎉 获得诗篇</div>
-        <div style="text-align:center;font-size:0.8rem;color:var(--gold);padding-bottom:0.5rem;">💰 +<span id="sgRewardGold">0</span> 金币</div>
+        <div class="sg-reward-title"><span class="sg-ico sg-ico-gold sg-ico-lg">奖</span> 获得诗篇</div>
+        <div style="text-align:center;font-size:0.8rem;color:var(--gold);padding-bottom:0.5rem;"><span class="sg-ico sg-ico-gold sg-ico-sm">金</span> +<span id="sgRewardGold">0</span> 金币</div>
         <div class="sg-reward-cards" id="sgRewardCards"></div>
         <div class="sg-reward-actions">
           <button class="sg-btn sg-btn-primary" id="sgRewardSkip">继续</button>
@@ -2103,19 +2136,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       </div>
       <!-- 休憩画面 -->
       <div id="sgRest" class="sg-screen" style="display:none">
-        <div class="sg-rest-icon">🏮</div>
+        <div class="sg-rest-icon"><span class="sg-ico sg-ico-gold sg-ico-lg">灯</span></div>
         <div class="sg-rest-title">书院休憩</div>
         <div class="sg-rest-desc">静心养气，恢复体力。</div>
-        <div class="sg-rest-hp">当前 HP：<span id="sgRestHp">80</span>/<span id="sgRestMaxHp">80</span></div>
-        <div style="text-align:center;font-size:.7rem;color:var(--text-faint);display:none;">可恢复 <span id="sgRestAmt">0</span> HP</div>
-        <button class="sg-btn sg-btn-primary" id="sgRestBtn">休息（恢复 20 HP）</button>
-        <button class="sg-btn sg-btn-danger" id="sgRestUpgradeBtn" style="display:none">强化（选择一张牌升级）</button>
-        <button class="sg-btn" id="sgRestEnchantBtn" style="display:none">✨ 附魔（80金币）</button>
+        <div class="sg-rest-hp"><span class="sg-ico sg-ico-hp sg-ico-sm">心</span> <span id="sgRestHp">80</span>/<span id="sgRestMaxHp">80</span></div>
+        <div style="text-align:center;font-size:.7rem;color:var(--text-faint);display:none;">可恢复 <span id="sgRestAmt">0</span> <span class="sg-ico sg-ico-hp sg-ico-sm">心</span></div>
+        <button class="sg-btn sg-btn-primary" id="sgRestBtn"><span class="sg-ico sg-ico-hp sg-ico-sm">心</span> 休息（恢复 20）</button>
+        <button class="sg-btn sg-btn-danger" id="sgRestUpgradeBtn" style="display:none"><span class="sg-ico sg-ico-str sg-ico-sm">升</span> 强化（选择一张牌升级）</button>
+        <button class="sg-btn" id="sgRestEnchantBtn" style="display:none"><span class="sg-ico sg-ico-energy sg-ico-sm">光</span> 附魔（80金）</button>
         <button class="sg-btn" id="sgRestSkipBtn">继续前行</button>
       </div>
       <!-- 宝箱画面 -->
       <div id="sgTreasure" class="sg-screen" style="display:none">
-        <div class="sg-rest-icon">📦</div>
+        <div class="sg-rest-icon"><span class="sg-ico sg-ico-gold sg-ico-lg">箱</span></div>
         <div class="sg-rest-title">词苑拾珍</div>
         <div class="sg-rest-desc">获得一件宝物！</div>
         <div class="sg-relic-card" id="sgTreasureRelic"></div>
@@ -2123,14 +2156,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       </div>
       <!-- 商店画面 -->
       <div id="sgShop" class="sg-screen" style="display:none">
-        <div class="sg-rest-icon">🏪</div>
+        <div class="sg-rest-icon"><span class="sg-ico sg-ico-gold sg-ico-lg">市</span></div>
         <div class="sg-rest-title">诗市</div>
         <div class="sg-rest-desc">选购诗篇与宝物</div>
-        <div style="text-align:center;font-size:0.9rem;color:var(--gold);padding:0.3rem 0;">💰 <span id="sgShopGold">0</span> 金币</div>
+        <div style="text-align:center;font-size:0.9rem;color:var(--gold);padding:0.3rem 0;"><span class="sg-ico sg-ico-gold sg-ico-sm">金</span> <span id="sgShopGold">0</span> 金币</div>
         <div class="sg-shop-items" id="sgShopItems"></div>
         <div class="sg-shop-heal" id="sgShopHeal" style="display:none"></div>
         <div class="sg-shop-remove" id="sgShopRemoveCard" style="margin-top:0.5rem;text-align:center;">
-          <button class="sg-btn" id="sgShopRemoveBtn" style="font-size:0.75rem;">🗑️ 删卡（50金）</button>
+          <button class="sg-btn" id="sgShopRemoveBtn" style="font-size:0.75rem;"><span class="sg-ico sg-ico-str sg-ico-sm">删</span> 删卡（50金）</button>
         </div>
         <div class="sg-reward-actions">
           <button class="sg-btn" id="sgShopLeave">离开</button>
@@ -2138,14 +2171,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       </div>
       <!-- 事件画面 -->
       <div id="sgEvent" class="sg-screen" style="display:none">
-        <div class="sg-rest-icon" id="sgEventIcon">❓</div>
+        <div class="sg-rest-icon" id="sgEventIcon"><span class="sg-ico sg-ico-energy sg-ico-lg">遇</span></div>
         <div class="sg-rest-title" id="sgEventTitle">奇遇</div>
         <div class="sg-rest-desc" id="sgEventDesc">你遇到了一件奇怪的事情...</div>
         <div class="sg-event-choices" id="sgEventChoices"></div>
       </div>
       <!-- 结果画面 -->
       <div id="sgResult" class="sg-screen" style="display:none">
-        <div class="sg-result-icon" id="sgResultIcon">🏆</div>
+        <div class="sg-result-icon" id="sgResultIcon"><span class="sg-ico sg-ico-gold sg-ico-lg">胜</span></div>
         <div class="sg-result-title" id="sgResultTitle">胜利</div>
         <div class="sg-result-desc" id="sgResultDesc">你已问道九重诗境！</div>
         <div class="sg-result-detail" id="sgResultDetail"></div>
@@ -3778,6 +3811,57 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       '升级':{short:'升',tip:'永久强化此卡牌'},
       '回复':{short:'回',tip:'恢复生命值'},
     };
+    /* ── 古风图标替换系统 ── */
+    var SG_ICONS = {
+      '❤️':{ch:'心',cls:'sg-ico-hp'},
+      '❤':{ch:'心',cls:'sg-ico-hp'},
+      '⚡':{ch:'气',cls:'sg-ico-energy'},
+      '🛡️':{ch:'盾',cls:'sg-ico-block'},
+      '🛡':{ch:'盾',cls:'sg-ico-block'},
+      '💪':{ch:'力',cls:'sg-ico-str'},
+      '☠️':{ch:'毒',cls:'sg-ico-poison'},
+      '☠':{ch:'毒',cls:'sg-ico-poison'},
+      '🃏':{ch:'牌',cls:'sg-ico-deck'},
+      '📜':{ch:'卷',cls:'sg-ico-deck'},
+      '📄':{ch:'笺',cls:'sg-ico-deck'},
+      '💰':{ch:'金',cls:'sg-ico-gold'},
+      '🔄':{ch:'回',cls:'sg-ico-turn'},
+      '📚':{ch:'典',cls:'sg-ico-deck'},
+      '✋':{ch:'手',cls:'sg-ico-deck sg-ico-sm'},
+      '🏮':{ch:'灯',cls:'sg-ico-gold'},
+      '📦':{ch:'箱',cls:'sg-ico-gold'},
+      '✨':{ch:'光',cls:'sg-ico-energy'},
+      '🗡️':{ch:'剑',cls:'sg-ico-str'},
+      '🗡':{ch:'剑',cls:'sg-ico-str'},
+      '💊':{ch:'丹',cls:'sg-ico-poison'},
+    };
+    function ico(ch, cls, sm){
+      return '<span class="sg-ico '+(cls||'')+(sm?' sg-ico-sm':'')+'">'+ch+'</span>';
+    }
+    function replaceEmoji(t){
+      if(!t) return t;
+      var r = t;
+      for(var key in SG_ICONS){
+        var v = SG_ICONS[key];
+        r = r.split(key).join(ico(v.ch, v.cls));
+      }
+      return r;
+    }
+    function replaceEmojiText(t){
+      // For text content (not HTML), strip emoji or replace with char
+      if(!t) return t;
+      var r = t;
+      for(var key in SG_ICONS){
+        var v = SG_ICONS[key];
+        r = r.split(key).join(v.ch);
+      }
+      return r;
+    }
+    /* ── 图标版状态栏快捷工具 ── */
+    function makeStatusHtml(emoji, ch, cls, content){
+      return '<span class="sg-e">' + ico(ch, cls) + ' ' + content + '</span>';
+    }
+
     function parseKeywords(text){
       if(!text) return text;
       var keys = Object.keys(KEYWORD_DEFS).sort(function(a,b){return b.length-a.length;});
@@ -4591,16 +4675,17 @@ applyPoison();
       // Enemy name and HP
       // 敌人立绘emoji映射（Item 10）
       var enemyEmojis = {
-        lichou:'💔',qiusi:'🍂',yeyu:'🌧️',guhong:'🦅',zhuangzhi:'🔥',chouchang:'😔',piaobo:'🍃',
-        saihong:'🕊️',muyu:'☔',changfeng:'🌪️',feixu:'🌿',zhengyan:'🐦',kuangfeng:'💨',canhun:'👻',
-        xingshuang:'❄️',fengchen:'🌫️',canghai:'🌊',qingyun:'☁️',fusheng:'🫧',mingshi:'💀',zhanshen:'⚔️',wushuang:'🏆',
-        cimo:'📿',shihun:'📜',wenqu:'⭐',shuimo:'🖌️',bihun:'✒️',
-        exam:'📖',master:'👑',saint:'✨',
-        qun_maque:'🐦🐦',qun_yinghuo:'✨✨',qun_luanshi:'🪨🪨',
-        qun_shuangye:'🍂🍂',qun_fengdie:'🦋🦋',
-        qun_jianyu:'⚔️⚔️',qun_yanwu:'🌫️🌫️'
+        lichou:'心',qiusi:'叶',yeyu:'雨',guhong:'鸿',zhuangzhi:'火',chouchang:'愁',piaobo:'萍',
+        saihong:'雁',muyu:'笠',changfeng:'风',feixu:'絮',zhengyan:'燕',kuangfeng:'飓',canhun:'魂',
+        xingshuang:'霜',fengchen:'尘',canghai:'海',qingyun:'云',fusheng:'沫',mingshi:'亡',zhanshen:'战',wushuang:'冠',
+        cimo:'禅',shihun:'卷',wenqu:'星',shuimo:'墨',bihun:'笔',
+        exam:'经',master:'君',saint:'圣',
+        qun_maque:'雀',qun_yinghuo:'萤',qun_luanshi:'石',
+        qun_shuangye:'叶',qun_fengdie:'蝶',
+        qun_jianyu:'刃',qun_yanwu:'雾'
       };
-      var enemyEmoji = enemyEmojis[gBattle.id] || '👹';
+      var enemyEmoji = enemyEmojis[gBattle.id] || '魔';
+      var emojiIcon = '<span class="sg-ico sg-ico-lg" style="font-size:1.4rem;width:1.6em;height:1.6em;background:radial-gradient(circle at 35% 30%,#3a1a0a,#1a0a00);color:#e8d5b0;border-color:rgba(232,213,176,.3);text-shadow:0 0 6px rgba(232,213,176,.3);">'+enemyEmoji+'</span>';
       var enemyArea = document.getElementById('sgEnemyArea');
       if(gBattle._isGroup){
         // 群体敌人：显示两个敌人框（Item 3）
@@ -4609,7 +4694,7 @@ applyPoison();
         // 初始化二组血量
         if(!gBattle._groupHp2){ gBattle._groupHp2 = Math.ceil(gBattle.maxHp/2); gBattle._groupMaxHp2 = gBattle._groupHp2; }
         // 敌人1
-        document.getElementById('sgEnemyPortrait').textContent = enemyEmoji;
+        document.getElementById('sgEnemyPortrait').innerHTML = emojiIcon;
         document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
         document.getElementById('sgEnemyName').textContent = gBattle.name + ' · 甲';
         document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
@@ -4620,7 +4705,7 @@ applyPoison();
         document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
         // 敌人2
         var e2El = document.getElementById('sgEnemyPortrait2');
-        if(e2El) e2El.textContent = enemyEmoji;
+        if(e2El) e2El.innerHTML = emojiIcon;
         document.getElementById('sgEnemyName2').textContent = gBattle.name + ' · 乙';
         document.getElementById('sgEnemyDesc2').textContent = gBattle.desc;
         var e2HpPct = Math.max(0, Math.floor(gBattle._groupHp2 / gBattle._groupMaxHp2 * 100));
@@ -4650,8 +4735,8 @@ applyPoison();
         document.getElementById('sgEnemyName').innerHTML = gBattle.name + ' · 甲' + (target === 1 ? ' 👈' : '');
         document.getElementById('sgEnemyName2').innerHTML = gBattle.name + ' · 乙' + (target === 2 ? ' 👈' : '');
         // 意图只显示在敌人1上
-        var intentNames = { attack:'⚔️攻击', defend:'🛡️防御', debuff:'💀衰弱', buff:'⬆️强化', heal:'❤️回复' };
-        document.getElementById('sgEnemyIntent').textContent = intentNames[gBattle.intent] || '⚔️';
+        var intentNames = { attack:'<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>攻击', defend:'<span class="sg-ico sg-ico-block sg-ico-sm">盾</span>防御', debuff:'<span class="sg-ico sg-ico-poison sg-ico-sm">毒</span>衰弱', buff:'<span class="sg-ico sg-ico-energy sg-ico-sm">光</span>强化', heal:'<span class="sg-ico sg-ico-hp sg-ico-sm">心</span>回复' };
+        document.getElementById('sgEnemyIntent').innerHTML = intentNames[gBattle.intent] || '<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>';
         document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
         document.getElementById('sgEnemyIntent2').textContent = '';
         document.getElementById('sgIntentVal2').textContent = '';
@@ -4662,16 +4747,16 @@ applyPoison();
         if(hpFill2) hpFill2.style.transition = 'width .3s';
         // Buff只显示在敌人1
         var ebHtml = '';
-        if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff">⬆力+' + gBattle.buffs.str + '</span>';
-        if(gBattle.buffs.vuln > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇易伤' + gBattle.buffs.vuln + '</span>';
-        if(gBattle.buffs.weak > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇虚弱' + gBattle.buffs.weak + '</span>';
+        if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff"><span class="sg-ico sg-ico-str sg-ico-sm">力</span>+' + gBattle.buffs.str + '</span>';
+        if(gBattle.buffs.vuln > 0) ebHtml += '<span class="sg-buff sg-debuff"><span class="sg-ico sg-ico-poison sg-ico-sm">弱</span>' + gBattle.buffs.vuln + '</span>';
+        if(gBattle.buffs.weak > 0) ebHtml += '<span class="sg-buff sg-debuff"><span class="sg-ico sg-ico-poison sg-ico-sm">虚</span>' + gBattle.buffs.weak + '</span>';
         document.getElementById('sgEnemyBuffs').innerHTML = ebHtml;
         document.getElementById('sgEnemyPoison').textContent = gBattle.enemyPoison;
       } else {
         // 单个敌人
         if(enemyArea) enemyArea.className = 'sg-enemy-area';
         document.getElementById('sgEnemy2').style.display = 'none';
-        document.getElementById('sgEnemyPortrait').textContent = enemyEmoji;
+        document.getElementById('sgEnemyPortrait').innerHTML = emojiIcon;
         document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
         document.getElementById('sgEnemyName').textContent = gBattle.name;
         document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
@@ -4685,15 +4770,15 @@ applyPoison();
         document.getElementById('sgEnemyBlockNum').textContent = gBattle.block; document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
 
         // Intent
-        var intentNames = { attack:'⚔️攻击', defend:'🛡️防御', debuff:'💀衰弱', buff:'⬆️强化', heal:'❤️回复' };
-        document.getElementById('sgEnemyIntent').textContent = intentNames[gBattle.intent] || '⚔️';
+        var intentNames = { attack:'<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>攻击', defend:'<span class="sg-ico sg-ico-block sg-ico-sm">盾</span>防御', debuff:'<span class="sg-ico sg-ico-poison sg-ico-sm">毒</span>衰弱', buff:'<span class="sg-ico sg-ico-energy sg-ico-sm">光</span>强化', heal:'<span class="sg-ico sg-ico-hp sg-ico-sm">心</span>回复' };
+        document.getElementById('sgEnemyIntent').innerHTML = intentNames[gBattle.intent] || '<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>';
         document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
 
         // Enemy buffs
         var ebHtml = '';
-        if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff">⬆力+' + gBattle.buffs.str + '</span>';
-        if(gBattle.buffs.vuln > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇易伤' + gBattle.buffs.vuln + '</span>';
-        if(gBattle.buffs.weak > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇虚弱' + gBattle.buffs.weak + '</span>';
+        if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff"><span class="sg-ico sg-ico-str sg-ico-sm">力</span>+' + gBattle.buffs.str + '</span>';
+        if(gBattle.buffs.vuln > 0) ebHtml += '<span class="sg-buff sg-debuff"><span class="sg-ico sg-ico-poison sg-ico-sm">弱</span>' + gBattle.buffs.vuln + '</span>';
+        if(gBattle.buffs.weak > 0) ebHtml += '<span class="sg-buff sg-debuff"><span class="sg-ico sg-ico-poison sg-ico-sm">虚</span>' + gBattle.buffs.weak + '</span>';
         document.getElementById('sgEnemyBuffs').innerHTML = ebHtml;
 
         // Enemy poison
@@ -4701,8 +4786,8 @@ applyPoison();
       }
 
       // Player Portrait (Item 6)
-      var charPortraits = {lizhi:'🌙',sush:'🌊',liqing:'🌸'};
-      var pEmoji = charPortraits[G.charId] || '🍶';
+      var charPortraits = {lizhi:'月',sush:'浪',liqing:'花'};
+      var pEmoji = charPortraits[G.charId] || '诗';
       var pClass = G.charId || '';
       var portraitEl = document.getElementById('sgPlayerPortrait');
       if(portraitEl){
@@ -4763,11 +4848,40 @@ applyPoison();
 
         if(canPlay){
           (function(ci, el2){
-            cardEl.addEventListener('click', function(){
+            el2.draggable = 'true';
+            el2.addEventListener('dragstart', function(e){
+              e.dataTransfer.setData('text/plain', ''+ci);
+              e.dataTransfer.effectAllowed = 'move';
+              el2.classList.add('dragging');
+            });
+            el2.addEventListener('dragend', function(e){
+              el2.classList.remove('dragging');
+              handEl.classList.remove('drag-over');
+            });
+            el2.addEventListener('click', function(){
               playCard(ci);
             });
           })(hi, cardEl);
         }
+        // Drop targets for reorder (all cards including disabled)
+        (function(ci, el2){
+          if(!el2.draggable) el2.draggable = 'true';
+          el2.addEventListener('dragover', function(e){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+          el2.addEventListener('dragenter', function(e){ e.preventDefault(); handEl.classList.add('drag-over'); el2.classList.add('drag-hover'); });
+          el2.addEventListener('dragleave', function(){ el2.classList.remove('drag-hover'); });
+          el2.addEventListener('drop', function(e){
+            e.preventDefault();
+            el2.classList.remove('drag-hover');
+            handEl.classList.remove('drag-over');
+            var fromIdx = parseInt(e.dataTransfer.getData('text/plain'), 10);
+            if(isNaN(fromIdx) || fromIdx === ci) return;
+            // Swap hand positions
+            var tmp = gBattle.hand[fromIdx];
+            gBattle.hand[fromIdx] = gBattle.hand[ci];
+            gBattle.hand[ci] = tmp;
+            renderBattle();
+          });
+        })(hi, cardEl);
 
         var isNewlyDrawn = gBattle._newlyDrawn && gBattle._newlyDrawn.indexOf(hi) !== -1;
         if(gBattle._animDraw || isNewlyDrawn){
