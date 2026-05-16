@@ -1835,9 +1835,10 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 }
 .sg-collection-detail-box{
   background:var(--bg-card);border:1px solid var(--gold);
-  border-radius:12px;padding:1.2rem;max-width:380px;width:85%;
+  border-radius:12px;padding:1.2rem;max-width:440px;width:88%;
   animation:sgScaleIn 0.2s ease-out;
   box-shadow:0 10px 40px rgba(0,0,0,0.4);
+  max-height:80vh;overflow-y:auto;
 }
 .sg-collection-detail-box .sg-cdb-header{
   display:flex;justify-content:space-between;align-items:center;
@@ -1857,9 +1858,11 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 }
 .sg-collection-detail-box .sg-cdb-field b{color:var(--text);}
 .sg-collection-detail-box .sg-cdb-flavor{
-  font-size:0.65rem;color:var(--text-faint);font-style:italic;
-  margin-top:0.4rem;padding-top:0.4rem;
+  font-size:0.62rem;color:var(--text-dim);line-height:1.7;
+  margin-top:0.4rem;padding:0.5rem 0.5rem 0.4rem;
   border-top:1px dashed var(--border);
+  background:var(--gold-soft);border-radius:4px;
+  border-left:2px solid rgba(201,168,76,0.25);
 }
 /* 敌人详情字段 */
 .sg-cdb-stat-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin:0.3rem 0;}
@@ -6063,6 +6066,318 @@ function setBattleBackground(){
       document.body.appendChild(det);
     }
 
+    // ═══════════════════════════════════════════════════════════════════════
+    // ══════ 图鉴专属背景故事与剧情（每个物品独一无二） ══════
+    // ═══════════════════════════════════════════════════════════════════════
+    var CARD_FLAV = {};
+    var CARD_TIPS = {};
+    var RELIC_FLAV = {};
+    var PILL_FLAV = {};
+    var ENEMY_FLAV = {};
+
+    // ── 诗牌背景故事 ──
+    CARD_FLAV.yinyong='相传李白少年时在蜀中读书，偶遇一位老道。老道问他："诗为何物？"李白答："志之所之也。"老道笑而不语，留下一卷泛黄的《诗大序》便飘然而去。此后李白吟咏不辍，终成诗仙。';
+    CARD_TIPS.yinyong='零费过牌，帮助快速滤出关键卡牌，是卡组运转的润滑剂';
+    CARD_FLAV.mosong='苏轼贬谪黄州时，每日黎明即起，面江默诵《论语》《庄子》。有好事者问他为何不写新诗，苏轼答："熟读而后能悟，悟而后能化。"江声入耳，化为日后千古文章。';
+    CARD_TIPS.mosong='零费格挡，续航基石，维持血量健康的基础保障';
+    CARD_FLAV.qingci='李白醉后挥毫，笔落惊风雨，诗成泣鬼神。相传此诗写成时，墨迹未干便化作一缕青烟，直上九霄。有人问其中奥妙，李白笑指杯中酒："清词丽句必为邻。"';
+    CARD_TIPS.qingci='李白1费攻击，高效输出，配合力量加成效果更佳';
+    CARD_FLAV.mansha='苏轼游蕲水清泉寺，见溪水西流，有感而发。寺中老僧曰："水可西流，人可再少。"苏轼大笑，挥笔写下此词。从此每遇困境，便默诵此句，心气自平。';
+    CARD_TIPS.mansha='基础格挡技能，稳固防守，为后续爆发蓄力';
+    CARD_FLAV.puziman='李清照与赵明诚婚后，常以词牌为戏。赵明诚出上阕，李清照对下阕。此词乃二人合璧之作，明诚写"菩萨蛮"三字，清照续成双叠句，一时传为闺中佳话。';
+    CARD_TIPS.puziman='双段攻击，稳定输出，叠毒流派的优质选择';
+    CARD_FLAV.dianjiang='李清照少时荡秋千，见客入来，袜刬金钗溜。和羞走，倚门回首，却把青梅嗅。此词记少女心事，胭脂色的词句中藏着说不出口的温柔。';
+    CARD_TIPS.dianjiang='施加易伤，为高爆发卡牌创造输出窗口';
+    CARD_FLAV.pozhen='辛弃疾夜读《五代史》，忽闻营中号角声。想起当年沙场秋点兵，马作的卢飞快，弓如霹雳弦惊。可惜如今白发已生，只能醉里挑灯看剑，梦回吹角连营。';
+    CARD_TIPS.pozhen='高费高伤，中期核心输出，对精英和Boss效果显著';
+    CARD_FLAV.manjiang='岳飞北伐至朱仙镇，遥望汴京，满江红透。麾下将士皆热血沸腾，欲一鼓作气收复失地。然十二道金牌至，岳飞仰天长啸，将此词题于壁上，墨迹如血。';
+    CARD_TIPS.manjiang='强力单伤，配合易伤debuff可造成毁灭性打击';
+    CARD_FLAV.jingyesi='李白客居扬州客栈，夜半酒醒，见月光如霜铺满庭院。举头望月，想起远在蜀中的父亲和兄长。此诗写于床前，未加雕饰，却成了千古流传的思乡绝唱。';
+    CARD_TIPS.jingyesi='零费攻击，过牌补刀两不误，节奏紧凑';
+    CARD_FLAV.yijianmei='李清照思念远游的丈夫，独上西楼。雁字回时，月满西楼。花自飘零水自流，一种相思两处闲愁。此情无计可消除，才下眉头，却上心头。';
+    CARD_TIPS.yijianmei='格挡兼易伤，防御反击一体，适合主动进攻节奏';
+    CARD_FLAV.guiziyao='陶渊明辞官归隐，舟遥遥以轻飏，风飘飘而吹衣。问征夫以前路，恨晨光之熹微。归去来兮，田园将芜胡不归？此词写尽千古归隐者的心声。';
+    CARD_TIPS.guiziyao='伤害附带虚弱，攻防兼备的万金油卡牌';
+    CARD_FLAV.nangezi='欧阳修春日游颍州西湖，见沙堤十里，柳絮纷飞。一叶扁舟载歌女数人，凤髻金泥带，龙纹玉掌梳。来年再来，风景依旧，人面不知何处去。';
+    CARD_TIPS.nangezi='叠毒流派核心牌，持续伤害的起点';
+    CARD_FLAV.ruanlang='苏轼与友人游西湖群山，日暮而归。有友问："今日之游何如？"苏轼笑答："天边金掌露成霜，云间玉叶风前堕。"归途遇雨，众人皆狼狈，独苏轼不觉。';
+    CARD_TIPS.ruanlang='攻守平衡，稳扎稳打的基础战术牌';
+    CARD_FLAV.xifenfei='晏殊送别故人，泪湿阑干。劝君更尽一杯酒，西出阳关无故人。此词写在驿站的墙上，往来行人见了无不感伤。后来驿站重修，特意保留了这面墙。';
+    CARD_TIPS.xifenfei='双段攻击破格挡，对护盾敌人效果加倍';
+    CARD_FLAV.guomei='文天祥过梅岭，遥望故国，心中激荡。此地梅花岁岁开，行人到此尽徘徊。中有行人肠断处，梅花不顾自开落。后人路过梅岭，犹闻悲歌在耳。';
+    CARD_TIPS.guomei='高伤自损，高风险高回报，关键时刻逆转战局';
+    CARD_FLAV.jiangcheng='苏轼悼念亡妻王弗，夜梦还乡。小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。此词写于王弗去世十年后，字字是泪。';
+    CARD_TIPS.jiangcheng='半血以下伤害翻倍，绝境反杀的利器';
+    CARD_FLAV.ruman='李清照回忆少女时光，常记溪亭日暮。沉醉不知归路，兴尽晚回舟，误入藕花深处。争渡争渡，惊起一滩鸥鹭。那时的快乐，简单而纯粹。';
+    CARD_TIPS.ruman='格挡兼过牌，增强卡组循环，攻守转换的枢纽';
+    CARD_FLAV.qingping='晏殊填词时，有人拿边塞诗来请教。晏殊说："词不同于诗，词要清平祥和。"问者不解。晏殊指着庭院中的芍药："你看，花开无声，但谁都能感受到它的美。"';
+    CARD_TIPS.qingping='格挡加易伤，为后续攻击制造可乘之机';
+    CARD_FLAV.shengsheng='李清照南渡后，独居江南。秋日黄昏，细雨滴梧桐。寻寻觅觅，冷冷清清，凄凄惨惨戚戚。乍暖还寒时候，最难将息。三杯两盏淡酒，怎敌他晚来风急。';
+    CARD_TIPS.shengsheng='双重虚弱，大幅削弱敌人，适合Boss战';
+    CARD_FLAV.diehua='欧阳修庭院深深深几许，杨柳堆烟，帘幕无重数。一个春日，他独坐庭院中，见双蝶在花间追逐，想起年少时也曾为情所困，如今只余淡淡惆怅。';
+    CARD_TIPS.diehua='过牌核心，快速检索关键牌，卡组运转引擎';
+    CARD_FLAV.yujia='范仲淹戍守边塞，秋来风景异。四面边声连角起，千嶂里，长烟落日孤城闭。浊酒一杯家万里，燕然未勒归无计。将军白发征夫泪。';
+    CARD_TIPS.yujia='格挡加能量，防守反击的优质选择';
+    CARD_FLAV.linjiang='晏几道梦回往日，小蘋当时曾出现。梦后楼台高锁，酒醒帘幕低垂。去年春恨却来时，落花人独立，微雨燕双飞。此词写尽繁华落尽后的寂寥。';
+    CARD_TIPS.linjiang='零费回血消耗牌，绝境救命的底牌';
+    CARD_FLAV.dingfeng='苏轼沙湖道中遇雨，雨具先去。同行皆狼狈，余独不觉。已而遂晴，故作此词。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。回首向来萧瑟处，归去，也无风雨也无晴。';
+    CARD_TIPS.dingfeng='获得力量加成，奠定后续爆发基础';
+    CARD_FLAV.niannu='苏轼游赤壁，望大江东去。乱石穿空，惊涛拍岸，卷起千堆雪。江山如画，一时多少豪杰。遥想公瑾当年，小乔初嫁了，雄姿英发。羽扇纶巾，谈笑间樯橹灰飞烟灭。';
+    CARD_TIPS.niannu='AOE清场，群战利器，应对召唤流敌人';
+    CARD_FLAV.jiangjin='李白与岑勋、元丹丘会于嵩山，豪饮三百杯。岑夫子，丹丘生，将进酒，杯莫停。与君歌一曲，请君为我倾耳听。五花马，千金裘，呼儿将出换美酒，与尔同销万古愁。';
+    CARD_TIPS.jiangjin='伤害回能，快攻卡组的节奏发动机';
+    CARD_FLAV.tasha='秦观南行途中，雾失楼台，月迷津渡。桃源望断无寻处。可堪孤馆闭春寒，杜鹃声里斜阳暮。驿寄梅花，鱼传尺素，砌成此恨无重数。';
+    CARD_TIPS.tasha='三段攻击，破盾叠毒效果好，对单敌人效率极高';
+    CARD_FLAV.yulin='柳永离京南下，与恋人长亭送别。寒蝉凄切，对长亭晚，骤雨初歇。执手相看泪眼，竟无语凝噎。此去经年，应是良辰好景虚设。便纵有千种风情，更与何人说。';
+    CARD_TIPS.yulin='高额格挡，生存向牌组必备';
+    CARD_FLAV.wanglu='李白游庐山，见瀑布从三千尺高处飞泻而下，疑似银河从天而降。当地山民说，每逢月圆之夜，瀑布中会有仙女起舞。李白连观三夜，虽未见仙女，却得此绝句。';
+    CARD_TIPS.wanglu='伤害过牌两不误，保持手牌优势的高效牌';
+    CARD_FLAV.busuanzi='李之仪卜居长江边，见江水日夜东流。我住长江头，君住长江尾。日日思君不见君，共饮长江水。此水几时休？此恨何时已？只愿君心似我心，定不负相思意。';
+    CARD_TIPS.busuanzi='手牌越多伤害越高，过牌流的核心输出';
+    CARD_FLAV.caisangzi='欧阳修游颍州西湖，采桑子词成十三首。轻舟短棹西湖好，绿水逶迤。芳草长堤，隐隐笙歌处处随。无风水面琉璃滑，不觉船移。微动涟漪，惊起沙禽掠岸飞。';
+    CARD_TIPS.caisangzi='格挡叠毒，攻防兼备的持续输出手段';
+    CARD_FLAV.daolianzi='李煜被囚汴京，夜深人静时听到远处捣衣声。深院静，小庭空，断续寒砧断续风。无奈夜长人不寐，数声和月到帘栊。此词写尽亡国之君的凄凉。';
+    CARD_TIPS.daolianzi='零费爆发能量，一回合打出多张牌的关键';
+    CARD_FLAV.langtaosha='王安石登临送目，正故国晚秋。千里澄江似练，翠峰如簇。征帆去棹残阳里，背西风，酒旗斜矗。六朝旧事随流水，但寒烟衰草凝绿。';
+    CARD_TIPS.langtaosha='AOE清场，群战专属，配合力量加成威力惊人';
+    CARD_FLAV.mantingfang='苏轼游颍州西湖，见十里荷花盛开。菡萏香销翠叶残，西风愁起绿波间。还与韶光共憔悴，不堪看。细雨梦回鸡塞远，小楼吹彻玉笙寒。';
+    CARD_TIPS.mantingfang='回复加格挡，续航与防守兼备的王牌技能';
+    CARD_FLAV.shaonian='柳永少年时游长安古道，见马迟迟行。离思满天涯，归云一去无踪迹。此词是柳永晚年回忆少年游历之作，字里行间都是对逝去时光的追忆。';
+    CARD_TIPS.shaonian='临时力量爆发，一回合巨额伤害的关键';
+    CARD_FLAV.tanpo='李璟秋日登楼，见菡萏香销翠叶残。西风愁起绿波间，还与韶光共憔悴。多少泪珠何限恨，倚阑干。此词写尽帝王面对国势衰微的无奈。';
+    CARD_TIPS.tanpo='大量过牌，快速刷空牌库找出核心组合';
+    CARD_FLAV.wangjiangnan='温庭筠笔下女子梳洗罢，独倚望江楼。过尽千帆皆不是，斜晖脉脉水悠悠。肠断白蘋洲。此词写闺中人盼归的痴情，千帆过尽，不见归人。';
+    CARD_TIPS.wangjiangnan='消耗型高额格挡，危机时刻保命牌';
+    CARD_FLAV.wulingchun='李清照避乱江南，时值暮春。闻说双溪春尚好，也拟泛轻舟。只恐双溪舴艋舟，载不动许多愁。国破家亡之痛，何人能解？';
+    CARD_TIPS.wulingchun='血量越低伤害越高，绝境反杀的王牌';
+    CARD_FLAV.xiaochongshan='岳飞夜不能寐，独坐寒蛩鸣叫的帐中。昨夜寒蛩不住鸣，惊回千里梦，已三更。起来独自绕阶行，人悄悄，帘外月胧明。白首为功名，旧山松竹老，阻归程。';
+    CARD_TIPS.xiaochongshan='防守蓄力，为下一回合爆发做铺垫';
+    CARD_FLAV.xingxiangzi='秦观春日游小园，见树绕村庄，水满陂塘。倚东风，豪兴徜徉。小园几许，收尽春光。有桃花红，李花白，菜花黄。偶然乘兴，步过东冈。';
+    CARD_TIPS.xingxiangzi='过牌加回能，卡组运转的核心引擎';
+    CARD_FLAV.zuihuajian='冯延巳晴雪后游小园，见梅花初绽。晴雪小园春未到，池边梅自早。高树鹊衔巢，斜月明寒草。山川风景好，自古金陵道。少年看却老。';
+    CARD_TIPS.zuihuajian='格挡转化伤害，护盾流牌组的核心输出';
+    CARD_FLAV.jianzi='苏轼贬谪惠州，天涯海角，故人书信渐稀。天涯旧恨，独自凄凉人不问。欲见回肠，断尽金炉小篆香。黛蛾长敛，任是春风吹不展。困倚危楼，过尽飞鸿字字愁。';
+    CARD_TIPS.jianzi='高伤削敌，精英战中削弱敌人的关键牌';
+    CARD_FLAV.shidiao='苏轼中秋夜欢饮达旦，大醉。明月几时有，把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。此词一出，逸响千古。';
+    CARD_TIPS.shidiao='每回合额外能量，能量流牌组的核心';
+    CARD_FLAV.xijiang='苏轼夜行黄沙道中，明月别枝惊鹊，清风半夜鸣蝉。稻花香里说丰年，听取蛙声一片。七八个星天外，两三点雨山前。此词写田园之乐，恬淡自然。';
+    CARD_TIPS.xijiang='每回合固定格挡，防御流牌组的基石';
+    CARD_FLAV.zhegu='晏几道追忆往昔，彩袖殷勤捧玉钟，当年拚却醉颜红。舞低杨柳楼心月，歌尽桃花扇底风。从别后，忆相逢，几回魂梦与君同。';
+    CARD_TIPS.zhegu='每回合力量成长，越战越强的核心卡';
+    CARD_FLAV.qinyuan='毛泽东北国风光，千里冰封万里雪飘。望长城内外，惟余莽莽。大河上下，顿失滔滔。山舞银蛇，原驰蜡象，欲与天公试比高。须晴日，看红装素裹，分外妖娆。';
+    CARD_TIPS.qinyuan='全方面强化，生存与上限兼具的终极卡牌';
+    CARD_FLAV.liuzhou='贺铸少年时在汴京任侠仗义，结交豪杰。少年侠气，交结五都雄。肝胆洞，毛发耸。立谈中，死生同，一诺千金重。推翘勇，矜豪纵。';
+    CARD_TIPS.liuzhou='巨额单体伤害，消耗型爆发，一击定胜负';
+    CARD_FLAV.yiqine='李白在长安城上见西风残照，汉家陵阙。乐游原上清秋节，咸阳古道音尘绝。音尘绝，西风残照，汉家陵阙。此词写尽盛唐气象下的苍凉。';
+    CARD_TIPS.yiqine='高伤配合全面debuff，一锤定音的终结技';
+    CARD_FLAV.yumeiren='李煜被囚时，遥望故国。春花秋月何时了，往事知多少。小楼昨夜又东风，故国不堪回首月明中。雕栏玉砌应犹在，只是朱颜改。问君能有几多愁，恰似一江春水向东流。';
+    CARD_TIPS.yumeiren='每回合自动回血，持久战的资本';
+    CARD_FLAV.liuyachao='欧阳修春日绿阴中听琵琶，六幺声起。绿阴春尽，飞絮绕香阁。晚来翠眉宫样，巧把远山学。一寸狂心未说，已向横波觉。';
+    CARD_TIPS.liuyachao='三段攻击，破盾清杂兵效率极高';
+    CARD_FLAV.shizhouman='苏轼想象海外十洲仙山，云水苍茫。十洲云水，三岛烟霞，中有神仙眷属。此词写于贬谪途中，以仙山寄托对自由的向往。';
+    CARD_TIPS.shizhouman='中费格挡，朴实而有效的防御手段';
+    CARD_FLAV.qingyu='辛弃疾元夕夜游，东风夜放花千树，更吹落星如雨。宝马雕车香满路。凤箫声动，玉壶光转，一夜鱼龙舞。众里寻他千百度，蓦然回首，那人却在灯火阑珊处。';
+    CARD_TIPS.qingyu='高伤加深层易伤，爆发组合的核心组件';
+    CARD_FLAV.yulouchun='宋祁春日游湖，绿杨烟外晓寒轻，红杏枝头春意闹。浮生长恨欢娱少，肯爱千金轻一笑。为君持酒劝斜阳，且向花间留晚照。';
+    CARD_TIPS.yulouchun='攻守兼施，叠毒流的又一选择';
+    CARD_FLAV.xijiangyue='辛弃疾夜行黄沙道，明月惊鹊，清风鸣蝉。稻花香里说丰年，听取蛙声一片。七八个星天外，两三点雨山前。此词写田园之趣，清新自然。';
+    CARD_TIPS.xijiangyue='零费补刀，灵活的低费攻击选择';
+    CARD_FLAV.zuiweng='欧阳修被贬滁州，自号醉翁。醉翁之意不在酒，在乎山水之间也。山水之乐，得之心而寓之酒也。此词以酒写心，以醉写醒，旷达中见真意。';
+    CARD_TIPS.zuiweng='攻击回血双效，续航与输出兼具';
+    CARD_FLAV.chengfeng='苏轼中秋词中"我欲乘风归去"之句，传至皇宫。神宗读之，叹曰："苏轼终是爱君。"遂将苏轼从黄州召回。此卡即取"乘风归去"之意，轻盈飘逸。';
+    CARD_TIPS.chengfeng='零费回能消耗，关键时刻打出连锁操作';
+    CARD_FLAV.shenzui='李清照少女时与友人饮酒至沉醉，迷路于藕花深处。常记溪亭日暮，沉醉不知归路。兴尽晚回舟，误入藕花深处。那时的沉醉，是青春最美好的模样。';
+    CARD_TIPS.shenzui='过牌回能，卡组运转的高效引擎';
+    // 李白专属
+    CARD_FLAV.lizhi_jiutian='李白登楼望月，忽见银河倒泻。欲上青天揽明月的念头如闪电划过心头。侍者见李白呆立良久，笔落纸上时，诗已成。后人评："此诗只应天上有。"';
+    CARD_TIPS.lizhi_jiutian='李白核心输出，配合力量加成效果翻倍';
+    CARD_FLAV.lizhi_baixue='李白在翰林院时，一日玄宗命其作诗。李白援笔立就，曲高而和者寡。玄宗叹曰："此真天才也。"阳春白雪，曲高和寡，正是李白一生的写照。';
+    CARD_TIPS.lizhi_baixue='低费格挡，李白的基础防御手段';
+    CARD_FLAV.lizhi_wangyue='李白青年时游泰山，望岳而叹。会当凌绝顶，一览众山小。此诗写于开元盛世，青年李白意气风发，胸中自有万里江山。后来每遇挫折便重读此诗。';
+    CARD_TIPS.lizhi_wangyue='李白前期高效输出，性价比极高';
+    CARD_FLAV.lizhi_bailu='李白在金陵江边见白鹭上青天，秋色连波。两个黄鹂鸣翠柳，一行白鹭上青天。此句看似简单，却画意盎然，千古流传。';
+    CARD_TIPS.lizhi_bailu='零费补刀，灵活填充攻击曲线';
+    CARD_FLAV.lizhi_shuidao='李白听闻蜀道之难难于上青天，遂入蜀一探究竟。蚕丛及鱼凫，开国何茫然。尔来四万八千岁，不与秦塞通人烟。此诗写尽蜀道之险，也写尽人生之难。';
+    CARD_TIPS.lizhi_shuidao='李白AOE清场，应对群怪的利器';
+    CARD_FLAV.lizhi_taohua='李白游泾县桃花潭，汪伦酿美酒款待。李白临行时，汪伦踏歌送行。桃花潭水深千尺，不及汪伦送我情。这份情谊比千尺潭水还深。';
+    CARD_TIPS.lizhi_taohua='李白续航手段，战斗中的回血保障';
+    CARD_FLAV.lizhi_jingye='李白客居异乡，夜半醒来见月光如霜。疑是地上霜的恍惚中，思念涌上心头。此诗写于最平常的夜晚，却触动了千年来每一个游子的心。';
+    CARD_TIPS.lizhi_jingye='零费过牌加补刀，节奏紧凑的万金油';
+    CARD_FLAV.lizhi_yanbo='李白登黄鹤楼，见烟波江上。眼前有景道不得，崔颢题诗在上头。虽未在黄鹤楼留下诗篇，但"烟波江上使人愁"的意境已入骨髓。';
+    CARD_TIPS.lizhi_yanbo='格挡加虚弱，攻防兼备的基础卡';
+    CARD_FLAV.lizhi_jiangnan='李白晚年游江南，春水碧于天，画船听雨眠。垆边人似月，皓腕凝霜雪。未老莫还乡，还乡须断肠。江南的美好让诗仙也流连忘返。';
+    CARD_TIPS.lizhi_jiangnan='伤害过牌节奏牌，保持手牌优势的重要卡';
+    CARD_FLAV.lizhi_tianmu='李白梦游天姥山，飞渡镜湖。脚著谢公屐，身登青云梯。半壁见海日，空中闻天鸡。此诗想象奇特，气势磅礴，是李白浪漫主义的巅峰之作。';
+    CARD_TIPS.lizhi_tianmu='李白终极大招，全场清场消耗牌，慎用但威力无穷';
+    CARD_FLAV.lizhi_changfeng='李白行路难，多歧路今安在。长风破浪会有时，直挂云帆济沧海。此诗写于被排挤出长安后，虽遇挫折，依然豪情万丈。';
+    CARD_TIPS.lizhi_changfeng='李白爆发回能消耗牌，一回合打出组合技的关键';
+    CARD_FLAV.lizhi_zuoxian='李白自称臣是酒中仙，天子呼来不上船。醉后作诗百篇，字字珠玑。醉仙之名，不是因为嗜酒，而是因为醉中能见真我。';
+    CARD_TIPS.lizhi_zuoxian='能量流核心，每回合额外能量持续输出';
+    CARD_FLAV.lizhi_zuixian='李白与友人对饮，醉后狂歌。歌声震落梁上尘，惊起飞鸟。友人大惊，李白笑曰："醉仙狂歌，天地为之一振，何况区区敌人。"';
+    CARD_TIPS.lizhi_zuixian='对残血敌人造成翻倍伤害，收割利器';
+    CARD_FLAV.lizhi_tianhe='李白遥望庐山瀑布，飞流直下三千尺。疑是银河落九天的奇景让他彻夜难眠。第二天他对山僧说："昨夜我看见了天河。"山僧笑而不语。';
+    CARD_TIPS.lizhi_tianhe='三段高伤，李白爆发输出核心，可叠加力量';
+    CARD_FLAV.lizhi_yueying='李白月下舞剑，剑光如月影。他有一把从不离身的宝剑，名曰"青霜"。每逢月圆之夜，便在庭院中练剑，剑招与诗情融为一体。';
+    CARD_TIPS.lizhi_yueying='击杀回能，清杂兵后滚雪球的节奏牌';
+    // 苏轼专属
+    CARD_FLAV.sush_dajiang='苏轼游赤壁，江水东去。客有吹洞箫者，倚歌而和之。其声呜呜然，如怨如慕，如泣如诉。苏轼问客："何为其然也？"客答："哀吾生之须臾，羡长江之无穷。"';
+    CARD_TIPS.sush_dajiang='苏轼核心AOE，精英战的主力清场技能';
+    CARD_FLAV.sush_dingfeng='苏轼沙湖遇雨后作此词。同行皆狼狈，独苏轼不觉。竹杖芒鞋轻胜马，一蓑烟雨任平生。回首向来萧瑟处，也无风雨也无晴。';
+    CARD_TIPS.sush_dingfeng='中费高额格挡，苏轼生存核心';
+    CARD_FLAV.sush_liyue='苏轼与友人游赤壁，感叹人生如逆旅。寄蜉蝣于天地，渺沧海之一粟。哀吾生之须臾，羡长江之无穷。此句写尽了对生命的思考。';
+    CARD_TIPS.sush_liyue='零费补刀，填充攻击曲线的灵活选择';
+    CARD_FLAV.sush_chiqiang='苏轼赤壁怀古，想起当年的赤壁之战。大江东去，浪淘尽千古风流人物。故垒西边，人道是三国周郎赤壁。乱石穿空，惊涛拍岸，卷起千堆雪。';
+    CARD_TIPS.sush_chiqiang='苏轼中费攻击，稳定输出的重要手段';
+    CARD_FLAV.sush_sangyu='苏轼晚年与友人游西湖，微雨燕双飞。落花人独立的美好春光中，他想起了远方的弟弟苏辙。桑榆暮景，兄弟情深。';
+    CARD_TIPS.sush_sangyu='苏轼专属回血，续航保障';
+    CARD_FLAV.sush_shipo='苏轼游石钟山，夜探石壁。乱石穿空的景象让他想起赤壁之战。此词将江涛的磅礴气势化为词中的豪情。';
+    CARD_TIPS.sush_shipo='双段高伤，苏轼对精英的爆发输出';
+    CARD_FLAV.sush_yangzhou='苏轼过扬州，二十四桥明月夜。玉人何处教吹箫，桥边红药年年知为谁生。此词写扬州胜景，也写物是人非的感慨。';
+    CARD_TIPS.sush_yangzhou='格挡叠毒，攻防一体的灵活卡牌';
+    CARD_FLAV.sush_songbie='苏轼送别友人，临别赠言。人生如逆旅，我亦是行人。不必为离别伤感，因为人人都是天地间的过客。此语一出，满座皆叹。';
+    CARD_TIPS.sush_songbie='零费过牌回能消耗，极限操作的关键';
+    CARD_FLAV.sush_xiyu='苏轼游西湖，山色空蒙雨亦奇。水光潋滟晴方好，山色空蒙雨亦奇。此诗写西湖晴雨两宜之美，也暗喻人生顺逆皆可欣赏。';
+    CARD_TIPS.sush_xiyu='伤害加易伤，制造输出窗口的核心手段';
+    CARD_FLAV.sush_liying='苏轼游山寺，闻流莺百啭。百啭无人能解，因风飞过蔷薇。此词写春日的生机，也写无人理解的孤独——正如苏轼在朝堂上的处境。';
+    CARD_TIPS.sush_liying='三段攻击，破盾清杂效率极高';
+    CARD_FLAV.sush_shuiyun='苏轼游西湖，水光潋滟晴方好。欲把西湖比西子，淡妆浓抹总相宜。此词将西湖比作美人，意境优美，是苏轼最广为传诵的作品之一。';
+    CARD_TIPS.sush_shuiyun='高额格挡，防守反击战术的核心';
+    CARD_FLAV.sush_kuangda='苏轼一生三贬，从黄州到惠州再到儋州，愈贬愈远。但每到一个地方，他都能找到生活的乐趣。旷达不是天生的，是在磨难中炼成的。';
+    CARD_TIPS.sush_kuangda='每回合成长格挡，防守流核心';
+    CARD_FLAV.sush_jianghai='苏轼晚年贬谪海南，临江望海。小舟从此逝，江海寄余生。夜阑风静縠纹平，此身虽在堪惊。此词写于人生最失意时，却依然旷达从容。';
+    CARD_TIPS.sush_jianghai='高额格挡削弱敌人，精英战中攻守兼备';
+    CARD_FLAV.sush_songfeng='苏轼游山寺，松风吹解带。山月照弹琴的闲适中，他写道："此中有真意，欲辨已忘言。"不必解释，自在心中。';
+    CARD_TIPS.sush_songfeng='格挡蓄力，为下一击做准备的战术牌';
+    CARD_FLAV.sush_kuangda2='苏轼在儋州，每日与黎民百姓相处。有人问他为何不怨天尤人，苏轼笑道："吾生无恶，死且不恨。"此等胸襟，千古少有。';
+    CARD_TIPS.sush_kuangda2='格挡过牌，攻守兼备的中费实用牌';
+    // 李清照专属
+    CARD_FLAV.liqing_xunmi='李清照南渡后，国破家亡。寻寻觅觅，冷冷清清，凄凄惨惨戚戚。乍暖还寒时候，最难将息。满地菊花堆积，憔悴损，如今有谁堪摘？';
+    CARD_TIPS.liqing_xunmi='零费虚弱，削弱敌人的高效手段';
+    CARD_FLAV.liqing_mandu='李清照东篱把酒黄昏后，暗香盈袖。帘卷西风，人比黄花瘦。此词寄给远方的丈夫赵明诚，写尽相思之苦。';
+    CARD_TIPS.liqing_mandu='李清照核心输出，中费高效伤害';
+    CARD_FLAV.liqing_wutong='李清照独坐窗前，听雨打梧桐。梧桐更兼细雨，到黄昏点点滴滴。这次第，怎一个愁字了得。此词写亡国之痛，丧夫之悲，层层叠叠，无以复加。';
+    CARD_TIPS.liqing_wutong='中费格挡，李清照的防御基础';
+    CARD_FLAV.liqing_yanzi='晏殊见燕子归来，想起去年在此筑巢的燕子。无可奈何花落去，似曾相识燕归来。小园香径独徘徊。物是人非，唯有燕子年年来。';
+    CARD_TIPS.liqing_yanzi='过牌消耗，危机时刻寻找翻盘机会';
+    CARD_FLAV.liqing_lianxin='王维山居秋暝，莲动下渔舟。竹喧归浣女，莲动下渔舟。随意春芳歇，王孙自可留。此词写田园之静美，莲心之纯净。';
+    CARD_TIPS.liqing_lianxin='伤害加虚弱，小幅削弱的灵活攻击';
+    CARD_FLAV.liqing_chunyi='李清照看到雨后海棠，试问卷帘人。知否知否，应是绿肥红瘦。此词写春日将尽的感伤，惜春之情溢于言表。';
+    CARD_TIPS.liqing_chunyi='零费格挡过牌，保持节奏的关键低费卡';
+    CARD_FLAV.liqing_hehua='李清照少女时与友人游湖，误入藕花深处。争渡争渡，惊起一滩鸥鹭。那时的快乐灿若夏花，是后来苦难岁月中最温暖的回忆。';
+    CARD_TIPS.liqing_hehua='双段攻击，破格挡效果优秀';
+    CARD_FLAV.liqing_shengge='李清照与友人宴会后，沉醉不知归路。兴尽晚回舟的快乐时光已一去不返，南渡后再无此等欢乐。';
+    CARD_TIPS.liqing_shengge='消耗型大量回血，绝境保命的最后底牌';
+    CARD_FLAV.liqing_meihua='李清照赏梅，想起远方的丈夫。此花不与群花比，梅花的孤傲正如她的品格。江南无所有，聊赠一枝春。';
+    CARD_TIPS.liqing_meihua='叠毒加伤，毒流派的核心输出';
+    CARD_FLAV.liqing_xianglian='李清照独上西楼，帘卷西风。西风帘卷处，人在天涯。此词写思念远方的亲人，帘卷西风的画面千百年来让人动容。';
+    CARD_TIPS.liqing_xianglian='格挡回能，攻守兼备的中费实用牌';
+    CARD_FLAV.liqing_jingmeng='李煜从梦中惊醒，南唐故国已成往事。剪不断理还乱是离愁，别是一般滋味在心头。此词写亡国之痛，字字泣血。';
+    CARD_TIPS.liqing_jingmeng='高伤加深层易伤，爆发核心';
+    CARD_FLAV.liqing_wanque='李清照的词风以婉约著称，但婉约不是柔弱。在婉约的外表下，是坚韧不拔的品格。此卡即体现李清照词中那种柔中带刚的力量。';
+    CARD_TIPS.liqing_wanque='每回合自动回血，持久战的续航核心';
+    CARD_FLAV.liqing_hehua2='李清照晚年回忆往昔，误入藕花深处的少女时光已如梦。如今国破家亡，只能在词中寻找片刻慰藉。荷花年年开，人却不似少年时。';
+    CARD_TIPS.liqing_hehua2='攻击回血双效，续航输出兼具';
+    // 无色牌
+    CARD_FLAV.wuse_wuxin='程颢春日偶成，云淡风轻近午天。傍花随柳过前川。时人不识余心乐，将谓偷闲学少年。万物静观皆自得。';
+    CARD_TIPS.wuse_wuxin='通用零费格挡，任何牌组都可携带的万金油';
+    CARD_FLAV.wuse_liuguang='蒋捷听雨，少年听雨歌楼上，壮年听雨客舟中，而今听雨僧庐下。流光容易把人抛，红了樱桃，绿了芭蕉。';
+    CARD_TIPS.wuse_liuguang='高伤消耗，无色牌的强力输出选择';
+    CARD_FLAV.wuse_shanshui='欧阳修醉翁亭记中说山水之乐，得之心而寓之酒也。山水不言，自有大美。此卡即取山水之乐，由心而发。';
+    CARD_TIPS.wuse_shanshui='回血消耗，危机时刻的救命牌';
+    CARD_FLAV.wuse_qianli='王之涣登鹳雀楼，白日依山尽，黄河入海流。欲穷千里目，更上一层楼。此诗写登高望远的豪情，激励了无数后来者。';
+    CARD_TIPS.wuse_qianli='伤害过牌，节奏紧凑的通用卡';
+    CARD_FLAV.wuse_mozhan='张旭醉后以头发蘸墨作书，狂草如龙蛇走。墨洒长天，天地为之变色。此卡取狂草之意，墨洒之处，无坚不摧。';
+    CARD_TIPS.wuse_mozhan='无色终极AOE，群战清场的核武器';
+    CARD_FLAV.wuse_siyuan='陆机《文赋》云："诗缘情而绮靡。"诗歌因情感而生，因文采而美。此卡即取诗缘情之意，情感所至，诗亦至焉。';
+    CARD_TIPS.wuse_siyuan='零费过牌消耗，快速滤牌找关键组合';
+
+    // ── 遗器背景故事 ──
+    RELIC_FLAV.yuhuruan='和靖先生林逋隐居西湖孤山，梅妻鹤子。冬日拥玉壶于怀，暖意自生。此壶乃其妻梅所赠，虽人去壶空，余温犹在。';
+    RELIC_FLAV.shizhen='陈抟老祖高卧华山，一睡八百载。枕中藏《诗经》《离骚》，梦中与古人论诗。醒来时枕边生花，香气三日不散。';
+    RELIC_FLAV.moling='王羲之醉后书《兰亭序》，醒后更书数十本皆不及。此墨令乃其传家之宝，得之者书道大进，诗情亦增。';
+    RELIC_FLAV.fengliu='王导执此扇指挥渡江诸士，风神俊朗，满座倾倒。后人藏之秘阁，每逢雅集方取出把玩，扇面上犹存魏晋风度。';
+    RELIC_FLAV.zuihou='蜀中有一醉猴，喜饮米酒，醉后攀援绝壁，采得千年灵芝。李白入蜀时偶遇此猴，以诗换酒，以酒换芝，传为奇谈。';
+    RELIC_FLAV.qinglian='周敦颐爱莲，植青莲于庐山下。每至夏日，莲香十里。此莲乃其手植，历经风雨而不凋，正如君子之德。';
+    RELIC_FLAV.jincuodao='李白少年时偶得此刀，刀身刻有"错金"二字。相传乃上古铸剑师所制，切金断玉，吹毛可断。李白常佩之游历天下。';
+    RELIC_FLAV.yuhubing='王昌龄在玉壶中藏冰，以喻己之清白。洛阳亲友如相问，一片冰心在玉壶。此壶历千年而冰不化，清节永存。';
+    RELIC_FLAV.longquanjian='干将莫邪铸剑于龙泉，三年乃成。剑气冲牛斗，斩蛟龙于深渊。后为文人所佩，剑气化为文气，笔锋如剑锋。';
+    RELIC_FLAV.qilinfu='麒麟现于孔子作《春秋》之年，世人以为祥瑞。此符刻麒麟之形，佩之者可辟百邪。郑和远航时带此符，风浪不惊。';
+    RELIC_FLAV.xuanhuangdan='葛洪炼丹于罗浮山，七七四十九日丹成。丹分玄黄二色，服之可延年益寿。葛洪自服后白发行走如少年。';
+    RELIC_FLAV.biyuxiao='萧史善吹箫，箫声引凤来仪。秦穆公以女弄玉妻之，夫妇吹箫引凤，乘凤仙去。此箫乃萧史遗物，音色空灵。';
+    RELIC_FLAV.zijinguan='紫金冠乃屈原当年所戴之冠，高冠岌岌。屈子行吟泽畔，冠上的紫金在阳光下熠熠生辉，正如他不屈的人格。';
+    RELIC_FLAV.yinjiazhou='岳飞抗金时所披银甲，刀枪不入。甲上有箭痕数十处，每一处都是一场血战。后人观之，犹闻战鼓声声。';
+    RELIC_FLAV.qingtongjing='魏征死后，太宗得一古镜。以铜为镜可正衣冠，以史为镜可知兴替，以人为镜可明得失。魏征逝，一鉴亡矣。';
+    RELIC_FLAV.yuruyi='和氏璧琢成玉如意，历经千年。如意如意，随人心意。但真正如意者少，不如意者多。此如意见证了无数悲欢离合。';
+    RELIC_FLAV.qinglianjiu='李白每饮必醉，每醉必有诗。此酒乃蜀中老妪所酿，李白饮后诗兴大发，留下千古名篇。老妪也因此酒闻名天下。';
+    RELIC_FLAV.jinxing='端溪石砚，金星点点如夜空繁星。苏轼得此砚爱不释手，每日研墨挥毫。此砚磨出的墨，写出的字，皆有星光。';
+    RELIC_FLAV.bailuyi='白居易爱白鹭之洁白无瑕，制此衣以自喻。衣上有白鹭刺绣，振翅欲飞。每着此衣，便觉神清气爽，诗思泉涌。';
+    RELIC_FLAV.dongpoyin='苏轼号东坡居士，此印乃其亲刻。印文曰"东坡居士"，篆法古朴。每有得意之作，必钤此印。后流落民间，为藏家所宝。';
+    RELIC_FLAV.xuejiancha='陆羽《茶经》云："雪水煎茶，乃上上之选。"苏轼得此秘法后，常于雪天取雪煮茶。茶香与雪韵交融，别是一番滋味。';
+    RELIC_FLAV.tengzhang='苏轼竹杖芒鞋轻胜马，此杖乃他在黄州时所制。杖上刻有"一蓑烟雨任平生"七字。拄杖而行，风雨不惧。';
+    RELIC_FLAV.huanhuashi='西施浣纱于若耶溪边，石上留下了她的足迹。此石后为文人所得，磨为砚台。研墨时可见西施倩影，诗情自生。';
+    RELIC_FLAV.lianyezhou='李清照误入藕花深处时所乘小舟，舟形如莲叶。此舟轻巧灵便，载着少女的欢笑穿梭于荷塘。后随清照南渡，漂泊江海。';
+    RELIC_FLAV.qiuyunpa='秋云为帛，裁而成帕。上有李清照手绣的菊花图案，针脚细密如词。秋云帕拭泪，泪痕化为诗句。';
+
+    // ── 丹药背景故事 ──
+    PILL_FLAV.hpPill='华佗游历山川，偶遇百岁老者。老者面如童颜，自云常服此丹。华佗求其方，老者笑曰："春采百花，夏取清露，秋收百草，冬藏雪水，合而炼之。"';
+    PILL_FLAV.strPill='张飞与关羽比试力气，各服此丹一粒。张飞力举千斤鼎，关羽单手托石狮。诸葛亮笑曰："此丹虽好，不如智慧之力。"';
+    PILL_FLAV.blockPill='少林寺达摩面壁九年，悟出金钟罩之法。此丹以少林秘方炼制，服后身如金刚，刀枪不入。';
+    PILL_FLAV.poisonPill='传说神农尝百草时发现此毒。用七种毒虫、九种毒草炼制而成。神农告诫后人："毒可害人亦可救人，存乎一心。"';
+    PILL_FLAV.weakPill='华佗为关公刮骨疗毒时发现，此散可令敌人筋骨酸软。关公笑道："此等伎俩，岂能阻我？"但普通将士却难以抵挡。';
+    PILL_FLAV.energyPill='吕洞宾炼制的回气丹，采日月精华，合五行之气。服后丹田生热，气走周天，片刻之间精力充沛。';
+    PILL_FLAV.vulnPill='孙膑被困庞涓时，秘密研制此散。撒向敌军，甲胄自裂。此散专破护体真气，是兵法中"攻其无备"的体现。';
+    PILL_FLAV.doubleAtkPill='项羽垓下之战前服此丹，一击可碎山河。然天意难违，霸王终败。此丹虽可倍增战力，但无法逆转天命。';
+    PILL_FLAV.healPoisonPill='苗疆巫医以蛊制丹，以毒攻毒。服后体内毒气化为药力，反而治愈伤势。汉人医者闻之惊叹："蛮方亦有奇术。"';
+    PILL_FLAV.strBlockPill='岳飞背刻"精忠报国"四字，每战必服此丹。铁骨铮铮，为国为民。秦桧以"莫须有"害之，然其铁骨精神永存。';
+    PILL_FLAV.lizhiWinePill='李白醉后诗兴大发，作诗百篇。有人问其秘诀，李白笑曰："此乃醉仙酿，非酒也，乃诗之魂。"';
+    PILL_FLAV.lizhiMoonPill='李白月下独酌，影子与月光化为灵丹。对影成三人的奇景中，丹成月华，服之可得月光之力。';
+    PILL_FLAV.lizhiSwordPill='李白习剑于峨眉山，剑术已臻化境。此丹以剑气凝炼而成，服后剑意冲天，一击可破千军。';
+    PILL_FLAV.sushRiverPill='苏轼游赤壁，感慨大江东去。以江水为引，炼成此丹。服后如立潮头，任他风浪滔天，我自岿然不动。';
+    PILL_FLAV.sushWindPill='苏轼于风口浪尖炼就风骨。此散以天风为引，炼入旷达之意。服者如沐春风，处变不惊。';
+    PILL_FLAV.sushBambooPill='苏轼居黄州时，于东坡种竹。宁可食无肉，不可居无竹。此丹以竹叶炼成，清心明目，可愈百伤。';
+    PILL_FLAV.liqingFlowerPill='李清照以落花为药引，以愁绪为丹火。花魂入丹，服后百花之毒入敌体，以花之柔克敌之刚。';
+    PILL_FLAV.liqingAutumnPill='秋意浓时，李清照采菊东篱下。此散以秋风为炉，以霜露为引。撒向敌阵，秋意肃杀，兵甲皆寒。';
+    PILL_FLAV.liqingHeartPill='莲心虽苦，却能清心。李清照以莲心入药，炼此丹。服后心若莲花，不染尘埃，伤痛自愈。';
+
+    // ── 敌人背景故事 ──
+    ENEMY_FLAV.lichou='此愁非彼愁。离愁乃南唐后主李煜的一缕情思所化。李煜被囚汴京后，满腔愁绪凝聚成形，逃入诗词之境，化为阻碍诗人的第一道关卡。';
+    ENEMY_FLAV.qiusi='马致远一曲《天净沙·秋思》，"古道西风瘦马，夕阳西下，断肠人在天涯"的意境化为实体。秋思所过之处，草木凋零。';
+    ENEMY_FLAV.yeyu='李商隐"巴山夜雨涨秋池"的思念之情在千年的雨夜中凝结成精。每逢秋雨时节，它便出没于诗境之中，以夜雨之声扰乱诗人的心绪。';
+    ENEMY_FLAV.guhong='苏轼"缥缈孤鸿影"中的孤鸿，本是惊鸿一瞥的意象，却在诗境中化形为独立的敌人。它来去如电，单影无人能捕捉。';
+    ENEMY_FLAV.zhuangzhi='岳飞"壮志饥餐胡虏肉"的豪情壮志，历经八百年的沙场杀气凝聚而成。它不是单纯的敌人，而是一腔未能实现的报国热血所化的执念。';
+    ENEMY_FLAV.chouchang='李商隐"此情可待成追忆，只是当时已惘然"的惆怅精魂。它擅长以诅咒扰乱诗人的卡组，正如往事总是在不经意间涌现心头。';
+    ENEMY_FLAV.piaobo='杜甫"飘飘何所似，天地一沙鸥"的漂泊感凝聚成形。它居无定所，行踪飘忽，在诗境的各个角落出没，以漂泊之苦考验每一位诗人。';
+    ENEMY_FLAV.qun_maque='杜甫"两个黄鹂鸣翠柳，一行白鹭上青天"中的雀鸟误入诗境，成群结队地骚扰行人。虽单个弱小，但聚众成群时不容小觑。';
+    ENEMY_FLAV.qun_yinghuo='杜牧"轻罗小扇扑流萤"中的流萤，在夏夜的池塘边聚集成阵。流萤之光虽美，但成群的流萤足以灼伤诗人的眼睛。';
+    ENEMY_FLAV.qun_luanshi='苏轼"乱石穿空，惊涛拍岸"中的乱石，被诗境的奇力赋予了生命。它们聚集成阵，以石雨攻势考验诗人的应变能力。';
+    ENEMY_FLAV.saihong='范仲淹"塞下秋来风景异，衡阳雁去无留意"中的塞鸿。它是边塞诗意的化身，千万里的飞翔使它拥有了坚韧的防御力。';
+    ENEMY_FLAV.muyu='白居易"暮雨潇潇江上村"中的暮雨，带着江南的湿气与凉意。它擅长以毒雨侵蚀诗人的意志，每一滴雨都含着诗的愁绪。';
+    ENEMY_FLAV.changfeng='李白"长风几万里，吹度玉门关"中的长风。它是塞外的烈风，挟着沙砾和远方的诗篇，以风为刃攻击诗人。';
+    ENEMY_FLAV.feixu='贺铸"一川烟草，满城风絮，梅子黄时雨"中的飞絮。它是暮春的绵絮，看似轻软，却令人不胜其扰。飞絮满天涯，愁绪亦如之。';
+    ENEMY_FLAV.zhengyan='王维"征雁出边塞，胡沙没马蹄"中的征雁。每年南来北往于边塞与中原之间，见证了无数征人的悲欢离合。';
+    ENEMY_FLAV.kuangfeng='杜甫"风急天高猿啸哀"中的狂风。它是诗境中最狂暴的力量之一，越战越狂，每一次出手都比上一次更加猛烈。';
+    ENEMY_FLAV.canhun='辛弃疾"千古兴亡多少事，悠悠，不尽长江滚滚流"中的残魂。它是南朝旧事中未能安息的灵魂，通过不断回复生命来拖延战局。';
+    ENEMY_FLAV.qun_shuangye='杜牧"停车坐爱枫林晚，霜叶红于二月花"中的霜叶。深秋时节，霜叶聚集成阵，以肃杀之气围攻诗人。';
+    ENEMY_FLAV.qun_fengdie='杜甫"穿花蛱蝶深深见，点水蜻蜓款款飞"中的风蝶。成群的蝴蝶在花丛中翩跹起舞，但也会在敌人指示下发动猛攻。';
+    ENEMY_FLAV.xingshuang='温庭筠"星霜几度，江山如画"中的星霜。它是岁月凝结的产物，蕴含着光阴的力量。星霜之下的每一击都携带着岁月的重量。';
+    ENEMY_FLAV.fengchen='杜甫"风尘荏苒，音书断绝"中的风尘。它是长途跋涉的旅人身上沾染的尘埃与风霜。积年累月的风尘磨去了棱角，也铸就了坚韧。';
+    ENEMY_FLAV.canghai='李商隐"沧海月明珠有泪"中的沧海。它是诗境中最为深沉的意象之一，容纳了千年的月光与泪水。沧海翻涌，每一朵浪花都是一首诗。';
+    ENEMY_FLAV.qingyun='王勃"穷且益坚，不坠青云之志"中的青云。青云虽高，却非不可及。它代表着每一个诗人对高处的向往与追求。';
+    ENEMY_FLAV.fusheng='李白"浮生若梦，为欢几何"中的浮生。它是人生的虚幻面，时隐时现，难以捉摸。浮生若梦的意境在此化为一个步履轻盈的敌人。';
+    ENEMY_FLAV.mingshi='屈原《九歌》中的冥士，掌管幽冥之事。它从阴间带来诅咒之力，以亡者的低语干扰生者的诗心。';
+    ENEMY_FLAV.zhanshen='辛弃疾"醉里挑灯看剑，梦回吹角连营"中的战神。它是百战之身凝聚的杀气，是边塞诗中最为刚猛的力量化身。';
+    ENEMY_FLAV.wushuang='辛弃疾"天下英雄谁敌手，曹刘"中的无双。它是英雄气概的体现，非一人之力可敌。它能召唤其他敌人前来助战。';
+    ENEMY_FLAV.qun_jianyu='李贺"男儿何不带吴钩，收取关山五十州"中的剑雨。千百把吴钩化为剑雨，从天而降。每一柄剑都蕴含着征战沙场的决心。';
+    ENEMY_FLAV.qun_yanwu='杜牧"烟笼寒水月笼沙"中的烟舞。薄雾如纱，在月下幻化成形。烟雾缭绕中陷阱重重，令人防不胜防。';
+    ENEMY_FLAV.cimo='词魔是诗境中最为诡异的敌人之一。它本是词牌格律的化身，因长年被墨守成规者供奉而走火入魔，反过来攻击那些真正追求诗道的人。';
+    ENEMY_FLAV.shihun='诗魂是历代诗人对诗歌的虔诚信仰凝聚而成。它没有实体，只是一团璀璨的光芒。但它承载着屈原到李杜苏辛的千古诗心。';
+    ENEMY_FLAV.wenqu='文曲星本是天上掌管文运的星官，因见人间诗道衰微，遂下凡化身考验。能通过文曲之试者，方有资格问鼎诗道之巅。';
+    ENEMY_FLAV.shuimo='水墨是王维"诗中有画，画中有诗"的理念凝聚而成。它半诗半画，半实半虚，以水墨之形展现诗画的交融之力。';
+    ENEMY_FLAV.bihun='笔魂是千古以来所有文人墨客手中的笔所化的精魂。每一支笔都有一个故事，千千万万个故事汇集成了笔魂的无上力量。';
+    ENEMY_FLAV.exam='科举试是千年科举制度的意志化身。十年寒窗无人问，一举成名天下知。它代表着体制对才华的考验，通过它才能真正获得诗道的认可。';
+    ENEMY_FLAV.master='大宗师是文坛至高地位的象征。从韩愈到欧阳修，历代文坛领袖的精神在此汇聚。击败大宗师意味着获得了整个文坛的承认。';
+    ENEMY_FLAV.saint='诗圣是诗歌之道的终极守护者。他融合了杜甫的沉郁、李白的飘逸、苏轼的旷达、李清照的婉约——是集大成者。唯有最纯粹的诗心方能与之对话。';
+
     // 图鉴 - 卡片详情（增强版）
     function showCardDetail(cardKey){
       var c = CARDS[cardKey];
@@ -6072,32 +6387,8 @@ function setBattleBackground(){
       var typeNames = {attack:'攻击牌',skill:'技能牌',power:'能力牌'};
       var typeIcons = {attack:'⚔',skill:'🌀',power:'✨'};
       var rColors = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
-      var flavTexts = {
-        yinyong:'"诗者，志之所之也。"',
-        mosong:'"熟读唐诗三百首。"',
-        lizhi_jiutian:'"飞流直下三千尺。"',
-        lizhi_tianhe:'"疑是银河落九天。"',
-        sush_dajiang:'"大江东去，浪淘尽。"',
-        sush_shuiyun:'"水光潋滟晴方好。"',
-        liqing_mandu:'"寻寻觅觅，冷冷清清。"',
-        liqing_xunmi:'"此情无计可消除。"'
-      };
-      var strategyTips = {
-        yinyong:'核心过牌手段，帮助快速滤出关键卡牌',
-        mosong:'续航基石，维持血量健康至关重要',
-        lizhi_jiutian:'李白爆发核心，配合力量加成效果翻倍',
-        lizhi_tianhe:'强力AOE，清理群怪的最佳选择',
-        sush_dajiang:'高额单体伤害，打精英/Boss的主力输出',
-        sush_shuiyun:'防御反击一体，攻守兼备',
-        liqing_mandu:'李清照专属积累手段，越战越强',
-        liqing_xunmi:'精准检索，保证关键卡准时上手',
-        zhan:'普攻永不过时',
-        fang:'稳扎稳打，积蓄力量',
-        lian:'连击叠加，后发制人',
-        yun:'运筹帷幄，决胜千里'
-      };
-      var flavor = flavTexts[cardKey] || '"诗中有画，画中有诗。"';
-      var tip = strategyTips[cardKey] || '';
+      var flavor = CARD_FLAV[cardKey] || '"诗中有画，画中有诗。"';
+      var tip = CARD_TIPS[cardKey] || '';
       var upgradeNote = '';
       if(c.upgraded || (c.id && c.id.indexOf('_plus')>0)){
         upgradeNote = '<div class="sg-cdb-field"><b>升级状态：</b><span style="color:#55cc55;">&#9632; 已升级</span></div>';
@@ -6129,10 +6420,11 @@ function setBattleBackground(){
           if(CHARACTERS[cci].id===relic.char){ charName=CHARACTERS[cci].name; break; }
         }
       }
+      var rFlav = RELIC_FLAV[relic.id] || '"古器有灵，诗道相生。"';
       showCollectionDetail(relic.name,
         '<div class="sg-cdb-field"><b>效果：</b>'+relic.desc+'</div>' +
         (charName ? '<div class="sg-cdb-field"><b>专属：</b>'+charName+'</div>' : '') +
-        '<div class="sg-cdb-flavor">"古器有灵，诗道相生。"</div>'
+        '<div class="sg-cdb-flavor">'+rFlav+'</div>'
       );
     }
 
@@ -6141,11 +6433,12 @@ function setBattleBackground(){
       var p = PILLS[pillKey];
       if(!p) return;
       var tip = getPillTip(p.name);
+      var pFlav = PILL_FLAV[pillKey] || '"丹成诗就，妙手偶得。"';
       showCollectionDetail(p.name,
         '<div class="sg-cdb-field" style="text-align:center;font-size:2rem;margin-bottom:0.2rem;">'+p.icon+'</div>' +
         '<div class="sg-cdb-field"><b>效果：</b>'+p.desc+'</div>' +
         (tip ? '<div class="sg-cdb-field"><b>说明：</b>'+tip+'</div>' : '') +
-        '<div class="sg-cdb-flavor">"丹成诗就，妙手偶得。"</div>'
+        '<div class="sg-cdb-flavor">'+pFlav+'</div>'
       );
     }
 
@@ -6191,6 +6484,7 @@ function setBattleBackground(){
           summon:'群体攻击卡牌在此战价值极高'
         }[eData.specialAbility]||'') : '';
       var tacticsHtml = tacticsNote ? '<div class="sg-cdb-field" style="margin-top:0.3rem;padding:0.3rem;background:rgba(201,168,76,0.12);border-radius:6px;border-left:2px solid var(--gold);"><b>&#9876; 对战策略：</b>'+tacticsNote+'</div>' : '';
+      var eFlav = ENEMY_FLAV[enemyKey] || '"诗道之敌，亦是诗道之师。"';
       showCollectionDetail(eData.name,
         '<div class="sg-cdb-field" style="text-align:center;font-size:1.2rem;margin-bottom:0.3rem;">'+(eData.desc||'')+'</div>' +
         '<div class="sg-cdb-stat-row">' +
@@ -6200,7 +6494,7 @@ function setBattleBackground(){
         '<div class="sg-cdb-field"><b>意图循环：</b>'+intents+'</div>' +
         special +
         tacticsHtml +
-        '<div class="sg-cdb-flavor">"诗道之敌，亦是诗道之师。"</div>'
+        '<div class="sg-cdb-flavor">'+eFlav+'</div>'
       );
     }
 
