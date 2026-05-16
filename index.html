@@ -1407,7 +1407,17 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 }
 .sg-shop-heal:hover{border-color:var(--gold);color:var(--gold);}
 .sg-shop-relic{text-align:center;padding:.3rem 0;}
-.sg-shop-relic-icon{font-size:1.5rem;}
+.sg-shop-relic-icon{
+  font-size:1.8rem;width:48px;height:48px;line-height:48px;text-align:center;
+  margin:0 auto 4px;border-radius:12px;
+  background:radial-gradient(circle at 30% 30%, rgba(255,215,0,0.15), rgba(139,90,43,0.08));
+  border:1px solid rgba(201,168,76,0.3);box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  transition:all 0.2s;
+}
+.sg-shop-item:hover .sg-shop-relic-icon{
+  border-color:var(--gold);background:radial-gradient(circle at 30% 30%, rgba(255,215,0,0.25), rgba(139,90,43,0.12));
+  transform:scale(1.08);
+}
 .sg-shop-relic-name{font-size:.75rem;font-weight:700;color:var(--gold);}
 .sg-shop-relic-desc{font-size:.55rem;color:var(--text-faint);}
 .sg-shop-price-locked{color:var(--red-seal)!important;opacity:.5;}
@@ -1818,7 +1828,17 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   transform:translateY(-3px);border-color:var(--gold);
   box-shadow:0 4px 16px rgba(0,0,0,0.15);
 }
-.sg-collection-item-card .sg-cic-icon{font-size:1.5rem;}
+.sg-collection-item-card .sg-cic-icon{
+  font-size:1.8rem;width:48px;height:48px;line-height:48px;text-align:center;
+  margin:0 auto 2px;border-radius:12px;
+  background:radial-gradient(circle at 30% 30%, rgba(255,215,0,0.15), rgba(139,90,43,0.08));
+  border:1px solid rgba(201,168,76,0.3);box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  transition:all 0.2s;
+}
+.sg-collection-item-card:hover .sg-cic-icon{
+  border-color:var(--gold);background:radial-gradient(circle at 30% 30%, rgba(255,215,0,0.25), rgba(139,90,43,0.12));
+  transform:scale(1.1);
+}
 .sg-collection-item-card .sg-cic-name{font-size:0.6rem;font-weight:700;color:var(--text);}
 .sg-collection-item-card .sg-cic-type{font-size:0.5rem;color:var(--text-faint);}
 /* 详情面板 */
@@ -2542,7 +2562,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
           </div>
         </div>
         <button class="sg-battle-restart" id="sgBattleRestartBtn"><span class="sg-ico sg-ico-turn sg-ico-sm">回</span> 重开</button>
-        <button class="sg-battle-restart" id="sgAllCardsBtn" style="right:6rem;font-size:.55rem;"><span class="sg-ico sg-ico-deck sg-ico-sm">卷</span> 所有牌</button>
+        <button class="sg-battle-restart" id="sgAllCardsBtn" style="right:6rem;font-size:.55rem;"><span class="sg-ico sg-ico-deck sg-ico-sm">卷</span> 牌库</button>
       </div>
       <!-- 奖励画面 -->
       <div id="sgReward" class="sg-screen" style="display:none">
@@ -2611,11 +2631,11 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
           <div class="sg-act-banner-sub" id="sgActBannerSub">科举试律，严苛无情</div>
         </div>
         <button class="sg-btn sg-btn-primary" id="sgActContinueBtn">进入下一境</button>
-      <!-- Deck Popup -->
-      <div id="sgDeckPopup" class="sg-screen" style="display:none;"></div>
     </div>
   </div>
 </div>
+<!-- Deck Popup（移出所有屏幕容器，避免被父级display:none隐藏） -->
+<div id="sgDeckPopup" class="sg-screen" style="display:none;"></div>
 
 
 <!-- ═══════════════════════════ JS ═══════════════════════════ -->
@@ -3378,34 +3398,34 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
     /* ═══════════════════════════════════════════════════════════════════════ */
 
     var RELICS = [
-      { id:'yuhuruan', name:'玉壶暖', desc:'战斗开始时获得3点格挡', effect:'battleStartBlock', val:3 },
-      { id:'shizhen', name:'诗枕', desc:'每回合抽牌数+1', effect:'extraDraw', val:1 },
-      { id:'moling', name:'墨令', desc:'每场战斗首次攻击伤害+5', effect:'firstAttackDmg', val:5 },
-      { id:'fengliu', name:'风流扇', desc:'使用技能牌时25%概率获得1点能量', effect:'skillEnergy', val:25 },
-      { id:'zuihou', name:'醉猴', desc:'每回合第一张牌费用-1', effect:'firstCardDiscount', val:1 },
-      { id:'qinglian', name:'青莲', desc:'战斗结束时回复3HP', effect:'battleEndHeal', val:3 },
-      { id:'jincuodao', name:'金错刀', desc:'攻击牌伤害+2', effect:'attackDmgUp', val:2 },
-      { id:'yuhubing', name:'玉壶冰', desc:'获得2点额外能量', effect:'extraEnergy', val:2 },
-      { id:'longquanjian', name:'龙泉剑', desc:'精英战斗后获得15金币', effect:'eliteGold', val:15 },
-      { id:'qilinfu', name:'麒麟符', desc:'受伤时25%概率格挡3点', effect:'dmgBlockChance', val:3 },
-      { id:'xuanhuangdan', name:'玄黄丹', desc:'最大HP+15', effect:'maxHpUp', val:15 },
-      { id:'biyuxiao', name:'碧玉箫', desc:'每3场战斗回复10HP', effect:'every3FightHeal', val:10 },
-      { id:'zijinguan', name:'紫金冠', desc:'获得1点初始格挡', effect:'startBlock', val:1 },
-      { id:'yinjiazhou', name:'银甲胄', desc:'格挡效果+2', effect:'blockBonus', val:2 },
-      { id:'qingtongjing', name:'青铜镜', desc:'查看敌人意图', effect:'seeIntents', val:1 },
-      { id:'yuruyi', name:'玉如意', desc:'商店物品打8折', effect:'shopDiscount', val:0.8 },
-      // === 李白专属遗器（Item 8）===
-      { id:'qinglianjiu', name:'青莲酒', desc:'每回合首次攻击额外+5伤害', effect:'firstAttackBonusPlus', val:5, char:'lizhi' },
-      { id:'jinxing', name:'金星砚', desc:'攻击牌有30%概率不消耗能量', effect:'attackFreeChance', val:30, char:'lizhi' },
-      { id:'bailuyi', name:'白露衣', desc:'战斗开始时获得5点格挡+2力量', effect:'battleStartBlockStr', val:5, char:'lizhi' },
-      // === 苏轼专属遗器（Item 8）===
-      { id:'dongpoyin', name:'东坡印', desc:'每回合首次格挡额外+3', effect:'firstBlockBonus', val:3, char:'sush' },
-      { id:'xuejiancha', name:'雪煎茶', desc:'战斗开始时获得8点格挡', effect:'battleStartBlock', val:8, char:'sush' },
-      { id:'tengzhang', name:'竹杖', desc:'每回合回复2HP', effect:'turnHeal', val:2, char:'sush' },
-      // === 李清照专属遗器（Item 8）===
-      { id:'huanhuashi', name:'浣花石', desc:'使用技能牌时回复1HP', effect:'skillHeal', val:1, char:'liqing' },
-      { id:'lianyezhou', name:'莲叶舟', desc:'每回合第一张牌额外抽1张', effect:'firstCardExtraDraw', val:1, char:'liqing' },
-      { id:'qiuyunpa', name:'秋云帕', desc:'中毒/叠毒效果+2', effect:'poisonBonus', val:2, char:'liqing' }
+      { id:'yuhuruan', name:'玉壶暖', desc:'战斗开始时获得3点格挡', effect:'battleStartBlock', val:3, icon:'🏺' },
+      { id:'shizhen', name:'诗枕', desc:'每回合抽牌数+1', effect:'extraDraw', val:1, icon:'📖' },
+      { id:'moling', name:'墨令', desc:'每场战斗首次攻击伤害+5', effect:'firstAttackDmg', val:5, icon:'🖌️' },
+      { id:'fengliu', name:'风流扇', desc:'使用技能牌时25%概率获得1点能量', effect:'skillEnergy', val:25, icon:'🪭' },
+      { id:'zuihou', name:'醉猴', desc:'每回合第一张牌费用-1', effect:'firstCardDiscount', val:1, icon:'🐒' },
+      { id:'qinglian', name:'青莲', desc:'战斗结束时回复3HP', effect:'battleEndHeal', val:3, icon:'🪷' },
+      { id:'jincuodao', name:'金错刀', desc:'攻击牌伤害+2', effect:'attackDmgUp', val:2, icon:'🗡️' },
+      { id:'yuhubing', name:'玉壶冰', desc:'获得2点额外能量', effect:'extraEnergy', val:2, icon:'❄️' },
+      { id:'longquanjian', name:'龙泉剑', desc:'精英战斗后获得15金币', effect:'eliteGold', val:15, icon:'⚔️' },
+      { id:'qilinfu', name:'麒麟符', desc:'受伤时25%概率格挡3点', effect:'dmgBlockChance', val:3, icon:'🏮' },
+      { id:'xuanhuangdan', name:'玄黄丹', desc:'最大HP+15', effect:'maxHpUp', val:15, icon:'💊' },
+      { id:'biyuxiao', name:'碧玉箫', desc:'每3场战斗回复10HP', effect:'every3FightHeal', val:10, icon:'🪈' },
+      { id:'zijinguan', name:'紫金冠', desc:'获得1点初始格挡', effect:'startBlock', val:1, icon:'👑' },
+      { id:'yinjiazhou', name:'银甲胄', desc:'格挡效果+2', effect:'blockBonus', val:2, icon:'🛡️' },
+      { id:'qingtongjing', name:'青铜镜', desc:'查看敌人意图', effect:'seeIntents', val:1, icon:'🪞' },
+      { id:'yuruyi', name:'玉如意', desc:'商店物品打8折', effect:'shopDiscount', val:0.8, icon:'💎' },
+      // === 李白专属遗器 ===
+      { id:'qinglianjiu', name:'青莲酒', desc:'每回合首次攻击额外+5伤害', effect:'firstAttackBonusPlus', val:5, char:'lizhi', icon:'🍶' },
+      { id:'jinxing', name:'金星砚', desc:'攻击牌有30%概率不消耗能量', effect:'attackFreeChance', val:30, char:'lizhi', icon:'✒️' },
+      { id:'bailuyi', name:'白露衣', desc:'战斗开始时获得5点格挡+2力量', effect:'battleStartBlockStr', val:5, char:'lizhi', icon:'👘' },
+      // === 苏轼专属遗器 ===
+      { id:'dongpoyin', name:'东坡印', desc:'每回合首次格挡额外+3', effect:'firstBlockBonus', val:3, char:'sush', icon:'📜' },
+      { id:'xuejiancha', name:'雪煎茶', desc:'战斗开始时获得8点格挡', effect:'battleStartBlock', val:8, char:'sush', icon:'🍵' },
+      { id:'tengzhang', name:'竹杖', desc:'每回合回复2HP', effect:'turnHeal', val:2, char:'sush', icon:'🎋' },
+      // === 李清照专属遗器 ===
+      { id:'huanhuashi', name:'浣花石', desc:'使用技能牌时回复1HP', effect:'skillHeal', val:1, char:'liqing', icon:'🪨' },
+      { id:'lianyezhou', name:'莲叶舟', desc:'每回合第一张牌额外抽1张', effect:'firstCardExtraDraw', val:1, char:'liqing', icon:'🚣' },
+      { id:'qiuyunpa', name:'秋云帕', desc:'中毒/叠毒效果+2', effect:'poisonBonus', val:2, char:'liqing', icon:'🧣' }
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -4296,11 +4316,33 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       return result;
     }
 
+    // ── 抽牌音效 ──
+    function playDrawSfx(){
+      try{
+        var actx = gBgmCtx || new (window.AudioContext || window.webkitAudioContext)();
+        if(actx.state === 'suspended') actx.resume();
+        var now = actx.currentTime;
+        // 上升三音 — 模拟翻书/抽牌
+        for(var di=0;di<3;di++){
+          var osc = actx.createOscillator();
+          var g = actx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600 + di*200, now + di*0.04);
+          g.gain.setValueAtTime(0, now + di*0.04);
+          g.gain.linearRampToValueAtTime(0.06, now + di*0.04 + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.001, now + di*0.04 + 0.15);
+          osc.connect(g); g.connect(actx.destination);
+          osc.start(now + di*0.04); osc.stop(now + di*0.04 + 0.15);
+        }
+      } catch(e){}
+    }
+
     function drawCards(n, animated){
       if(!gBattle) return;
       var extra = hasRelic('shizhen') ? 1 : 0;
       if(hasRelic('lianyezhou')) extra += 1;
       n = n + extra;
+      playDrawSfx();
 
       var startHandLen = gBattle.hand.length;
       for(var i=0;i<n;i++){
@@ -4880,8 +4922,8 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         if(availR.length > 0){
           var newRelic = availR[Math.floor(Math.random() * availR.length)];
           G.relics.push(newRelic.id);
-          showEffectFloat(window.innerWidth/2, window.innerHeight/2-80, '🔮 获得遗器：' + newRelic.name);
-          showNewCollectAnimation({icon:"🔮", name:newRelic.name});
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-80, (newRelic.icon||'🔮') + ' 获得遗器：' + newRelic.name);
+          showNewCollectAnimation({icon:newRelic.icon||'🔮', name:newRelic.name});
         }
       }
 
@@ -5551,7 +5593,7 @@ function setBattleBackground(){
         rDiv.className = 'sg-shop-item';
         rDiv.innerHTML =
           '<div class="sg-shop-relic">' +
-          '<div class="sg-shop-relic-icon">🔮</div>' +
+          '<div class="sg-shop-relic-icon">' + (sr.icon || '🔮') + '</div>' +
           '<div class="sg-shop-relic-name">'+sr.name+'</div>' +
           '<div class="sg-shop-relic-desc">'+sr.desc+'</div>' +
           '</div>' +
@@ -5561,7 +5603,7 @@ function setBattleBackground(){
             if(G.gold >= rPrice2){
               G.gold -= rPrice2;
               G.relics.push(relicId);
-              showNewCollectAnimation({icon:"🔮", name:(function(){for(var ri=0;ri<RELICS.length;ri++){if(RELICS[ri].id===relicId)return RELICS[ri].name;}return '遗器';})()});
+              showNewCollectAnimation({icon:sr.icon||'🔮', name:sr.name});
               document.getElementById('sgShopGold').textContent = G.gold;
               rDiv.style.opacity = '0.4';
               rDiv.style.pointerEvents = 'none';
@@ -6046,8 +6088,8 @@ function setBattleBackground(){
         if(availR.length > 0){
           var newRelic = availR[Math.floor(Math.random() * availR.length)];
           G.relics.push(newRelic.id);
-          showNewCollectAnimation({icon:"🔮", name:newRelic.name});
-          html += '<br><br>获得遗器：<strong>' + newRelic.name + '</strong> — ' + newRelic.desc;
+          showNewCollectAnimation({icon:newRelic.icon||'🔮', name:newRelic.name});
+          html += '<br><br>' + (newRelic.icon||'🔮') + ' 获得遗器：<strong>' + newRelic.name + '</strong> — ' + newRelic.desc;
         }
       } else {
         // Give a card instead
@@ -6552,8 +6594,10 @@ function setBattleBackground(){
           if(CHARACTERS[cci].id===relic.char){ charName=CHARACTERS[cci].name; break; }
         }
       }
+      var rIcon = relic.icon || '🔮';
       var rFlav = RELIC_FLAV[relic.id] || '"古器有灵，诗道相生。"';
       showCollectionDetail(relic.name,
+        '<div class="sg-cdb-field" style="text-align:center;font-size:2.5rem;margin-bottom:0.2rem;">'+rIcon+'</div>' +
         '<div class="sg-cdb-field"><b>效果：</b>'+relic.desc+'</div>' +
         (charName ? '<div class="sg-cdb-field"><b>专属：</b>'+charName+'</div>' : '') +
         '<div class="sg-cdb-flavor">'+rFlav+'</div>'
@@ -6740,7 +6784,7 @@ function setBattleBackground(){
             }
           }
           html += '<div class="sg-collection-item-card" data-relic-idx="'+ri+'">' +
-            '<div class="sg-cic-icon">&#128302;</div>' +
+            '<div class="sg-cic-icon">' + (r.icon || '🔮') + '</div>' +
             '<div class="sg-cic-name">'+r.name+'</div>' +
             charMark +
             '<div class="sg-cic-type" style="font-size:0.5rem;color:var(--text-faint);">遗器</div>' +
