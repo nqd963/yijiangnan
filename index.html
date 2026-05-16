@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="v2.1.0-major-overhaul-20260516">
+<meta name="version" content="v2.1.1-fix-syntax-20260516">
 <link rel="canonical" href="https://nqd963.github.io/yijiangnan/">
 
 <!-- Open Graph -->
@@ -1056,6 +1056,10 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   position:absolute;font-size:.9rem;font-weight:700;pointer-events:none;z-index:10;color:#22c55e;
   animation:sgBlockFloat .7s ease-out forwards;
 }
+/* ── 胜利动画（Item 8） ── */
+@keyframes sgVicTitle{0%{transform:scale(0) rotate(-10deg);opacity:0}60%{transform:scale(1.15) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes sgVicParticle{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-200px) scale(0);opacity:0}}
+
 .sg-poison-float{
   position:absolute;font-size:.9rem;font-weight:700;pointer-events:none;z-index:10;color:#a855f7;
   animation:sgBlockFloat .7s ease-out forwards;
@@ -1944,19 +1948,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <!-- 持久状态栏（所有界面可见） -->
       <div class="sg-status-bar" id="sgStatusBar" style="display:none;">
         <div class="sg-sbar-left">
-          <span class="sg-sbar-char" id="sgSbarChar">📜 诗人</span>
-          <span class="sg-sbar-hp">❤️ <span id="sgSbarHp">80</span>/<span id="sgSbarMaxHp">80</span></span>
-          <span class="sg-sbar-block" id="sgSbarBlock" style="display:none;">🛡️ <span id="sgSbarBlockVal">0</span></span>
+          <span class="sg-sbar-char sg-stat-tip" id="sgSbarChar">📜 诗人<span class="sg-stat-tooltip">当前角色</span></span>
+          <span class="sg-sbar-hp sg-stat-tip">❤️ <span id="sgSbarHp">80</span>/<span id="sgSbarMaxHp">80</span><span class="sg-stat-tooltip">当前生命值</span></span>
+          <span class="sg-sbar-block sg-stat-tip" id="sgSbarBlock" style="display:none;">🛡️ <span id="sgSbarBlockVal">0</span><span class="sg-stat-tooltip">护盾值</span></span>
         </div>
         <div class="sg-sbar-center">
-          <span class="sg-sbar-energy">⚡ <span id="sgSbarEnergy">3</span>/<span id="sgSbarMaxEnergy">3</span></span>
-          <span class="sg-sbar-gold">💰 <span id="sgSbarGold">0</span></span>
-          <span class="sg-sbar-deck">📚 <span id="sgSbarDeck">0</span></span>
-          <span class="sg-sbar-relic">🔮 <span id="sgSbarRelic">0</span></span>
+          <span class="sg-sbar-energy sg-stat-tip">⚡ <span id="sgSbarEnergy">3</span>/<span id="sgSbarMaxEnergy">3</span><span class="sg-stat-tooltip">每回合可用能量</span></span>
+          <span class="sg-sbar-gold sg-stat-tip">💰 <span id="sgSbarGold">0</span><span class="sg-stat-tooltip">当前金币</span></span>
+          <span class="sg-sbar-deck sg-stat-tip">📚 <span id="sgSbarDeck">0</span><span class="sg-stat-tooltip">卡组总张数</span></span>
+          <span class="sg-sbar-relic sg-stat-tip">🔮 <span id="sgSbarRelic">0</span><span class="sg-stat-tooltip">遗器数量</span></span>
         </div>
         <div class="sg-sbar-right">
-          <span class="sg-sbar-act" id="sgSbarAct">🏛️ 第一境</span>
-          <span class="sg-sbar-floor" id="sgSbarFloor">层 1/12</span>
+          <span class="sg-sbar-act sg-stat-tip" id="sgSbarAct">🏛️ 第一境<span class="sg-stat-tooltip">当前所在境</span></span>
+          <span class="sg-sbar-floor sg-stat-tip" id="sgSbarFloor">层 1/12<span class="sg-stat-tooltip">当前层数</span></span>
         </div>
       </div>
       <!-- 标题画面 -->
@@ -1966,6 +1970,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         <div class="sg-title-sub">古诗词 · 肉鸽卡牌</div>
         <div class="sg-title-desc">三境九转，以诗为剑<br>攀登诗道之巅</div>
         <button class="sg-btn sg-btn-primary" id="sgStartBtn">开始征程</button>
+        <button class="sg-btn" id="sgCollectionBtn" style="margin-top:.5rem;font-size:.7rem;">📖 诗境图鉴</button>
       </div>
       <!-- 角色选择 -->
       <div id="sgCharSelect" class="sg-screen" style="display:none">
@@ -2040,6 +2045,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           </div>
         </div>
         <button class="sg-battle-restart" id="sgBattleRestartBtn">↺ 重开战斗</button>
+        <button class="sg-battle-restart" id="sgAllCardsBtn" style="right:6rem;font-size:.55rem;">📜 所有牌</button>
       </div>
       <!-- 奖励画面 -->
       <div id="sgReward" class="sg-screen" style="display:none">
@@ -4009,20 +4015,19 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(!gBattle) return;
       if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)) return;
 
-      // 群体敌人：伤害交替作用于两个敌人（AOE同时攻击两个）（Item 3）
+      // 群体敌人：玩家点击选择攻击目标（Item 7）
       if(gBattle._isGroup){
         if(isAoe){
-          // AOE: 两个敌人都受一半伤害
-          var halfDmg = Math.floor(dmg / 2);
-          applyDmgToGroupEnemy1(halfDmg);
-          applyDmgToGroupEnemy2(halfDmg);
+          // AOE: 两个敌人都受伤害
+          applyDmgToGroupEnemy1(dmg);
+          applyDmgToGroupEnemy2(dmg);
         } else {
-          // 单伤：优先攻击存活的那个，交替攻击
-          if(gBattle.hp > 0 && gBattle._groupHp2 > 0){
-            // 两个都活着，轮流攻击
-            if(!gBattle._groupLastHit) gBattle._groupLastHit = 1;
-            if(gBattle._groupLastHit === 1){ applyDmgToGroupEnemy2(dmg); gBattle._groupLastHit = 2; }
-            else { applyDmgToGroupEnemy1(dmg); gBattle._groupLastHit = 1; }
+          // 单伤：攻击选中的目标
+          var targetEnemy = gBattle._selectedTarget || 1;
+          if(targetEnemy === 1 && gBattle.hp > 0){
+            applyDmgToGroupEnemy1(dmg);
+          } else if(targetEnemy === 2 && gBattle._groupHp2 > 0){
+            applyDmgToGroupEnemy2(dmg);
           } else if(gBattle.hp > 0){
             applyDmgToGroupEnemy1(dmg);
           } else {
@@ -4157,9 +4162,43 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       }
     }
 
+    function showVictoryAnimation(callback){
+      // 胜利动画：全屏闪白 + "胜利"大字 + 粒子（Item 8）
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;flex-direction:column;pointer-events:none;';
+      // 闪白背景
+      var flash = document.createElement('div');
+      flash.style.cssText = 'position:absolute;inset:0;background:rgba(255,255,255,0.15);animation:sgFadeOut .5s ease-out forwards;';
+      overlay.appendChild(flash);
+      // 粒子庆祝
+      for(var pi=0;pi<20;pi++){
+        var p = document.createElement('div');
+        p.style.cssText = 'position:absolute;width:'+(4+Math.random()*6)+'px;height:'+(4+Math.random()*6)+'px;border-radius:50%;background:hsl('+Math.floor(Math.random()*360)+',80%,60%);left:'+Math.random()*100+'%;top:50%;animation:sgVicParticle '+(0.6+Math.random()*0.6)+'s ease-out forwards;animation-delay:'+(Math.random()*0.3)+'s;';
+        overlay.appendChild(p);
+      }
+      // 胜利大字
+      var title = document.createElement('div');
+      title.textContent = '🏆 胜 利';
+      title.style.cssText = 'font-size:3rem;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(201,168,76,.6),0 0 60px rgba(201,168,76,.3);z-index:1;animation:sgVicTitle .5s ease-out forwards;transform:scale(0);';
+      overlay.appendChild(title);
+      var sub = document.createElement('div');
+      sub.textContent = '敌 人 已 溃 散';
+      sub.style.cssText = 'font-size:1rem;color:var(--text-dim);margin-top:.5rem;z-index:1;animation:sgVicTitle .5s ease-out .2s both;';
+      overlay.appendChild(sub);
+      document.body.appendChild(overlay);
+      // 敌人溃散动画
+      var eEl = document.getElementById('sgEnemy');
+      if(eEl){ eEl.style.transition = 'all .4s'; eEl.style.transform = 'scale(0) rotate(10deg)'; eEl.style.opacity = '0'; }
+      var e2El = document.getElementById('sgEnemy2');
+      if(e2El){ e2El.style.transition = 'all .4s .1s'; e2El.style.transform = 'scale(0) rotate(-10deg)'; e2El.style.opacity = '0'; }
+      setTimeout(function(){
+        document.body.removeChild(overlay);
+        if(callback) callback();
+      }, 1200);
+    }
+
     function checkEnemyDeath(){
       if(!gBattle || gBattle.hp > 0) return;
-      // Enemy defeated
       gIsBattling = false;
       G.fightCount++;
 
@@ -4196,10 +4235,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         }
       }
 
-      hideAllScreens();
+      // 显示胜利动画后再进入奖励界面
+      showVictoryAnimation(function(){
+        hideAllScreens();
 
-      // Show reward screen
-      var rewardEl = document.getElementById('sgReward');
+        // Show reward screen
+        var rewardEl = document.getElementById('sgReward');
       if(rewardEl){
         document.getElementById('sgRewardGold').textContent = goldReward;
         document.getElementById('sgRewardCards').innerHTML = '';
@@ -4236,7 +4277,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
         showScreen('sgReward');
       }
-    }
+    });  // 关闭 showVictoryAnimation 回调 + 函数调用
+    }  // 关闭 checkEnemyDeath
 
     function applyPoison(){
       if(!gBattle) return;
@@ -4524,12 +4566,35 @@ applyPoison();
         document.getElementById('sgEnemyBlock2').style.display = 'none';
         document.getElementById('sgEnemyBuffs2').innerHTML = '';
         document.getElementById('sgEnemyPoison2').textContent = '';
+        // 目标选择高亮（Item 7）
+        var target = gBattle._selectedTarget || 1;
+        var e1El = document.getElementById('sgEnemy');
+        var e2El = document.getElementById('sgEnemy2');
+        if(e1El){ e1El.style.cursor = 'pointer'; e1El.style.borderColor = target === 1 ? 'var(--gold)' : 'var(--border)'; e1El.style.boxShadow = target === 1 ? '0 0 15px rgba(201,168,76,.3)' : 'none'; }
+        if(e2El){ e2El.style.cursor = 'pointer'; e2El.style.borderColor = target === 2 ? 'var(--gold)' : 'var(--border)'; e2El.style.boxShadow = target === 2 ? '0 0 15px rgba(201,168,76,.3)' : 'none'; }
+        // 点击选择目标
+        if(e1El && !e1El._hasGroupClick){
+          e1El._hasGroupClick = true;
+          e1El.onclick = function(e){ e.stopPropagation(); gBattle._selectedTarget = 1; renderBattle(); };
+        }
+        if(e2El && !e2El._hasGroupClick){
+          e2El._hasGroupClick = true;
+          e2El.onclick = function(e){ e.stopPropagation(); gBattle._selectedTarget = 2; renderBattle(); };
+        }
+        // 目标指示标记
+        document.getElementById('sgEnemyName').innerHTML = gBattle.name + ' · 甲' + (target === 1 ? ' 👈' : '');
+        document.getElementById('sgEnemyName2').innerHTML = gBattle.name + ' · 乙' + (target === 2 ? ' 👈' : '');
         // 意图只显示在敌人1上
         var intentNames = { attack:'⚔️攻击', defend:'🛡️防御', debuff:'💀衰弱', buff:'⬆️强化', heal:'❤️回复' };
         document.getElementById('sgEnemyIntent').textContent = intentNames[gBattle.intent] || '⚔️';
         document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
         document.getElementById('sgEnemyIntent2').textContent = '';
         document.getElementById('sgIntentVal2').textContent = '';
+        // 重置血条样式
+        var hpFill1 = document.getElementById('sgEnemyHpFill');
+        if(hpFill1) hpFill1.style.transition = 'width .3s';
+        var hpFill2 = document.getElementById('sgEnemyHpFill2');
+        if(hpFill2) hpFill2.style.transition = 'width .3s';
         // Buff只显示在敌人1
         var ebHtml = '';
         if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff">⬆力+' + gBattle.buffs.str + '</span>';
@@ -5301,9 +5366,49 @@ applyPoison();
       document.body.appendChild(overlay);
     }
 
+    // 局外图鉴（Item 5）
+    function showCollection(){
+      var overlay = document.createElement('div');
+      overlay.className = 'sg-deck-overlay';
+      overlay.style.zIndex = '99999';
+      overlay.onclick = function(){ document.body.removeChild(overlay); };
+      var panel = document.createElement('div');
+      panel.className = 'sg-deck-panel';
+      panel.style.cssText = 'background:var(--bg);border:1px solid var(--gold);border-radius:12px;padding:1rem;max-width:600px;width:95%;max-height:85vh;overflow-y:auto;';
+      panel.onclick = function(e){ e.stopPropagation(); };
+      panel.innerHTML = '<h3 style="text-align:center;color:var(--gold);font-size:1rem;margin-bottom:.5rem;">📖 诗境图鉴 <span style="float:right;cursor:pointer;font-size:1rem;" onclick="this.closest(\'.sg-deck-overlay\').remove();">✕</span></h3>';
+      // 卡牌列表
+      panel.innerHTML += '<div style="font-size:.7rem;color:var(--text-dim);margin:.3rem 0;">━━━ 卡牌大全 ━━━</div>';
+      var rC = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+      var cardKeys = Object.keys(CARDS);
+      var gridHtml = '<div class="sg-deck-grid">';
+      for(var cki=0;cki<cardKeys.length;cki++){
+        var c = CARDS[cardKeys[cki]];
+        if(!c) continue;
+        gridHtml += '<div class="sg-card" style="border-color:'+(rC[c.rarity]||'#a8a8a8')+';cursor:default;width:95px;">' +
+          '<div class="sg-card-cost">'+(c.cost||0)+'</div>' +
+          '<div class="sg-card-name">'+c.name+'</div>' +
+          '<div class="sg-card-desc">'+(c.desc||'')+'</div>' +
+          '<div class="sg-card-type">'+c.type+(c.rarity==='rare'?' ★':'')+'</div></div>';
+      }
+      gridHtml += '</div>';
+      panel.innerHTML += gridHtml;
+      // 遗器列表
+      panel.innerHTML += '<div style="font-size:.7rem;color:var(--text-dim);margin:.5rem 0 .3rem;">━━━ 遗器大全 ━━━</div>';
+      panel.innerHTML += '<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">';
+      for(var ri=0;ri<RELICS.length;ri++){
+        var r = RELICS[ri];
+        panel.innerHTML += '<span style="background:var(--bg-card-alt);border:1px solid var(--border);border-radius:6px;padding:.2rem .4rem;font-size:.55rem;">' + r.icon + ' ' + r.name + '</span>';
+      }
+      panel.innerHTML += '</div>';
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+    }
+
     // 灵丹/物品渲染增强：加古风图标和tooltip（Item 10）
     var PILL_ICONS = {
-      '回复':{icon:'🌿',tip:'恢复少量生命值','恢复5HP':{icon:'🌿',tip:'恢复5点生命值'}},
+      '回复':{icon:'🌿',tip:'恢复少量生命值'},
+      '恢复5HP':{icon:'🌿',tip:'恢复5点生命值'},
       '力量':{icon:'🗡️',tip:'临时提升攻击力'},
       '格挡':{icon:'🛡️',tip:'获得临时护盾'},
       '能量':{icon:'⚡',tip:'恢复行动能量'},
@@ -5383,8 +5488,10 @@ applyPoison();
         audioCtx = ctx;   // 同时设置 audioCtx，兼容钢琴小游戏
         if(ctx.state === 'suspended') ctx.resume();
         gBgmGain = gBgmCtx.createGain();
-        gBgmGain.gain.value = 0.08;
+        gBgmGain.gain.value = 0.20;
         gBgmGain.connect(gBgmCtx.destination);
+        // 确保AudioContext已恢复（浏览器策略要求用户交互后恢复）
+        if(gBgmCtx.state === 'suspended') gBgmCtx.resume();
       } catch(e){ gBgmCtx = null; console.log('Audio not available'); }
     }
 
@@ -5570,6 +5677,12 @@ applyPoison();
           fsBtn.textContent = document.fullscreenElement ? '⛶ 退出全屏' : '⛶ 全屏';
         });
       }
+      // Collection browser (Item 5)
+      var collectionBtn = document.getElementById('sgCollectionBtn');
+      if(collectionBtn){
+        collectionBtn.addEventListener('click', showCollection);
+      }
+
       // Start button -> show character select
       var startBtn = document.getElementById('sgStartBtn');
       if(startBtn){
@@ -5603,9 +5716,54 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
             var charCards = container.querySelectorAll('.sg-cs-portrait-card');
             for(var ci2=0;ci2<charCards.length;ci2++){
               (function(el2){
-                el2.addEventListener('click', function(){
+                el2.addEventListener('click', function(e){
+                  e.stopPropagation();
                   var cid = el2.getAttribute('data-char');
-                  initGame(cid);
+                  // 全屏立绘预览（Item 6）
+                  var ch = null;
+                  for(var cii=0;cii<CHARACTERS.length;cii++){ if(CHARACTERS[cii].id === cid){ ch = CHARACTERS[cii]; break; } }
+                  if(!ch) { initGame(cid); return; }
+                  var overlay = document.createElement('div');
+                  overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;animation:sgFadeIn .3s;';
+                  // 立绘（全屏比例）
+                  var imgContainer = document.createElement('div');
+                  imgContainer.style.cssText = 'width:80%;max-width:500px;aspect-ratio:1/1.1;border-radius:16px;overflow:hidden;position:relative;box-shadow:0 0 60px rgba(201,168,76,.2);';
+                  var charEmojis2 = {lizhi:'🌙',sush:'🌊',liqing:'🌸'};
+                  var emoji2 = charEmojis2[cid] || '📜';
+                  imgContainer.innerHTML = '<img src="images/'+cid+'.png" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;" onerror="this.style.display=\'none\'">' +
+                    '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:6rem;opacity:0.3;">' + emoji2 + '</div>';
+                  overlay.appendChild(imgContainer);
+                  // 角色名
+                  var nameEl = document.createElement('div');
+                  nameEl.textContent = ch.name + '「' + ch.title + '」';
+                  nameEl.style.cssText = 'font-size:1.5rem;color:var(--gold);margin-top:1rem;text-shadow:0 0 20px rgba(201,168,76,.3);';
+                  overlay.appendChild(nameEl);
+                  // 属性
+                  var infoEl = document.createElement('div');
+                  infoEl.style.cssText = 'font-size:.8rem;color:var(--text-dim);margin-top:.3rem;';
+                  infoEl.innerHTML = '❤️ ' + ch.maxHp + ' 生命 · ' + ch.desc;
+                  overlay.appendChild(infoEl);
+                  var abilEl = document.createElement('div');
+                  abilEl.style.cssText = 'font-size:.7rem;color:var(--gold);margin-top:.2rem;';
+                  abilEl.textContent = '✨ ' + ch.ability;
+                  overlay.appendChild(abilEl);
+                  // 确认按钮
+                  var btnRow = document.createElement('div');
+                  btnRow.style.cssText = 'display:flex;gap:1rem;margin-top:1.2rem;';
+                  var confirmBtn = document.createElement('button');
+                  confirmBtn.textContent = '✔ 确认选择';
+                  confirmBtn.style.cssText = 'padding:.6rem 2rem;font-size:1rem;background:var(--gold);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;';
+                  confirmBtn.onclick = function(){ document.body.removeChild(overlay); initGame(cid); };
+                  btnRow.appendChild(confirmBtn);
+                  var backBtn = document.createElement('button');
+                  backBtn.textContent = '← 返回';
+                  backBtn.style.cssText = 'padding:.6rem 1.5rem;font-size:.9rem;background:rgba(255,255,255,0.1);color:var(--text);border:1px solid var(--border);border-radius:8px;cursor:pointer;';
+                  backBtn.onclick = function(){ document.body.removeChild(overlay); };
+                  btnRow.appendChild(backBtn);
+                  overlay.appendChild(btnRow);
+                  document.body.appendChild(overlay);
+                  // 音效反馈
+                  try{ var actx = new (window.AudioContext || window.webkitAudioContext)(); var osc = actx.createOscillator(); var g = actx.createGain(); osc.connect(g); g.connect(actx.destination); osc.type='sine'; osc.frequency.value=523; g.gain.value=0.1; g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+0.3); osc.start(); osc.stop(actx.currentTime+0.3); setTimeout(function(){actx.close();},500); }catch(e){}
                 });
               })(charCards[ci2]);
             }
@@ -5713,6 +5871,14 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
             }
             restartGame();
           }
+        });
+      }
+
+      // "所有牌"按钮（Item 4）
+      var allCardsBtn = document.getElementById('sgAllCardsBtn');
+      if(allCardsBtn){
+        allCardsBtn.addEventListener('click', function(){
+          if(G && G.deck) showDeckPopup();
         });
       }
 
