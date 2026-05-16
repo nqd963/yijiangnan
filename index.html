@@ -1166,10 +1166,12 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 /* 卡牌名称 — 类型色带 */
 .sg-card .sg-card-name{
   padding:7px 8px 5px;margin:0;font-size:.65rem;font-weight:700;
+  transition:color .3s,text-shadow .3s;
   color:var(--text);letter-spacing:.03em;
   border-bottom:1px solid rgba(0,0,0,.08);
   position:relative;z-index:1;
 }
+.sg-card .sg-card-name.sg-upgraded-name{color:#44dd88;text-shadow:0 0 6px rgba(68,221,136,.3);}
 .sg-card.attack .sg-card-name{
   background:linear-gradient(180deg,rgba(194,58,43,.18),rgba(194,58,43,.04));
   color:color-mix(in srgb,var(--text),#c23a2b 30%);
@@ -1581,8 +1583,8 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   .sg-cs-portrait-card::before,.sg-cs-portrait-card::after{display:none !important;}
   .sg-char-lizhi::before,.sg-char-sush::before,.sg-char-liqing::before{display:none !important;}
 }
-/* 通用GPU加速 */
-.sg-card,.sg-btn,.sg-enemy,.sg-cs-portrait-card{will-change:transform;}
+/* 轻量GPU加速（仅在交互时启用layer） */
+.sg-btn,.sg-enemy,.sg-cs-portrait-card{transform:translateZ(0);}
 
 /* ═══════════════════════════════════════════════════════════════════════ */
 /* ══════ Item 6: 新获得收集通知栏 ══════ */
@@ -3282,41 +3284,41 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       liqing_strike:{id:"liqing_strike",name:"漱玉击",cost:1,type:"attack",rarity:"basic",dmg:6,char:"liqing",desc:"漱玉词心 · 造成6点伤害"},
       liqing_anxiang:{id:"liqing_anxiang",name:"暗香",cost:0,type:"attack",rarity:"basic",dmg:3,debuff:"weak",val:1,char:"liqing",desc:"暗香盈袖 · 造成3点伤害 · 虚弱1层"},
       liqing_qingmei:{id:"liqing_qingmei",name:"青梅嗅",cost:0,type:"attack",rarity:"rare",dmg:11,innate:true,exhaust:true,char:"liqing",desc:"倚门回首 · 造成11点伤害 · 消耗 · 固有"},
-      liqing_luanhong:{id:"liqing_luanhong",name:"乱红飞度",cost:1,type:"attack",rarity:"common",dmg:4,hits:2,aoe:true,char:"liqing",desc:"乱红飞度 · 对所有敌人造成4点伤害×2"},
-      liqing_zhiqingmei:{id:"liqing_zhiqingmei",name:"掷青梅",cost:1,type:"attack",rarity:"common",dmg:9,draw:1,discard:1,char:"liqing",desc:"青梅掷 · 造成9点伤害 · 抽1张牌 · 弃1张牌"},
+      liqing_luanhong:{id:"liqing_luanhong",name:"乱红飞度",cost:1,type:"attack",rarity:"uncommon",dmg:4,hits:2,aoe:true,char:"liqing",desc:"乱红飞度 · 对所有敌人造成4点伤害×2"},
+      liqing_zhiqingmei:{id:"liqing_zhiqingmei",name:"掷青梅",cost:1,type:"attack",rarity:"uncommon",dmg:9,draw:1,discard:1,char:"liqing",desc:"青梅掷 · 造成9点伤害 · 抽1张牌 · 弃1张牌"},
       liqing_fengzhu:{id:"liqing_fengzhu",name:"风住尘香",cost:2,type:"attack",rarity:"uncommon",dmg:10,block:10,char:"liqing",desc:"风住尘香 · 获得10点格挡 · 造成10点伤害"},
       liqing_jiuwanli:{id:"liqing_jiuwanli",name:"九万里风",cost:1,type:"attack",rarity:"rare",dmg:10,aoe:true,echoKill:true,char:"liqing",desc:"九万里风 · 对所有敌人造成10点伤害 · 击杀重复"},
       liqing_yihanmei:{id:"liqing_yihanmei",name:"一剪寒梅",cost:1,type:"attack",rarity:"rare",dmgPerAtkPlayed:6,char:"liqing",desc:"一剪寒梅 · 本回合每张攻击牌造成6点伤害"},
       liqing_mandi:{id:"liqing_mandi",name:"满地黄花",cost:1,type:"attack",rarity:"rare",dmgPerSkillInHand:5,char:"liqing",desc:"满地黄花 · 手牌每张技能牌造成5点伤害"},
       liqing_lvfei:{id:"liqing_lvfei",name:"绿肥红瘦",cost:1,type:"attack",rarity:"common",dmg:6,aoe:true,sly:true,char:"liqing",desc:"绿肥红瘦 · 对所有敌人造成6点伤害 · 奇巧"},
-      liqing_eran:{id:"liqing_eran",name:"二安词话",cost:1,type:"attack",rarity:"common",dmg:7,extraIf5Hand:true,char:"liqing",desc:"二安词话 · 造成7点伤害 · 手牌≥5额外攻击一次"},
+      liqing_eran:{id:"liqing_eran",name:"二安词话",cost:1,type:"attack",rarity:"uncommon",dmg:7,extraIf5Hand:true,char:"liqing",desc:"二安词话 · 造成7点伤害 · 手牌≥5额外攻击一次"},
       liqing_zaibudong:{id:"liqing_zaibudong",name:"载不动愁",cost:0,type:"attack",rarity:"rare",dmg:60,aoe:true,grandFinale:true,char:"liqing",desc:"载不动愁 · 抽牌堆空时对所有敌人造成60点伤害"},
-      liqing_liuyan:{id:"liqing_liuyan",name:"柳眼梅腮",cost:1,type:"attack",rarity:"common",dmg:3,addShivs:2,char:"liqing",desc:"柳眼梅腮 · 造成3点伤害 · 将2张残花加入手牌"},
+      liqing_liuyan:{id:"liqing_liuyan",name:"柳眼梅腮",cost:1,type:"attack",rarity:"uncommon",dmg:3,addShivs:2,char:"liqing",desc:"柳眼梅腮 · 造成3点伤害 · 将2张残花加入手牌"},
       liqing_wushi:{id:"liqing_wushi",name:"物是人非",cost:1,type:"attack",rarity:"rare",dmg:9,dmgPerDiscard:4,char:"liqing",desc:"物是人非 · 造成9点伤害 · 每弃牌+4伤害"},
       liqing_jiangshan:{id:"liqing_jiangshan",name:"江山愁",cost:3,type:"attack",rarity:"rare",dmg:1,dmgPerCardDrawn:1,char:"liqing",desc:"江山留愁 · 造成1点伤害 · 本场每抽牌+1伤害"},
       liqing_caixia:{id:"liqing_caixia",name:"才下眉头",cost:3,type:"attack",rarity:"rare",dmg:15,costDownPerSkill:1,char:"liqing",desc:"才下眉头 · 造成15点伤害 · 每技能费用-1"},
-      liqing_lianjuan:{id:"liqing_lianjuan",name:"帘卷西风",cost:1,type:"attack",rarity:"common",dmg:6,poison:3,char:"liqing",desc:"帘卷西风 · 造成6点伤害 · 施加3层中毒"},
+      liqing_lianjuan:{id:"liqing_lianjuan",name:"帘卷西风",cost:1,type:"attack",rarity:"uncommon",dmg:6,poison:3,char:"liqing",desc:"帘卷西风 · 造成6点伤害 · 施加3层中毒"},
       liqing_zhameng:{id:"liqing_zhameng",name:"蚱蜢舟",cost:2,type:"attack",rarity:"rare",dmg:12,nextSkillCost0:true,char:"liqing",desc:"蚱蜢舟 · 造成12点伤害 · 下一张技能牌费用为0"},
       liqing_yueman:{id:"liqing_yueman",name:"月满西楼",cost:0,type:"attack",rarity:"rare",dmg:13,dmgRedPerHand:2,char:"liqing",desc:"月满西楼 · 造成13点伤害 · 手牌每牌伤害-2"},
       liqing_xinghe:{id:"liqing_xinghe",name:"星河舞",cost:2,type:"attack",rarity:"rare",dmg:15,drawNextTurn:2,char:"liqing",desc:"星河欲转 · 造成15点伤害 · 下回合抽2张牌"},
-      liqing_ouhua:{id:"liqing_ouhua",name:"藕花深处",cost:2,type:"attack",rarity:"common",dmg:3,hits:4,aoe:true,sly:true,randomTargets:true,char:"liqing",desc:"藕花深处 · 随机敌人3点伤害×4 · 奇巧"},
+      liqing_ouhua:{id:"liqing_ouhua",name:"藕花深处",cost:2,type:"attack",rarity:"uncommon",dmg:3,hits:4,aoe:true,sly:true,randomTargets:true,char:"liqing",desc:"藕花深处 · 随机敌人3点伤害×4 · 奇巧"},
       liqing_qiqican:{id:"liqing_qiqican",name:"凄凄惨惨",cost:-1,type:"attack",rarity:"rare",dmg:8,hitsX:true,char:"liqing",desc:"凄凄惨惨 · 造成8点伤害X次(X为能量)"},
       liqing_wutongyu:{id:"liqing_wutongyu",name:"梧桐雨",cost:0,type:"attack",rarity:"common",dmg:6,char:"liqing",desc:"梧桐雨 · 造成6点伤害"},
       liqing_chousun:{id:"liqing_chousun",name:"愁损北人",cost:1,type:"attack",rarity:"rare",dmg:8,enemyHpLossPerCard:2,char:"liqing",desc:"愁损北人 · 造成8点伤害 · 每张牌敌人失去2点生命"},
-      liqing_renbi:{id:"liqing_renbi",name:"人比黄花",cost:1,type:"attack",rarity:"common",dmg:8,debuff:"weak",val:1,char:"liqing",desc:"人比黄花 · 造成8点伤害 · 虚弱1层"},
+      liqing_renbi:{id:"liqing_renbi",name:"人比黄花",cost:1,type:"attack",rarity:"uncommon",dmg:8,debuff:"weak",val:1,char:"liqing",desc:"人比黄花 · 造成8点伤害 · 虚弱1层"},
       liqing_bingqi:{id:"liqing_bingqi",name:"病起萧萧",cost:0,type:"attack",rarity:"ancient",dmg:11,debuff:"weak",val:3,innate:true,char:"liqing",desc:"病起萧萧 · 固有 · 造成11点伤害 · 虚弱3层"},
       liqing_pengzhou:{id:"liqing_pengzhou",name:"蓬舟吹取",cost:1,type:"attack",rarity:"rare",dmg:10,exhaust:true,killBonusReward:true,char:"liqing",desc:"蓬舟吹取 · 造成10点伤害 · 致命得额外奖励 · 消耗"},
       liqing_xinlai:{id:"liqing_xinlai",name:"新来瘦",cost:0,type:"attack",rarity:"rare",dmg:10,debuff:"vuln",val:1,innate:true,exhaust:true,char:"liqing",desc:"新来瘦 · 固有 · 造成10点伤害 · 易伤1层 · 消耗"},
 
       // ── 技能牌（40张） ──
-      liqing_defend:{id:"liqing_defend",name:"漱玉壁",cost:0,type:"skill",rarity:"basic",block:5,char:"liqing",desc:"漱玉壁 · 获得5点格挡"},
+      liqing_defend:{id:"liqing_defend",name:"漱玉壁",cost:1,type:"skill",rarity:"basic",block:8,char:"liqing",desc:"漱玉壁 · 获得8点格挡"},
       liqing_dongli:{id:"liqing_dongli",name:"东篱把酒",cost:1,type:"skill",rarity:"basic",block:8,discard:1,char:"liqing",desc:"东篱把酒 · 获得8点格挡 · 弃1张牌"},
-      liqing_rumeng:{id:"liqing_rumeng",name:"如梦令",cost:1,type:"skill",rarity:"common",draw:3,discard:1,char:"liqing",desc:"如梦令 · 抽3张牌 · 弃1张牌"},
-      liqing_yimen:{id:"liqing_yimen",name:"倚门回首",cost:1,type:"skill",rarity:"common",tempAgil:3,char:"liqing",desc:"倚门回首 · 本回合获得3点敏捷"},
+      liqing_rumeng:{id:"liqing_rumeng",name:"如梦令",cost:1,type:"skill",rarity:"uncommon",draw:3,discard:1,char:"liqing",desc:"如梦令 · 抽3张牌 · 弃1张牌"},
+      liqing_yimen:{id:"liqing_yimen",name:"倚门回首",cost:1,type:"skill",rarity:"uncommon",tempAgil:3,char:"liqing",desc:"倚门回首 · 本回合获得3点敏捷"},
       liqing_wuling:{id:"liqing_wuling",name:"武陵春",cost:1,type:"skill",rarity:"common",block:5,draw:2,char:"liqing",desc:"武陵春 · 获得5点格挡 · 抽2张牌"},
-      liqing_zhengdu:{id:"liqing_zhengdu",name:"争渡",cost:1,type:"skill",rarity:"common",addShivs:3,char:"liqing",desc:"争渡 · 将3张残花加入手牌"},
+      liqing_zhengdu:{id:"liqing_zhengdu",name:"争渡",cost:1,type:"skill",rarity:"uncommon",addShivs:3,char:"liqing",desc:"争渡 · 将3张残花加入手牌"},
       liqing_liandong:{id:"liqing_liandong",name:"莲动",cost:1,type:"skill",rarity:"common",block:6,addShivs:1,char:"liqing",desc:"莲动 · 获得6点格挡 · 将1张残花加入手牌"},
-      liqing_baowu:{id:"liqing_baowu",name:"薄雾浓云",cost:1,type:"skill",rarity:"common",poison:5,char:"liqing",desc:"薄雾浓云 · 施加5层中毒"},
+      liqing_baowu:{id:"liqing_baowu",name:"薄雾浓云",cost:1,type:"skill",rarity:"uncommon",poison:5,char:"liqing",desc:"薄雾浓云 · 施加5层中毒"},
       liqing_queba:{id:"liqing_queba",name:"却把青梅",cost:0,type:"skill",rarity:"common",block:4,char:"liqing",desc:"却把青梅 · 获得4点格挡"},
       liqing_hongou:{id:"liqing_hongou",name:"红藕香残",cost:1,type:"skill",rarity:"common",block:4,blockNextTurn:4,char:"liqing",desc:"红藕香残 · 获得4点格挡 · 下回合4点格挡"},
       liqing_shengsheng2:{id:"liqing_shengsheng2",name:"声声慢",cost:1,type:"skill",rarity:"common",enemyStrDownAll:6,char:"liqing",desc:"声声慢 · 所有敌人本回合失去6点力量"},
@@ -4338,6 +4340,11 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         _isGroup: !!(eData && eData.isGroup),
 };
 
+      // Clean up copyToDiscard copies from previous battles — 不跨战斗保留
+      if(G.deck){
+        G.deck = G.deck.filter(function(c){ return !c.id || c.id.indexOf('copy_') !== 0; });
+      }
+
       // Safety: rebuild deck if empty
       if(!G.deck || G.deck.length === 0){
         console.warn('[诗境问道] 卡组为空！尝试重新初始化...', G.charId);
@@ -4402,6 +4409,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 
       // 追踪总抽牌数
       gBattle._totalCardsDrawn = 0;
+      gBattle._discardCountThisTurn = 0;
       gBattle._skillsPlayedThisCombat = 0;
       if(hasRelic('lianyezhou')){ gBattle.firstCardExtraDraw = 1; }
 
@@ -4566,6 +4574,13 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       '抽牌':{short:'抽',tip:'从抽牌堆抽取卡牌到手牌'},
       '升级':{short:'升',tip:'永久强化此卡牌'},
       '回复':{short:'回',tip:'恢复生命值'},
+      '敏捷':{short:'敏',tip:'每层增加获得格挡 3 点。与"力量"相对，是防御系的成长属性'},
+      '奇巧':{short:'巧',tip:'拥有"奇巧"的卡牌在回合结束时被弃掉时会自动打出，不消耗能量'},
+      '无形':{short:'无',tip:'拥有"无形"时，受到的所有伤害减半（向上取整），每层持续1回合'},
+      '残花':{short:'花',tip:'零费攻击牌，造成4点伤害，打出后消耗。可被多张卡牌生成，是李清照的核心资源牌'},
+      '荆棘':{short:'荆',tip:'每层荆棘在受到攻击时对攻击者反伤 3 点'},
+      '固有':{short:'固',tip:'战斗开始时此牌必定在手牌中'},
+      '保留':{short:'留',tip:'回合结束时此牌不会被弃掉，可留在手牌中'},
     };
     /* ── 古风图标替换系统 ── */
     var SG_ICONS = {
@@ -6871,6 +6886,18 @@ function setBattleBackground(){
 
       // Player poison
       document.getElementById('sgPlayerPoison').textContent = gBattle.playerPoison;
+      // 确保敌人区域始终可见（防御性渲染）
+      try{
+        var _eArea = document.getElementById('sgEnemyArea');
+        if(_eArea){
+          _eArea.style.display = 'flex';
+          var _epEl = document.getElementById('sgEnemyPortrait');
+          if(_epEl && (!_epEl.innerHTML || _epEl.innerHTML.trim() === '')){
+            var _fb = enemyEmojis[gBattle.id] || '魔';
+            _epEl.innerHTML = '<span style="font-size:2rem;">'+_fb+'</span>';
+          }
+        }
+      }catch(_ee){}
 
       // Energy and turn
       document.getElementById('sgPlayerEnergy').textContent = gBattle.energy;
@@ -6907,9 +6934,18 @@ function setBattleBackground(){
         cardEl.style.borderColor = borderColor;
         cardEl.innerHTML =
           '<div class="sg-card-cost">' + (canPlay ? cost : ('<span style="color:#ff4444">' + cost + '</span>')) + '</div>' +
-          '<div class="sg-card-name">' + card.name + '</div>' +
+          '<div class="sg-card-name'+(card.upgraded?' sg-upgraded-name':'')+'">' + card.name + '</div>' +
           '<div class="sg-card-desc">' + parseKeywords(card.desc || '') + (card.enchantDesc ? '<br><span style="color:var(--gold);font-size:.45rem;">✦ '+card.enchantDesc+'</span>' : '') + '</div>' +
-          '<div class="sg-card-type">' + card.type + ((card.rarity === 'rare' || card.rarity === 'ancient') ? ' ★' : '') + '</div>';
+          '<div class="sg-card-type">' + card.type + ((card.rarity === 'rare' || card.rarity === 'ancient') ? ' ★' : '') + '</div>' +
+                    (!card.isShiv && (card.dmg>0||card.block>0||card.poison>0||card.heal>0||card.addShivs>0||card.tempAgil>0||card.gainAgil>0) ? '<div class="sg-card-stats" style="font-size:0.4rem;color:var(--text-faint);text-align:center;padding:1px 0 2px;border-top:1px solid rgba(0,0,0,.06);">' +
+            (card.dmg>0?'<span style="margin:0 2px;">⚔'+card.dmg+'</span>':'') +
+            (card.block>0?'<span style="margin:0 2px;">🛡'+card.block+'</span>':'') +
+            (card.poison>0?'<span style="margin:0 2px;">☠'+card.poison+'</span>':'') +
+            (card.heal>0?'<span style="margin:0 2px;">❤'+card.heal+'</span>':'') +
+            (card.addShivs>0?'<span style="margin:0 2px;">🌸'+card.addShivs+'</span>':'') +
+            (card.tempAgil>0?'<span style="margin:0 2px;">💨'+card.tempAgil+'</span>':'') +
+            (card.gainAgil>0?'<span style="margin:0 2px;">💨'+card.gainAgil+'</span>':'') +
+            '</div>' : '')
 
         // 鼠标悬停音效
         cardEl.addEventListener('mouseenter', function(){ playHoverSfx(); });
@@ -7140,7 +7176,7 @@ function setBattleBackground(){
         cardEl.className = 'sg-card sg-card-selectable';
         var rColors2 = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
         cardEl.style.borderColor = (rColors2[cd.rarity]||'#a8a8a8');
-        cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
+        cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name'+(cd.upgraded?' sg-upgraded-name':'')+'">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
         (function(ui2){
           cardEl.addEventListener('click', function(){
             if(G.gold >= 50){
@@ -7357,8 +7393,8 @@ function setBattleBackground(){
           if(previewMode){
             pCd = JSON.parse(JSON.stringify(cd));
             applyUpgrade(pCd);
-            pCd.name = cd.name.replace(/†$/, '') + '†';
-            if(pCd.desc && pCd.desc.indexOf('†') === -1) pCd.desc += ' †升级';
+            pCd.name = cd.name.replace(/†/g,'').trim() + '†';
+            if(!cd.upgraded) rebuildCardDesc(pCd);
           }
           var cardEl = document.createElement('div');
           cardEl.className = 'sg-card sg-card-selectable';
@@ -7369,7 +7405,7 @@ function setBattleBackground(){
           }
           var upgradeBadge = (cd.upgraded) ? '<span style="position:absolute;top:-4px;right:-4px;font-size:.45rem;background:#22aa22;color:#fff;border-radius:6px;padding:1px 4px;line-height:1.2;z-index:2;">✦升</span>' : '';
           cardEl.style.position = 'relative';
-          cardEl.innerHTML = '<div class="sg-card-cost">'+(previewMode ? pCd.cost : (cd.cost||0))+'</div><div class="sg-card-name">'+(previewMode ? pCd.name : cd.name)+'</div><div class="sg-card-desc">'+(previewMode ? pCd.desc : (cd.desc||''))+'</div><div class="sg-card-type">'+cd.type+'</div>' + (!previewMode ? upgradeBadge : '');
+          cardEl.innerHTML = '<div class="sg-card-cost">'+(previewMode ? pCd.cost : (cd.cost||0))+'</div><div class="sg-card-name'+(previewMode ? (cd.upgraded?'':'') : (cd.upgraded?' sg-upgraded-name':''))+'">'+(previewMode ? pCd.name : cd.name)+'</div><div class="sg-card-desc">'+(previewMode ? pCd.desc : (cd.desc||''))+'</div><div class="sg-card-type">'+cd.type+'</div>' + (!previewMode ? upgradeBadge : '');
           if(!previewMode){
             (function(ui2){
               cardEl.addEventListener('click', function(){
@@ -7516,12 +7552,34 @@ function setBattleBackground(){
       card.upgraded = true;
     }
 
+    function rebuildCardDesc(card){
+      if(!card) return;
+      // 在原描述基础上追加升级后的关键数值
+      var statParts = [];
+      if(card.dmg && card.dmg > 0) statParts.push(card.dmg + '伤');
+      if(card.block && card.block > 0) statParts.push(card.block + '盾');
+      if(card.poison && card.poison > 0) statParts.push(card.poison + '毒');
+      if(card.heal && card.heal > 0) statParts.push('回' + card.heal);
+      if(card.addShivs && card.addShivs > 0) statParts.push(card.addShivs + '残花');
+      if(card.tempAgil && card.tempAgil > 0) statParts.push(card.tempAgil + '敏');
+      if(card.gainAgil && card.gainAgil > 0 && !card.thorns) statParts.push(card.gainAgil + '敏');
+      if(card.gainAgil && card.thorns) statParts.push(card.gainAgil + '敏·' + card.thorns + '刺');
+      // 追加数值更新（仅在升级后有变化时）
+      if(statParts.length > 0){
+        var statStr = '📊' + statParts.join(' ');
+        if(card.desc.indexOf('📊') === -1) card.desc += ' ' + statStr;
+        else card.desc = card.desc.replace(/📊[^ ]*( [^ ]*)*/g, statStr);
+      }
+    }
+
     function upgradeCard(deckIdx){
       if(!G || !G.deck[deckIdx]) return;
       applyUpgrade(G.deck[deckIdx]);
       var card = G.deck[deckIdx];
-      card.name = card.name.replace(/†$/, '') + '†';
-      if(card.desc && card.desc.indexOf('†') === -1) card.desc += ' †升级';
+      // 保持†标记同时由CSS sg-upgraded-name控制颜色
+      card.name = card.name.replace(/†/g,'').trim() + '†';
+      // 重建描述文本以反映升级后的实际数值
+      rebuildCardDesc(card);
       var fx = document.getElementById('sgRest');
       if(fx) showEffectFloat(fx.offsetLeft + fx.offsetWidth/2, fx.offsetTop + 50, '✦ 强化成功！');
       if(typeof showRest === 'function') showRest();
@@ -7765,7 +7823,7 @@ function setBattleBackground(){
           if(!cd) continue;
           panel.innerHTML += '<div class="sg-card" style="border-color:'+(rarityColors3[cd.rarity]||'#a8a8a8')+';cursor:default;">' +
             '<div class="sg-card-cost">'+(cd.cost||0)+'</div>' +
-            '<div class="sg-card-name">'+cd.name+'</div>' +
+            '<div class="sg-card-name'+(cd.upgraded?' sg-upgraded-name':'')+'">'+cd.name+'</div>' +
             '<div class="sg-card-desc">'+(cd.desc||'')+'</div>' +
             '<div class="sg-card-type">'+cd.type+'</div></div>';
         }
@@ -8648,6 +8706,7 @@ function setBattleBackground(){
         '<button class="sg-collection-tab active" data-tab="cards">&#127183; 诗牌</button>' +
         '<button class="sg-collection-tab" data-tab="relics">&#128302; 遗器</button>' +
         '<button class="sg-collection-tab" data-tab="pills">&#9886; 丹药</button>' +
+        '<button class="sg-collection-tab" data-tab="mechanics">&#9881; 机制</button>' +
         '<button class="sg-collection-tab" data-tab="enemies">&#128128; 敌人</button>' +
         '</div>';
 
@@ -8666,6 +8725,7 @@ function setBattleBackground(){
         if(tabId === 'cards') renderCardsTab();
         else if(tabId === 'relics') renderRelicsTab();
         else if(tabId === 'pills') renderPillsTab();
+        else if(tabId === 'mechanics') renderMechanicsTab();
         else if(tabId === 'enemies') renderEnemiesTab();
       }
 
@@ -8812,6 +8872,70 @@ function setBattleBackground(){
             showPillDetail(el.getAttribute('data-pill-key'));
           });
         });
+      }
+
+      function renderMechanicsTab(){
+        var mechanics = [
+          {name:'力量',icon:'💪',color:'#ff6644',desc:'每层使攻击伤害+3。是物理输出的核心属性。',flavor:'"力拔山兮气盖世。"——项羽《垓下歌》。力量是勇武的象征，在诗境中化为攻伐之力。'},
+          {name:'敏捷',icon:'🌪️',color:'#44ccff',desc:'每层使获得格挡+3。与力量相对，是防御成长属性。',flavor:'"身轻一鸟过，枪急万人呼。"——杜甫《送蔡希曾》。敏捷是身法的极致，如飞鸟掠空、词锋过隙。'},
+          {name:'格挡',icon:'🛡️',color:'#88aacc',desc:'抵消等量的攻击伤害。每回合开始时归零。',flavor:'"固国不以山溪之险。"——《孟子》。格挡如诗之含蓄，以柔克刚。'},
+          {name:'中毒',icon:'☠️',color:'#66cc44',desc:'每回合结束时受到层数伤害，随后层数减半（向下取整）。',flavor:'"花开堪折直须折，莫待无花空折枝。"毒如落花，看似消散，实则渗透入骨。'},
+          {name:'易伤',icon:'🎯',color:'#ffaa44',desc:'受到攻击伤害增加50%。每层持续1回合。',flavor:'"攻其无备，出其不意。"——《孙子兵法》。易伤即破绽，是攻伐的绝佳时机。'},
+          {name:'虚弱',icon:'🌫️',color:'#aa88cc',desc:'造成的攻击伤害减少25%。每层持续1回合。',flavor:'"弱之胜强，柔之胜刚。"——《道德经》。虚弱非弱，乃以柔克刚之道。'},
+          {name:'奇巧',icon:'🌀',color:'#ff88dd',desc:'拥有"奇巧"的卡牌在手中被弃置（回合结束）时会自动打出，不消耗能量。',flavor:'"奇文共欣赏，疑义相与析。"——陶渊明《移居》。奇巧之牌，弃而不废，如奇文之妙，自有人赏。'},
+          {name:'无形',icon:'👻',color:'#cc88ff',desc:'拥有"无形"时，受到的所有伤害减半（向上取整）。每层持续1回合。',flavor:'"大象无形，道隐无名。"——《道德经》。无形之境，物我两忘，伤害减半。'},
+          {name:'残花（小刀）',icon:'🌸',color:'#ff88aa',desc:'零费攻击牌，造成4点伤害，打出后消耗。可被多张卡牌生成，是李清照的核心资源。',flavor:'"花自飘零水自流。"——李清照《一剪梅》。落花不是无情物，化作残刃更护词。'},
+          {name:'荆棘',icon:'🌵',color:'#66dd66',desc:'每层荆棘在受到攻击时对攻击者造成3点反伤。',flavor:'"蒹葭苍苍，白露为霜。"——《诗经》。荆棘似蒹葭，看似柔弱，触之则伤。'},
+          {name:'固有',icon:'⭐',color:'#ffcc00',desc:'战斗开始时此牌必定在手牌中。',flavor:'"一鸣惊人，一飞冲天。"——《史记》。固有之牌如胸有成竹，开局便已运筹帷幄。'},
+          {name:'保留',icon:'💎',color:'#88ddff',desc:'回合结束时此牌不会被弃掉，可留在手牌中。',flavor:'"此情无计可消除，才下眉头，却上心头。"——李清照《一剪梅》。保留如词中深情，挥之不去。'},
+          {name:'消耗',icon:'🔥',color:'#ff8844',desc:'打出后从战斗中移除，本场战斗不再出现。',flavor:'"春蚕到死丝方尽。"——李商隐《无题》。消耗如春蚕吐丝，一鸣惊人后便归于沉寂。'},
+          {name:'抽牌',icon:'🃏',color:'#aaddff',desc:'从抽牌堆中抽取卡牌加入手牌。',flavor:'"书中自有黄金屋。"——赵恒《劝学》。抽牌如翻阅诗卷，每一张都是新的灵感。'},
+          {name:'回复',icon:'❤️',color:'#ff4466',desc:'恢复生命值。',flavor:'"沉舟侧畔千帆过，病树前头万木春。"——刘禹锡《酬乐天》。回复如春回大地，生机再现。'},
+          {name:'升级',icon:'✨',color:'#ffdd44',desc:'永久强化此卡牌，提升伤害/格挡/效果等数值。已升级的卡牌名字会变色。',flavor:'"百尺竿头须进步，十方世界是全身。"——释道原《景德传灯录》。学无止境，诗亦无止境。'},
+        ];
+        // 敌人特殊机制
+        var enemyMechanics = [
+          {name:'暴怒',icon:'🔥',desc:'精英敌人专属。每回合力量+1，越战越强。',flavor:'"怒发冲冠，凭栏处、潇潇雨歇。"——岳飞《满江红》。暴怒是精英的本能。'},
+          {name:'再生',icon:'💚',desc:'精英敌人专属。每回合回复少量生命。',flavor:'"野火烧不尽，春风吹又生。"——白居易《草》。再生命如原上草。'},
+          {name:'召唤',icon:'👥',desc:'首领敌人专属。召唤其他敌人加入战斗。',flavor:'"一呼百应，众志成城。"——《周易》。召唤体现首领的统御之力。'},
+          {name:'诅咒',icon:'💀',desc:'首领敌人专属。向牌库中塞入诅咒牌干扰卡组。',flavor:'"千夫所指，无疾而死。"——《汉书》。诅咒乃无形之刃。'},
+        ];
+        var html = '<div style="padding:0.3rem;">';
+        // 通用机制部分
+        html += '<div style="border-bottom:1px dashed var(--border);padding-bottom:0.2rem;margin-bottom:0.3rem;">' +
+          '<span style="font-size:0.7rem;color:var(--gold);">📖 通用战斗机制</span>' +
+          '<div style="font-size:0.5rem;color:var(--text-faint);margin-top:0.1rem;">诗境中蕴藏的天地法则，是每一位诗人都需掌握的奥义</div></div>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+        for(var mi=0;mi<mechanics.length;mi++){
+          var mech = mechanics[mi];
+          html += '<div style="flex:0 0 calc(33% - 6px);min-width:140px;background:var(--bg-card-alt);border-radius:8px;padding:0.3rem;border:1px solid ' + mech.color + '40;cursor:pointer;" ' +
+            'onclick="showCollectionDetail(\'' + mech.name + '\', \'<div style=text-align:center;font-size:2rem;margin-bottom:0.3rem;>' + mech.icon + '</div><div class=sg-cdb-field><b>效果：</b>' + mech.desc + '</div><div class=sg-cdb-flavor style=margin-top:0.3rem;>' + mech.flavor + '</div>\')">' +
+            '<div style="display:flex;align-items:center;gap:4px;">' +
+            '<span style="font-size:1.2rem;">' + mech.icon + '</span>' +
+            '<span style="font-size:0.6rem;font-weight:700;color:' + mech.color + ';">' + mech.name + '</span>' +
+            '</div>' +
+            '<div style="font-size:0.45rem;color:var(--text-faint);margin-top:0.15rem;">' + mech.desc + '</div>' +
+            '</div>';
+        }
+        html += '</div>';
+        // 敌人特殊机制
+        html += '<div style="border-bottom:1px dashed var(--border);padding-bottom:0.2rem;margin:0.4rem 0 0.3rem;">' +
+          '<span style="font-size:0.7rem;color:var(--gold);">👹 敌人专属机制</span>' +
+          '<div style="font-size:0.5rem;color:var(--text-faint);margin-top:0.1rem;">精英与首领掌握的特殊能力，考验诗人的真正实力</div></div>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+        for(var emi=0;emi<enemyMechanics.length;emi++){
+          var em = enemyMechanics[emi];
+          html += '<div style="flex:0 0 calc(50% - 6px);min-width:140px;background:var(--bg-card-alt);border-radius:8px;padding:0.3rem;border:1px solid #aa4444;cursor:pointer;" ' +
+            'onclick="showCollectionDetail(\'' + em.name + '\', \'<div style=text-align:center;font-size:2rem;margin-bottom:0.3rem;>' + em.icon + '</div><div class=sg-cdb-field><b>效果：</b>' + em.desc + '</div><div class=sg-cdb-flavor style=margin-top:0.3rem;>' + em.flavor + '</div>\')">' +
+            '<div style="display:flex;align-items:center;gap:4px;">' +
+            '<span style="font-size:1.2rem;">' + em.icon + '</span>' +
+            '<span style="font-size:0.6rem;font-weight:700;color:#ff6644;">' + em.name + '</span>' +
+            '</div>' +
+            '<div style="font-size:0.45rem;color:var(--text-faint);margin-top:0.15rem;">' + em.desc + '</div>' +
+            '</div>';
+        }
+        html += '</div></div>';
+        content.innerHTML = html;
       }
 
       function renderEnemiesTab(){
@@ -8967,7 +9091,7 @@ function setBattleBackground(){
         var upgradeBadge = (cd.upgraded) ? '<span style="position:absolute;top:-4px;right:-4px;font-size:.45rem;background:#22aa22;color:#fff;border-radius:6px;padding:1px 4px;line-height:1.2;z-index:2;">✦升</span>' : '';
         html += '<div class="sg-card" style="position:relative;border-color:'+(rarityColors3[cd.rarity]||'#a8a8a8')+';cursor:default;">' +
           '<div class="sg-card-cost">'+(cd.cost||0)+'</div>' +
-          '<div class="sg-card-name">'+cd.name+'</div>' +
+          '<div class="sg-card-name'+(cd.upgraded?' sg-upgraded-name':'')+'">'+cd.name+'</div>' +
           '<div class="sg-card-desc">'+(cd.desc||'')+'</div>' +
           '<div class="sg-card-type">'+cd.type+'</div>' +
           upgradeBadge +
@@ -9002,7 +9126,7 @@ function setBattleBackground(){
         cardEl.className = 'sg-card sg-card-selectable';
         var rCol = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
         cardEl.style.borderColor = (rCol[cd.rarity]||'#a8a8a8');
-        cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
+        cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name'+(cd.upgraded?' sg-upgraded-name':'')+'">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
         (function(ui2){
           cardEl.addEventListener('click', function(){
             G.deck.splice(ui2, 1);
@@ -9442,7 +9566,7 @@ function setBattleBackground(){
       var particleBg = document.createElement('div');
       particleBg.className = 'sg-particle-bg';
       particleBg.id = 'sgParticleBg';
-      for(var pbi=0;pbi<15;pbi++){
+      for(var pbi=0;pbi<10;pbi++){
         var pt = document.createElement('div');
         pt.className = 'sg-pb-particle';
         var psize = 2+Math.random()*4;
