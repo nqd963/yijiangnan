@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="v2.1.1-fix-syntax-20260516">
+<meta name="version" content="v2.1.2-deck-mgmt-drawfx-20260516">
 <link rel="canonical" href="https://nqd963.github.io/yijiangnan/">
 
 <!-- Open Graph -->
@@ -1151,8 +1151,12 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   padding:3px 8px 7px;font-size:.45rem;color:var(--text-faint);
   border-top:1px solid rgba(0,0,0,.05);position:relative;z-index:1;
 }
-.sg-card.playing{animation:sgCardPlay .25s ease forwards;z-index:5;}
-@keyframes sgCardPlay{0%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}100%{transform:scale(.8);opacity:0}}
+.sg-card.playing{animation:sgCardPlay .3s ease forwards;z-index:5;}
+@keyframes sgCardPlay{
+  0%{transform:scale(1) rotate(0);opacity:1;filter:brightness(1);}
+  30%{transform:scale(1.15) rotate(3deg);opacity:1;filter:brightness(1.3);}
+  100%{transform:scale(1.3) rotate(5deg) translateY(-60px);opacity:0;filter:brightness(2);}
+}
 .sg-card.primary{border-color:var(--gold);border-width:2px;}
 .sg-card.primary .sg-card-name{background:linear-gradient(180deg,rgba(201,168,76,.2),rgba(201,168,76,.05));}
 /* 稀有/金色卡牌微光浮动 */
@@ -1207,9 +1211,25 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
 /* ── 抽牌动画 ── */
 @keyframes sgDrawCard{
-  0%{transform:scale(.3) rotate(-15deg) translateY(-60px);opacity:0;}
-  60%{transform:scale(1.05) rotate(2deg) translateY(0);opacity:1;}
-  100%{transform:scale(1) rotate(0) translateY(0);opacity:1;}
+  0%{transform:scale(.2) rotate(-20deg) translateY(-80px);opacity:0;
+    filter:brightness(2) blur(2px);}
+  40%{transform:scale(1.08) rotate(3deg) translateY(-5px);opacity:1;
+    filter:brightness(1.2) blur(0);}
+  70%{transform:scale(.97) rotate(-1deg) translateY(2px);opacity:1;}
+  100%{transform:scale(1) rotate(0) translateY(0);opacity:1;
+    filter:brightness(1) blur(0);}
+}
+@keyframes sg-cardAppear{
+  0%{transform:scale(.85) translateY(-10px);opacity:0;}
+  100%{transform:scale(1) translateY(0);opacity:1;}
+}
+/* 抽牌时的闪光粒子 */
+.sg-draw-flash{position:absolute;pointer-events:none;z-index:50;
+  width:8px;height:8px;border-radius:50%;background:var(--gold);
+  animation:sgDrawParticle .5s ease-out forwards;}
+@keyframes sgDrawParticle{
+  0%{transform:translate(0,0) scale(1);opacity:1;}
+  100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0;}
 }
 
 /* ── 确认按钮 ── */
@@ -1247,6 +1267,31 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-enchant-close{display:block;margin:.4rem auto 0;padding:.25rem .8rem;
   background:transparent;color:var(--text-faint);border:1px solid var(--border);
   border-radius:4px;cursor:pointer;font-family:inherit;font-size:.6rem;}
+
+/* ── 模态框（升级/删除用） ── */
+.sg-modal-overlay{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.7);
+  display:flex;align-items:center;justify-content:center;
+  animation:sgFadeIn .15s ease-out;}
+.sg-modal-box{background:var(--bg-card,#1a1a2e);border:1px solid var(--gold,#c9a84c);
+  border-radius:12px;padding:1.5rem;max-width:500px;width:90%;max-height:80vh;
+  overflow-y:auto;animation:sgScaleIn .2s ease-out;position:relative;
+  box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 0 1px rgba(201,168,76,.1);}
+.sg-modal-title{color:var(--gold);text-align:center;margin:0 0 1rem 0;
+  font-size:.95rem;font-weight:700;letter-spacing:.05em;}
+.sg-modal-close{display:block;margin:1rem auto 0;padding:.45rem 1.2rem;
+  background:var(--btn-bg,#333);color:var(--text,#e0e0e0);
+  border:1px solid var(--border,#555);border-radius:6px;cursor:pointer;
+  font-family:inherit;font-size:.7rem;transition:all .15s;}
+.sg-modal-close:hover{background:var(--ink-700);border-color:var(--gold-dim);}
+/* 可选择卡牌悬停效果 */
+.sg-card-selectable{border:2px solid;margin:.3rem 0;cursor:pointer;
+  transition:all .15s ease;position:relative;}
+.sg-card-selectable:hover{transform:translateY(-2px) scale(1.02);
+  box-shadow:0 6px 20px rgba(0,0,0,.35),0 0 0 1px var(--gold-dim);z-index:2;}
+.sg-card-selectable:active{transform:scale(.97);}
+/* 模态框动画 */
+@keyframes sgFadeIn{0%{opacity:0}100%{opacity:1}}
+@keyframes sgScaleIn{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
 
 /* ── 确认后继续（事件用） ── */
 .sg-event-result{font-size:.7rem;color:var(--text-faint);padding:.3rem 0;}
@@ -3751,6 +3796,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(hasRelic('lianyezhou')) extra += 1;
       n = n + extra;
 
+      var startHandLen = gBattle.hand.length;
       for(var i=0;i<n;i++){
         if(gBattle.drawPile.length === 0){
           if(gBattle.discardPile.length === 0) break;
@@ -3758,11 +3804,30 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
           gBattle.discardPile = [];
           shuffle(gBattle.drawPile);
           gBattle.shuffledThisTurn = true;
+          if(animated) showEffectFloat(window.innerWidth/2, window.innerHeight/2-100, '🔄 洗牌');
         }
         var cardIdx = gBattle.drawPile.pop();
         gBattle.hand.push(cardIdx);
       }
+      // Track newly drawn card indices for animation
+      gBattle._newlyDrawn = [];
+      for(var di=startHandLen; di<gBattle.hand.length; di++){
+        gBattle._newlyDrawn.push(di);
+      }
       if(animated){
+        // 抽牌粒子效果
+        for(var p=0;p<Math.min(n,3);p++){
+          setTimeout(function(){
+            var handEl = document.getElementById('sgHand');
+            if(!handEl) return;
+            var pEl = document.createElement('div');
+            pEl.className = 'sg-draw-flash';
+            var rx = (Math.random()-0.5)*60, ry = -(40+Math.random()*60);
+            pEl.style.cssText = '--dx:'+rx+'px;--dy:'+ry+'px;position:absolute;left:50%;margin-left:'+(Math.random()-0.5)*40+'px;top:50%;margin-top:-'+Math.random()*20+'px;';
+            handEl.appendChild(pEl);
+            setTimeout(function(){ if(pEl.parentNode) pEl.parentNode.removeChild(pEl); }, 600);
+          }, p*80);
+        }
         setTimeout(function(){ renderBattle(true); }, 60);
       }
     }
@@ -4704,9 +4769,16 @@ applyPoison();
           })(hi, cardEl);
         }
 
-        if(gBattle._animDraw){
-          cardEl.style.animation = 'sgDrawCard 0.3s ease-out';
-          cardEl.style.animationDelay = (hi * 0.07) + 's';
+        var isNewlyDrawn = gBattle._newlyDrawn && gBattle._newlyDrawn.indexOf(hi) !== -1;
+        if(gBattle._animDraw || isNewlyDrawn){
+          cardEl.style.animation = 'sgDrawCard 0.35s ease-out';
+          cardEl.style.animationDelay = ((hi - (gBattle._newlyDrawn ? gBattle._newlyDrawn[0] : 0)) * 0.08) + 's';
+          // Newly drawn cards get a brief golden glow
+          if(isNewlyDrawn){
+            cardEl.style.boxShadow = '0 0 20px rgba(201,168,76,.5), 0 0 40px rgba(201,168,76,.2)';
+            cardEl.style.transition = 'box-shadow .6s ease';
+            setTimeout(function(el2){ if(el2) el2.style.boxShadow = ''; }, 700, cardEl);
+          }
         } else {
           cardEl.style.animation = 'sg-cardAppear 0.25s ease-out';
           cardEl.style.animationDelay = (hi * 0.05) + 's';
@@ -4715,6 +4787,7 @@ applyPoison();
         handEl.appendChild(cardEl);
       }
       gBattle._animDraw = false;
+      gBattle._newlyDrawn = null;
 
       // Intent reveal
       if(gBattle.seeIntents || hasRelic('qingtongjing')){
@@ -4872,19 +4945,18 @@ applyPoison();
       }
       var overlay = document.createElement('div');
       overlay.className = 'sg-modal-overlay';
-      overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
       var box = document.createElement('div');
-      box.style.cssText = 'background:var(--bg-card,#1a1a2e);border:1px solid var(--gold,#c9a84c);border-radius:12px;padding:1.5rem;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;';
-      var title = document.createElement('h3');
-      title.textContent = '选择要删除的卡牌（50金）';
-      title.style.cssText = 'color:var(--gold,#c9a84c);text-align:center;margin:0 0 1rem 0;';
+      box.className = 'sg-modal-box';
+      var title = document.createElement('div');
+      title.className = 'sg-modal-title';
+      title.textContent = '🗑 选择要删除的卡牌（50金）';
       box.appendChild(title);
       for(var ui=0;ui<G.deck.length;ui++){
         var cd = G.deck[ui];
         var cardEl = document.createElement('div');
         cardEl.className = 'sg-card sg-card-selectable';
         var rColors2 = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
-        cardEl.style.cssText = 'border-color:'+(rColors2[cd.rarity]||'#a8a8a8')+';margin:0.3rem 0;cursor:pointer;';
+        cardEl.style.borderColor = (rColors2[cd.rarity]||'#a8a8a8');
         cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
         (function(ui2){
           cardEl.addEventListener('click', function(){
@@ -4903,8 +4975,8 @@ applyPoison();
         box.appendChild(cardEl);
       }
       var closeBtn = document.createElement('button');
-      closeBtn.textContent = '取消';
-      closeBtn.style.cssText = 'display:block;margin:1rem auto 0;padding:0.5rem 1.5rem;background:var(--btn-bg,#333);color:var(--text,#e0e0e0);border:1px solid var(--border,#555);border-radius:6px;cursor:pointer;';
+      closeBtn.className = 'sg-modal-close';
+      closeBtn.textContent = '取消 ✕';
       closeBtn.onclick = function(){ document.body.removeChild(overlay); };
       box.appendChild(closeBtn);
       overlay.appendChild(box);
@@ -5084,19 +5156,18 @@ applyPoison();
       if(!G || !G.deck || G.deck.length === 0) return;
       var overlay = document.createElement('div');
       overlay.className = 'sg-modal-overlay';
-      overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
       var box = document.createElement('div');
-      box.style.cssText = 'background:var(--bg-card,#1a1a2e);border:1px solid var(--gold,#c9a84c);border-radius:12px;padding:1.5rem;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;';
-      var title = document.createElement('h3');
-      title.textContent = '选择一张牌强化';
-      title.style.cssText = 'color:var(--gold,#c9a84c);text-align:center;margin:0 0 1rem 0;';
+      box.className = 'sg-modal-box';
+      var title = document.createElement('div');
+      title.className = 'sg-modal-title';
+      title.textContent = '✦ 选择一张牌强化';
       box.appendChild(title);
       for(var ui=0;ui<G.deck.length;ui++){
         var cd = G.deck[ui];
         var cardEl = document.createElement('div');
         cardEl.className = 'sg-card sg-card-selectable';
         var rColors = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
-        cardEl.style.cssText = 'border-color:'+(rColors[cd.rarity]||'#a8a8a8')+';margin:0.3rem 0;cursor:pointer;';
+        cardEl.style.borderColor = (rColors[cd.rarity]||'#a8a8a8');
         cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
         (function(ui2){
           cardEl.addEventListener('click', function(){
@@ -5107,8 +5178,8 @@ applyPoison();
         box.appendChild(cardEl);
       }
       var closeBtn = document.createElement('button');
-      closeBtn.textContent = '取消';
-      closeBtn.style.cssText = 'display:block;margin:1rem auto 0;padding:0.5rem 1.5rem;background:var(--btn-bg,#333);color:var(--text,#e0e0e0);border:1px solid var(--border,#555);border-radius:6px;cursor:pointer;';
+      closeBtn.className = 'sg-modal-close';
+      closeBtn.textContent = '取消 ✕';
       closeBtn.onclick = function(){ document.body.removeChild(overlay); };
       box.appendChild(closeBtn);
       overlay.appendChild(box);
@@ -5436,7 +5507,12 @@ applyPoison();
       popup.style.display = '';
       popup.className = 'sg-deck-overlay';
       var html = '<div class="sg-deck-panel" onclick="event.stopPropagation();">';
-      html += '<h3>📜 卡组 (' + G.deck.length + '张) <span style="float:right;cursor:pointer;font-size:1rem;" onclick="document.getElementById(\'sgDeckPopup\').style.display=\'none\';">✕</span></h3>';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">' +
+        '<h3 style="font-size:.9rem;color:var(--gold);margin:0;">📜 卡组 (' + G.deck.length + '张)</h3>' +
+        '<div>' +
+        '<button class="sg-btn" style="font-size:.5rem;padding:.15rem .4rem;margin-right:.3rem;" onclick="showDeckSortDialog()">🔀 排序</button>' +
+        '<span style="cursor:pointer;font-size:1rem;color:var(--text-faint);" onclick="document.getElementById(\'sgDeckPopup\').style.display=\'none\';">✕</span>' +
+        '</div></div>';
       html += '<div class="sg-deck-grid">';
       var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
       var raritySort = {basic:0, common:1, uncommon:2, rare:3};
@@ -5447,6 +5523,7 @@ applyPoison();
       });
       for(var di=0;di<sorted.length;di++){
         var cd = sorted[di];
+        var origIdx = G.deck.indexOf(cd);
         html += '<div class="sg-card" style="border-color:'+(rarityColors3[cd.rarity]||'#a8a8a8')+';cursor:default;">' +
           '<div class="sg-card-cost">'+(cd.cost||0)+'</div>' +
           '<div class="sg-card-name">'+cd.name+'</div>' +
@@ -5454,10 +5531,107 @@ applyPoison();
           '<div class="sg-card-type">'+cd.type+'</div>' +
           '</div>';
       }
-      html += '</div></div>';
+      html += '</div>';
+      html += '<div style="text-align:center;margin-top:.3rem;">' +
+        '<button class="sg-btn" style="font-size:.5rem;padding:.15rem .5rem;background:rgba(194,58,43,.15);color:var(--red-seal);border-color:var(--red-seal);" onclick="if(G.deck.length>3){showDeckRemoveDialog();}else{showEffectFloat(window.innerWidth/2,window.innerHeight/2,\'卡牌太少\');}">🗑 删除卡牌</button>' +
+        '</div>';
+      html += '</div>';
       popup.innerHTML = html;
       // Click overlay to close
       popup.onclick = function(){ popup.style.display = 'none'; };
+    }
+
+    function showDeckRemoveDialog(){
+      if(!G || !G.deck || G.deck.length <= 3){
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2, '卡牌太少，无法删除');
+        return;
+      }
+      var overlay = document.createElement('div');
+      overlay.className = 'sg-modal-overlay';
+      var box = document.createElement('div');
+      box.className = 'sg-modal-box';
+      var title = document.createElement('div');
+      title.className = 'sg-modal-title';
+      title.textContent = '🗑 选择要删除的卡牌';
+      box.appendChild(title);
+      for(var ui=0;ui<G.deck.length;ui++){
+        var cd = G.deck[ui];
+        var cardEl = document.createElement('div');
+        cardEl.className = 'sg-card sg-card-selectable';
+        var rCol = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+        cardEl.style.borderColor = (rCol[cd.rarity]||'#a8a8a8');
+        cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
+        (function(ui2){
+          cardEl.addEventListener('click', function(){
+            G.deck.splice(ui2, 1);
+            showEffectFloat(window.innerWidth/2, window.innerHeight/2, '🗑 已删除');
+            document.body.removeChild(overlay);
+            showDeckPopup();
+          });
+        })(ui);
+        box.appendChild(cardEl);
+      }
+      var closeBtn = document.createElement('button');
+      closeBtn.className = 'sg-modal-close';
+      closeBtn.textContent = '取消 ✕';
+      closeBtn.onclick = function(){ document.body.removeChild(overlay); showDeckPopup(); };
+      box.appendChild(closeBtn);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+    }
+
+    function showDeckSortDialog(){
+      if(!G || !G.deck || G.deck.length <= 1) return;
+      var overlay = document.createElement('div');
+      overlay.className = 'sg-modal-overlay';
+      var box = document.createElement('div');
+      box.className = 'sg-modal-box';
+      var title = document.createElement('div');
+      title.className = 'sg-modal-title';
+      title.textContent = '🔀 点击卡牌调整顺序（再点选择新位置）';
+      box.appendChild(title);
+      var orders = G.deck.slice().map(function(c,i){return i;});
+      var sortedEl = document.createElement('div');
+      sortedEl.style.cssText = 'display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-height:50vh;overflow-y:auto;padding:.3rem 0;';
+      var rColS = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+      var pendingSwap = null;
+      for(var ui=0;ui<G.deck.length;ui++){
+        var cd = G.deck[ui];
+        var cardEl = document.createElement('div');
+        cardEl.className = 'sg-card';
+        cardEl.style.cssText = 'width:90px;border-color:'+(rColS[cd.rarity]||'#a8a8a8')+';cursor:pointer;transition:all .15s;';
+        cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name" style="font-size:.55rem;">'+cd.name+'</div><div class="sg-card-desc" style="font-size:.4rem;">'+(cd.desc||'').substring(0,20)+'</div><div class="sg-card-type" style="font-size:.38rem;">#'+(ui+1)+'</div>';
+        (function(ui2, el2){
+          el2.addEventListener('click', function(){
+            if(pendingSwap === null){
+              pendingSwap = ui2;
+              el2.style.borderColor = 'var(--gold)';
+              el2.style.boxShadow = '0 0 15px rgba(201,168,76,.5)';
+            } else if(pendingSwap === ui2){
+              pendingSwap = null;
+              el2.style.borderColor = (rColS[cd.rarity]||'#a8a8a8');
+              el2.style.boxShadow = '';
+            } else {
+              // Swap
+              var tmp = G.deck[pendingSwap];
+              G.deck[pendingSwap] = G.deck[ui2];
+              G.deck[ui2] = tmp;
+              showEffectFloat(window.innerWidth/2, window.innerHeight/2, '🔄 已调整顺序');
+              document.body.removeChild(overlay);
+              showDeckPopup();
+            }
+          });
+        })(ui, cardEl);
+        sortedEl.appendChild(cardEl);
+      }
+      box.appendChild(sortedEl);
+      var closeBtn = document.createElement('button');
+      closeBtn.className = 'sg-modal-close';
+      closeBtn.textContent = '完成 ✕';
+      closeBtn.onclick = function(){ document.body.removeChild(overlay); showDeckPopup(); };
+      box.appendChild(closeBtn);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
     }
 
     /* ═══════════════════════════════════════════════════════════════════════ */
