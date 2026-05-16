@@ -836,6 +836,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   font-size:2.2rem;position:relative;z-index:1;transition:all .3s;
 }
 .sg-cs-portrait-card:hover .sg-cs-avatar{transform:scale(1.08);}
+.sg-cs-portrait-card .sg-cs-avatar .sg-cs-avatar-img{
+  width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;top:0;left:0;
+}
 .sg-cs-portrait-card .sg-cs-char-name{font-size:.95rem;font-weight:700;letter-spacing:.1em;position:relative;z-index:1;}
 .sg-cs-portrait-card .sg-cs-char-title{font-size:.65rem;font-weight:400;letter-spacing:.05em;position:relative;z-index:1;}
 .sg-cs-portrait-card .sg-cs-hp{font-size:.7rem;position:relative;z-index:1;}
@@ -872,6 +875,11 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-player-portrait-icon.lizhi{background:radial-gradient(circle at 30% 30%,#ffd700,#b8860b);border-color:#c9a84c;}
 .sg-player-portrait-icon.sush{background:radial-gradient(circle at 30% 30%,#60a5fa,#1e4b7a);border-color:#6b9bc4;}
 .sg-player-portrait-icon.liqing{background:radial-gradient(circle at 30% 30%,#e879b0,#8b3a6a);border-color:#c084b0;}
+/* 立绘图片兼容 */
+.sg-player-portrait-icon{position:relative;}
+.sg-player-portrait-icon .sg-player-portrait-img{
+  width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;top:0;left:0;
+}
 
 /* ── 地图 ── */
 .sg-map-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;font-size:1rem;color:var(--text-dim);}
@@ -1007,7 +1015,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 /* ── 玩家状态 ── */
 .sg-player-area{padding:.3rem 0;}
 .sg-player-portrait-wrap{text-align:center;padding:.3rem 0;}
-.sg-player-portrait{font-size:1.8rem;display:inline-block;}
+.sg-player-portrait{font-size:1.8rem;display:inline-block;position:relative;width:36px;height:36px;line-height:36px;text-align:center;}
 .sg-player-name{font-size:.75rem;color:var(--text-dim);}
 .sg-status{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;padding:.3rem 0;font-size:.68rem;color:var(--text-dim);}
 .sg-status-item{background:var(--bg-card-alt);padding:.2rem .5rem;border-radius:6px;border:1px solid var(--border);}
@@ -1905,7 +1913,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
         </div>
         <div class="sg-player-area" id="sgPlayerArea">
           <div class="sg-player-portrait-wrap">
-            <div class="sg-player-portrait" id="sgPlayerPortrait">🍶</div>
+            <div class="sg-player-portrait" id="sgPlayerPortrait"><img class="sg-player-portrait-img" src="images/lizhi.png" onerror="this.style.display='none'">🍶</div>
             <div class="sg-player-name" id="sgPlayerName">诗人</div>
             <div style="height:4px;border-radius:2px;background:var(--border);overflow:hidden;width:80px;margin:2px auto;">
               <div class="sg-hp-fill" id="sgPlayerHpFill" style="width:100%;background:var(--gold);"></div>
@@ -4368,7 +4376,7 @@ applyPoison();
       var pClass = G.charId || '';
       var portraitEl = document.getElementById('sgPlayerPortrait');
       if(portraitEl){
-        portraitEl.textContent = pEmoji;
+        portraitEl.innerHTML = '<img class="sg-player-portrait-img" src="images/'+G.charId+'.png" onerror="this.style.display=\'none\'">'+pEmoji;
         portraitEl.className = 'sg-player-portrait-icon ' + pClass;
         var wrap = portraitEl.closest('.sg-player-portrait-wrap');
         if(wrap) wrap.className = 'sg-player-portrait-frame sg-player-portrait-wrap';
@@ -5326,7 +5334,7 @@ var charClasses = {lizhi:'sg-char-lizhi',sush:'sg-char-sush',liqing:'sg-char-liq
 var emoji = charEmojis[ch.id] || '📜';
 var cssClass = charClasses[ch.id] || '';
 html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' +
-                '<div class="sg-cs-avatar">'+emoji+'</div>' +
+                '<div class="sg-cs-avatar"><img class="sg-cs-avatar-img" src="images/'+ch.id+'.png" onerror="this.style.display=\'none\'">'+emoji+'</div>' +
                 '<div class="sg-cs-char-name">'+ch.name+'</div>' +
                 '<div class="sg-cs-char-title">「'+ch.title+'」</div>' +
                 '<div class="sg-cs-hp">❤️ '+ch.maxHp+'</div>' +
