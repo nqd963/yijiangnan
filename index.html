@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="v2.0.1-fix-gBgmLoopTimer-20260515">
+<meta name="version" content="v2.1.0-major-overhaul-20260516">
 <link rel="canonical" href="https://nqd963.github.io/yijiangnan/">
 
 <!-- Open Graph -->
@@ -824,44 +824,87 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-cs-card .sg-cs-char-desc{font-size:.6rem;color:var(--text-faint);line-height:1.3;}
 .sg-cs-card .sg-cs-char-cards{font-size:.55rem;color:var(--text-dim);}
 
-/* ── 角色立绘卡片（Item 6） ── */
+/* ── 角色立绘卡片 — 大图重设计（Item 4） ── */
 .sg-cs-portrait-card{
-  width:160px;padding:1rem .6rem .8rem;border-radius:14px;cursor:pointer;
-  text-align:center;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:5px;
+  width:200px;padding:0;border-radius:16px;cursor:pointer;
+  text-align:center;transition:all .35s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;align-items:center;
   position:relative;overflow:hidden;
+  border:2px solid var(--border);background:var(--bg-card-alt);
 }
-.sg-cs-portrait-card:hover{transform:translateY(-6px) scale(1.02);}
+.sg-cs-portrait-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 12px 40px rgba(0,0,0,.25);border-color:var(--gold);}
+/* 超大立绘头像 */
 .sg-cs-portrait-card .sg-cs-avatar{
-  width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:2.2rem;position:relative;z-index:1;transition:all .3s;
+  width:100%;aspect-ratio:1/1.1;max-height:280px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;position:relative;overflow:hidden;
+  margin:0;border-radius:14px 14px 0 0;
+  transition:all .4s;
 }
-.sg-cs-portrait-card:hover .sg-cs-avatar{transform:scale(1.08);}
 .sg-cs-portrait-card .sg-cs-avatar .sg-cs-avatar-img{
-  width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;top:0;left:0;
+  width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;
+  transition:transform .4s;
 }
-.sg-cs-portrait-card .sg-cs-char-name{font-size:.95rem;font-weight:700;letter-spacing:.1em;position:relative;z-index:1;}
-.sg-cs-portrait-card .sg-cs-char-title{font-size:.65rem;font-weight:400;letter-spacing:.05em;position:relative;z-index:1;}
-.sg-cs-portrait-card .sg-cs-hp{font-size:.7rem;position:relative;z-index:1;}
-.sg-cs-portrait-card .sg-cs-desc{font-size:.6rem;line-height:1.3;position:relative;z-index:1;}
-.sg-cs-portrait-card .sg-cs-ability{font-size:.55rem;color:var(--gold);position:relative;z-index:1;}
-/* 李白 - 月/酒 主题 */
-.sg-char-lizhi{background:linear-gradient(145deg,#1a0a0a,#2d1510);border:2px solid #c9a84c;color:#e8d48b;}
-.sg-char-lizhi .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#ffd700,#b8860b);border:2px solid #c9a84c;box-shadow:0 0 20px rgba(201,168,76,.4);}
+.sg-cs-portrait-card:hover .sg-cs-avatar .sg-cs-avatar-img{transform:scale(1.08);}
+/* 角色信息浮在底部 */
+.sg-cs-portrait-card .sg-cs-info-overlay{
+  width:100%;padding:.6rem .5rem .5rem;
+  background:linear-gradient(180deg,transparent,rgba(0,0,0,.75) 30%);
+  position:absolute;bottom:0;left:0;z-index:2;
+  transition:all .3s;
+}
+.sg-cs-portrait-card:hover .sg-cs-info-overlay{
+  background:rgba(0,0,0,.85);
+}
+.sg-cs-portrait-card .sg-cs-char-name{
+  font-size:1.1rem;font-weight:700;letter-spacing:.1em;
+  text-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+.sg-cs-portrait-card .sg-cs-char-title{
+  font-size:.7rem;font-weight:400;letter-spacing:.05em;
+  opacity:.85;
+}
+/* 展开的详细信息（hover时显示） */
+.sg-cs-portrait-card .sg-cs-detail{
+  max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .3s;
+  opacity:0;width:100%;text-align:center;padding:0 .5rem;
+}
+.sg-cs-portrait-card:hover .sg-cs-detail{
+  max-height:120px;opacity:1;padding:.4rem .5rem .6rem;
+}
+.sg-cs-portrait-card .sg-cs-hp{font-size:.75rem;display:inline-block;margin:0 .3rem;}
+.sg-cs-portrait-card .sg-cs-desc{font-size:.6rem;line-height:1.4;color:var(--text-dim);}
+.sg-cs-portrait-card .sg-cs-ability{font-size:.55rem;color:var(--gold);}
+/* 立绘背景主题 - 保持原有色彩但适配新布局 */
+.sg-char-lizhi{border-color:#c9a84c;background:linear-gradient(145deg,#1a0a0a,#2d1510);}
+.sg-char-lizhi .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#ffd700,#b8860b);}
 .sg-char-lizhi .sg-cs-char-name{color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,.3);}
 .sg-char-lizhi .sg-cs-char-title{color:#d4a94b;}
-.sg-char-lizhi::before{content:'';position:absolute;top:-30%;right:-30%;width:100px;height:100px;background:radial-gradient(circle,rgba(255,215,0,.08),transparent);border-radius:50%;}
+.sg-char-lizhi::before{content:'';position:absolute;top:-30%;right:-30%;width:120px;height:120px;background:radial-gradient(circle,rgba(255,215,0,.08),transparent);border-radius:50%;pointer-events:none;z-index:0;}
 /* 苏轼 - 江/风 主题 */
-.sg-char-sush{background:linear-gradient(145deg,#0a1628,#15203a);border:2px solid #6b9bc4;color:#b0d0e8;}
-.sg-char-sush .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#60a5fa,#1e4b7a);border:2px solid #6b9bc4;box-shadow:0 0 20px rgba(96,165,250,.3);}
+.sg-char-sush{border-color:#6b9bc4;background:linear-gradient(145deg,#0a1628,#15203a);}
+.sg-char-sush .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#60a5fa,#1e4b7a);}
 .sg-char-sush .sg-cs-char-name{color:#93c5fd;text-shadow:0 0 10px rgba(147,197,253,.3);}
 .sg-char-sush .sg-cs-char-title{color:#7ab0d8;}
-.sg-char-sush::before{content:'';position:absolute;bottom:-20%;left:-20%;width:90px;height:90px;background:radial-gradient(circle,rgba(96,165,250,.08),transparent);}
+.sg-char-sush::before{content:'';position:absolute;bottom:-20%;left:-20%;width:110px;height:110px;background:radial-gradient(circle,rgba(96,165,250,.08),transparent);pointer-events:none;z-index:0;}
 /* 李清照 - 花/秋 主题 */
-.sg-char-liqing{background:linear-gradient(145deg,#1a0a1e,#2d1530);border:2px solid #c084b0;color:#e8c0d8;}
-.sg-char-liqing .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#e879b0,#8b3a6a);border:2px solid #c084b0;box-shadow:0 0 20px rgba(192,132,176,.4);}
+.sg-char-liqing{border-color:#c084b0;background:linear-gradient(145deg,#1a0a1e,#2d1530);}
+.sg-char-liqing .sg-cs-avatar{background:radial-gradient(circle at 30% 30%,#e879b0,#8b3a6a);}
 .sg-char-liqing .sg-cs-char-name{color:#f0b8d8;text-shadow:0 0 10px rgba(240,184,216,.3);}
 .sg-char-liqing .sg-cs-char-title{color:#d4a0c4;}
-.sg-char-liqing::before{content:'';position:absolute;top:-20%;left:50%;width:80px;height:80px;background:radial-gradient(circle,rgba(232,121,176,.08),transparent);}
+.sg-char-liqing::before{content:'';position:absolute;top:-20%;left:50%;width:100px;height:100px;background:radial-gradient(circle,rgba(232,121,176,.08),transparent);pointer-events:none;z-index:0;}
+/* 人物选择容器 */
+.sg-cs-cards{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;padding:.5rem 0;}
+/* 响应式角色卡片 */
+@media(min-width:1200px){
+  .sg-cs-portrait-card{width:260px;}
+  .sg-cs-portrait-card .sg-cs-avatar{max-height:320px;}
+  .sg-cs-portrait-card .sg-cs-char-name{font-size:1.3rem;}
+}
+@media(max-width:768px){
+  .sg-cs-portrait-card{width:160px;}
+  .sg-cs-portrait-card .sg-cs-avatar{max-height:200px;font-size:3rem;}
+}
 /* 战斗中玩家肖像（Item 6） */
 .sg-player-portrait-frame{
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
@@ -924,8 +967,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
 /* ── 战斗 ── */
 .sg-battle-bg{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%, rgba(180,120,60,0.08) 0%, transparent 70%);pointer-events:none;z-index:-1;}
-.sg-enemy-area{text-align:center;padding:.5rem 0 .8rem;}
-.sg-enemy{display:inline-block;padding:.8rem 1.2rem;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:160px;position:relative;overflow:hidden;}
+.sg-enemy-area{text-align:center;padding:.5rem 0 .8rem;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.sg-enemy-area.sg-group-battle .sg-enemy{flex:1;max-width:280px;min-width:140px;}
+.sg-enemy{display:inline-block;padding:.8rem 1.2rem;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:160px;position:relative;overflow:hidden;transition:all .3s;}
 .sg-enemy-name{font-size:1rem;font-weight:700;color:var(--red-seal);margin-bottom:.2rem;}
 .sg-enemy-intent{font-size:.6rem;color:var(--text-faint);margin-bottom:.1rem;min-height:1.2em;}
 .sg-enemy-intent-val{font-size:.55rem;color:var(--text-dim);margin-bottom:.1rem;min-height:1em;}
@@ -939,10 +983,15 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-buff{display:inline-block;padding:.1rem .3rem;border-radius:4px;background:var(--gold-dim);margin:0 .1rem;font-weight:600;}
 .sg-buff.sg-debuff{background:rgba(194,58,43,0.15);color:var(--red-seal);}
 .sg-dmg-float{
-  position:absolute;font-size:1.1rem;font-weight:900;pointer-events:none;z-index:10;
+  position:absolute;font-size:1.3rem;font-weight:900;pointer-events:none;z-index:100;
+  color:#ff4444;text-shadow:0 0 10px rgba(255,68,68,.6),0 0 20px rgba(255,68,68,.2);
   animation:sgDmgFloat .8s ease-out forwards;
+  transform:translateX(-50%);font-family:serif;
 }
-@keyframes sgDmgFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-40px) scale(1.3)}}
+.sg-dmg-float.heal{color:#55cc55;text-shadow:0 0 10px rgba(85,204,85,.6);}
+.sg-dmg-float.block{color:#3b82f6;text-shadow:0 0 10px rgba(59,130,246,.5);}
+.sg-dmg-float.poison{color:#a855f7;text-shadow:0 0 10px rgba(168,85,247,.5);}
+@keyframes sgDmgFloat{0%{opacity:1;transform:translate(-50%,0) scale(1.2)}50%{transform:translate(-50%,-20px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-45px) scale(.95)}}
 .sg-enemy-portrait{font-size:2.2rem;margin-bottom:.2rem;position:relative;z-index:1;}
 /* ── 敌人立绘增强（Item 10） ── */
 .sg-enemy-portrait.sg-enemy-enhanced{
@@ -1108,17 +1157,48 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
 /* ── 术语浮层提示 ── */
 .sg-tooltip-wrap{position:relative;display:inline;}
-.sg-term{cursor:help;border-bottom:1px dashed var(--gold);color:var(--gold);}
-.sg-term:hover+.sg-tooltip,.sg-tooltip:hover{opacity:1;visibility:visible;transform:translateX(0);}
+.sg-term{cursor:help;border-bottom:1px dashed var(--gold);color:var(--gold);transition:color .2s;}
+.sg-term:hover{color:#fff;text-shadow:0 0 8px rgba(201,168,76,.4);}
+.sg-term:hover+.sg-tooltip,.sg-tooltip:hover{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
 .sg-tooltip{
-  position:absolute;bottom:130%;left:50%;transform:translateX(-50%) translateY(4px);
-  background:var(--bg-card);color:var(--text);border:1px solid var(--gold);border-radius:6px;
-  padding:.4rem .6rem;font-size:.6rem;line-height:1.4;white-space:nowrap;
-  opacity:0;visibility:hidden;transition:all .15s;z-index:100;
-  pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2);
-  max-width:220px;white-space:normal;
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);
+  background:linear-gradient(145deg,var(--bg-card),var(--ink-800));color:var(--ink-100);
+  border:1px solid var(--gold);border-radius:8px;
+  padding:.45rem .7rem;font-size:.65rem;line-height:1.5;
+  opacity:0;visibility:hidden;transition:all .2s cubic-bezier(.4,0,.2,1);z-index:1000;
+  pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.35),0 0 0 1px rgba(201,168,76,.1);
+  max-width:260px;white-space:normal;font-weight:400;letter-spacing:.02em;
 }
 .sg-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:var(--gold);}
+.sg-tooltip::before{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:8px solid transparent;border-top-color:rgba(201,168,76,.15);margin-top:-1px;}
+
+/* ── 简化版状态浮层提示（Item 5） ── */
+.sg-stat-tip{position:relative;cursor:help;}
+.sg-stat-tip .sg-stat-tooltip{
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%) translateY(4px);
+  background:var(--ink-800);color:var(--ink-100);
+  border:1px solid var(--gold);border-radius:6px;
+  padding:.3rem .5rem;font-size:.55rem;line-height:1.4;white-space:nowrap;
+  opacity:0;visibility:hidden;transition:all .2s;z-index:1000;
+  pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.sg-stat-tip:hover .sg-stat-tooltip{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+
+/* ── 灵丹/物品浮层（Item 10） ── */
+.sg-pill-tip{position:relative;display:inline-flex;cursor:pointer;}
+.sg-pill-tip .sg-pill-tooltip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);
+  background:linear-gradient(145deg,#2d1a0a,#1a0e05);color:var(--gold-light);
+  border:1px solid var(--gold);border-radius:8px;
+  padding:.5rem .8rem;font-size:.6rem;line-height:1.5;
+  opacity:0;visibility:hidden;transition:all .2s;z-index:1000;
+  pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.4);
+  min-width:120px;text-align:center;
+}
+.sg-pill-tip:hover .sg-pill-tooltip{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+.sg-pill-tip .sg-pill-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
   border:5px solid transparent;border-top-color:var(--gold);}
 
 /* ── 抽牌动画 ── */
@@ -1343,7 +1423,17 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
   @keyframes sg-particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
 .sg-fade-out{animation:sgFadeOut .25s ease forwards;}
-@keyframes sgFadeOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-5px) scale(0.98)}}</style>
+@keyframes sgFadeOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-5px) scale(0.98)}}
+/* ── 移动端性能优化：减少动画消耗，开启GPU加速（Item 17） ── */
+@media(max-width:768px){
+  .sg-enemy-portrait.sg-enemy-enhanced::before{animation:none !important;}
+  .sg-card[style*="#ffcc00"],.sg-card.primary{animation:none !important;}
+  .sg-battle-bg{background-attachment:scroll !important;}
+  .sg-cs-portrait-card::before,.sg-cs-portrait-card::after{display:none !important;}
+  .sg-char-lizhi::before,.sg-char-sush::before,.sg-char-liqing::before{display:none !important;}
+}
+/* 通用GPU加速 */
+.sg-card,.sg-btn,.sg-enemy,.sg-cs-portrait-card{will-change:transform;}</style>
 </head>
 <body>
 
@@ -1895,7 +1985,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       <!-- 战斗画面 -->
       <div id="sgBattle" class="sg-screen" style="display:none">
         <div class="sg-battle-bg"></div>
-        <div class="sg-enemy-area">
+        <div class="sg-enemy-area" id="sgEnemyArea">
           <div class="sg-enemy" id="sgEnemy">
             <div class="sg-enemy-portrait" id="sgEnemyPortrait">👹</div>
             <div class="sg-enemy-name" id="sgEnemyName">诗魔</div>
@@ -1910,6 +2000,21 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
             <div class="sg-enemy-buffs" id="sgEnemyBuffs"></div>
             <div class="sg-enemy-poison" id="sgEnemyPoison"></div>
           </div>
+          <!-- 第二个敌人（群体敌人时显示） -->
+          <div class="sg-enemy" id="sgEnemy2" style="display:none;">
+            <div class="sg-enemy-portrait" id="sgEnemyPortrait2">👹</div>
+            <div class="sg-enemy-name" id="sgEnemyName2">诗魔</div>
+            <div class="sg-enemy-desc" id="sgEnemyDesc2"></div>
+            <div class="sg-enemy-intent" id="sgEnemyIntent2"></div>
+            <div class="sg-enemy-intent-val" id="sgIntentVal2"></div>
+            <div class="sg-hp-bar-wrap">
+              <div class="sg-hp-fill" id="sgEnemyHpFill2" style="width:100%"></div>
+            </div>
+            <div class="sg-hp-text"><span id="sgEnemyHp2">0</span>/<span id="sgEnemyMaxHp2">0</span></div>
+            <div class="sg-enemy-block" id="sgEnemyBlock2" style="display:none">🛡️ <span id="sgEnemyBlockNum2">0</span></div>
+            <div class="sg-enemy-buffs" id="sgEnemyBuffs2"></div>
+            <div class="sg-enemy-poison" id="sgEnemyPoison2"></div>
+          </div>
         </div>
         <div class="sg-player-area" id="sgPlayerArea">
           <div class="sg-player-portrait-wrap">
@@ -1920,13 +2025,13 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
             </div>
           </div>
           <div class="sg-status">
-            <div class="sg-status-item">❤️ <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span></div>
-            <div class="sg-status-item">⚡ <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span></div>
-            <div class="sg-status-item">🛡️ <span id="sgPlayerBlock">0</span></div>
-            <div class="sg-status-item">💪 <span id="sgPlayerStrength">0</span></div>
-            <div class="sg-status-item">☠️ <span id="sgPlayerPoison">0</span></div>
-            <div class="sg-status-item" style="cursor:pointer" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span> 🃏<span id="sgDrawPile">0</span> ✋<span id="sgHandCount">0</span> 📄<span id="sgDiscardPile">0</span></div>
-            <div class="sg-status-item">🔄 <span id="sgTurnNum">0</span></div>
+            <div class="sg-status-item sg-stat-tip">❤️ <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span><span class="sg-stat-tooltip">当前生命值，归零则落败</span></div>
+            <div class="sg-status-item sg-stat-tip">⚡ <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span><span class="sg-stat-tooltip">行动能量，打出卡牌需要消耗能量</span></div>
+            <div class="sg-status-item sg-stat-tip">🛡️ <span id="sgPlayerBlock">0</span><span class="sg-stat-tooltip">护盾，抵消等量攻击伤害，每回合重置</span></div>
+            <div class="sg-status-item sg-stat-tip">💪 <span id="sgPlayerStrength">0</span><span class="sg-stat-tooltip">力量，每层使攻击伤害+3</span></div>
+            <div class="sg-status-item sg-stat-tip">☠️ <span id="sgPlayerPoison">0</span><span class="sg-stat-tooltip">中毒，每回合结束时受到层数伤害</span></div>
+            <div class="sg-status-item" id="sgDeckCount">📚 <span id="sgDeckCountNum">0</span> <span class="sg-stat-tip" id="sgDrawPileBtn" style="cursor:pointer">🃏<span id="sgDrawPile">0</span><span class="sg-stat-tooltip">抽牌堆：点击查看剩余卡牌</span></span> ✋<span id="sgHandCount">0</span> <span class="sg-stat-tip" id="sgDiscardPileBtn" style="cursor:pointer">📄<span id="sgDiscardPile">0</span><span class="sg-stat-tooltip">弃牌堆：点击查看已弃卡牌</span></span></div>
+            <div class="sg-status-item sg-stat-tip">🔄 <span id="sgTurnNum">0</span><span class="sg-stat-tooltip">当前回合数</span></div>
           </div>
           <div id="sgPillsArea" style="text-align:center;padding:0.2rem 0;min-height:1.8rem;"></div>
           <div class="sg-hand" id="sgHand"></div>
@@ -3902,7 +4007,32 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
     function damageEnemy(enemyIdx, dmg, isAoe){
       if(!gBattle) return;
-      if(gBattle.hp <= 0) return;
+      if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)) return;
+
+      // 群体敌人：伤害交替作用于两个敌人（AOE同时攻击两个）（Item 3）
+      if(gBattle._isGroup){
+        if(isAoe){
+          // AOE: 两个敌人都受一半伤害
+          var halfDmg = Math.floor(dmg / 2);
+          applyDmgToGroupEnemy1(halfDmg);
+          applyDmgToGroupEnemy2(halfDmg);
+        } else {
+          // 单伤：优先攻击存活的那个，交替攻击
+          if(gBattle.hp > 0 && gBattle._groupHp2 > 0){
+            // 两个都活着，轮流攻击
+            if(!gBattle._groupLastHit) gBattle._groupLastHit = 1;
+            if(gBattle._groupLastHit === 1){ applyDmgToGroupEnemy2(dmg); gBattle._groupLastHit = 2; }
+            else { applyDmgToGroupEnemy1(dmg); gBattle._groupLastHit = 1; }
+          } else if(gBattle.hp > 0){
+            applyDmgToGroupEnemy1(dmg);
+          } else {
+            applyDmgToGroupEnemy2(dmg);
+          }
+        }
+        renderBattle();
+        if(gBattle.hp <= 0 && gBattle._groupHp2 <= 0) checkEnemyDeath();
+        return;
+      }
 
       // Enemy block
       if(gBattle.block > 0){
@@ -3962,6 +4092,29 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
       if(hasRelic('longquanjian') && gBattle.isElite && gBattle.hp <= 0){
         G.gold += 15;
       }
+    }
+
+    // 群体敌人辅助函数
+    function applyDmgToGroupEnemy1(dmg){
+      if(gBattle.block > 0){
+        if(gBattle.block >= dmg){ gBattle.block -= dmg; dmg = 0; }
+        else { dmg -= gBattle.block; gBattle.block = 0; }
+      }
+      gBattle.hp -= dmg;
+      if(gBattle.hp < 0){ gBattle._groupHp2 += gBattle.hp; gBattle.hp = 0; }
+      if(gBattle.hp < 0) gBattle.hp = 0;
+      showDmgFloat(document.getElementById('sgBattle').offsetLeft+60, 60, dmg);
+      // 闪红特效
+      var ep = document.getElementById('sgEnemyPortrait');
+      if(ep && dmg > 0){ ep.style.transition='transform 0.08s'; ep.style.transform='scale(1.15)'; setTimeout(function(){ ep.style.transform='scale(1)'; },80); }
+    }
+    function applyDmgToGroupEnemy2(dmg){
+      gBattle._groupHp2 -= dmg;
+      if(gBattle._groupHp2 < 0){ gBattle.hp += gBattle._groupHp2; gBattle._groupHp2 = 0; }
+      if(gBattle._groupHp2 < 0) gBattle._groupHp2 = 0;
+      showDmgFloat(document.getElementById('sgBattle').offsetLeft+document.getElementById('sgBattle').offsetWidth-60, 60, dmg);
+      var ep2 = document.getElementById('sgEnemyPortrait2');
+      if(ep2 && dmg > 0){ ep2.style.transition='transform 0.08s'; ep2.style.transform='scale(1.15)'; setTimeout(function(){ ep2.style.transform='scale(1)'; },80); }
     }
 
     function damagePlayer(dmg){
@@ -4276,11 +4429,12 @@ applyPoison();
         var pillId = G.pills[pi];
         var pill = PILLS[pillId];
         if(!pill) continue;
-        var btn = document.createElement('button');
-        btn.className = 'sg-pill-btn';
-        btn.textContent = pill.icon + ' ' + pill.name;
-        btn.title = pill.desc;
-        btn.style.cssText = 'background:var(--btn-bg,#2a2a3e);color:var(--text,#e0e0e0);border:1px solid var(--gold,#c9a84c);border-radius:6px;padding:0.2rem 0.5rem;margin:0.15rem;font-size:0.65rem;cursor:pointer;';
+        var btn = document.createElement('span');
+        btn.className = 'sg-pill-tip';
+        btn.style.cssText = 'display:inline-flex;';
+        var tipText = renderPillTooltip(pill.name, pill.desc);
+        btn.innerHTML = '<button class="sg-pill-btn" style="background:var(--btn-bg,#2a2a3e);color:var(--text,#e0e0e0);border:1px solid var(--gold,#c9a84c);border-radius:6px;padding:0.2rem 0.5rem;margin:0.15rem;font-size:0.65rem;cursor:pointer;">' + pill.icon + ' ' + pill.name + '</button>' +
+          (tipText ? '<span class="sg-pill-tooltip">' + tipText + '</span>' : '');
         (function(pillId2){
           btn.onclick = function(){
             if(!gBattle || !gBattle.hand) return;
@@ -4340,35 +4494,81 @@ applyPoison();
         qun_jianyu:'⚔️⚔️',qun_yanwu:'🌫️🌫️'
       };
       var enemyEmoji = enemyEmojis[gBattle.id] || '👹';
-      document.getElementById('sgEnemyPortrait').textContent = enemyEmoji;
-      document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
-      document.getElementById('sgEnemyName').textContent = gBattle.name + (gBattle._isGroup ? ' ⚔️群' : '');
-      document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
-      var abilityNames = {enrage:"🔥暴怒",regen:"💚再生",summon:"👥召唤",curse:"💀诅咒"};
-      if(gBattle.specialAbility && abilityNames[gBattle.specialAbility]){
-        document.getElementById('sgEnemyDesc').textContent += ' ['+abilityNames[gBattle.specialAbility]+']';
+      var enemyArea = document.getElementById('sgEnemyArea');
+      if(gBattle._isGroup){
+        // 群体敌人：显示两个敌人框（Item 3）
+        if(enemyArea) enemyArea.className = 'sg-enemy-area sg-group-battle';
+        document.getElementById('sgEnemy2').style.display = '';
+        // 初始化二组血量
+        if(!gBattle._groupHp2){ gBattle._groupHp2 = Math.ceil(gBattle.maxHp/2); gBattle._groupMaxHp2 = gBattle._groupHp2; }
+        // 敌人1
+        document.getElementById('sgEnemyPortrait').textContent = enemyEmoji;
+        document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
+        document.getElementById('sgEnemyName').textContent = gBattle.name + ' · 甲';
+        document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
+        var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
+        document.getElementById('sgEnemyHpFill').style.width = eHpPct + '%';
+        document.getElementById('sgEnemyHp').textContent = gBattle.hp; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
+        document.getElementById('sgEnemyBlockNum').textContent = gBattle.block;
+        document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
+        // 敌人2
+        var e2El = document.getElementById('sgEnemyPortrait2');
+        if(e2El) e2El.textContent = enemyEmoji;
+        document.getElementById('sgEnemyName2').textContent = gBattle.name + ' · 乙';
+        document.getElementById('sgEnemyDesc2').textContent = gBattle.desc;
+        var e2HpPct = Math.max(0, Math.floor(gBattle._groupHp2 / gBattle._groupMaxHp2 * 100));
+        document.getElementById('sgEnemyHpFill2').style.width = e2HpPct + '%';
+        document.getElementById('sgEnemyHp2').textContent = gBattle._groupHp2;
+        document.getElementById('sgEnemyMaxHp2').textContent = gBattle._groupMaxHp2;
+        document.getElementById('sgEnemyBlockNum2').textContent = 0;
+        document.getElementById('sgEnemyBlock2').style.display = 'none';
+        document.getElementById('sgEnemyBuffs2').innerHTML = '';
+        document.getElementById('sgEnemyPoison2').textContent = '';
+        // 意图只显示在敌人1上
+        var intentNames = { attack:'⚔️攻击', defend:'🛡️防御', debuff:'💀衰弱', buff:'⬆️强化', heal:'❤️回复' };
+        document.getElementById('sgEnemyIntent').textContent = intentNames[gBattle.intent] || '⚔️';
+        document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
+        document.getElementById('sgEnemyIntent2').textContent = '';
+        document.getElementById('sgIntentVal2').textContent = '';
+        // Buff只显示在敌人1
+        var ebHtml = '';
+        if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff">⬆力+' + gBattle.buffs.str + '</span>';
+        if(gBattle.buffs.vuln > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇易伤' + gBattle.buffs.vuln + '</span>';
+        if(gBattle.buffs.weak > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇虚弱' + gBattle.buffs.weak + '</span>';
+        document.getElementById('sgEnemyBuffs').innerHTML = ebHtml;
+        document.getElementById('sgEnemyPoison').textContent = gBattle.enemyPoison;
+      } else {
+        // 单个敌人
+        if(enemyArea) enemyArea.className = 'sg-enemy-area';
+        document.getElementById('sgEnemy2').style.display = 'none';
+        document.getElementById('sgEnemyPortrait').textContent = enemyEmoji;
+        document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
+        document.getElementById('sgEnemyName').textContent = gBattle.name;
+        document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
+        var abilityNames = {enrage:"🔥暴怒",regen:"💚再生",summon:"👥召唤",curse:"💀诅咒"};
+        if(gBattle.specialAbility && abilityNames[gBattle.specialAbility]){
+          document.getElementById('sgEnemyDesc').textContent += ' ['+abilityNames[gBattle.specialAbility]+']';
+        }
+        var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
+        document.getElementById('sgEnemyHpFill').style.width = eHpPct + '%';
+        document.getElementById('sgEnemyHp').textContent = gBattle.hp; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
+        document.getElementById('sgEnemyBlockNum').textContent = gBattle.block; document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
+
+        // Intent
+        var intentNames = { attack:'⚔️攻击', defend:'🛡️防御', debuff:'💀衰弱', buff:'⬆️强化', heal:'❤️回复' };
+        document.getElementById('sgEnemyIntent').textContent = intentNames[gBattle.intent] || '⚔️';
+        document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
+
+        // Enemy buffs
+        var ebHtml = '';
+        if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff">⬆力+' + gBattle.buffs.str + '</span>';
+        if(gBattle.buffs.vuln > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇易伤' + gBattle.buffs.vuln + '</span>';
+        if(gBattle.buffs.weak > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇虚弱' + gBattle.buffs.weak + '</span>';
+        document.getElementById('sgEnemyBuffs').innerHTML = ebHtml;
+
+        // Enemy poison
+        document.getElementById('sgEnemyPoison').textContent = gBattle.enemyPoison;
       }
-      var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
-      var hpBarWrap = document.querySelector('.sg-enemy .sg-hp-bar-wrap');
-      if(hpBarWrap) hpBarWrap.className = 'sg-hp-bar-wrap sg-hp-bar-enhanced';
-      document.getElementById('sgEnemyHpFill').style.width = eHpPct + '%';
-      document.getElementById('sgEnemyHp').textContent = gBattle.hp; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
-      document.getElementById('sgEnemyBlockNum').textContent = gBattle.block; document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
-
-      // Intent
-      var intentNames = { attack:'⚔️攻击', defend:'🛡️防御', debuff:'💀衰弱', buff:'⬆️强化', heal:'❤️回复' };
-      document.getElementById('sgEnemyIntent').textContent = intentNames[gBattle.intent] || '⚔️';
-      document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
-
-      // Enemy buffs
-      var ebHtml = '';
-      if(gBattle.buffs.str > 0) ebHtml += '<span class="sg-buff">⬆力+' + gBattle.buffs.str + '</span>';
-      if(gBattle.buffs.vuln > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇易伤' + gBattle.buffs.vuln + '</span>';
-      if(gBattle.buffs.weak > 0) ebHtml += '<span class="sg-buff sg-debuff">⬇虚弱' + gBattle.buffs.weak + '</span>';
-      document.getElementById('sgEnemyBuffs').innerHTML = ebHtml;
-
-      // Enemy poison
-      document.getElementById('sgEnemyPoison').textContent = gBattle.enemyPoison;
 
       // Player Portrait (Item 6)
       var charPortraits = {lizhi:'🌙',sush:'🌊',liqing:'🌸'};
@@ -5020,14 +5220,14 @@ applyPoison();
     /* ══════ 特效与动画 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
 
-    function showDmgFloat(x, y, val){
+    function showDmgFloat(x, y, val, type){
       var el = document.createElement('div');
-      el.className = 'sg-dmg-float';
+      el.className = 'sg-dmg-float' + (type ? ' ' + type : '');
       el.textContent = val;
       el.style.left = x + 'px';
       el.style.top = y + 'px';
       document.body.appendChild(el);
-      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 800);
+      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 850);
     }
 
     function showEffectFloat(x, y, text){
@@ -5065,8 +5265,61 @@ applyPoison();
     }
 
     /* ═══════════════════════════════════════════════════════════════════════ */
-    /* ══════ 卡组查看 ══════ */
+    /* ══════ 卡组/牌堆查看 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
+
+    // 局内查看抽牌堆或弃牌堆（Item 7）
+    function showBattlePilePopup(type){
+      if(!gBattle || !G) return;
+      var pile = type === 'draw' ? gBattle.drawPile : gBattle.discardPile;
+      var title = type === 'draw' ? '🃏 抽牌堆' : '📄 弃牌堆';
+      var overlay = document.createElement('div');
+      overlay.className = 'sg-deck-overlay';
+      overlay.onclick = function(){ document.body.removeChild(overlay); };
+      var panel = document.createElement('div');
+      panel.className = 'sg-deck-panel';
+      panel.onclick = function(e){ e.stopPropagation(); };
+      panel.innerHTML = '<h3>' + title + ' (' + pile.length + '张) <span style="float:right;cursor:pointer;font-size:1rem;" onclick="this.closest(\'.sg-deck-overlay\').remove();">✕</span></h3>';
+      if(pile.length === 0){
+        panel.innerHTML += '<div style="text-align:center;color:var(--text-faint);padding:1rem 0;">牌堆为空</div>';
+      } else {
+        var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+        panel.innerHTML += '<div class="sg-deck-grid">';
+        // 展示牌堆时按原始顺序（从底到顶），也即倒序
+        for(var pi=pile.length-1;pi>=0;pi--){
+          var cd = G.deck[pile[pi]];
+          if(!cd) continue;
+          panel.innerHTML += '<div class="sg-card" style="border-color:'+(rarityColors3[cd.rarity]||'#a8a8a8')+';cursor:default;">' +
+            '<div class="sg-card-cost">'+(cd.cost||0)+'</div>' +
+            '<div class="sg-card-name">'+cd.name+'</div>' +
+            '<div class="sg-card-desc">'+(cd.desc||'')+'</div>' +
+            '<div class="sg-card-type">'+cd.type+'</div></div>';
+        }
+        panel.innerHTML += '</div>';
+      }
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+    }
+
+    // 灵丹/物品渲染增强：加古风图标和tooltip（Item 10）
+    var PILL_ICONS = {
+      '回复':{icon:'🌿',tip:'恢复少量生命值','恢复5HP':{icon:'🌿',tip:'恢复5点生命值'}},
+      '力量':{icon:'🗡️',tip:'临时提升攻击力'},
+      '格挡':{icon:'🛡️',tip:'获得临时护盾'},
+      '能量':{icon:'⚡',tip:'恢复行动能量'},
+      '抽牌':{icon:'📜',tip:'额外抽取卡牌'},
+      '叠毒':{icon:'☠️',tip:'对敌人施加中毒'},
+    };
+    function getPillTip(name){
+      for(var key in PILL_ICONS){
+        if(name.indexOf(key) !== -1) return PILL_ICONS[key].tip;
+      }
+      return '';
+    }
+    function renderPillTooltip(name, desc){
+      var tip = getPillTip(name);
+      return tip || desc || '';
+    }
 
     function showDeckPopup(){
       var popup = document.getElementById('sgDeckPopup');
@@ -5335,11 +5588,14 @@ var emoji = charEmojis[ch.id] || '📜';
 var cssClass = charClasses[ch.id] || '';
 html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' +
                 '<div class="sg-cs-avatar"><img class="sg-cs-avatar-img" src="images/'+ch.id+'.png" onerror="this.style.display=\'none\'">'+emoji+'</div>' +
+                '<div class="sg-cs-info-overlay">' +
                 '<div class="sg-cs-char-name">'+ch.name+'</div>' +
                 '<div class="sg-cs-char-title">「'+ch.title+'」</div>' +
-                '<div class="sg-cs-hp">❤️ '+ch.maxHp+'</div>' +
-                '<div class="sg-cs-desc">'+ch.desc+'</div>' +
-                '<div class="sg-cs-ability">'+ch.ability+'</div>' +
+                '</div>' +
+                '<div class="sg-cs-detail">' +
+                '<div class="sg-cs-hp">❤️ 最大生命：'+ch.maxHp+'</div>' +
+                '<div class="sg-cs-ability">✨ '+ch.ability+'</div>' +
+                '</div>' +
                 '</div>';
             }
             container.innerHTML = html2;
@@ -5381,6 +5637,16 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
       var deckBtn = document.getElementById('sgDeckCount');
       if(deckBtn){
         deckBtn.addEventListener('click', showDeckPopup);
+      }
+
+      // 局内牌堆点击查看（Item 7）
+      var drawPileBtn = document.getElementById('sgDrawPileBtn');
+      if(drawPileBtn){
+        drawPileBtn.addEventListener('click', function(){ showBattlePilePopup('draw'); });
+      }
+      var discardPileBtn = document.getElementById('sgDiscardPileBtn');
+      if(discardPileBtn){
+        discardPileBtn.addEventListener('click', function(){ showBattlePilePopup('discard'); });
       }
 
       // Shop leave
