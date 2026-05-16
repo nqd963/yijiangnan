@@ -62,28 +62,35 @@
 html{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 button,.mp-app,.cipu-tab,.game-btn,.pz-submit,.game-note{touch-action:manipulation;}
 :root{
+  --ink-900:#141414;--ink-800:#222222;--ink-700:#333333;
+  --ink-600:#555555;--ink-400:#888888;--ink-200:#bbbbbb;
+  --ink-100:#e0e0e0;--ink-50:#f0f0f0;
+  --gold:#c9a84c;--gold-light:#e8d48b;--gold-dim:rgba(201,168,76,0.15);
+  --gold-soft:rgba(201,168,76,0.06);
+  --red-seal:#c23a2b;--red-light:rgba(194,58,43,0.08);
+  --bg:#1a1a1e;--bg-card:#252529;--bg-card-alt:rgba(37,37,41,0.9);
+  --text:#e8e0d8;--text-dim:#a8a098;--text-faint:#7a7a7a;
+  --border:#333338;--shadow:rgba(0,0,0,0.4);
+  --hero-from:#0a0a0e;--hero-mid:#141418;--hero-to:#1a1a1e;
+  --particle-color:rgba(201,168,76,0.10);
+  --radius-sm:4px;--radius-md:6px;--radius-lg:10px;
+  transition:background .4s,color .4s;
+}
+body.light{
+  --bg:#f0ede8;--bg-card:#ffffff;--bg-card-alt:rgba(255,255,255,0.85);
+  --text:#1a1a1e;--text-dim:#555555;--text-faint:#999999;
+  --border:#d8d4d0;--shadow:rgba(0,0,0,0.08);
   --ink-900:#1a1410;--ink-800:#2f2520;--ink-700:#4a3a30;
   --ink-600:#5c4a3e;--ink-400:#9a8476;--ink-200:#d4c9bf;
   --ink-100:#efe8e2;--ink-50:#f7f3ef;
-  --gold:#c9a84c;--gold-light:#e8d48b;--gold-dim:rgba(201,168,76,0.12);
-  --red-seal:#c23a2b;--red-light:rgba(194,58,43,0.07);
-  --bg:#f5efe6;--bg-card:#ffffff;--bg-card-alt:rgba(255,255,255,0.6);
-  --text:#2f2520;--text-dim:#5c4a3e;--text-faint:#9a8476;
-  --border:#d4c9bf;--shadow:rgba(0,0,0,0.06);
   --hero-from:#1a1410;--hero-mid:#2f2520;--hero-to:#3d3028;
-  --particle-color:rgba(201,168,76,0.12);
-  transition:background .4s,color .4s;
-}
-body.dark{
-  --bg:#181310;--bg-card:#241e18;--bg-card-alt:rgba(36,30,24,0.8);
-  --text:#e8ddd0;--text-dim:#b8a89a;--text-faint:#8a7a6a;
-  --border:#3d3028;--shadow:rgba(0,0,0,0.3);
-  --hero-from:#0d0a08;--hero-mid:#181310;--hero-to:#1f1813;
-  --particle-color:rgba(201,168,76,0.08);
-  --red-light:rgba(194,58,43,0.12);
+  --particle-color:rgba(201,168,76,0.10);
+  --red-light:rgba(194,58,43,0.06);
 }
 html,body{width:100%;min-height:100vh;margin:0;padding:0;}
-body{font-family:'Noto Serif SC','STKaiti','KaiTi','SimSun','FangSong','Microsoft YaHei',serif;background:var(--bg);color:var(--text);line-height:1.9;overflow-x:hidden;min-height:100vh;}
+body{font-family:'Noto Sans SC','Microsoft YaHei','PingFang SC','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;min-height:100vh;}
+/* 诗意标题保持衬线字体 */
+.poem-text,.sg-poem,.sg-card-name,.sg-enemy-name,.sg-title-text,.sg-cs-name,.sg-shop-title{font-family:'Noto Serif SC','STKaiti','KaiTi','FangSong',serif;}
 
 /* ═══════════════════════════ SCROLL PROGRESS ═══════════════════════════ */
 .progress-wrap{position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;background:transparent;}
@@ -800,15 +807,18 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
 /* ── 通用 ── */
 .sg-btn{
-  padding:.6rem 1.4rem;border:1px solid var(--border);border-radius:100px;
-  background:transparent;color:var(--text-dim);cursor:pointer;font-size:.9rem;
-  font-family:inherit;transition:all .2s;letter-spacing:.05em;
+  padding:.55rem 1.4rem;border:1px solid var(--border);border-radius:var(--radius-md);
+  background:transparent;color:var(--text-dim);cursor:pointer;font-size:.85rem;
+  font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;
+  transition:all .2s;letter-spacing:.03em;
   -webkit-tap-highlight-color:transparent;user-select:none;
+  text-transform:none;
 }
-.sg-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
-.sg-btn-primary{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;}
-.sg-btn-primary:hover{opacity:.85;color:#fff;}
-.sg-btn-small{padding:.35rem 1rem;font-size:.8rem;}
+.sg-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-soft);}
+.sg-btn:active{transform:scale(0.97);}
+.sg-btn-primary{background:var(--gold);color:#1a1a1e;border-color:var(--gold);font-weight:600;}
+.sg-btn-primary:hover{opacity:.85;color:#1a1a1e;background:var(--gold);}
+.sg-btn-small{padding:.3rem .9rem;font-size:.75rem;}
 
 /* ── 标题 ── */
 .sg-title-icon{font-size:3.5rem;text-align:center;padding-top:2.5rem;}
@@ -919,8 +929,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   padding:.3rem .6rem .3rem .3rem;margin:0 auto;width:auto;
 }
 .sg-player-portrait-icon{
-  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:1.3rem;border:2px solid var(--gold);
+  width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;border:2px solid var(--gold);
 }
 .sg-player-portrait-icon.lizhi{background:radial-gradient(circle at 30% 30%,#ffd700,#b8860b);border-color:#c9a84c;}
 .sg-player-portrait-icon.sush{background:radial-gradient(circle at 30% 30%,#60a5fa,#1e4b7a);border-color:#6b9bc4;}
@@ -1003,15 +1013,34 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 /* ── 敌人立绘增强（Item 10） ── */
 .sg-enemy-portrait.sg-enemy-enhanced{
   position:relative;display:inline-flex;align-items:center;justify-content:center;
-  width:60px;height:60px;border-radius:50%;margin:0 auto .3rem;
-  background:radial-gradient(circle at 40% 35%, rgba(120,60,60,0.5), rgba(30,10,10,0.8)) !important;
-  border:2px solid rgba(180,80,80,0.4);box-shadow:0 0 20px rgba(180,60,60,0.2),inset 0 0 15px rgba(120,40,40,0.2);
+  width:82px;height:82px;border-radius:50%;margin:0 auto .3rem;
+  background:radial-gradient(circle at 35% 30%, rgba(201,168,76,0.25), rgba(60,40,20,0.5) 60%, rgba(20,12,8,0.7)) !important;
+  border:2px solid rgba(201,168,76,0.5);box-shadow:0 0 20px rgba(201,168,76,0.15),inset 0 0 15px rgba(201,168,76,0.1);
   overflow:hidden;font-size:2rem;line-height:1;
 }
 .sg-enemy-portrait.sg-enemy-enhanced::before{
-  content:'';position:absolute;inset:-4px;
-  background:conic-gradient(from 0deg, transparent, rgba(180,60,60,0.2), transparent, rgba(180,60,60,0.2), transparent);
+  content:'';position:absolute;inset:-3px;
+  background:conic-gradient(from 0deg, transparent, rgba(201,168,76,0.15), transparent, rgba(201,168,76,0.15), transparent);
   animation:sgEnemyGlow 4s linear infinite;
+  border-radius:50%;
+}
+/* 敌人立绘Type变体 - 保持与角色立绘风格一致 */
+.sg-enemy-portrait.sg-enemy-enhanced.sg-etype-act1{
+  background:radial-gradient(circle at 35% 30%, rgba(180,140,80,0.3), rgba(50,35,20,0.5) 60%, rgba(16,12,10,0.7)) !important;
+  border-color:rgba(180,140,80,0.5);
+}
+.sg-enemy-portrait.sg-enemy-enhanced.sg-etype-act2{
+  background:radial-gradient(circle at 35% 30%, rgba(160,100,160,0.3), rgba(40,20,50,0.5) 60%, rgba(12,8,16,0.7)) !important;
+  border-color:rgba(160,100,160,0.5);
+}
+.sg-enemy-portrait.sg-enemy-enhanced.sg-etype-act3{
+  background:radial-gradient(circle at 35% 30%, rgba(80,130,200,0.3), rgba(20,30,60,0.5) 60%, rgba(8,8,16,0.7)) !important;
+  border-color:rgba(80,130,200,0.5);
+}
+.sg-enemy-portrait.sg-enemy-enhanced.sg-etype-boss{
+  background:radial-gradient(circle at 35% 30%, rgba(200,60,40,0.35), rgba(60,10,10,0.6) 60%, rgba(16,4,4,0.8)) !important;
+  border-color:rgba(200,60,40,0.6);
+  box-shadow:0 0 30px rgba(200,60,40,0.25),inset 0 0 20px rgba(200,60,40,0.15);
 }
 @keyframes sgEnemyGlow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
@@ -1078,7 +1107,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 /* ── 玩家状态 ── */
 .sg-player-area{padding:.3rem 0;}
 .sg-player-portrait-wrap{text-align:center;padding:.3rem 0;}
-.sg-player-portrait{font-size:1.8rem;display:inline-block;position:relative;width:36px;height:36px;line-height:36px;text-align:center;}
+.sg-player-portrait{font-size:1.8rem;display:inline-block;position:relative;width:48px;height:48px;line-height:48px;text-align:center;}
 .sg-player-name{font-size:.75rem;color:var(--text-dim);}
 .sg-status{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;padding:.3rem 0;font-size:.68rem;color:var(--text-dim);}
 .sg-status-item{background:var(--bg-card-alt);padding:.2rem .5rem;border-radius:6px;border:1px solid var(--border);}
@@ -1089,9 +1118,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   min-height:110px;padding:.4rem 0;overflow-y:auto;
 }
 .sg-card{
-  width:115px;padding:0;border-radius:10px;
-  background:linear-gradient(180deg,var(--bg-card) 0%,color-mix(in srgb,var(--bg-card),var(--text) 6%) 100%);
-  border:2px solid var(--border);cursor:pointer;
+  width:115px;padding:0;border-radius:var(--radius-sm);
+  background:linear-gradient(180deg,var(--bg-card) 0%,color-mix(in srgb,var(--bg-card),var(--text) 4%) 100%);
+  border:1px solid var(--border);cursor:pointer;
   text-align:center;transition:all .15s;
   display:flex;flex-direction:column;
   -webkit-tap-highlight-color:transparent;user-select:none;
@@ -1105,7 +1134,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   background:linear-gradient(180deg,rgba(255,255,255,.07) 0%,transparent 100%);
   pointer-events:none;border-radius:8px 8px 0 0;z-index:0;
 }
-.dark .sg-card::before{background:linear-gradient(180deg,rgba(255,255,255,.04) 0%,transparent 100%);}
+body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%,transparent 100%);}
 /* 卡牌悬浮立体抬起 */
 .sg-card:hover{
   transform:translateY(-10px) scale(1.05);
@@ -1241,7 +1270,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-pill-tip{position:relative;display:inline-flex;cursor:pointer;}
 .sg-pill-tip .sg-pill-tooltip{
   position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);
-  background:linear-gradient(145deg,#2d1a0a,#1a0e05);color:var(--gold-light);
+  background:linear-gradient(145deg,#4a3020,#3a2215);color:#f0d878;border:1px solid rgba(201,168,76,0.3);
   border:1px solid var(--gold);border-radius:8px;
   padding:.5rem .8rem;font-size:.6rem;line-height:1.5;
   opacity:0;visibility:hidden;transition:all .2s;z-index:1000;
@@ -1472,8 +1501,8 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   #sgEnemyArea{padding:0.3rem}
   .sg-btn{font-size:0.65rem;padding:0.3rem 0.6rem}
   .sg-rest-title{font-size:1.2rem}
-  .sg-enemy-portrait{width:60px;height:60px;font-size:1.4rem}
-  .sg-player-portrait{width:50px;height:50px;font-size:1.2rem}
+  .sg-enemy-portrait{width:72px;height:72px;font-size:1.6rem}
+  .sg-player-portrait{width:60px;height:60px;font-size:1.4rem}
   .sg-shop-items{grid-template-columns:repeat(2,1fr)}
   #sgMap{padding:0.3rem}
   .sg-map-node{width:38px;height:38px;font-size:.85rem;min-width:38px;}
@@ -1498,9 +1527,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   #sgHand .sg-card{min-width:60px;font-size:0.5rem}
   .sg-card .sg-card-cost{width:16px;height:16px;font-size:.5rem;line-height:16px;top:-5px;left:-5px;}
   #sgPlayerArea{flex-direction:column}
-  .sg-enemy-portrait{width:50px;height:50px;font-size:1.2rem}
-  .sg-player-portrait{width:40px;height:40px;font-size:1rem}
-  .sg-player-portrait-icon{width:32px;height:32px;font-size:1rem;}
+  .sg-enemy-portrait{width:60px;height:60px;font-size:1.4rem}
+  .sg-player-portrait{width:44px;height:44px;font-size:1.2rem}
+  .sg-player-portrait-icon{width:40px;height:40px;font-size:1.1rem;}
   .sg-enemy-portrait.sg-enemy-enhanced{width:44px;height:44px;font-size:1.4rem;}
   .sg-shop-items{grid-template-columns:1fr}
   .sg-hand{gap:4px;}
@@ -2598,14 +2627,14 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 
   /* ── Dark Mode ── */
   var toggle = document.getElementById('themeToggle');
-  var dark = localStorage.getItem('dark') === 'true';
-  if(dark) document.body.classList.add('dark');
-  toggle.textContent = dark ? '\u2600\uFE0F' : '\uD83C\uDF19';
+  var light = localStorage.getItem('light') === 'true';
+  if(light) document.body.classList.add('light');
+  toggle.textContent = light ? '\uD83C\uDF19' : '\u2600\uFE0F';
   toggle.addEventListener('click', function(){
-    dark = !dark;
-    document.body.classList.toggle('dark', dark);
-    toggle.textContent = dark ? '\u2600\uFE0F' : '\uD83C\uDF19';
-    localStorage.setItem('dark', dark);
+    light = !light;
+    document.body.classList.toggle('light', light);
+    toggle.textContent = light ? '\uD83C\uDF19' : '\u2600\uFE0F';
+    localStorage.setItem('light', light);
   });
   /* ── Share ── */
   var shareBtn = document.getElementById('shareBtn');
@@ -5132,7 +5161,10 @@ function setBattleBackground(){
       var enemySvg = (typeof ENEMY_SVGS !== 'undefined') ? ENEMY_SVGS[gBattle.id] : null;
       var portraitHtml;
       if(enemySvg){
-        portraitHtml = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;">'+enemySvg+'</div>';
+        // Deduplicate SVG IDs to avoid conflicts when multiple SVGs coexist
+        var uid = '_e' + (gBattle.id || 'x') + (gBattle._portraitUid || (gBattle._portraitUid = Date.now() % 9999));
+        var safeSvg = enemySvg.replace(/id="([^"]+)"/g, 'id="$1'+uid+'"').replace(/url\(#([^)]+)\)/g, 'url(#$1'+uid+')');
+        portraitHtml = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;">'+safeSvg+'</div>';
       } else {
         portraitHtml = '<span class="sg-ico sg-ico-lg" style="font-size:1.4rem;width:1.6em;height:1.6em;background:radial-gradient(circle at 35% 30%,#3a1a0a,#1a0a00);color:#e8d5b0;border-color:rgba(232,213,176,.3);text-shadow:0 0 6px rgba(232,213,176,.3);">'+enemyEmoji+'</span>';
       }
@@ -5145,7 +5177,8 @@ function setBattleBackground(){
         if(!gBattle._groupHp2){ gBattle._groupHp2 = Math.ceil(gBattle.maxHp/2); gBattle._groupMaxHp2 = gBattle._groupHp2; }
         // 敌人1
         document.getElementById('sgEnemyPortrait').innerHTML = portraitHtml;
-        document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
+        var _actEt = gBattle.isBoss ? 'sg-etype-boss' : 'sg-etype-act'+(G?Math.min(Math.max(G.act,1),3):1);
+        document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced ' + _actEt;
         document.getElementById('sgEnemyName').textContent = gBattle.name + ' · 甲';
         document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
         var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
@@ -5207,7 +5240,8 @@ function setBattleBackground(){
         if(enemyArea) enemyArea.className = 'sg-enemy-area';
         document.getElementById('sgEnemy2').style.display = 'none';
         document.getElementById('sgEnemyPortrait').innerHTML = portraitHtml;
-        document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced';
+        var _actEt = gBattle.isBoss ? 'sg-etype-boss' : 'sg-etype-act'+(G?Math.min(Math.max(G.act,1),3):1);
+        document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced ' + _actEt;
         document.getElementById('sgEnemyName').textContent = gBattle.name;
         document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
         var abilityNames = {enrage:"🔥暴怒",regen:"💚再生",summon:"👥召唤",curse:"💀诅咒"};
@@ -5928,6 +5962,9 @@ function setBattleBackground(){
       var el = document.createElement('div');
       el.className = 'sg-dmg-float' + (type ? ' ' + type : '');
       el.textContent = val;
+      // Fallback positioning: if x/y are invalid, center on screen
+      if(!x || x <= 0) x = window.innerWidth / 2 + (Math.random()-0.5)*100;
+      if(!y || y <= 0) y = window.innerHeight * 0.35;
       el.style.left = x + 'px';
       el.style.top = y + 'px';
       document.body.appendChild(el);
@@ -6019,12 +6056,14 @@ function setBattleBackground(){
       document.body.appendChild(det);
     }
 
-    // 图鉴 - 卡片详情
+    // 图鉴 - 卡片详情（增强版）
     function showCardDetail(cardKey){
       var c = CARDS[cardKey];
       if(!c) return;
       var rarityNames = {basic:'基础',common:'普通',uncommon:'精良',rare:'稀有'};
+      var rarityDesc = {basic:'初学入门之诗',common:'寻常可见之句',uncommon:'匠心独运之作',rare:'千古绝唱之名篇'};
       var typeNames = {attack:'攻击牌',skill:'技能牌',power:'能力牌'};
+      var typeIcons = {attack:'⚔',skill:'🌀',power:'✨'};
       var rColors = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
       var flavTexts = {
         yinyong:'"诗者，志之所之也。"',
@@ -6036,7 +6075,22 @@ function setBattleBackground(){
         liqing_mandu:'"寻寻觅觅，冷冷清清。"',
         liqing_xunmi:'"此情无计可消除。"'
       };
+      var strategyTips = {
+        yinyong:'核心过牌手段，帮助快速滤出关键卡牌',
+        mosong:'续航基石，维持血量健康至关重要',
+        lizhi_jiutian:'李白爆发核心，配合力量加成效果翻倍',
+        lizhi_tianhe:'强力AOE，清理群怪的最佳选择',
+        sush_dajiang:'高额单体伤害，打精英/Boss的主力输出',
+        sush_shuiyun:'防御反击一体，攻守兼备',
+        liqing_mandu:'李清照专属积累手段，越战越强',
+        liqing_xunmi:'精准检索，保证关键卡准时上手',
+        zhan:'普攻永不过时',
+        fang:'稳扎稳打，积蓄力量',
+        lian:'连击叠加，后发制人',
+        yun:'运筹帷幄，决胜千里'
+      };
       var flavor = flavTexts[cardKey] || '"诗中有画，画中有诗。"';
+      var tip = strategyTips[cardKey] || '';
       var upgradeNote = '';
       if(c.upgraded || (c.id && c.id.indexOf('_plus')>0)){
         upgradeNote = '<div class="sg-cdb-field"><b>升级状态：</b><span style="color:#55cc55;">&#9632; 已升级</span></div>';
@@ -6045,13 +6099,15 @@ function setBattleBackground(){
       if(c.enchantments && c.enchantments.length>0){
         enchants = '<div class="sg-cdb-field"><b>附魔：</b>'+c.enchantments.join('、')+'</div>';
       }
+      var strategyHtml = tip ? '<div class="sg-cdb-field" style="margin-top:0.3rem;padding:0.3rem;background:var(--gold-dim);border-radius:6px;"><b>&#128220; 策略提示：</b>'+tip+'</div>' : '';
       showCollectionDetail(c.name,
         '<div class="sg-cdb-field" style="text-align:center;font-size:1.5rem;margin-bottom:0.3rem;color:'+(rColors[c.rarity]||'#a8a8a8')+';">' +
           (c.rarity==='rare'?'&#9733;':'') + (c.rarity==='uncommon'?'&#9670;':'') +
         '</div>' +
-        '<div class="sg-cdb-field"><b>类型：</b>'+(typeNames[c.type]||c.type)+' | <b>费用：</b>'+(c.cost||0)+' 气</div>' +
-        '<div class="sg-cdb-field"><b>稀有度：</b>'+(rarityNames[c.rarity]||c.rarity)+'</div>' +
-        '<div class="sg-cdb-field"><b>效果：</b>'+c.desc+'</div>' +
+        '<div class="sg-cdb-field"><b>'+(typeIcons[c.type]||'')+' 类型：</b>'+(typeNames[c.type]||c.type)+' | <b>费用：</b>'+(c.cost||0)+' 气</div>' +
+        '<div class="sg-cdb-field"><b>稀有度：</b>'+(rarityNames[c.rarity]||c.rarity)+' — '+(rarityDesc[c.rarity]||'')+'</div>' +
+        '<div class="sg-cdb-field"><b>效果详解：</b>'+c.desc+'</div>' +
+        strategyHtml +
         upgradeNote +
         enchants +
         '<div class="sg-cdb-flavor">'+flavor+'</div>'
@@ -6086,7 +6142,7 @@ function setBattleBackground(){
       );
     }
 
-    // 图鉴 - 敌人详情
+    // 图鉴 - 敌人详情（增强版）
     function showEnemyDetail(enemyKey, eData){
       var intentNames = {
         attack_d:'攻击(单体)', attack_2x:'攻击(二连)', attack_3x:'攻击(三连)',
@@ -6098,18 +6154,45 @@ function setBattleBackground(){
         poison_3:'毒(3层)', poison_4:'毒(4层)',
         curse:'诅咒'
       };
-      var intents = (eData.intentCycle||[]).map(function(i){ return intentNames[i]||i; }).join(' → ');
+      var intentDescs = {
+        attack_d:'对玩家造成中等伤害',
+        attack_2x:'连续两次快速攻击',
+        attack_3x:'连续三次快速攻击',
+        attack_big:'蓄力后释放的沉重一击',
+        attack_aoe:'同时攻击全体',
+        defend:'获得护盾格挡伤害',
+        heal:'回复生命值',
+        buff_str:'提升下一次攻击的威力',
+        vuln_1:'施加1层易伤，所受伤害+50%',
+        vuln_2:'施加2层易伤',
+        weak_1:'施加1层虚弱，攻击力减半',
+        weak_2:'施加2层虚弱',
+        poison_3:'施加3层中毒，每回合受到伤害',
+        poison_4:'施加4层中毒',
+        curse:'向牌库中塞入诅咒牌'
+      };
+      var intents = (eData.intentCycle||[]).map(function(i){
+        return '<span title="'+intentDescs[i]+'">'+(intentNames[i]||i)+'</span>';
+      }).join(' → ');
       var special = eData.specialAbility ?
         '<div class="sg-cdb-field"><b>特殊能力：</b><span style="color:var(--red-seal);">'+
-        ({curse:'施加诅咒',enrage:'狂暴',regen:'再生',summon:'召唤'}[eData.specialAbility]||eData.specialAbility)+'</span></div>' : '';
+        ({curse:'施加诅咒 — 战斗会越来越艰难',enrage:'狂暴 — 越战越猛，速战速决',regen:'再生 — 拖延战局会不利',summon:'召唤 — 小心被围攻'}[eData.specialAbility]||eData.specialAbility)+'</span></div>' : '';
+      var tacticsNote = eData.specialAbility ?
+        ({curse:'建议优先积攒过牌卡，尽快将诅咒牌滤出牌库',
+          enrage:'伤害输出要集中，不要给敌人叠加力量的机会',
+          regen:'一次性造成大量伤害，避免消耗战',
+          summon:'群体攻击卡牌在此战价值极高'
+        }[eData.specialAbility]||'') : '';
+      var tacticsHtml = tacticsNote ? '<div class="sg-cdb-field" style="margin-top:0.3rem;padding:0.3rem;background:rgba(201,168,76,0.12);border-radius:6px;border-left:2px solid var(--gold);"><b>&#9876; 对战策略：</b>'+tacticsNote+'</div>' : '';
       showCollectionDetail(eData.name,
         '<div class="sg-cdb-field" style="text-align:center;font-size:1.2rem;margin-bottom:0.3rem;">'+(eData.desc||'')+'</div>' +
         '<div class="sg-cdb-stat-row">' +
-          '<span class="sg-cdb-stat">&#9829; HP: '+eData.baseHp+(eData.hpGain>0?' +'+eData.hpGain+'×境':'')+'</span>' +
-          '<span class="sg-cdb-stat">&#9876; 伤害: '+eData.baseDmg+(eData.dmgGain>0?' +'+eData.dmgGain+'×境':'')+'</span>' +
+          '<span class="sg-cdb-stat">&#9829; 生命: '+eData.baseHp+(eData.hpGain>0?' +'+eData.hpGain+'×境':'')+'</span>' +
+          '<span class="sg-cdb-stat">&#9876; 攻击: '+eData.baseDmg+(eData.dmgGain>0?' +'+eData.dmgGain+'×境':'')+'</span>' +
           '</div>' +
         '<div class="sg-cdb-field"><b>意图循环：</b>'+intents+'</div>' +
         special +
+        tacticsHtml +
         '<div class="sg-cdb-flavor">"诗道之敌，亦是诗道之师。"</div>'
       );
     }
@@ -6539,6 +6622,36 @@ function setBattleBackground(){
     var gBgmCurrent = '';
     var gBgmPlaying = false;
     var gBgmLoopTimer = null;
+    var gAudioUnlocked = false;
+
+    // 用户手势解锁音频（浏览器自动播放策略要求）
+    function unlockAudioOnGesture(){
+      if(gAudioUnlocked) return;
+      try {
+        var ctx = new (window.AudioContext || window.webkitAudioContext)();
+        // 创建一个瞬时静默缓冲器以解锁
+        var buf = ctx.createBuffer(1, 1, 22050);
+        var src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.start(0);
+        src.stop(0.001);
+        if(ctx.state === 'suspended') ctx.resume();
+        // 预创建游戏BGM上下文
+        if(!gBgmCtx) {
+          gBgmCtx = ctx;
+          audioCtx = ctx;
+          gBgmGain = gBgmCtx.createGain();
+          gBgmGain.gain.value = 0.25;
+          gBgmGain.connect(gBgmCtx.destination);
+        }
+        gAudioUnlocked = true;
+        console.log('[音频] AudioContext已解锁');
+      } catch(e){ console.log('Audio unlock:', e.message); }
+    }
+    // 在首次用户点击时解锁
+    document.addEventListener('click', unlockAudioOnGesture, {once:true});
+    document.addEventListener('touchstart', unlockAudioOnGesture, {once:true});
 
     function initAudio(){
       if(gBgmCtx){
@@ -6555,6 +6668,7 @@ function setBattleBackground(){
         gBgmGain.connect(gBgmCtx.destination);
         // 确保AudioContext已恢复（浏览器策略要求用户交互后恢复）
         if(gBgmCtx.state === 'suspended') gBgmCtx.resume();
+        gAudioUnlocked = true;
       } catch(e){ gBgmCtx = null; console.log('Audio not available'); }
     }
 
@@ -6965,12 +7079,11 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
         });
       }
 
-      // "所有牌"按钮（Item 4）— 使用克隆替换以清除旧监听，直接设置onclick
+      // "所有牌"按钮 — 使用addEventListener避免cloneNode丢失事件
       var allCardsBtn = document.getElementById('sgAllCardsBtn');
-      if(allCardsBtn){
-        var newBtn = allCardsBtn.cloneNode(true);
-        allCardsBtn.parentNode.replaceChild(newBtn, allCardsBtn);
-        newBtn.onclick = function(e){
+      if(allCardsBtn && !allCardsBtn._sgBound){
+        allCardsBtn._sgBound = true;
+        allCardsBtn.addEventListener('click', function(e){
           if(e) e.stopPropagation();
           try {
             var deck = (typeof G !== 'undefined' && G && G.deck) ? G.deck : [];
@@ -6980,7 +7093,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
               if(typeof showEffectFloat === 'function') showEffectFloat(window.innerWidth/2, window.innerHeight/2, '暂无卡牌');
             }
           } catch(err){ console.warn('sgAllCardsBtn:', err); }
-        };
+        });
       }
 
       // Reward skip (continue after card selection)
