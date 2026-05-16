@@ -1000,53 +1000,46 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-buff{display:inline-block;padding:.1rem .3rem;border-radius:4px;background:var(--gold-dim);margin:0 .1rem;font-weight:600;}
 .sg-buff.sg-debuff{background:rgba(194,58,43,0.15);color:var(--red-seal);}
 .sg-dmg-float{
-  position:fixed;font-size:1.3rem;font-weight:900;pointer-events:none;z-index:99999;
-  color:#ff4444;text-shadow:0 0 10px rgba(255,68,68,.6),0 0 20px rgba(255,68,68,.2);
-  animation:sgDmgFloat .8s ease-out forwards;
-  transform:translateX(-50%);font-family:serif;
+  position:fixed;font-size:2rem;font-weight:900;pointer-events:none;z-index:99999;
+  color:#ff4444;text-shadow:0 0 15px rgba(255,68,68,.8),0 0 30px rgba(255,68,68,.4);
+  animation:sgDmgFloat 1.5s ease-out forwards;
+  transform:translateX(-50%);font-family:serif;white-space:nowrap;
 }
-.sg-dmg-float.heal{color:#55cc55;text-shadow:0 0 10px rgba(85,204,85,.6);}
-.sg-dmg-float.block{color:#3b82f6;text-shadow:0 0 10px rgba(59,130,246,.5);}
-.sg-dmg-float.poison{color:#a855f7;text-shadow:0 0 10px rgba(168,85,247,.5);}
-@keyframes sgDmgFloat{0%{opacity:1;transform:translate(-50%,0) scale(1.2)}50%{transform:translate(-50%,-20px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-45px) scale(.95)}}
+.sg-dmg-float.heal{color:#55cc55;text-shadow:0 0 15px rgba(85,204,85,.8),0 0 30px rgba(85,204,85,.3);}
+.sg-dmg-float.block{color:#3b82f6;text-shadow:0 0 15px rgba(59,130,246,.7),0 0 25px rgba(59,130,246,.3);}
+.sg-dmg-float.poison{color:#a855f7;text-shadow:0 0 15px rgba(168,85,247,.7),0 0 25px rgba(168,85,247,.3);}
+@keyframes sgDmgFloat{0%{opacity:1;transform:translate(-50%,0) scale(1.5)}30%{transform:translate(-50%,-15px) scale(1.3)}70%{opacity:.8;transform:translate(-50%,-35px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-60px) scale(.9)}}
 .sg-enemy-portrait{font-size:2.2rem;margin-bottom:.2rem;position:relative;z-index:1;}
-/* ── 敌人立绘增强（Item 10） ── */
+/* ── 敌人立绘增强 — 方形大图 ── */
 .sg-enemy-portrait.sg-enemy-enhanced{
   position:relative;display:inline-flex;align-items:center;justify-content:center;
-  width:68px;height:68px;border-radius:50%;margin:0 auto .2rem;
-  background:radial-gradient(circle at 35% 30%, rgba(201,168,76,0.25), rgba(60,40,20,0.5) 60%, rgba(20,12,8,0.7)) !important;
-  border:2px solid rgba(201,168,76,0.5);box-shadow:0 0 20px rgba(201,168,76,0.15),inset 0 0 15px rgba(201,168,76,0.1);
-  overflow:hidden;font-size:2rem;line-height:1;
+  width:100px;height:80px;border-radius:10px;margin:0 auto .2rem;
+  background:radial-gradient(circle at 35% 30%, rgba(201,168,76,0.2), rgba(40,25,15,0.5) 60%, rgba(12,8,6,0.6)) !important;
+  border:2px solid rgba(201,168,76,0.4);box-shadow:0 0 20px rgba(201,168,76,0.1),inset 0 0 10px rgba(201,168,76,0.05);
+  overflow:hidden;font-size:2.5rem;line-height:1;padding:.3rem;
 }
-.sg-enemy-portrait.sg-enemy-enhanced::before{
-  content:'';position:absolute;inset:-3px;
-  background:conic-gradient(from 0deg, transparent, rgba(201,168,76,0.15), transparent, rgba(201,168,76,0.15), transparent);
-  animation:sgEnemyGlow 4s linear infinite;
-  border-radius:50%;
-}
-/* 敌人立绘Type变体 - 保持与角色立绘风格一致 */
+/* 敌人立绘Type变体 */
 .sg-enemy-portrait.sg-enemy-enhanced.sg-etype-act1{
-  background:radial-gradient(circle at 35% 30%, rgba(180,140,80,0.3), rgba(50,35,20,0.5) 60%, rgba(16,12,10,0.7)) !important;
-  border-color:rgba(180,140,80,0.5);
+  background:radial-gradient(circle at 35% 30%, rgba(180,140,80,0.25), rgba(40,28,18,0.5) 60%, rgba(12,8,6,0.6)) !important;
+  border-color:rgba(180,140,80,0.4);
 }
 .sg-enemy-portrait.sg-enemy-enhanced.sg-etype-act2{
-  background:radial-gradient(circle at 35% 30%, rgba(160,100,160,0.3), rgba(40,20,50,0.5) 60%, rgba(12,8,16,0.7)) !important;
-  border-color:rgba(160,100,160,0.5);
+  background:radial-gradient(circle at 35% 30%, rgba(140,90,150,0.25), rgba(30,18,40,0.5) 60%, rgba(10,6,14,0.6)) !important;
+  border-color:rgba(140,90,150,0.4);
 }
 .sg-enemy-portrait.sg-enemy-enhanced.sg-etype-act3{
-  background:radial-gradient(circle at 35% 30%, rgba(80,130,200,0.3), rgba(20,30,60,0.5) 60%, rgba(8,8,16,0.7)) !important;
-  border-color:rgba(80,130,200,0.5);
+  background:radial-gradient(circle at 35% 30%, rgba(70,120,200,0.25), rgba(16,24,50,0.5) 60%, rgba(6,6,14,0.6)) !important;
+  border-color:rgba(70,120,200,0.4);
 }
 .sg-enemy-portrait.sg-enemy-enhanced.sg-etype-boss{
-  background:radial-gradient(circle at 35% 30%, rgba(200,60,40,0.35), rgba(60,10,10,0.6) 60%, rgba(16,4,4,0.8)) !important;
-  border-color:rgba(200,60,40,0.6);
-  box-shadow:0 0 30px rgba(200,60,40,0.25),inset 0 0 20px rgba(200,60,40,0.15);
+  background:radial-gradient(circle at 35% 30%, rgba(200,50,30,0.3), rgba(50,8,8,0.6) 60%, rgba(12,3,3,0.7)) !important;
+  border-color:rgba(200,50,30,0.5);
+  box-shadow:0 0 30px rgba(200,50,30,0.15),inset 0 0 15px rgba(200,50,30,0.08);
 }
-@keyframes sgEnemyGlow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
-/* 水墨SVG敌人立绘容器 */
+/* 水墨SVG敌人立绘容器 — 移除圆形边框 */
 .sg-enemy-svg-portrait{width:100%;height:100%;}
-.sg-enemy-svg-portrait svg{width:100%;height:100%;display:block;}
+.sg-enemy-svg-portrait svg{width:100%;height:100%;display:block;max-height:80px;}
 
 /* 敌人登场闪白 */
 /* 敌人登场闪白 */
@@ -1472,7 +1465,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   .sg-card .sg-card-type{padding:4px 10px 9px;font-size:.5rem;}
   #sgHand{gap:10px;min-height:150px;}
   #sgHand .sg-card{min-width:130px;}
-  .sg-enemy-portrait{width:90px;height:90px;font-size:2.5rem;}
+  .sg-enemy-portrait{width:100px;height:80px;font-size:2.5rem;}
   .sg-player-portrait{width:70px;height:70px;font-size:1.8rem;}
   .sg-player-portrait-icon{width:70px;height:70px;font-size:1.8rem;}
   .sg-map-node{width:56px;height:56px;font-size:1.2rem;min-width:56px;}
@@ -1503,8 +1496,8 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   #sgEnemyArea{padding:0.2rem;gap:6px}
   .sg-btn{font-size:0.65rem;padding:0.3rem 0.6rem}
   .sg-rest-title{font-size:1.2rem}
-  .sg-enemy-portrait{width:56px;height:56px;font-size:1.3rem}
-  .sg-enemy-portrait.sg-enemy-enhanced{width:56px;height:56px;font-size:1.3rem}
+  .sg-enemy-portrait{width:72px;height:58px;font-size:1.6rem}
+  .sg-enemy-portrait.sg-enemy-enhanced{width:72px;height:58px;font-size:1.6rem}
   .sg-player-portrait{width:40px;height:40px;font-size:1.2rem}
   .sg-player-portrait-icon{width:40px;height:40px;font-size:1.2rem}
   .sg-enemy{padding:.4rem .6rem;min-width:120px}
@@ -1531,15 +1524,15 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   .sg-cs-portrait-card{width:130px;padding:.8rem .4rem;}
   .sg-cs-portrait-card .sg-cs-avatar{width:56px;height:56px;font-size:1.8rem;}
   .sg-enemy{min-width:100px;padding:.4rem .5rem;}
-  .sg-enemy-portrait{font-size:1.4rem;}
+  .sg-enemy-portrait{font-size:1.6rem;}
   .sg-shop-item{padding:.4rem .6rem;flex-wrap:wrap;}
   #sgHand .sg-card{min-width:60px;font-size:0.5rem}
   .sg-card .sg-card-cost{width:16px;height:16px;font-size:.5rem;line-height:16px;top:-5px;left:-5px;}
   #sgPlayerArea{display:flex;flex-direction:column}
-  .sg-enemy-portrait{width:48px;height:48px;font-size:1.1rem}
+  .sg-enemy-portrait{width:60px;height:48px;font-size:1.2rem}
   .sg-player-portrait{width:36px;height:36px;font-size:1rem}
   .sg-player-portrait-icon{width:36px;height:36px;font-size:1rem;}
-  .sg-enemy-portrait.sg-enemy-enhanced{width:48px;height:48px;font-size:1.1rem;}
+  .sg-enemy-portrait.sg-enemy-enhanced{width:60px;height:48px;font-size:1.2rem;}
   .sg-shop-items{grid-template-columns:1fr}
   .sg-hand{gap:4px;}
   .sg-map-floor{gap:8px;padding:6px 2px;}
@@ -4361,6 +4354,68 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       return gBattle.energy >= cost;
     }
 
+    // ── 卡牌音效（用Web Audio模拟古风乐器短音） ──
+    function playCardSfx(type){
+      try{
+        var actx = gBgmCtx || new (window.AudioContext || window.webkitAudioContext)();
+        if(actx.state === 'suspended') actx.resume();
+        var now = actx.currentTime;
+        if(type === 'attack'){
+          // 短促拨弦音 — 模拟古筝/琵琶
+          var osc1 = actx.createOscillator();
+          var g1 = actx.createGain();
+          osc1.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(800, now);
+          osc1.frequency.exponentialRampToValueAtTime(400, now + 0.08);
+          g1.gain.setValueAtTime(0.15, now);
+          g1.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+          var f1 = actx.createBiquadFilter();
+          f1.type = 'lowpass';
+          f1.frequency.value = 2000;
+          osc1.connect(f1); f1.connect(g1); g1.connect(actx.destination);
+          osc1.start(now); osc1.stop(now + 0.15);
+          // 加一点噪声模拟剑击
+          var bufSize = actx.sampleRate * 0.05;
+          var noiseBuf = actx.createBuffer(1, bufSize, actx.sampleRate);
+          var nd = noiseBuf.getChannelData(0);
+          for(var ni=0;ni<bufSize;ni++) nd[ni] = (Math.random()*2-1) * Math.pow(1-ni/bufSize, 3);
+          var noiseSrc = actx.createBufferSource();
+          noiseSrc.buffer = noiseBuf;
+          var ng = actx.createGain();
+          ng.gain.setValueAtTime(0.08, now); ng.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          noiseSrc.connect(ng); ng.connect(actx.destination);
+          noiseSrc.start(now);
+        } else if(type === 'skill'){
+          // 轻柔铃声 — 模拟风铃/磬
+          for(var si=0;si<3;si++){
+            var osc2 = actx.createOscillator();
+            var g2 = actx.createGain();
+            osc2.type = 'sine';
+            var freqs = [880, 1100, 1320];
+            osc2.frequency.value = freqs[si];
+            g2.gain.setValueAtTime(0.06, now + si*0.06);
+            g2.gain.exponentialRampToValueAtTime(0.001, now + si*0.06 + 0.4);
+            osc2.connect(g2); g2.connect(actx.destination);
+            osc2.start(now + si*0.06); osc2.stop(now + si*0.06 + 0.4);
+          }
+        } else if(type === 'power'){
+          // 上升琶音 — 模拟古琴泛音
+          for(var pi=0;pi<4;pi++){
+            var osc3 = actx.createOscillator();
+            var g3 = actx.createGain();
+            osc3.type = 'triangle';
+            var baseF = 440;
+            osc3.frequency.value = baseF * Math.pow(2, pi/12) * 2;
+            g3.gain.setValueAtTime(0.05, now + pi*0.08);
+            g3.gain.linearRampToValueAtTime(0.08, now + pi*0.08 + 0.05);
+            g3.gain.exponentialRampToValueAtTime(0.001, now + pi*0.08 + 0.5);
+            osc3.connect(g3); g3.connect(actx.destination);
+            osc3.start(now + pi*0.08); osc3.stop(now + pi*0.08 + 0.5);
+          }
+        }
+      } catch(e){ /* audio sfx unavailable */ }
+    }
+
     function playCard(cardIdx){
       if(!gBattle || !G) return false;
       var deckIdx = gBattle.hand[cardIdx];
@@ -4568,6 +4623,9 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       if(!card.exhaust){
         gBattle.discardPile.push(deckIdx);
       }
+
+      // 出牌音效
+      playCardSfx(card.type);
 
       // 出牌特效：全屏微闪 + 粒子
       var cardEl = document.querySelector('#sgHand .sg-card');
@@ -5078,7 +5136,7 @@ applyPoison();
         btn.className = 'sg-pill-tip';
         btn.style.cssText = 'display:inline-flex;';
         var tipText = renderPillTooltip(pill.name, pill.desc);
-        btn.innerHTML = '<button class="sg-pill-btn" style="background:var(--btn-bg,#2a2a3e);color:var(--text,#e0e0e0);border:1px solid var(--gold,#c9a84c);border-radius:6px;padding:0.2rem 0.5rem;margin:0.15rem;font-size:0.65rem;cursor:pointer;">' + pill.icon + ' ' + pill.name + '</button>' +
+        btn.innerHTML = '<button class="sg-pill-btn" style="background:transparent;color:var(--gold,#c9a84c);border:1px solid var(--gold,#c9a84c);border-radius:6px;padding:0.2rem 0.5rem;margin:0.15rem;font-size:0.65rem;cursor:pointer;">' + pill.icon + ' ' + pill.name + '</button>' +
           (tipText ? '<span class="sg-pill-tooltip">' + tipText + '</span>' : '');
         (function(pillId2){
           btn.onclick = function(){
@@ -5176,10 +5234,17 @@ function setBattleBackground(){
         // Deduplicate SVG IDs to avoid conflicts when multiple SVGs coexist
         var uid = '_e' + (gBattle.id || 'x') + (gBattle._portraitUid || (gBattle._portraitUid = Date.now() % 9999));
         var safeSvg = enemySvg.replace(/id="([^"]+)"/g, 'id="$1'+uid+'"').replace(/url\(#([^)]+)\)/g, 'url(#$1'+uid+')');
-        portraitHtml = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;">'+safeSvg+'</div>';
+        portraitHtml = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">'+safeSvg+'</div>';
       } else {
-        portraitHtml = '<span class="sg-ico sg-ico-lg" style="font-size:1.4rem;width:1.6em;height:1.6em;background:radial-gradient(circle at 35% 30%,#3a1a0a,#1a0a00);color:#e8d5b0;border-color:rgba(232,213,176,.3);text-shadow:0 0 6px rgba(232,213,176,.3);">'+enemyEmoji+'</span>';
+        portraitHtml = '<span class="sg-ico sg-ico-lg" style="font-size:2rem;width:1.6em;height:1.6em;background:radial-gradient(circle at 35% 30%,#3a1a0a,#1a0a00);color:#e8d5b0;text-shadow:0 0 6px rgba(232,213,176,.3);">'+enemyEmoji+'</span>';
       }
+      // Fallback: if portrait container is empty after render, force emoji
+      var _checkPortraitLoaded = function(containerId, emojiFallback){
+        var el = document.getElementById(containerId);
+        if(el && (!el.innerHTML || el.innerHTML.trim() === '' || el.innerHTML.indexOf('svg') === -1)){
+          el.innerHTML = '<span style="font-size:2rem;">'+emojiFallback+'</span>';
+        }
+      };
       var enemyArea = document.getElementById('sgEnemyArea');
       if(gBattle._isGroup){
         // 群体敌人：显示两个敌人框（Item 3）
@@ -5280,6 +5345,14 @@ function setBattleBackground(){
         // Enemy poison
         document.getElementById('sgEnemyPoison').textContent = gBattle.enemyPoison;
       }
+      // 检查敌人立绘是否正确加载，失败则显示emoji
+      try{
+        if(typeof _checkPortraitLoaded === 'function'){
+          var fallbackEmoji = enemyEmojis[gBattle.id] || '魔';
+          _checkPortraitLoaded('sgEnemyPortrait', fallbackEmoji);
+          if(gBattle._isGroup) _checkPortraitLoaded('sgEnemyPortrait2', fallbackEmoji);
+        }
+      }catch(e){}
 
       // Player Portrait (Item 6)
       var charPortraits = {lizhi:'月',sush:'浪',liqing:'花'};
@@ -5775,28 +5848,77 @@ function setBattleBackground(){
       title.className = 'sg-modal-title';
       title.textContent = '✦ 选择一张牌强化';
       box.appendChild(title);
-      for(var ui=0;ui<G.deck.length;ui++){
-        var cd = G.deck[ui];
-        var cardEl = document.createElement('div');
-        cardEl.className = 'sg-card sg-card-selectable';
-        var rColors = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
-        cardEl.style.borderColor = (rColors[cd.rarity]||'#a8a8a8');
-        cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
-        (function(ui2){
-          cardEl.addEventListener('click', function(){
-            upgradeCard(ui2);
-            document.body.removeChild(overlay);
-          });
-        })(ui);
-        box.appendChild(cardEl);
+      var previewMode = false;
+      function renderCards(){
+        var cardList = box.querySelector('.sg-card-list');
+        if(!cardList) return;
+        cardList.innerHTML = '';
+        for(var ui=0;ui<G.deck.length;ui++){
+          var cd = G.deck[ui];
+          var pCd = previewMode ? {name:cd.name, desc:cd.desc, cost:cd.cost, dmg:cd.dmg, block:cd.block, heal:cd.heal, poison:cd.poison, rarity:cd.rarity, type:cd.type} : cd;
+          if(previewMode){
+            pCd.name = cd.name.replace(/†$/, '') + '†';
+            pCd.dmg = (cd.dmg||0) + 4;
+            pCd.block = (cd.block||0) + 3;
+            pCd.heal = cd.heal ? Math.floor(cd.heal * 1.5) : 0;
+            pCd.poison = (cd.poison||0) + 2;
+            pCd.cost = Math.max(0, (cd.cost||0) - 1);
+            if(pCd.desc && pCd.desc.indexOf('†') === -1) pCd.desc += ' †升级';
+          }
+          var cardEl = document.createElement('div');
+          cardEl.className = 'sg-card sg-card-selectable';
+          if(previewMode) cardEl.style.borderColor = '#ffcc00';
+          else {
+            var rCol = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+            cardEl.style.borderColor = (rCol[cd.rarity]||'#a8a8a8');
+          }
+          var upgradeBadge = (cd.upgraded) ? '<span style="position:absolute;top:-4px;right:-4px;font-size:.45rem;background:#22aa22;color:#fff;border-radius:6px;padding:1px 4px;line-height:1.2;z-index:2;">✦升</span>' : '';
+          cardEl.style.position = 'relative';
+          cardEl.innerHTML = '<div class="sg-card-cost">'+(previewMode ? pCd.cost : (cd.cost||0))+'</div><div class="sg-card-name">'+(previewMode ? pCd.name : cd.name)+'</div><div class="sg-card-desc">'+(previewMode ? pCd.desc : (cd.desc||''))+'</div><div class="sg-card-type">'+cd.type+'</div>' + (!previewMode ? upgradeBadge : '');
+          if(!previewMode){
+            (function(ui2){
+              cardEl.addEventListener('click', function(){
+                upgradeCard(ui2);
+                document.body.removeChild(overlay);
+              });
+            })(ui);
+          }
+          cardList.appendChild(cardEl);
+        }
       }
+      // Add preview button
+      var btnRow = document.createElement('div');
+      btnRow.style.cssText = 'text-align:center;margin-top:.3rem;display:flex;gap:.5rem;justify-content:center;';
+      var previewBtn = document.createElement('button');
+      previewBtn.className = 'sg-btn';
+      previewBtn.textContent = '👁 预览升级效果';
+      previewBtn.style.fontSize = '.55rem';
+      previewBtn.style.padding = '.15rem .5rem';
+      previewBtn.onclick = function(){
+        previewMode = !previewMode;
+        previewBtn.textContent = previewMode ? '✕ 关闭预览' : '👁 预览升级效果';
+        renderCards();
+      };
+      btnRow.appendChild(previewBtn);
       var closeBtn = document.createElement('button');
-      closeBtn.className = 'sg-modal-close';
+      closeBtn.className = 'sg-btn';
       closeBtn.textContent = '取消 ✕';
+      closeBtn.style.fontSize = '.55rem';
+      closeBtn.style.padding = '.15rem .5rem';
+      closeBtn.style.background = 'rgba(194,58,43,.15)';
+      closeBtn.style.color = 'var(--red-seal)';
+      closeBtn.style.borderColor = 'var(--red-seal)';
       closeBtn.onclick = function(){ document.body.removeChild(overlay); };
-      box.appendChild(closeBtn);
+      btnRow.appendChild(closeBtn);
+      // Card list container
+      var cardListDiv = document.createElement('div');
+      cardListDiv.className = 'sg-card-list';
+      cardListDiv.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-height:50vh;overflow-y:auto;padding:.3rem 0;';
+      box.appendChild(cardListDiv);
+      box.appendChild(btnRow);
       overlay.appendChild(box);
       document.body.appendChild(overlay);
+      renderCards();
     }
 
     function upgradeCard(deckIdx){
@@ -5974,13 +6096,21 @@ function setBattleBackground(){
       var el = document.createElement('div');
       el.className = 'sg-dmg-float' + (type ? ' ' + type : '');
       el.textContent = val;
-      // Fallback positioning: if x/y are invalid, center on screen
-      if(!x || x <= 0) x = window.innerWidth / 2 + (Math.random()-0.5)*100;
-      if(!y || y <= 0) y = window.innerHeight * 0.35;
+      // Better positioning: center on screen above the enemy area
+      var battleEl = document.getElementById('sgBattle');
+      if(battleEl){
+        var battleRect = battleEl.getBoundingClientRect();
+        // Position in center of screen, upper half (enemy area)
+        x = battleRect.left + battleRect.width / 2 + (Math.random()-0.5)*80;
+        y = battleRect.top + battleRect.height * 0.15 + (Math.random()-0.5)*30;
+      } else {
+        if(!x || x <= 0) x = window.innerWidth / 2 + (Math.random()-0.5)*100;
+        if(!y || y <= 0) y = window.innerHeight * 0.3;
+      }
       el.style.left = x + 'px';
       el.style.top = y + 'px';
       document.body.appendChild(el);
-      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 850);
+      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1600);
     }
 
     function showEffectFloat(x, y, text){
@@ -6799,11 +6929,13 @@ function setBattleBackground(){
       for(var di=0;di<sorted.length;di++){
         var cd = sorted[di];
         var origIdx = G.deck.indexOf(cd);
-        html += '<div class="sg-card" style="border-color:'+(rarityColors3[cd.rarity]||'#a8a8a8')+';cursor:default;">' +
+        var upgradeBadge = (cd.upgraded) ? '<span style="position:absolute;top:-4px;right:-4px;font-size:.45rem;background:#22aa22;color:#fff;border-radius:6px;padding:1px 4px;line-height:1.2;z-index:2;">✦升</span>' : '';
+        html += '<div class="sg-card" style="position:relative;border-color:'+(rarityColors3[cd.rarity]||'#a8a8a8')+';cursor:default;">' +
           '<div class="sg-card-cost">'+(cd.cost||0)+'</div>' +
           '<div class="sg-card-name">'+cd.name+'</div>' +
           '<div class="sg-card-desc">'+(cd.desc||'')+'</div>' +
           '<div class="sg-card-type">'+cd.type+'</div>' +
+          upgradeBadge +
           '</div>';
       }
       html += '</div>';
@@ -6976,58 +7108,134 @@ function setBattleBackground(){
       } catch(e){ gBgmCtx = null; console.log('Audio not available'); }
     }
 
-    // 多套变体音序，每次循环随机选一套，让BGM不单调
-    var BGM_PATTERNS = {
-      explore: [
-        { notes:[0,2,4,7,9,7,4,2,0,-2,0,2,4,7,9,12], tempo:95,  base:210 },
-        { notes:[0,4,7,12,7,4,0,2,4,7,9,7,4,2,0,-3], tempo:88,  base:220 },
-        { notes:[2,4,7,9,7,4,2,0,4,7,9,12,9,7,4,2],  tempo:92,  base:215 }
-      ],
-      battle: [
-        { notes:[0,3,7,10,7,3,0,5,8,5,0,3,7,10,12,10], tempo:128, base:250 },
-        { notes:[3,7,10,8,5,3,0,3,7,10,12,10,7,5,3],   tempo:135, base:260 },
-        { notes:[0,5,8,12,8,5,3,0,5,8,10,8,5,3,0,-2],  tempo:130, base:245 }
-      ],
-      elite: [
-        { notes:[0,3,7,11,7,3,0,5,10,5,0,3,7,11,14,11], tempo:145, base:280 },
-        { notes:[3,7,11,10,7,3,0,3,7,11,14,11,7,5,3,0], tempo:155, base:290 }
-      ],
-      boss1: [
-        { notes:[0,4,7,12,7,4,0,5,9,5,0,4,7,12,16,12],  tempo:125, base:235 },
-        { notes:[4,7,12,11,9,7,4,0,5,9,12,9,5,4,0,-3],  tempo:120, base:230 }
-      ],
-      boss2: [
-        { notes:[0,3,6,10,6,3,0,2,7,11,7,2,0,5,8,12],   tempo:140, base:265 },
-        { notes:[3,6,10,8,6,3,0,2,7,11,14,11,7,5,3,0],  tempo:145, base:270 }
-      ],
-      boss3: [
-        { notes:[0,5,9,12,9,5,0,4,8,12,8,4,0,7,11,14],  tempo:155, base:295 },
-        { notes:[5,9,12,14,12,9,5,0,4,8,12,14,12,8,4,0], tempo:165, base:300 }
-      ],
-      rest: [
-        { notes:[0,2,4,7,4,2,0,-2,0,2,4,7,9,7,4,2],     tempo:78,  base:195 },
-        { notes:[2,4,7,9,7,4,2,0,2,4,7,9,7,4,2,0],      tempo:72,  base:190 }
-      ],
-      shop: [
-        { notes:[0,4,7,11,7,4,0,2,5,9,5,2,0,4,7,11],    tempo:105, base:225 },
-        { notes:[4,7,11,9,7,4,0,2,5,9,12,9,5,2,0,-1],   tempo:110, base:230 }
-      ]
+    // ── 古风BGM系统 — 五声音阶 + 混响，减少电子感 ──
+    // 可在此添加MP3音源：将MP3文件放入项目audio/目录，修改下方URL即可
+    var BGM_AUDIO_FILES = {
+      explore: '',  // 如 'audio/explore.mp3'
+      battle:  '',
+      elite:   '',
+      boss:    '',
+      rest:    '',
+      shop:    ''
+    };
+    var gBgmAudio = null;      // HTML Audio播放器（当有MP3时使用）
+    var gBgmUseAudio = false;
+
+    // 五声音阶（宫商角徵羽）：C D E G A = 半音 0 2 4 7 9
+    var BGM_PENTA = {
+      explore: {
+        patterns: [
+          {melody:[0,2,4,7,9,7,4,2,  0,-2,0,2,4,7,9,12],  bass:[-12,-10,-7,-5,  -10,-7,-5,-3],  tempo:62, base:190},
+          {melody:[2,4,7,9,7,4,2,0,  4,7,9,12,9,7,4,2],   bass:[-10,-7,-5,-3,  -7,-5,-3,-1],    tempo:58, base:195},
+          {melody:[4,7,9,12,9,7,4,2,  0,2,4,7,9,7,4,0],   bass:[-7,-5,-3,0,   -5,-3,0,2],       tempo:65, base:185}
+        ]
+      },
+      battle: {
+        patterns: [
+          {melody:[0,3,5,7,10,7,5,3,  0,2,5,8,10,8,5,2],    bass:[-12,-5,0,-3,  -10,-3,2,-1],    tempo:82, base:240},
+          {melody:[3,5,7,10,12,10,7,5,  3,5,7,10,7,5,3,0],  bass:[-10,-3,2,5,  -8,-1,4,7],      tempo:88, base:245},
+          {melody:[5,7,10,12,10,7,5,3,  0,2,5,8,5,2,0,-2],  bass:[-7,0,5,7,    -5,2,7,9],        tempo:85, base:235}
+        ]
+      },
+      elite: {
+        patterns: [
+          {melody:[0,3,5,8,10,8,5,3,  0,2,5,7,10,7,5,2],   bass:[-12,-7,-3,0,  -10,-5,-1,2],    tempo:95, base:265},
+          {melody:[2,5,8,10,8,5,3,0,  3,5,8,12,8,5,3,0],   bass:[-10,-5,-1,2,  -8,-3,1,4],      tempo:100, base:270}
+        ]
+      },
+      boss: {
+        patterns: [
+          {melody:[0,2,4,7,12,7,4,2,  0,2,4,7,9,7,4,2],    bass:[-12,-5,0,2,   -10,-3,2,4],     tempo:75, base:230},
+          {melody:[2,4,7,12,14,12,7,4,  2,4,7,9,12,9,7,4],  bass:[-10,-3,2,4,   -8,-1,4,7],      tempo:72, base:235},
+          {melody:[4,7,12,16,12,7,4,0,  -2,0,4,7,12,7,4,0], bass:[-7,0,4,7,     -5,2,7,9],        tempo:80, base:225}
+        ]
+      },
+      rest: {
+        patterns: [
+          {melody:[0,2,4,7,4,2,0,-2,  0,2,4,7,9,7,4,2],    bass:[-12,-9,-7,-5,  -9,-7,-5,-3],    tempo:52, base:185},
+          {melody:[2,4,7,9,7,4,2,0,  2,4,7,9,7,4,2,0],     bass:[-10,-7,-5,-3,  -7,-5,-3,-1],    tempo:48, base:180}
+        ]
+      },
+      shop: {
+        patterns: [
+          {melody:[0,4,7,11,7,4,0,2,  5,9,5,2,0,4,7,11],   bass:[-12,-5,-3,0,  -10,-3,-1,2],    tempo:72, base:210},
+          {melody:[4,7,11,9,7,4,0,2,  5,9,12,9,5,2,0,-1],  bass:[-10,-3,-1,2,  -8,-1,1,4],      tempo:76, base:215}
+        ]
+      }
     };
 
-    function scheduleNoteBatch(osc, gainNode, baseFreq, noteArr, noteLen, nowTime, gainLevel, harmonyFlag){
-      for(var ni=0;ni<noteArr.length;ni++){
-        var n = noteArr[ni];
-        if(n === -99) continue;
-        var freq = baseFreq * Math.pow(2, n/12);
-        var swing = (ni % 2 === 1) ? (Math.random()*0.025-0.012) : 0;
-        var t = nowTime + ni * noteLen + swing;
-        gainNode.gain.setValueAtTime(0, t);
-        gainNode.gain.linearRampToValueAtTime(gainLevel, t + 0.025);
-        osc.frequency.setValueAtTime(freq, t);
-        var sustainEnd = t + noteLen * (harmonyFlag ? 0.45 : 0.55);
-        gainNode.gain.setValueAtTime(gainLevel, sustainEnd);
-        gainNode.gain.linearRampToValueAtTime(0, t + noteLen * 0.75);
+    // 生成混响脉冲响应
+    function createReverbIR(ctx, duration, decay){
+      var sr = ctx.sampleRate;
+      var len = Math.floor(sr * duration);
+      var buffer = ctx.createBuffer(2, len, sr);
+      for(var ch=0;ch<2;ch++){
+        var data = buffer.getChannelData(ch);
+        for(var i=0;i<len;i++){
+          data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i/len, decay) * (1 - Math.random()*0.1);
+        }
       }
+      return buffer;
+    }
+
+    // 播放一个音符（带低通滤波 + 包络，模拟传统乐器音色）
+    function playPentaNote(ctx, outputGain, freq, startTime, duration, vol, type, filterFreq){
+      var osc = ctx.createOscillator();
+      osc.type = type || 'sawtooth';
+      osc.frequency.setValueAtTime(freq, startTime);
+      if(Math.random() > 0.5){
+        osc.frequency.linearRampToValueAtTime(freq * 1.003, startTime + duration * 0.3);
+        osc.frequency.linearRampToValueAtTime(freq * 0.998, startTime + duration * 0.7);
+      }
+      var gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(vol, startTime + 0.04);
+      var sustainStart = startTime + duration * 0.4;
+      gain.gain.setValueAtTime(vol * 0.85, sustainStart);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      var filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = filterFreq || 1200;
+      filter.Q.value = 0.5;
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(outputGain);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.05);
+    }
+
+    // 播放Bass层
+    function playBassNote(ctx, outputGain, freq, startTime, duration, vol){
+      var osc = ctx.createOscillator();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      var gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(vol, startTime + 0.05);
+      gain.gain.setValueAtTime(vol * 0.7, startTime + duration * 0.5);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      var filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 400;
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(outputGain);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.05);
+    }
+
+    function stopBgm(){
+      gBgmPlaying = false;
+      if(gBgmLoopTimer) { clearTimeout(gBgmLoopTimer); gBgmLoopTimer = null; }
+      if(gBgmOsc){
+        for(var oi=0;oi<gBgmOsc.length;oi++){ try{ gBgmOsc[oi].stop(); }catch(e){} }
+        gBgmOsc = null;
+      }
+      if(gBgmAudio){
+        try{ gBgmAudio.pause(); gBgmAudio.src = ''; }catch(e){}
+        gBgmAudio = null;
+      }
+      gBgmUseAudio = false;
     }
 
     function playBgm(type){
@@ -7035,89 +7243,114 @@ function setBattleBackground(){
       if(!gBgmCtx) return;
       if(gBgmPlaying) stopBgm();
       gBgmCurrent = type || 'explore';
+      gBgmOsc = [];
 
-      var pool = BGM_PATTERNS[type] || BGM_PATTERNS.explore;
-      pool.__lastIdx = 0;
-      var v = pool[0];
-      var notes = v.notes;
-      var tempo = v.tempo;
-      var baseFreq = v.base;
-      var noteLen = 60 / tempo;
-      var totalTime = notes.length * noteLen;
-
-      // 旋律层（三角波 — 温暖）
-      gBgmOsc = gBgmCtx.createOscillator();
-      gBgmOsc.type = 'triangle';
-      gBgmOsc.frequency.value = baseFreq;
-      var melodyGain = gBgmCtx.createGain();
-      melodyGain.gain.value = 0;
-      gBgmOsc.connect(melodyGain);
-      melodyGain.connect(gBgmGain);
-      gBgmOsc.start();
-
-      // 和声层（正弦波 — 轻柔铺垫）
-      gBgmOsc2 = gBgmCtx.createOscillator();
-      gBgmOsc2.type = 'sine';
-      gBgmOsc2.frequency.value = baseFreq * 1.5;
-      var harmGain = gBgmCtx.createGain();
-      harmGain.gain.value = 0;
-      gBgmOsc2.connect(harmGain);
-      harmGain.connect(gBgmGain);
-      gBgmOsc2.start();
-
-      // 调度第一轮音符
-      var now = gBgmCtx.currentTime;
-      scheduleNoteBatch(gBgmOsc, melodyGain, baseFreq, notes, noteLen, now, 0.5, false);
-      // 和声层仅在强拍（每4拍）奏五度音
-      var harmNotes = [];
-      for(var hi=0;hi<notes.length;hi++){
-        harmNotes.push((hi % 4 === 0) ? notes[hi]+7 : -99);
+      // 尝试使用HTML Audio播放MP3（如果配置了URL）
+      var audioKey = type;
+      if(type === 'boss1' || type === 'boss2' || type === 'boss3') audioKey = 'boss';
+      var audioUrl = BGM_AUDIO_FILES[audioKey] || '';
+      if(audioUrl){
+        try {
+          gBgmAudio = new Audio(audioUrl);
+          gBgmAudio.loop = true;
+          gBgmAudio.volume = 0.3;
+          gBgmAudio.play().then(function(){ gBgmUseAudio = true; }).catch(function(){ gBgmUseAudio = false; });
+          if(gBgmUseAudio){ gBgmPlaying = true; return; }
+        } catch(e){ gBgmUseAudio = false; }
       }
-      scheduleNoteBatch(gBgmOsc2, harmGain, baseFreq, harmNotes, noteLen, now, 0.15, true);
 
-      // 循环函数 — 每次循环随机选不同变体
+      // 回退到Web Audio振荡器BGM
+      var pentaKey = type;
+      if(pentaKey === 'boss1' || pentaKey === 'boss2' || pentaKey === 'boss3') pentaKey = 'boss';
+      var data = BGM_PENTA[pentaKey] || BGM_PENTA.explore;
+      var patternIdx = Math.floor(Math.random() * data.patterns.length);
+      var pat = data.patterns[patternIdx];
+      var baseFreq = data.base || pat.base || 200;
+      var tempo = pat.tempo;
+      var melody = pat.melody;
+      var bassLine = pat.bass || [];
+      var noteLen = 60 / tempo;
+      var totalTime = melody.length * noteLen;
+
+      // 创建混响
+      var convolver = null;
+      try {
+        convolver = gBgmCtx.createConvolver();
+        convolver.buffer = createReverbIR(gBgmCtx, 1.5, 3);
+      } catch(e){ convolver = null; }
+
+      // 主输出
+      var dryGain = gBgmCtx.createGain();
+      dryGain.gain.value = 0.35;
+      dryGain.connect(gBgmGain);
+      var wetGain = null;
+      if(convolver){
+        wetGain = gBgmCtx.createGain();
+        wetGain.gain.value = 0.2;
+        convolver.connect(wetGain);
+        wetGain.connect(gBgmGain);
+      }
+
+      // 调度旋律音符（拨弦音色）
+      for(var mi=0;mi<melody.length;mi++){
+        var n = melody[mi];
+        if(n === -99) continue;
+        var freq = baseFreq * Math.pow(2, n/12);
+        var swing = (Math.random()-0.5) * 0.03;
+        var t = gBgmCtx.currentTime + mi * noteLen + swing;
+        playPentaNote(gBgmCtx, dryGain, freq, t, noteLen * 0.85, 0.12, 'sawtooth', 1500);
+        if(convolver){
+          playPentaNote(gBgmCtx, convolver, freq, t, noteLen * 1.2, 0.06, 'triangle', 800);
+        }
+      }
+      // 调度Bass层
+      for(var bi=0;bi<bassLine.length;bi++){
+        var bn = bassLine[bi];
+        var bassFreq = baseFreq * Math.pow(2, bn/12);
+        var bt = gBgmCtx.currentTime + bi * noteLen * 2;
+        playBassNote(gBgmCtx, dryGain, bassFreq, bt, noteLen * 1.8, 0.08);
+      }
+
+      // 循环调度
       var loopFunc = function(){
         if(!gBgmPlaying || !gBgmCtx) return;
-        // 选不同的变体（避免和上次一样）
-        var p = BGM_PATTERNS[gBgmCurrent] || BGM_PATTERNS.explore;
-        var idx;
+        var d2 = BGM_PENTA[pentaKey] || BGM_PENTA.explore;
+        var p2 = d2.patterns;
+        var idx2;
         do {
-          idx = Math.floor(Math.random() * p.length);
-        } while(idx === p.__lastIdx && p.length > 1);
-        p.__lastIdx = idx;
-        var v2 = p[idx];
-        var n2 = v2.notes;
-        var t2 = v2.tempo;
-        var b2 = v2.base;
+          idx2 = Math.floor(Math.random() * p2.length);
+        } while(idx2 === patternIdx && p2.length > 1);
+        patternIdx = idx2;
+        var pat2 = p2[idx2];
+        var b2 = data.base || pat2.base || 200;
+        var t2 = pat2.tempo;
         var nl2 = 60 / t2;
-        var tt2 = n2.length * nl2;
+        var mel2 = pat2.melody;
+        var bass2 = pat2.bass || [];
+        var tt2 = mel2.length * nl2;
 
-        var now2 = gBgmCtx.currentTime + 0.02;
-        // 前一轮淡出，新轮淡入
-        melodyGain.gain.linearRampToValueAtTime(0, now2);
-        harmGain.gain.linearRampToValueAtTime(0, now2);
-
-        scheduleNoteBatch(gBgmOsc, melodyGain, b2, n2, nl2, now2, 0.5, false);
-        var h2 = [];
-        for(var hi2=0;hi2<n2.length;hi2++){
-          h2.push((hi2 % 4 === 0) ? n2[hi2]+7 : -99);
+        for(var mi2=0;mi2<mel2.length;mi2++){
+          var n2 = mel2[mi2];
+          if(n2 === -99) continue;
+          var freq2 = b2 * Math.pow(2, n2/12);
+          var sw2 = (Math.random()-0.5) * 0.03;
+          var t2b = gBgmCtx.currentTime + 0.05 + mi2 * nl2 + sw2;
+          playPentaNote(gBgmCtx, dryGain, freq2, t2b, nl2 * 0.85, 0.12, 'sawtooth', 1500);
+          if(convolver){
+            playPentaNote(gBgmCtx, convolver, freq2, t2b, nl2 * 1.2, 0.06, 'triangle', 800);
+          }
         }
-        scheduleNoteBatch(gBgmOsc2, harmGain, b2, h2, nl2, now2, 0.15, true);
-
-        gBgmLoopTimer = setTimeout(loopFunc, tt2 * 1000 * 0.85);
+        for(var bi2=0;bi2<bass2.length;bi2++){
+          var bn2 = bass2[bi2];
+          var bf2 = b2 * Math.pow(2, bn2/12);
+          var bt2 = gBgmCtx.currentTime + 0.05 + bi2 * nl2 * 2;
+          playBassNote(gBgmCtx, dryGain, bf2, bt2, nl2 * 1.8, 0.08);
+        }
+        gBgmLoopTimer = setTimeout(loopFunc, tt2 * 1000 * 0.9);
       };
-
-      gBgmLoopTimer = setTimeout(loopFunc, totalTime * 1000 * 0.85);
+      gBgmLoopTimer = setTimeout(loopFunc, totalTime * 1000 * 0.9);
       gBgmPlaying = true;
     }
-
-    function stopBgm(){
-      gBgmPlaying = false;
-      if(gBgmLoopTimer) { clearTimeout(gBgmLoopTimer); gBgmLoopTimer = null; }
-      if(gBgmOsc) { try{ gBgmOsc.stop(); }catch(e){} gBgmOsc = null; }
-      if(gBgmOsc2) { try{ gBgmOsc2.stop(); }catch(e){} gBgmOsc2 = null; }
-    }
-
     // 根据节点类型自动切换BGM
     function switchBgmForNode(nodeType, isElite, isBoss){
       if(isBoss){
@@ -7266,7 +7499,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
                   btnRow.appendChild(confirmBtn);
                   var backBtn = document.createElement('button');
                   backBtn.textContent = '← 返回';
-                  backBtn.style.cssText = 'padding:.6rem 1.5rem;font-size:.9rem;background:rgba(255,255,255,0.1);color:var(--text);border:1px solid var(--border);border-radius:8px;cursor:pointer;';
+                  backBtn.style.cssText = 'padding:.6rem 1.5rem;font-size:.9rem;background:transparent;color:var(--text);border:1px solid var(--gold);border-radius:8px;cursor:pointer;';
                   backBtn.onclick = function(){ document.body.removeChild(overlay); };
                   btnRow.appendChild(backBtn);
                   overlay.appendChild(btnRow);
