@@ -6926,6 +6926,7 @@ function setBattleBackground(){
     var gBgmPlaying = false;
     var gBgmLoopTimer = null;
     var gAudioUnlocked = false;
+    var audioCtx = null;      // 主作用域audioCtx，供unlockAudioOnGesture/initAudio使用
 
     // 用户手势解锁音频（浏览器自动播放策略要求）
     function unlockAudioOnGesture(){
