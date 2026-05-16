@@ -7421,57 +7421,98 @@ function setBattleBackground(){
       // === 伤害升级（按卡牌类型差异化）===
       if(card.dmg){
         if(card.perUpgradeDmg){
-          card.dmg += card.perUpgradeDmg; // 灼热之诗：每次+6
+          card.dmg += card.perUpgradeDmg;
         } else if(card.rampageStrTurn && card.rampageStrTurn > 0){
-          card.rampageStrTurn += 3; // 狂怒/凤凰涅槃：提升增量
+          card.rampageStrTurn += 3;
+        } else if(card.hits && card.hits > 1 && card.aoe){
+          card.dmg += 1; // 多段AOE每hit+1
         } else if(card.hits && card.hits > 1){
-          card.dmg += 2; // 多段攻击：每段+2（飞剑诀3x2、双剑合璧、斗酒诗）
+          card.dmg += 2;
         } else if(card.aoe){
-          card.dmg += 3; // 全体攻击：+3
-        } else if(card.cost === 0){
-          card.dmg += 3; // 零费攻击：+3
+          card.dmg += 3;
+        } else if(card.cost === 0 && !card.hitsX){
+          card.dmg += 3;
         } else if(card.exhaust){
-          card.dmg += 5; // 消耗攻击：一次性高回报+5
+          card.dmg += 5;
         } else if(card.selfDmg && card.selfDmg > 0){
-          card.dmg += 5; // 自残攻击：+5
-        } else if(card.dmgPerStr){
-          card.dmg += 5; // 力量倍率（重剑无锋）：+5
-        } else if(card.dmgPerStrikeName){
-          card.dmg += 2; // 完美诗篇：+2
+          card.dmg += 5;
+        } else if(card.hitsX){
+          card.dmg += 2;
+        } else if(card.dmgPerStr){ card.dmg += 5;
+        } else if(card.dmgPerStrikeName){ card.dmg += 2;
+        } else if(card.grandFinale){ card.dmg += 20;
+        } else if(card.dmgPerAtkPlayed){ card.dmgPerAtkPlayed += 2;
+        } else if(card.dmgPerSkillInHand){ card.dmgPerSkillInHand += 2;
+        } else if(card.dmgPerDiscard){ card.dmgPerDiscard += 1; card.dmg += 3;
+        } else if(card.dmgPerCardDrawn){ card.dmg += 1;
+        } else if(card.costDownPerSkill){ card.dmg += 3;
+        } else if(card.nextSkillCost0){ card.dmg += 3;
+        } else if(card.drawNextTurn){ card.dmg += 3;
+        } else if(card.enemyHpLossPerCard){ card.enemyHpLossPerCard += 1; card.dmg += 2;
+        } else if(card.killBonusReward){ card.dmg += 3;
+        } else if(card.dmgRedPerHand){ card.dmg += 3;
+        } else if(card.addShivs && card.dmg){ card.dmg += 3;
         } else {
-          card.dmg += 4; // 标准攻击：+4
+          card.dmg += 4;
         }
       }
+      // 毒+伤混合升级
+      if(card.poison && card.dmg && !card.dmgPerAtkPlayed && !card.dmgPerSkillInHand && !card.dmgPerDiscard){
+        card.dmg += 2; card.poison += 1;
+      }
+
       // === 格挡升级 ===
       if(card.block){
-        if(card.block >= 20){
-          card.block += 6; // 超高格挡（不动如山30→36）
-        } else if(card.block >= 12){
-          card.block += 4; // 高格挡（火焰壁12→16、碧血染16→20）
-        } else {
-          card.block += 3; // 标准格挡
-        }
+        if(card.block >= 20) card.block += 6;
+        else if(card.block >= 12) card.block += 4;
+        else if(card.block >= 8) card.block += 3;
+        else card.block += 3;
+        if(card.blockNextTurn) card.blockNextTurn += 2;
       }
+      if(card.blockNextTurn && !card.block){ card.blockNextTurn += 2; }
+
       // === 生命回复升级 ===
-      if(card.heal){
-        card.heal = Math.floor(card.heal * 1.5);
+      if(card.heal){ card.heal = Math.floor(card.heal * 1.5); }
+
+      // === 中毒升级（纯毒）===
+      if(card.poison && !card.dmg){
+        if(card.poison >= 7) card.poison += 3;
+        else if(card.poison >= 5) card.poison += 2;
+        else card.poison += 2;
       }
-      // === 中毒升级 ===
-      if(card.poison){
-        card.poison += 2;
-      }
+
+      // === 李清照专属升级 ===
+      if(card.poisonIfPoisoned) card.poisonIfPoisoned += 3;
+      if(card.poisonPerDraw) card.poisonPerDraw += 1;
+      if(card.tempAgil) card.tempAgil += 1;
+      if(card.addShivs && !card.dmg) card.addShivs += 1;
+      if(card.poisonPerTurn && !card.poison) card.poisonPerTurn += 1;
+      if(card.poisonTriggerEvery) card.poisonTriggerEvery = Math.max(1, card.poisonTriggerEvery - 1);
+      if(card.poisonSpeedup) card.poisonSpeedup += 1;
+      if(card.gainAgil && !card.thorns) card.gainAgil += 1;
+      if(card.gainAgil && card.thorns){ card.gainAgil += 1; card.thorns += 2; }
+      if(card.shivDmgBonus && !card.shivPerTurn && !card.shivAoe) card.shivDmgBonus += 2;
+      if(card.retainCards) card.retainCards += 1;
+      if(card.intangible) card.intangible += 1;
+      if(card.dmgPerCardPlayed && card.randomTargets) card.dmgPerCardPlayed += 1;
+
       // === 自残减免 ===
       if(card.selfDmg && card.selfDmg > 0){
-        if(card.selfDmg > 3){
-          card.selfDmg = Math.max(0, card.selfDmg - 2); // 高自残（献祭6→4）
-        } else {
-          card.selfDmg = Math.max(0, card.selfDmg - 1); // 低自残（碧血染2→1等）
-        }
+        if(card.selfDmg > 3) card.selfDmg = Math.max(0, card.selfDmg - 2);
+        else card.selfDmg = Math.max(0, card.selfDmg - 1);
       }
-      // === 费用降低（仅≥2费卡）===
-      if(card.cost && card.cost >= 2){
-        card.cost = Math.max(0, card.cost - 1); // 2费→1费，3费→2费
+
+      // === 费用降低 ===
+      if(card.cost && card.cost >= 2 && card.cost < 99){
+        card.cost = Math.max(0, card.cost - 1);
       }
+
+      // === 升级后获得innate ===
+      var innateConvert = ['liqing_shengsheng2','liqing_jiambuduan','liqing_qianfan','liqing_yian2','liqing_chuixiao2','liqing_guichu2','liqing_jiushi2','liqing_chuimei2','liqing_chunyi2'];
+      if(card.id && innateConvert.indexOf(card.id) !== -1){
+        card.innate = true;
+      }
+
       card.upgraded = true;
     }
 
