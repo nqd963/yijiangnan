@@ -2574,10 +2574,11 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       <div id="sgReward" class="sg-screen" style="display:none">
         <div class="sg-reward-title"><span class="sg-ico sg-ico-gold sg-ico-lg">奖</span> 获得诗篇</div>
         <div style="text-align:center;font-size:0.8rem;color:var(--gold);padding-bottom:0.5rem;"><span class="sg-ico sg-ico-gold sg-ico-sm">金</span> +<span id="sgRewardGold">0</span> 金币</div>
-        <div class="sg-reward-pill" id="sgRewardPill" style="display:none;"></div>
+        <div class="sg-reward-items" id="sgRewardItems" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:0.2rem 0 0.5rem;"></div>
         <div class="sg-reward-cards" id="sgRewardCards"></div>
         <div class="sg-reward-actions">
           <button class="sg-btn sg-btn-primary" id="sgRewardSkip">继续</button>
+          <button class="sg-btn" id="sgRewardSkipAll" style="font-size:.6rem;padding:.25rem .6rem;margin-left:.5rem;background:rgba(100,100,100,0.15);">放弃全部</button>
         </div>
       </div>
       <!-- 休憩画面 -->
@@ -4054,6 +4055,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 
     var gBattle = null; // { enemy, hp, maxHp, intent, buffs, turn, block, ... }
     var gPendingPill = null; // 战后待领取的丹药
+    var gPendingRelic = null; // 战后待领取的遗物
 
     function getEnemyStats(eData, act){
       var hp = eData.baseHp + eData.hpGain * (act - 1);
@@ -4970,17 +4972,15 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       if(gBattle._isGroup) goldReward += 8; // 群体战额外金币
       G.gold += goldReward;
 
-      // 精英/Boss必定掉落遗物
+      // 精英/Boss掉落遗物 — 改为结算界面点击领取
+      gPendingRelic = null;
       if(gBattle.isElite || gBattle.isBoss){
         var availR = [];
         for(var ri=0;ri<RELICS.length;ri++){
           if(G.relics.indexOf(RELICS[ri].id) === -1 && (!RELICS[ri].char || RELICS[ri].char === G.charId)) availR.push(RELICS[ri]);
         }
         if(availR.length > 0){
-          var newRelic = availR[Math.floor(Math.random() * availR.length)];
-          G.relics.push(newRelic.id);
-          showEffectFloat(window.innerWidth/2, window.innerHeight/2-80, (newRelic.icon||'🔮') + ' 获得遗器：' + newRelic.name);
-          showNewCollectAnimation({icon:newRelic.icon||'🔮', name:newRelic.name});
+          gPendingRelic = availR[Math.floor(Math.random() * availR.length)];
         }
       }
 
@@ -5004,19 +5004,33 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         document.getElementById('sgRewardGold').textContent = goldReward;
         document.getElementById('sgRewardCards').innerHTML = '';
 
-        // 显示待领取丹药
-        var pillEl = document.getElementById('sgRewardPill');
-        if(gPendingPill && PILLS[gPendingPill]){
-          var pp = PILLS[gPendingPill];
-          pillEl.style.display = '';
-          pillEl.innerHTML = '<div class="sg-reward-pill-item" id="sgRewardPillBtn" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:0.3rem 0.8rem;border:1px solid var(--gold);border-radius:8px;background:var(--bg-card-alt);transition:all .2s;">' +
-            '<span style="font-size:1.5rem;">' + (pp.icon||'💊') + '</span>' +
-            '<div style="text-align:left;"><div style="font-size:.75rem;color:var(--gold);font-weight:700;">' + pp.name + '</div><div style="font-size:.55rem;color:var(--text-faint);">点击领取</div></div>' +
-            '</div>';
-        } else {
-          pillEl.style.display = 'none';
-          pillEl.innerHTML = '';
+        // 显示待领取遗物和丹药
+        var itemsEl = document.getElementById('sgRewardItems');
+        itemsEl.innerHTML = '';
+        var hasRewardItem = false;
+        // 遗物
+        if(gPendingRelic){
+          hasRewardItem = true;
+          var pr = gPendingRelic;
+          var rDiv = document.createElement('div');
+          rDiv.id = 'sgRewardRelicBtn';
+          rDiv.style.cssText = 'display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:0.3rem 0.8rem;border:1px solid var(--gold);border-radius:8px;background:var(--bg-card-alt);transition:all .2s;';
+          rDiv.innerHTML = '<span style="font-size:1.5rem;">' + (pr.icon||'🔮') + '</span>' +
+            '<div style="text-align:left;"><div style="font-size:.75rem;color:var(--gold);font-weight:700;">' + pr.name + '</div><div style="font-size:.55rem;color:var(--text-faint);">遗器 · 点击领取</div></div>';
+          itemsEl.appendChild(rDiv);
         }
+        // 丹药
+        if(gPendingPill && PILLS[gPendingPill]){
+          hasRewardItem = true;
+          var pp = PILLS[gPendingPill];
+          var pDiv = document.createElement('div');
+          pDiv.id = 'sgRewardPillBtn';
+          pDiv.style.cssText = 'display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:0.3rem 0.8rem;border:1px solid var(--gold);border-radius:8px;background:var(--bg-card-alt);transition:all .2s;';
+          pDiv.innerHTML = '<span style="font-size:1.5rem;">' + (pp.icon||'💊') + '</span>' +
+            '<div style="text-align:left;"><div style="font-size:.75rem;color:var(--gold);font-weight:700;">' + pp.name + '</div><div style="font-size:.55rem;color:var(--text-faint);">灵丹 · 点击领取</div></div>';
+          itemsEl.appendChild(pDiv);
+        }
+        itemsEl.style.display = hasRewardItem ? '' : 'none';
 
         var rewardCards = getRandomCards(3);
         var cardHtml = '';
@@ -5033,16 +5047,19 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         }
         document.getElementById('sgRewardCards').innerHTML = cardHtml;
 
-        // Bind card click to add to deck
+        // Bind card click to add to deck — 不自动完成，可继续领取遗物/丹药
         var cardEls = document.getElementById('sgRewardCards').querySelectorAll('.sg-card');
         for(var ci=0;ci<cardEls.length;ci++){
           (function(cel){
             cel.addEventListener('click',function(){
+              if(cel.classList.contains('sg-card-taken')) return;
               var cid = cel.getAttribute('data-card-id');
               if(CARDS[cid]){
                 addCardToDeck({id:cid, ...CARDS[cid]});
                 showEffectFloat(cel.offsetLeft, cel.offsetTop, '已加入卡组');
-                setTimeout(function(){ completeNode(); }, 500);
+                cel.classList.add('sg-card-taken');
+                cel.style.opacity = '0.4';
+                cel.style.pointerEvents = 'none';
               }
             });
           })(cardEls[ci]);
@@ -7777,23 +7794,40 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
         });
       }
 
-      // Reward pill (click to collect)
+      // Reward items (click to collect — 遗物/丹药)
       document.addEventListener('click', function(e){
-        var target = e.target.closest('#sgRewardPillBtn');
-        if(target && gPendingPill && PILLS[gPendingPill]){
+        // 遗物领取
+        var relicTarget = e.target.closest('#sgRewardRelicBtn');
+        if(relicTarget && gPendingRelic){
+          e.stopPropagation();
+          if(G.relics.indexOf(gPendingRelic.id) === -1){
+            G.relics.push(gPendingRelic.id);
+            showEffectFloat(relicTarget.offsetLeft, relicTarget.offsetTop, (gPendingRelic.icon||'🔮')+'已领取');
+            showNewCollectAnimation({icon:gPendingRelic.icon||'🔮', name:gPendingRelic.name});
+            gPendingRelic = null;
+            relicTarget.style.opacity = '0.4';
+            relicTarget.style.pointerEvents = 'none';
+            relicTarget.innerHTML = '<span style="font-size:.7rem;color:var(--text-faint);">已领取</span>';
+          }
+          return;
+        }
+        // 丹药领取
+        var pillTarget = e.target.closest('#sgRewardPillBtn');
+        if(pillTarget && gPendingPill && PILLS[gPendingPill]){
           e.stopPropagation();
           var pp = PILLS[gPendingPill];
           if(G.pills.length < (G.pillBagLimit||3)){
             G.pills.push(gPendingPill);
-            showEffectFloat(target.offsetLeft, target.offsetTop, pp.icon+'已领取');
+            showEffectFloat(pillTarget.offsetLeft, pillTarget.offsetTop, pp.icon+'已领取');
             showNewCollectAnimation({icon:pp.icon, name:pp.name});
             gPendingPill = null;
-            target.style.opacity = '0.4';
-            target.style.pointerEvents = 'none';
-            target.innerHTML = '<span style="font-size:.7rem;color:var(--text-faint);">已领取</span>';
+            pillTarget.style.opacity = '0.4';
+            pillTarget.style.pointerEvents = 'none';
+            pillTarget.innerHTML = '<span style="font-size:.7rem;color:var(--text-faint);">已领取</span>';
           } else {
-            showEffectFloat(target.offsetLeft, target.offsetTop, '灵丹已满');
+            showEffectFloat(pillTarget.offsetLeft, pillTarget.offsetTop, '灵丹已满');
           }
+          return;
         }
       });
 
@@ -7801,6 +7835,16 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
       var rewardContinue = document.getElementById('sgRewardSkip');
       if(rewardContinue){
         rewardContinue.addEventListener('click', function(){
+          completeNode();
+        });
+      }
+
+      // Reward skip all (放弃全部奖励)
+      var rewardSkipAll = document.getElementById('sgRewardSkipAll');
+      if(rewardSkipAll){
+        rewardSkipAll.addEventListener('click', function(){
+          gPendingRelic = null;
+          gPendingPill = null;
           completeNode();
         });
       }
