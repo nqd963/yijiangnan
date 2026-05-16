@@ -990,7 +990,9 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-enemy-area.sg-group-battle .sg-enemy{flex:1;max-width:280px;min-width:140px;}
 .sg-enemy{display:inline-block;padding:.5rem .8rem;border-radius:10px;background:var(--bg-card-alt);border:1px solid var(--border);min-width:140px;position:relative;overflow:hidden;transition:all .3s;}
 .sg-enemy-name{font-size:.85rem;font-weight:700;color:var(--red-seal);margin-bottom:.1rem;}
-.sg-enemy-intent{font-size:.5rem;color:var(--text-faint);margin-bottom:0;min-height:1em;}
+.sg-enemy-intent{font-size:.65rem;color:#e8d5b0;margin-bottom:2px;min-height:1.2em;text-shadow:0 0 6px rgba(232,213,176,.2);font-weight:600;letter-spacing:.05em;animation:sgIntentPulse 2s ease-in-out infinite;}
+.sg-enemy-intent-val{font-size:.7rem;color:#ffd700;margin-bottom:0;min-height:.9em;font-weight:700;text-shadow:0 0 8px rgba(255,215,0,.3);}
+@keyframes sgIntentPulse{0%,100%{opacity:1;}50%{opacity:.7;}}
 .sg-enemy-intent-val{font-size:.5rem;color:var(--text-dim);margin-bottom:0;min-height:.9em;}
 .sg-enemy-desc{font-size:.5rem;color:var(--text-faint);margin-bottom:0;}
 .sg-hp-bar-wrap{height:5px;border-radius:3px;background:var(--border);overflow:hidden;margin:.1rem 0;}
@@ -1138,6 +1140,17 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   box-shadow:0 12px 32px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.12);
   z-index:4;transition:transform .1s,box-shadow .1s;
 }
+/* 先古牌悬停特效 */
+.sg-card[style*="#ff44ff"]:hover{
+  box-shadow:0 12px 40px rgba(255,68,255,.25),0 0 30px rgba(255,68,255,.15),inset 0 1px 0 rgba(255,255,255,.12);
+  border-color:#ff44ff;
+  transform:translateY(-12px) scale(1.08);
+  animation:sgAncientGlow 0.8s ease-in-out infinite alternate;
+}
+@keyframes sgAncientGlow{
+  0%{filter:brightness(1) drop-shadow(0 0 4px rgba(255,68,255,.3));}
+  100%{filter:brightness(1.1) drop-shadow(0 0 12px rgba(255,68,255,.6));}
+}
 .sg-card.disabled{opacity:.45;cursor:not-allowed;transform:none!important;}
 .sg-card.disabled:hover{transform:none!important;border-color:var(--border);box-shadow:0 2px 6px var(--shadow);}
 /* 费用宝石 */
@@ -1228,7 +1241,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 .sg-card.primary{border-color:var(--gold);border-width:2px;}
 .sg-card.primary .sg-card-name{background:linear-gradient(180deg,rgba(201,168,76,.2),rgba(201,168,76,.05));}
 /* 稀有/金色卡牌微光浮动 */
-.sg-card[style*="#ffcc00"],.sg-card.primary{animation:sgRareGlow 2s ease-in-out infinite;}
+.sg-card[style*="#ffcc00"],.sg-card[style*="#ff44ff"],.sg-card.primary{animation:sgRareGlow 2s ease-in-out infinite;}
 @keyframes sgRareGlow{0%,100%{box-shadow:0 2px 6px var(--shadow),inset 0 1px 0 rgba(255,255,255,.08);}50%{box-shadow:0 2px 12px rgba(255,204,0,.2),inset 0 1px 0 rgba(255,255,255,.1);}}
 
 /* ── 术语浮层提示 ── */
@@ -1516,7 +1529,6 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   .sg-player-portrait-icon{width:40px;height:40px;font-size:1.2rem}
   .sg-enemy{padding:.4rem .6rem;min-width:120px}
   .sg-enemy-name{font-size:.85rem}
-  .sg-enemy-desc,.sg-enemy-intent,.sg-enemy-intent-val{font-size:.5rem}
   .sg-status{font-size:.58rem;gap:.25rem}
   .sg-status-item{padding:.15rem .35rem}
   .sg-shop-items{grid-template-columns:repeat(2,1fr)}
@@ -1808,6 +1820,18 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 }
 .sg-collection-subtab:hover{color:var(--gold);border-color:var(--gold);}
 .sg-collection-subtab.active{background:var(--gold);color:#fff;border-color:var(--gold);}
+/* 角色筛选栏 */
+.sg-collection-char-tabs{
+  display:flex;gap:4px;margin-bottom:0.4rem;flex-wrap:wrap;
+}
+.sg-collection-char-tab{
+  padding:0.2rem 0.6rem;font-size:0.6rem;cursor:pointer;
+  border:1px solid var(--border);border-radius:12px;
+  color:var(--text-dim);background:transparent;transition:all 0.2s;
+  font-family:inherit;
+}
+.sg-collection-char-tab:hover{color:var(--gold);border-color:var(--gold);}
+.sg-collection-char-tab.active{background:var(--gold);color:#fff;border-color:var(--gold);}
 /* 网格 */
 .sg-collection-grid{
   display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
@@ -1955,7 +1979,6 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 <!-- ══ THEME TOGGLE ══ -->
 <button class="theme-toggle" id="themeToggle" title="切换深色/浅色模式">🌙</button>
 <button class="theme-toggle" id="shareBtn" title="分享此页">🔗</button>
-
 
 <div id="sgMainPage">
 <!-- ══════════════════ HERO ══════════════════ -->
@@ -2298,7 +2321,6 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 </footer>
 
 
-
 <!-- ══ BGM PLAYER (Web Audio API 古风旋律) ══ -->
 <div class="bgm-wrap" id="bgmWrap">
   <div class="bgm-btn" id="bgmBtn" title="点击播放/停止古风BGM">
@@ -2497,6 +2519,9 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
           <div class="sg-cs-sub-title">— 以诗为剑，攀登诗道之巅 —</div>
         </div>
         <div class="sg-cs-cards-container" id="sgCharCards"></div>
+              <div style="text-align:center;padding:1rem 0 0;">
+          <button class="sg-btn" id="sgCharSelectBack" style="font-size:.6rem;">‹ 返回主页</button>
+        </div>
       </div>
       <!-- 地图画面 -->
       <div id="sgMap" class="sg-screen" style="display:none">
@@ -2556,7 +2581,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
             <div class="sg-status-item sg-stat-tip" id="sgStatusHp"><span class="sg-ico sg-ico-hp">心</span> <span id="sgPlayerHp">80</span>/<span id="sgPlayerMaxHp">80</span><span class="sg-stat-tooltip">当前生命值，归零则落败</span></div>
             <div class="sg-status-item sg-stat-tip" id="sgStatusEnergy"><span class="sg-ico sg-ico-energy">气</span> <span id="sgPlayerEnergy">3</span>/<span id="sgPlayerMaxEnergy">3</span><span class="sg-stat-tooltip">行动能量，打出卡牌需要消耗能量</span></div>
             <div class="sg-status-item sg-stat-tip" id="sgStatusBlock"><span class="sg-ico sg-ico-block">盾</span> <span id="sgPlayerBlock">0</span><span class="sg-stat-tooltip">护盾，抵消等量攻击伤害，每回合重置</span></div>
-            <div class="sg-status-item sg-stat-tip" id="sgStatusStr"><span class="sg-ico sg-ico-str">力</span> <span id="sgPlayerStrength">0</span><span class="sg-stat-tooltip">力量，每层使攻击伤害+3</span></div>
+            <div class="sg-status-item sg-stat-tip" id="sgStatusStr"><span class="sg-ico sg-ico-str">力</span> <span id="sgPlayerStrength">0</span><span class="sg-stat-tooltip" style="display:none;">力量，每层使攻击伤害+3</span><span class="sg-power-tip" style="position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--bg-card-alt);color:var(--text);font-size:.45rem;padding:2px 6px;border-radius:4px;border:1px solid var(--gold);white-space:nowrap;z-index:100;display:none;box-shadow:0 2px 8px rgba(0,0,0,.4);">力量：每层使攻击伤害+3<br>来源：能力牌、「烽火」等</span></div>
             <div class="sg-status-item sg-stat-tip" id="sgStatusPoison"><span class="sg-ico sg-ico-poison">毒</span> <span id="sgPlayerPoison">0</span><span class="sg-stat-tooltip">中毒，每回合结束时受到层数伤害</span></div>
             <div class="sg-status-item" id="sgDeckCount"><span class="sg-ico sg-ico-deck sg-ico-sm">典</span> <span id="sgDeckCountNum">0</span> <span class="sg-stat-tip" id="sgDrawPileBtn" style="cursor:pointer"><span class="sg-ico sg-ico-deck sg-ico-sm">牌</span><span id="sgDrawPile">0</span><span class="sg-stat-tooltip">抽牌堆：点击查看剩余卡牌</span></span> <span class="sg-ico sg-ico-deck sg-ico-sm">手</span><span id="sgHandCount">0</span> <span class="sg-stat-tip" id="sgDiscardPileBtn" style="cursor:pointer"><span class="sg-ico sg-ico-deck sg-ico-sm">笺</span><span id="sgDiscardPile">0</span><span class="sg-stat-tooltip">弃牌堆：点击查看已弃卡牌</span></span></div>
             <div class="sg-status-item sg-stat-tip" id="sgStatusTurn"><span class="sg-ico sg-ico-turn">回</span> <span id="sgTurnNum">0</span><span class="sg-stat-tooltip">当前回合数</span></div>
@@ -2645,7 +2670,6 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 <!-- Deck Popup（移出所有屏幕容器，避免被父级display:none隐藏） -->
 <div id="sgDeckPopup" class="sg-screen" style="display:none;"></div>
 
-
 <!-- ═══════════════════════════ JS ═══════════════════════════ -->
 <script>
 (function(){
@@ -2660,14 +2684,15 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 
   /* ── Dark Mode ── */
   var toggle = document.getElementById('themeToggle');
-  var light = localStorage.getItem('light') === 'true';
+  var light = false;
+  try{ light = localStorage.getItem('light') === 'true'; }catch(e){}
   if(light) document.body.classList.add('light');
   toggle.textContent = light ? '\uD83C\uDF19' : '\u2600\uFE0F';
   toggle.addEventListener('click', function(){
     light = !light;
     document.body.classList.toggle('light', light);
     toggle.textContent = light ? '\uD83C\uDF19' : '\u2600\uFE0F';
-    localStorage.setItem('light', light);
+    try{ localStorage.setItem('light', light); }catch(e){}
   });
   /* ── Share ── */
   var shareBtn = document.getElementById('shareBtn');
@@ -3191,7 +3216,6 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
     });
   })();
 
-
   (function(){
     "use strict";
 
@@ -3199,82 +3223,45 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
     /* ══════ 数据定义 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
 
-    var CARDS = {
-      yinyong:{name:"吟咏",cost:0,type:"attack",dmg:5,desc:"基础诗咏 · 造成5点伤害",rarity:"basic"},
-      mosong:{name:"默诵",cost:0,type:"skill",block:4,desc:"基础默诵 · 获得4点格挡",rarity:"basic"},
-      qingci:{name:"清词",cost:1,type:"attack",dmg:9,desc:"清词丽句 · 造成9点伤害",rarity:"common",char:"lizhi"},
+        var CARDS = {
+      // === 基础牌 (所有角色共用) ===
+      yinyong:{id:"yinyong",name:"吟咏",cost:0,type:"attack",dmg:5,desc:"基础诗咏 · 造成5点伤害",rarity:"basic"},
+      mosong:{id:"mosong",name:"默诵",cost:0,type:"skill",block:4,desc:"基础默诵 · 获得4点格挡",rarity:"basic"},
+
+      // === 其他角色与通用牌 ===
       mansha:{name:"浣溪沙",cost:1,type:"skill",block:8,desc:"护体清溪 · 获得8点格挡",rarity:"common",char:"sush"},
-      puziman:{name:"菩萨蛮",cost:1,type:"attack",dmg:6,hits:2,desc:"双叠句 · 造成6点伤害×2",rarity:"common",char:"liqing"},
-      dianjiang:{name:"点绛唇",cost:1,type:"skill",debuff:"vuln",val:1,desc:"蹴罢秋千 · 施加易伤1层",rarity:"common",char:"liqing"},
-      pozhen:{name:"破阵子",cost:2,type:"attack",dmg:20,desc:"醉里挑灯 · 造成20点伤害",rarity:"common",char:"lizhi"},
-      manjiang:{name:"满江红",cost:2,type:"attack",dmg:16,desc:"壮怀激烈 · 造成16点伤害",rarity:"common",char:"lizhi"},
-      jingyesi:{name:"静夜思",cost:0,type:"attack",dmg:4,desc:"低头思故乡 · 造成4点伤害",rarity:"common",char:"lizhi"},
-      yijianmei:{name:"一剪梅",cost:1,type:"skill",block:5,debuff:"vuln",val:1,desc:"此情无计可消除 · 5格挡·易伤1层",rarity:"common",char:"liqing"},
-      guiziyao:{name:"归字谣",cost:1,type:"attack",dmg:7,debuff:"weak",val:1,desc:"归去来兮 · 7伤·虚弱1层",rarity:"common",char:"lizhi"},
-      nangezi:{name:"南歌子",cost:1,type:"skill",poison:5,desc:"凤髻金泥带 · 叠毒5",rarity:"common",char:"liqing"},
+      puziman:{name:"菩萨蛮",cost:1,type:"attack",dmg:6,hits:2,desc:"双叠句 · 造成6点伤害×2",rarity:"common"},
+      dianjiang:{name:"点绛唇",cost:1,type:"skill",debuff:"vuln",val:1,desc:"蹴罢秋千 · 施加易伤1层",rarity:"common"},
+      yijianmei:{name:"一剪梅",cost:1,type:"skill",block:5,debuff:"vuln",val:1,desc:"此情无计可消除 · 5格挡·易伤1层",rarity:"common"},
+      nangezi:{name:"南歌子",cost:1,type:"skill",poison:5,desc:"凤髻金泥带 · 叠毒5",rarity:"common"},
       ruanlang:{name:"阮郎归",cost:1,type:"attack",dmg:6,block:6,desc:"天边金掌露成霜 · 6伤·6格挡",rarity:"common",char:"sush"},
-      xifenfei:{name:"惜分飞",cost:1,type:"attack",dmg:5,hits:2,desc:"泪湿阑干 · 5伤害×2",rarity:"common",char:"lizhi"},
-      guomei:{name:"过梅岭",cost:1,type:"attack",dmg:8,selfDmg:3,desc:"中有行人 · 8伤·自损3",rarity:"common",char:"lizhi"},
       jiangcheng:{name:"江城子",cost:1,type:"attack",dmg:12,half:true,desc:"十年生死两茫茫 · 半血以下伤害翻倍",rarity:"uncommon",char:"sush"},
       ruman:{name:"如梦令",cost:1,type:"skill",block:6,draw:1,desc:"昨夜雨疏风骤 · 6格挡·抽1牌",rarity:"uncommon",char:"sush"},
       qingping:{name:"清平乐",cost:1,type:"skill",block:6,debuff:"vuln",val:1,desc:"清平祥和 · 6格挡易伤1层",rarity:"uncommon",char:"sush"},
-      shengsheng:{name:"声声慢",cost:1,type:"skill",debuff:"weak",val:2,desc:"寻寻觅觅冷冷清清 · 虚弱2层",rarity:"uncommon",char:"liqing"},
-      diehua:{name:"蝶恋花",cost:1,type:"skill",draw:2,desc:"庭院深深 · 抽2张牌",rarity:"uncommon",char:"liqing"},
+      shengsheng:{name:"声声慢",cost:1,type:"skill",debuff:"weak",val:2,desc:"寻寻觅觅冷冷清清 · 虚弱2层",rarity:"uncommon"},
+      diehua:{name:"蝶恋花",cost:1,type:"skill",draw:2,desc:"庭院深深 · 抽2张牌",rarity:"uncommon"},
       yujia:{name:"渔家傲",cost:1,type:"skill",block:8,gainEnergy:1,desc:"塞上秋来风景异 · 8格挡·+1能量",rarity:"uncommon",char:"sush"},
-      linjiang:{name:"临江仙",cost:0,type:"skill",heal:8,exhaust:true,desc:"梦后楼台高锁 · 回复8HP·消耗",rarity:"uncommon",char:"liqing"},
+      linjiang:{name:"临江仙",cost:0,type:"skill",heal:8,exhaust:true,desc:"梦后楼台高锁 · 回复8HP·消耗",rarity:"uncommon"},
       dingfeng:{name:"定风波",cost:1,type:"skill",buff:"str",val:2,desc:"莫听穿林打叶声 · 获得2点力量",rarity:"uncommon",char:"sush"},
       niannu:{name:"念奴娇",cost:2,type:"attack",dmg:12,aoe:true,desc:"大江东去浪淘尽 · 全体12点伤害",rarity:"uncommon",char:"sush"},
-      jiangjin:{name:"将进酒",cost:1,type:"attack",dmg:8,gainEnergy:1,desc:"杯莫停 · 8伤+1能量",rarity:"uncommon",char:"lizhi"},
-      tasha:{name:"踏莎行",cost:1,type:"attack",dmg:4,hits:3,desc:"雾失楼台 · 4点伤害×3",rarity:"uncommon",char:"lizhi"},
       yulin:{name:"雨霖铃",cost:2,type:"skill",block:15,desc:"寒蝉凄切对长亭晚 · 获得15格挡",rarity:"uncommon",char:"sush"},
-      wanglu:{name:"望庐山瀑布",cost:1,type:"attack",dmg:10,draw:1,desc:"飞流直下三千尺 · 10伤·抽1牌",rarity:"uncommon",char:"lizhi"},
-      busuanzi:{name:"卜算子",cost:1,type:"attack",dmgPerCard:3,desc:"我住长江头 · 每张手牌+3伤",rarity:"uncommon",char:"lizhi"},
       caisangzi:{name:"采桑子",cost:1,type:"skill",block:6,poison:3,desc:"轻舟短棹 · 6格挡叠毒3",rarity:"uncommon",char:"sush"},
       daolianzi:{name:"捣练子",cost:0,type:"skill",gainEnergy:2,exhaust:true,desc:"深院静 · 得2能量消耗",rarity:"uncommon",char:"sush"},
       langtaosha:{name:"浪淘沙",cost:2,type:"attack",dmg:10,aoe:true,desc:"大江东去浪淘尽 · 全体10伤",rarity:"uncommon",char:"sush"},
       mantingfang:{name:"满庭芳",cost:2,type:"skill",heal:8,block:8,desc:"十里荷花菡萏香 · 回8HP·8格挡",rarity:"uncommon",char:"sush"},
       shaonian:{name:"少年游",cost:1,type:"skill",tempStr:3,desc:"长安古道马迟迟 · 本回合+3力量",rarity:"uncommon",char:"sush"},
       tanpo:{name:"摊破浣溪沙",cost:2,type:"skill",draw:3,desc:"菡萏香销翠叶残 · 抽3张牌",rarity:"uncommon",char:"sush"},
-      wangjiangnan:{name:"望江南",cost:1,type:"skill",block:10,exhaust:true,desc:"梳洗罢 · 10格挡消耗",rarity:"uncommon",char:"liqing"},
-      wulingchun:{name:"武陵春",cost:2,type:"attack",dmg:10,dmgPerMissingHp:1,desc:"载不动许多愁 · 每少20HP+1伤",rarity:"uncommon",char:"lizhi"},
+      wangjiangnan:{name:"望江南",cost:1,type:"skill",block:10,exhaust:true,desc:"梳洗罢 · 10格挡消耗",rarity:"uncommon"},
       xiaochongshan:{name:"小重山",cost:1,type:"skill",block:8,desc:"昨夜寒蛩 · 8格挡下回+2力",rarity:"uncommon",char:"liqing",nextTurnStr:2},
-      xingxiangzi:{name:"行香子",cost:1,type:"skill",draw:1,gainEnergy:1,desc:"小园几许 · 抽1牌+1能量",rarity:"uncommon",char:"liqing"},
-      zuihuajian:{name:"醉花间",cost:1,type:"attack",dmg:6,blockBonus:true,desc:"晴雪小园 · 每3格挡+1伤",rarity:"uncommon",char:"lizhi"},
-      jianzi:{name:"减字木兰花",cost:2,type:"attack",dmg:14,debuff:"strDown",val:2,desc:"天涯旧恨 · 14伤减敌力量2",rarity:"uncommon",char:"lizhi"},
-      shuidiao:{name:"水调歌头",cost:2,type:"power",desc:"每回合+1能量",rarity:"rare",power:"energy",char:"lizhi"},
+      xingxiangzi:{name:"行香子",cost:1,type:"skill",draw:1,gainEnergy:1,desc:"小园几许 · 抽1牌+1能量",rarity:"uncommon"},
       xijiang:{name:"西江月",cost:1,type:"power",desc:"每回合+3格挡",rarity:"rare",power:"block",char:"sush"},
-      zhegu:{name:"鹧鸪天",cost:1,type:"power",desc:"每回合+1力量",rarity:"rare",power:"strength",char:"liqing"},
+      zhegu:{name:"鹧鸪天",cost:1,type:"power",desc:"每回合+1力量",rarity:"rare",power:"strength"},
       qinyuan:{name:"沁园春",cost:3,type:"skill",heal:10,maxHp:2,exhaust:true,desc:"北国风光千里雪 · 回10HP·+2最大HP·消耗",rarity:"rare",char:"sush"},
-      liuzhou:{name:"六州歌头",cost:3,type:"attack",dmg:28,exhaust:true,desc:"少年侠气 · 28伤消耗",rarity:"rare",char:"lizhi"},
-      yiqine:{name:"忆秦娥",cost:2,type:"attack",dmg:18,exhaust:true,debuff:"vuln",val:2,debuff2:"weak",val2:2,desc:"西风残照汉家陵阙 · 18伤·易伤2·虚弱2·消耗",rarity:"rare",char:"lizhi"},
-      yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal",char:"liqing"},
-      // === 通用新增 ===
-      liuyachao:{name:"六幺令",cost:1,type:"attack",dmg:5,hits:3,desc:"绿阴春尽 · 5伤害×3",rarity:"common",char:"lizhi"},
+      yumeiren:{name:"虞美人",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal"},
       shizhouman:{name:"十洲慢",cost:1,type:"skill",block:6,desc:"十洲云水 · 6格挡",rarity:"common",char:"sush"},
-      qingyu:{name:"青玉案",cost:2,type:"attack",dmg:10,debuff:"vuln",val:2,desc:"东风夜放花千树 · 10伤·易伤2",rarity:"uncommon",char:"liqing"},
+      qingyu:{name:"青玉案",cost:2,type:"attack",dmg:10,debuff:"vuln",val:2,desc:"东风夜放花千树 · 10伤·易伤2",rarity:"uncommon"},
       yulouchun:{name:"玉楼春",cost:1,type:"skill",block:8,poison:2,desc:"绿杨芳草 · 8格挡·叠毒2",rarity:"common",char:"sush"},
-      xijiangyue:{name:"西江月·夜",cost:0,type:"attack",dmg:6,desc:"明月惊鹊 · 6伤",rarity:"common",char:"lizhi"},
       zuiweng:{name:"醉翁操",cost:2,type:"attack",dmg:12,heal:5,desc:"醉翁之意 · 12伤·回5HP",rarity:"uncommon",char:"sush"},
-      chengfeng:{name:"乘风",cost:0,type:"skill",gainEnergy:1,exhaust:true,desc:"乘风归去 · 1能量·消耗",rarity:"common",char:"lizhi"},
-      shenzui:{name:"深醉",cost:1,type:"skill",draw:1,gainEnergy:1,desc:"沉醉不知归路 · 抽1·+1能量",rarity:"uncommon",char:"lizhi"},
-      // === 李白专属 ===
-      lizhi_jiutian:{name:"九天揽月",cost:2,type:"attack",dmg:18,desc:"欲上青天揽明月 · 18伤",rarity:"uncommon",char:"lizhi"},
-      lizhi_baixue:{name:"阳春白雪",cost:1,type:"skill",block:8,desc:"曲高和寡 · 8格挡",rarity:"common",char:"lizhi"},
-      lizhi_wangyue:{name:"望岳",cost:1,type:"attack",dmg:10,desc:"会当凌绝顶 · 10伤",rarity:"common",char:"lizhi"},
-      lizhi_bailu:{name:"白鹭",cost:0,type:"attack",dmg:4,desc:"一行白鹭上青天 · 4伤",rarity:"common",char:"lizhi"},
-      lizhi_shuidao:{name:"蜀道难",cost:2,type:"attack",dmg:12,aoe:true,desc:"难于上青天 · 全体12伤",rarity:"uncommon",char:"lizhi"},
-      lizhi_taohua:{name:"桃花潭",cost:1,type:"skill",heal:6,desc:"桃花潭水深千尺 · 回6HP",rarity:"uncommon",char:"lizhi"},
-      lizhi_jingye:{name:"静夜思·月",cost:0,type:"attack",dmg:3,draw:1,desc:"疑是地上霜 · 3伤·抽1",rarity:"common",char:"lizhi"},
-      lizhi_yanbo:{name:"烟波",cost:1,type:"skill",block:6,debuff:"weak",val:1,desc:"烟波江上使人愁 · 6格挡·虚弱1",rarity:"common",char:"lizhi"},
-      lizhi_jiangnan:{name:"忆江南",cost:1,type:"attack",dmg:7,draw:1,desc:"能不忆江南 · 7伤·抽1",rarity:"uncommon",char:"lizhi"},
-      lizhi_tianmu:{name:"天姥吟",cost:3,type:"attack",dmg:15,aoe:true,exhaust:true,desc:"安能摧眉折腰 · 全体15伤·消耗",rarity:"rare",char:"lizhi"},
-      lizhi_changfeng:{name:"长风破浪",cost:2,type:"skill",gainEnergy:3,exhaust:true,desc:"直挂云帆济沧海 · 3能量·消耗",rarity:"rare",char:"lizhi"},
-      lizhi_zuoxian:{name:"醉仙",cost:1,type:"power",desc:"每回合+1能量",rarity:"rare",power:"energy",char:"lizhi"},
-      // === 新增 李白专属卡片（Item 8）===
-      lizhi_zuixian:{name:"醉仙狂歌",cost:1,type:"attack",dmg:10,enemyHalf:true,desc:"醉仙狂歌 · 10伤·敌半血翻倍",rarity:"uncommon",char:"lizhi"},
-      lizhi_tianhe:{name:"天河流水",cost:2,type:"attack",dmg:8,hits:3,desc:"疑是银河落九天 · 8伤×3",rarity:"uncommon",char:"lizhi"},
-      lizhi_yueying:{name:"月影剑",cost:1,type:"attack",dmg:8,killEnergy:2,desc:"月下剑影 · 8伤·击杀+2能量",rarity:"common",char:"lizhi"},
-      // === 苏轼专属 ===
       sush_dajiang:{name:"大江东去",cost:2,type:"attack",dmg:14,aoe:true,desc:"浪淘尽 · 全体14伤",rarity:"uncommon",char:"sush"},
       sush_dingfeng:{name:"也无风雨",cost:1,type:"skill",block:10,desc:"也无风雨也无晴 · 10格挡",rarity:"common",char:"sush"},
       sush_liyue:{name:"梨月",cost:0,type:"attack",dmg:5,desc:"人生如逆旅 · 5伤",rarity:"common",char:"sush"},
@@ -3287,34 +3274,222 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       sush_liying:{name:"流莺",cost:1,type:"attack",dmg:4,hits:3,desc:"百啭无人能解 · 4伤×3",rarity:"uncommon",char:"sush"},
       sush_shuiyun:{name:"水云间",cost:2,type:"skill",block:15,desc:"一蓑烟雨任平生 · 15格挡",rarity:"uncommon",char:"sush"},
       sush_kuangda:{name:"旷达",cost:2,type:"power",desc:"每回合+3格挡",rarity:"rare",power:"block",char:"sush"},
-      // === 新增 苏轼专属卡片（Item 8）===
       sush_kuangda2:{name:"旷达",cost:1,type:"skill",block:10,draw:2,desc:"也无风雨也无晴 · 10格挡·抽2",rarity:"common",char:"sush"},
       sush_jianghai:{name:"江海余生",cost:2,type:"skill",block:15,debuff:"strDown",val:3,desc:"江海寄余生 · 15格挡·减敌力3",rarity:"uncommon",char:"sush"},
       sush_songfeng:{name:"松风",cost:1,type:"skill",block:6,nextAtkBonus:5,desc:"松风吹解带 · 6格挡·下次攻击+5",rarity:"common",char:"sush"},
-      // === 李清照专属 ===
-      liqing_xunmi:{name:"寻寻觅觅",cost:0,type:"skill",debuff:"weak",val:2,desc:"冷冷清清 · 虚弱2层",rarity:"common",char:"liqing"},
-      liqing_mandu:{name:"满地黄花",cost:1,type:"attack",dmg:12,desc:"憔悴损 · 12伤",rarity:"common",char:"liqing"},
-      liqing_wutong:{name:"梧桐雨",cost:1,type:"skill",block:8,desc:"到黄昏点点滴滴 · 8格挡",rarity:"common",char:"liqing"},
-      liqing_yanzi:{name:"燕归来",cost:1,type:"skill",draw:2,exhaust:true,desc:"似曾相识燕归来 · 抽2·消耗",rarity:"uncommon",char:"liqing"},
-      liqing_lianxin:{name:"莲心",cost:1,type:"attack",dmg:5,debuff:"weak",val:1,desc:"莲动下渔舟 · 5伤·虚弱1",rarity:"common",char:"liqing"},
-      liqing_chunyi:{name:"春意",cost:0,type:"skill",block:4,draw:1,desc:"应是绿肥红瘦 · 4格挡·抽1",rarity:"common",char:"liqing"},
-      liqing_hehua:{name:"藕花深处",cost:1,type:"attack",dmg:5,hits:2,desc:"争渡争渡 · 5伤×2",rarity:"common",char:"liqing"},
-      liqing_shengge:{name:"笙歌",cost:2,type:"skill",heal:15,exhaust:true,desc:"沉醉不知归路 · 回15HP·消耗",rarity:"uncommon",char:"liqing"},
-      liqing_meihua:{name:"梅花烙",cost:1,type:"attack",dmg:4,poison:4,desc:"此花不与群花比 · 4伤·叠毒4",rarity:"uncommon",char:"liqing"},
-      liqing_xianglian:{name:"香帘",cost:1,type:"skill",block:6,gainEnergy:1,desc:"帘卷西风 · 6格挡·+1能量",rarity:"common",char:"liqing"},
-      liqing_jingmeng:{name:"惊梦",cost:2,type:"attack",dmg:10,debuff:"vuln",val:2,desc:"剪不断理还乱 · 10伤·易伤2",rarity:"uncommon",char:"liqing"},
-      liqing_wanque:{name:"婉约",cost:1,type:"power",desc:"每回合回复2HP",rarity:"rare",power:"heal",char:"liqing"},
-      // === 新增 李清照专属卡片（Item 8）===
-      liqing_wanque2:{name:"婉约",cost:1,type:"skill",block:5,debuff:"vuln",val:2,desc:"帘卷西风 · 5格挡·易伤2",rarity:"common",char:"liqing"},
-      liqing_hehua2:{name:"荷花渡",cost:2,type:"attack",dmg:6,heal:4,desc:"误入藕花深处 · 6伤·回4HP",rarity:"uncommon",char:"liqing"},
-      liqing_xianglian2:{name:"香帘",cost:0,type:"skill",draw:1,debuff:"strDown",val:1,desc:"帘卷西风 · 抽1·减敌力1",rarity:"common",char:"liqing"},
-      // === 无色牌（事件获得） ===
+      // === 李清照专属卡牌（86张，改编自静谧猎手） ===
+      // ── 攻击牌（28张） ──
+      liqing_strike:{id:"liqing_strike",name:"漱玉击",cost:1,type:"attack",rarity:"basic",dmg:6,char:"liqing",desc:"漱玉词心 · 造成6点伤害"},
+      liqing_anxiang:{id:"liqing_anxiang",name:"暗香",cost:0,type:"attack",rarity:"basic",dmg:3,debuff:"weak",val:1,char:"liqing",desc:"暗香盈袖 · 造成3点伤害 · 虚弱1层"},
+      liqing_qingmei:{id:"liqing_qingmei",name:"青梅嗅",cost:0,type:"attack",rarity:"rare",dmg:11,innate:true,exhaust:true,char:"liqing",desc:"倚门回首 · 造成11点伤害 · 消耗 · 固有"},
+      liqing_luanhong:{id:"liqing_luanhong",name:"乱红飞度",cost:1,type:"attack",rarity:"common",dmg:4,hits:2,aoe:true,char:"liqing",desc:"乱红飞度 · 对所有敌人造成4点伤害×2"},
+      liqing_zhiqingmei:{id:"liqing_zhiqingmei",name:"掷青梅",cost:1,type:"attack",rarity:"common",dmg:9,draw:1,discard:1,char:"liqing",desc:"青梅掷 · 造成9点伤害 · 抽1张牌 · 弃1张牌"},
+      liqing_fengzhu:{id:"liqing_fengzhu",name:"风住尘香",cost:2,type:"attack",rarity:"uncommon",dmg:10,block:10,char:"liqing",desc:"风住尘香 · 获得10点格挡 · 造成10点伤害"},
+      liqing_jiuwanli:{id:"liqing_jiuwanli",name:"九万里风",cost:1,type:"attack",rarity:"rare",dmg:10,aoe:true,echoKill:true,char:"liqing",desc:"九万里风 · 对所有敌人造成10点伤害 · 击杀重复"},
+      liqing_yihanmei:{id:"liqing_yihanmei",name:"一剪寒梅",cost:1,type:"attack",rarity:"rare",dmgPerAtkPlayed:6,char:"liqing",desc:"一剪寒梅 · 本回合每张攻击牌造成6点伤害"},
+      liqing_mandi:{id:"liqing_mandi",name:"满地黄花",cost:1,type:"attack",rarity:"rare",dmgPerSkillInHand:5,char:"liqing",desc:"满地黄花 · 手牌每张技能牌造成5点伤害"},
+      liqing_lvfei:{id:"liqing_lvfei",name:"绿肥红瘦",cost:1,type:"attack",rarity:"common",dmg:6,aoe:true,sly:true,char:"liqing",desc:"绿肥红瘦 · 对所有敌人造成6点伤害 · 奇巧"},
+      liqing_eran:{id:"liqing_eran",name:"二安词话",cost:1,type:"attack",rarity:"common",dmg:7,extraIf5Hand:true,char:"liqing",desc:"二安词话 · 造成7点伤害 · 手牌≥5额外攻击一次"},
+      liqing_zaibudong:{id:"liqing_zaibudong",name:"载不动愁",cost:0,type:"attack",rarity:"rare",dmg:60,aoe:true,grandFinale:true,char:"liqing",desc:"载不动愁 · 抽牌堆空时对所有敌人造成60点伤害"},
+      liqing_liuyan:{id:"liqing_liuyan",name:"柳眼梅腮",cost:1,type:"attack",rarity:"common",dmg:3,addShivs:2,char:"liqing",desc:"柳眼梅腮 · 造成3点伤害 · 将2张残花加入手牌"},
+      liqing_wushi:{id:"liqing_wushi",name:"物是人非",cost:1,type:"attack",rarity:"rare",dmg:9,dmgPerDiscard:4,char:"liqing",desc:"物是人非 · 造成9点伤害 · 每弃牌+4伤害"},
+      liqing_jiangshan:{id:"liqing_jiangshan",name:"江山愁",cost:3,type:"attack",rarity:"rare",dmg:1,dmgPerCardDrawn:1,char:"liqing",desc:"江山留愁 · 造成1点伤害 · 本场每抽牌+1伤害"},
+      liqing_caixia:{id:"liqing_caixia",name:"才下眉头",cost:3,type:"attack",rarity:"rare",dmg:15,costDownPerSkill:1,char:"liqing",desc:"才下眉头 · 造成15点伤害 · 每技能费用-1"},
+      liqing_lianjuan:{id:"liqing_lianjuan",name:"帘卷西风",cost:1,type:"attack",rarity:"common",dmg:6,poison:3,char:"liqing",desc:"帘卷西风 · 造成6点伤害 · 施加3层中毒"},
+      liqing_zhameng:{id:"liqing_zhameng",name:"蚱蜢舟",cost:2,type:"attack",rarity:"rare",dmg:12,nextSkillCost0:true,char:"liqing",desc:"蚱蜢舟 · 造成12点伤害 · 下一张技能牌费用为0"},
+      liqing_yueman:{id:"liqing_yueman",name:"月满西楼",cost:0,type:"attack",rarity:"rare",dmg:13,dmgRedPerHand:2,char:"liqing",desc:"月满西楼 · 造成13点伤害 · 手牌每牌伤害-2"},
+      liqing_xinghe:{id:"liqing_xinghe",name:"星河舞",cost:2,type:"attack",rarity:"rare",dmg:15,drawNextTurn:2,char:"liqing",desc:"星河欲转 · 造成15点伤害 · 下回合抽2张牌"},
+      liqing_ouhua:{id:"liqing_ouhua",name:"藕花深处",cost:2,type:"attack",rarity:"common",dmg:3,hits:4,aoe:true,sly:true,randomTargets:true,char:"liqing",desc:"藕花深处 · 随机敌人3点伤害×4 · 奇巧"},
+      liqing_qiqican:{id:"liqing_qiqican",name:"凄凄惨惨",cost:-1,type:"attack",rarity:"rare",dmg:8,hitsX:true,char:"liqing",desc:"凄凄惨惨 · 造成8点伤害X次(X为能量)"},
+      liqing_wutongyu:{id:"liqing_wutongyu",name:"梧桐雨",cost:0,type:"attack",rarity:"common",dmg:6,char:"liqing",desc:"梧桐雨 · 造成6点伤害"},
+      liqing_chousun:{id:"liqing_chousun",name:"愁损北人",cost:1,type:"attack",rarity:"rare",dmg:8,enemyHpLossPerCard:2,char:"liqing",desc:"愁损北人 · 造成8点伤害 · 每张牌敌人失去2点生命"},
+      liqing_renbi:{id:"liqing_renbi",name:"人比黄花",cost:1,type:"attack",rarity:"common",dmg:8,debuff:"weak",val:1,char:"liqing",desc:"人比黄花 · 造成8点伤害 · 虚弱1层"},
+      liqing_bingqi:{id:"liqing_bingqi",name:"病起萧萧",cost:0,type:"attack",rarity:"ancient",dmg:11,debuff:"weak",val:3,innate:true,char:"liqing",desc:"病起萧萧 · 固有 · 造成11点伤害 · 虚弱3层"},
+      liqing_pengzhou:{id:"liqing_pengzhou",name:"蓬舟吹取",cost:1,type:"attack",rarity:"rare",dmg:10,exhaust:true,killBonusReward:true,char:"liqing",desc:"蓬舟吹取 · 造成10点伤害 · 致命得额外奖励 · 消耗"},
+      liqing_xinlai:{id:"liqing_xinlai",name:"新来瘦",cost:0,type:"attack",rarity:"rare",dmg:10,debuff:"vuln",val:1,innate:true,exhaust:true,char:"liqing",desc:"新来瘦 · 固有 · 造成10点伤害 · 易伤1层 · 消耗"},
+
+      // ── 技能牌（40张） ──
+      liqing_defend:{id:"liqing_defend",name:"漱玉壁",cost:0,type:"skill",rarity:"basic",block:5,char:"liqing",desc:"漱玉壁 · 获得5点格挡"},
+      liqing_dongli:{id:"liqing_dongli",name:"东篱把酒",cost:1,type:"skill",rarity:"basic",block:8,discard:1,char:"liqing",desc:"东篱把酒 · 获得8点格挡 · 弃1张牌"},
+      liqing_rumeng:{id:"liqing_rumeng",name:"如梦令",cost:1,type:"skill",rarity:"common",draw:3,discard:1,char:"liqing",desc:"如梦令 · 抽3张牌 · 弃1张牌"},
+      liqing_yimen:{id:"liqing_yimen",name:"倚门回首",cost:1,type:"skill",rarity:"common",tempAgil:3,char:"liqing",desc:"倚门回首 · 本回合获得3点敏捷"},
+      liqing_wuling:{id:"liqing_wuling",name:"武陵春",cost:1,type:"skill",rarity:"common",block:5,draw:2,char:"liqing",desc:"武陵春 · 获得5点格挡 · 抽2张牌"},
+      liqing_zhengdu:{id:"liqing_zhengdu",name:"争渡",cost:1,type:"skill",rarity:"common",addShivs:3,char:"liqing",desc:"争渡 · 将3张残花加入手牌"},
+      liqing_liandong:{id:"liqing_liandong",name:"莲动",cost:1,type:"skill",rarity:"common",block:6,addShivs:1,char:"liqing",desc:"莲动 · 获得6点格挡 · 将1张残花加入手牌"},
+      liqing_baowu:{id:"liqing_baowu",name:"薄雾浓云",cost:1,type:"skill",rarity:"common",poison:5,char:"liqing",desc:"薄雾浓云 · 施加5层中毒"},
+      liqing_queba:{id:"liqing_queba",name:"却把青梅",cost:0,type:"skill",rarity:"common",block:4,char:"liqing",desc:"却把青梅 · 获得4点格挡"},
+      liqing_hongou:{id:"liqing_hongou",name:"红藕香残",cost:1,type:"skill",rarity:"common",block:4,blockNextTurn:4,char:"liqing",desc:"红藕香残 · 获得4点格挡 · 下回合4点格挡"},
+      liqing_shengsheng2:{id:"liqing_shengsheng2",name:"声声慢",cost:1,type:"skill",rarity:"common",enemyStrDownAll:6,char:"liqing",desc:"声声慢 · 所有敌人本回合失去6点力量"},
+      liqing_chenzui:{id:"liqing_chenzui",name:"沉醉",cost:0,type:"skill",rarity:"common",draw:1,discard:1,char:"liqing",desc:"沉醉 · 抽1张牌 · 弃1张牌"},
+      liqing_dongliju:{id:"liqing_dongliju",name:"东篱菊",cost:2,type:"skill",rarity:"common",poison:7,char:"liqing",desc:"东篱菊 · 施加7层中毒"},
+      liqing_ruinao:{id:"liqing_ruinao",name:"瑞脑销",cost:2,type:"skill",rarity:"common",block:9,char:"liqing",desc:"瑞脑销 · 获得9点格挡"},
+      liqing_yudian:{id:"liqing_yudian",name:"玉簟秋",cost:1,type:"skill",rarity:"common",block:5,blockPersist:true,char:"liqing",desc:"玉簟秋 · 获得5点格挡 · 格挡不消失"},
+      liqing_yushu:{id:"liqing_yushu",name:"雨疏风骤",cost:2,type:"skill",rarity:"common",poison:3,hits:3,randomTargets:true,char:"liqing",desc:"雨疏风骤 · 随机敌人3层中毒×3"},
+      liqing_anxiangying:{id:"liqing_anxiangying",name:"暗香盈袖",cost:1,type:"skill",rarity:"common",poisonIfPoisoned:9,char:"liqing",desc:"暗香盈袖 · 若敌人中毒则施加9层中毒"},
+      liqing_ciqing:{id:"liqing_ciqing",name:"此情无计",cost:0,type:"skill",rarity:"rare",discardAllDrawEqual:true,char:"liqing",desc:"此情无计 · 弃所有牌 · 抽等量牌"},
+      liqing_shiwen:{id:"liqing_shiwen",name:"试问卷帘",cost:0,type:"skill",rarity:"common",draw:1,blockIfDrawnSkill:3,char:"liqing",desc:"试问卷帘 · 抽1张牌 · 若为技能获得3点格挡"},
+      liqing_qingjie:{id:"liqing_qingjie",name:"轻解罗裳",cost:0,type:"skill",rarity:"rare",drawToX:6,char:"liqing",desc:"轻解罗裳 · 抽牌至6张"},
+      liqing_lianjuan2:{id:"liqing_lianjuan2",name:"帘卷",cost:0,type:"skill",rarity:"common",removeAllBlock:true,debuff:"vuln",val:2,char:"liqing",desc:"帘卷 · 移除敌人格挡 · 易伤2层"},
+      liqing_xianyun:{id:"liqing_xianyun",name:"险韵诗成",cost:1,type:"skill",rarity:"rare",block:7,slyOneSkill:true,char:"liqing",desc:"险韵诗成 · 获得7点格挡 · 为技能添加奇巧"},
+      liqing_modao:{id:"liqing_modao",name:"莫道消魂",cost:3,type:"skill",rarity:"rare",poison:4,aoe:true,char:"liqing",desc:"莫道消魂 · 对所有敌人施加4层中毒"},
+      liqing_jiuxing:{id:"liqing_jiuxing",name:"酒醒",cost:0,type:"skill",rarity:"rare",discard:2,addShivs:2,char:"liqing",desc:"酒醒 · 弃2张牌 · 将2张残花加入手牌"},
+      liqing_huanghun:{id:"liqing_huanghun",name:"黄昏后",cost:2,type:"skill",rarity:"rare",poisonPerDraw:3,aoe:true,char:"liqing",desc:"黄昏后 · 本回合每抽牌对所有敌人施加3层中毒"},
+      liqing_xianyunshi:{id:"liqing_xianyunshi",name:"险韵诗",cost:0,type:"skill",rarity:"rare",gainEnergy:1,draw:2,exhaust:true,char:"liqing",desc:"险韵诗 · 获得1能量 · 抽2张牌 · 消耗"},
+      liqing_queshang:{id:"liqing_queshang",name:"却上心头",cost:0,type:"skill",rarity:"common",discard:1,draw:2,char:"liqing",desc:"却上心头 · 弃1张牌 · 抽2张牌"},
+      liqing_liangchu:{id:"liqing_liangchu",name:"凉初透",cost:0,type:"skill",rarity:"rare",block:8,char:"liqing",desc:"凉初透 · 获得8点格挡"},
+      liqing_huazi:{id:"liqing_huazi",name:"花自飘零",cost:1,type:"skill",rarity:"rare",blockPerCardPlayed:1,char:"liqing",desc:"花自飘零 · 每张牌获得1点格挡"},
+      liqing_xiangying:{id:"liqing_xiangying",name:"香盈袖",cost:1,type:"skill",rarity:"rare",gainAgil:2,char:"liqing",desc:"香盈袖 · 获得2点敏捷"},
+      liqing_yongzhou:{id:"liqing_yongzhou",name:"永昼",cost:1,type:"skill",rarity:"rare",poisonPerTurn:2,aoe:true,char:"liqing",desc:"永昼 · 回合开始时对所有敌人施加2层中毒"},
+      liqing_yifan:{id:"liqing_yifan",name:"一番风",cost:1,type:"skill",rarity:"rare",poisonTriggerEvery:3,poisonTriggerDmg:11,aoe:true,char:"liqing",desc:"一番风 · 每3次中毒触发全体11点伤害"},
+      liqing_lvyi:{id:"liqing_lvyi",name:"绿蚁",cost:1,type:"skill",rarity:"rare",poisonSpeedup:1,char:"liqing",desc:"绿蚁 · 中毒额外触发1次"},
+      liqing_jieyu:{id:"liqing_jieyu",name:"解语花",cost:2,type:"skill",rarity:"rare",poisonOnUndealtDmg:1,char:"liqing",desc:"解语花 · 攻击未格挡伤害时施加1层中毒"},
+      liqing_jiambuduan:{id:"liqing_jiambuduan",name:"剪不断",cost:2,type:"skill",rarity:"rare",shivAoe:true,addShivs:4,char:"liqing",desc:"剪不断 · 残花攻击全体 · 将4张残花加入手牌"},
+      liqing_lihailuan:{id:"liqing_lihailuan",name:"理还乱",cost:1,type:"skill",rarity:"rare",shivPerTurn:1,char:"liqing",desc:"理还乱 · 回合开始时将1张残花加入手牌"},
+      liqing_yian:{id:"liqing_yian",name:"易安诀",cost:2,type:"skill",rarity:"rare",slyOnSkillPlay:true,char:"liqing",desc:"易安诀 · 技能牌打出时获得奇巧"},
+      liqing_chuixiao:{id:"liqing_chuixiao",name:"吹箫人去",cost:1,type:"skill",rarity:"rare",shivRetain:true,firstShivDmgBonus:9,char:"liqing",desc:"吹箫人去 · 残花保留 · 第1张残花+9伤害"},
+      liqing_fenghuang:{id:"liqing_fenghuang",name:"凤凰台上",cost:3,type:"skill",rarity:"rare",dmgPerCardPlayed:4,randomTargets:true,char:"liqing",desc:"凤凰台上 · 每牌对随机敌人4点伤害"},
+      liqing_guichu:{id:"liqing_guichu",name:"归何处",cost:2,type:"skill",rarity:"rare",dmgOnDraw:2,aoe:true,char:"liqing",desc:"归何处 · 抽牌时对所有敌人2点伤害"},
+      liqing_jiushi:{id:"liqing_jiushi",name:"旧时天气",cost:1,type:"skill",rarity:"rare",drawDiscardPerTurn:true,char:"liqing",desc:"旧时天气 · 回合开始抽1弃1"},
+      liqing_chuimei:{id:"liqing_chuimei",name:"吹梅笛怨",cost:2,type:"skill",rarity:"rare",weakDoubleDmg:true,char:"liqing",desc:"吹梅笛怨 · 虚弱敌人承受双倍伤害"},
+      liqing_chunyi:{id:"liqing_chunyi",name:"春意知几许",cost:1,type:"skill",rarity:"rare",retainCards:1,char:"liqing",desc:"春意知几许 · 回合结束保留1张牌"},
+      liqing_hunmeng:{id:"liqing_hunmeng",name:"魂梦",cost:3,type:"skill",rarity:"ancient",intangible:2,agilLossPerTurn:1,char:"liqing",desc:"魂梦 · 获得2层无形 · 回合失去1敏捷"},
+
+      // ── 能力牌（18张） ──
+      liqing_nianyu:{id:"liqing_nianyu",name:"碾玉",cost:3,type:"power",rarity:"rare",gainAgil:1,thorns:4,sly:true,char:"liqing",desc:"碾玉 · 能力 · 获得1敏捷 · 4荆棘 · 奇巧"},
+      liqing_lvyi2:{id:"liqing_lvyi2",name:"绿蚁新醅",cost:1,type:"power",rarity:"rare",poisonSpeedup:1,char:"liqing",desc:"绿蚁新醅 · 能力 · 中毒额外触发1次"},
+      liqing_jinshi:{id:"liqing_jinshi",name:"金石录",cost:1,type:"power",rarity:"common",shivDmgBonus:4,char:"liqing",desc:"金石录 · 能力 · 残花额外4点伤害"},
+      liqing_huazi2:{id:"liqing_huazi2",name:"花自飘零水自流",cost:1,type:"power",rarity:"rare",blockPerCardPlayed:1,char:"liqing",desc:"花自飘零 · 能力 · 每张牌获得1格挡"},
+      liqing_jieyu2:{id:"liqing_jieyu2",name:"解语花印",cost:2,type:"power",rarity:"rare",poisonOnUndealtDmg:1,char:"liqing",desc:"解语花印 · 能力 · 未格挡伤害施加1中毒"},
+      liqing_jiambuduan2:{id:"liqing_jiambuduan2",name:"剪不断理还乱",cost:2,type:"power",rarity:"rare",shivAoe:true,addShivs:4,char:"liqing",desc:"剪不断 · 能力 · 残花AOE · 将4张残花加入手牌"},
+      liqing_qingzhou:{id:"liqing_qingzhou",name:"轻舟",cost:1,type:"power",rarity:"common",gainAgil:2,char:"liqing",desc:"轻舟 · 能力 · 获得2点敏捷"},
+      liqing_qianfan:{id:"liqing_qianfan",name:"千帆舞",cost:1,type:"power",rarity:"common",shivPerTurn:1,char:"liqing",desc:"千帆舞 · 能力 · 每回合将1张残花加入手牌"},
+      liqing_yian2:{id:"liqing_yian2",name:"易安居士诀",cost:2,type:"power",rarity:"rare",slyOnSkillPlay:true,char:"liqing",desc:"易安诀 · 能力 · 技能牌打出时获得奇巧"},
+      liqing_yongzhou2:{id:"liqing_yongzhou2",name:"永昼愁",cost:1,type:"power",rarity:"common",poisonPerTurn:2,aoe:true,char:"liqing",desc:"永昼 · 能力 · 回合开始全体叠毒2"},
+      liqing_yifan2:{id:"liqing_yifan2",name:"一番风信",cost:1,type:"power",rarity:"common",poisonTriggerEvery:2,poisonTriggerDmg:11,aoe:true,char:"liqing",desc:"一番风 · 能力 · 每2次中毒全体11伤"},
+      liqing_chuixiao2:{id:"liqing_chuixiao2",name:"吹箫",cost:1,type:"power",rarity:"common",shivRetain:true,firstShivDmgBonus:9,char:"liqing",desc:"吹箫人去 · 能力 · 残花保留 · 第1张残花+9伤害"},
+      liqing_fenghuang2:{id:"liqing_fenghuang2",name:"凤凰游",cost:3,type:"power",rarity:"rare",dmgPerCardPlayed:5,randomTargets:true,char:"liqing",desc:"凤凰游 · 能力 · 每牌对随机敌人5点伤害"},
+      liqing_guichu2:{id:"liqing_guichu2",name:"归去来",cost:2,type:"power",rarity:"common",dmgOnDraw:2,aoe:true,char:"liqing",desc:"归去来 · 能力 · 抽牌时全体2点伤害"},
+      liqing_jiushi2:{id:"liqing_jiushi2",name:"旧时",cost:1,type:"power",rarity:"rare",drawDiscardPerTurn:true,char:"liqing",desc:"旧时天气 · 能力 · 每回合抽1弃1"},
+      liqing_chuimei2:{id:"liqing_chuimei2",name:"吹梅",cost:2,type:"power",rarity:"rare",weakDoubleDmg:true,char:"liqing",desc:"吹梅笛怨 · 能力 · 虚弱敌人双倍伤害"},
+      liqing_chunyi2:{id:"liqing_chunyi2",name:"春意儿许",cost:1,type:"power",rarity:"common",retainCards:2,char:"liqing",desc:"春意知几许 · 能力 · 回合结束保留2张牌"},
+      liqing_hunmeng2:{id:"liqing_hunmeng2",name:"魂梦同",cost:3,type:"power",rarity:"ancient",intangible:3,agilLossPerTurn:1,char:"liqing",desc:"魂梦同 · 能力 · 获得3层无形 · 回合失去1敏捷"},
+
+      // 残花（小刀） - 李清照生成的零费攻击牌
+      liqing_canhua:{name:"残花",cost:0,type:"attack",dmg:4,exhaust:true,isShiv:true,desc:"零落成泥 · 4伤·消耗",rarity:"common",char:"liqing"},
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,desc:"万物静观皆自得 · 5格挡",rarity:"common"},
       wuse_liuguang:{name:"流光",cost:1,type:"attack",dmg:14,exhaust:true,desc:"流光容易把人抛 · 14伤·消耗",rarity:"uncommon"},
       wuse_shanshui:{name:"山水",cost:1,type:"skill",heal:10,exhaust:true,desc:"山水之乐得之心 · 回10HP·消耗",rarity:"uncommon"},
       wuse_qianli:{name:"千里目",cost:1,type:"attack",dmg:8,draw:1,desc:"更上一层楼 · 8伤·抽1",rarity:"common"},
       wuse_mozhan:{name:"墨绽",cost:2,type:"attack",dmg:16,aoe:true,exhaust:true,desc:"墨洒长天 · 全体16伤·消耗",rarity:"rare"},
-      wuse_siyuan:{name:"诗缘",cost:0,type:"skill",draw:2,exhaust:true,desc:"诗缘情而绮靡 · 抽2·消耗",rarity:"uncommon"}
+      wuse_siyuan:{name:"诗缘",cost:0,type:"skill",draw:2,exhaust:true,desc:"诗缘情而绮靡 · 抽2·消耗",rarity:"uncommon"},
+
+      // === 李白专属卡牌 (87张) ===
+            lizhi_strike:{id:"lizhi_strike",name:"长歌行",cost:1,type:"attack",rarity:"basic",dmg:6,char:"lizhi",desc:"长歌行 · 造成6点伤害"},
+            lizhi_defend:{id:"lizhi_defend",name:"青云衣",cost:1,type:"skill",rarity:"basic",block:5,char:"lizhi",desc:"青云衣 · 获得5点格挡"},
+            lizhi_bash:{id:"lizhi_bash",name:"醉撞天门",cost:2,type:"attack",rarity:"basic",dmg:8,debuff:"vuln",val:2,char:"lizhi",desc:"醉撞天门 · 造成8点伤害 · 易伤2层"},
+            lizhi_anger:{id:"lizhi_anger",name:"剑器行",cost:0,type:"attack",rarity:"common",dmg:6,char:"lizhi",copyToDiscard:true,desc:"剑器行 · 造成6点伤害 · 复制入弃牌堆"},
+            lizhi_bloodwall:{id:"lizhi_bloodwall",name:"碧血染",cost:1,type:"skill",rarity:"common",block:16,selfDmg:2,char:"lizhi",desc:"碧血染 · 获得16点格挡 · 自损2"},
+            lizhi_bloodletting:{id:"lizhi_bloodletting",name:"散发弄扁舟",cost:0,type:"skill",rarity:"common",selfDmg:3,gainEnergy:2,char:"lizhi",desc:"散发弄扁舟 · 自损3 · +2能量"},
+            lizhi_bodyslam:{id:"lizhi_bodyslam",name:"铁骨铜声",cost:1,type:"attack",rarity:"common",char:"lizhi",dmgBlock:true,desc:"铁骨铜声 · 伤害等于格挡值"},
+            lizhi_breakthrough:{id:"lizhi_breakthrough",name:"破晓歌",cost:1,type:"attack",rarity:"common",dmg:9,selfDmg:1,aoe:true,char:"lizhi",desc:"破晓歌 · 造成9点伤害 · 自损1 · 全体"},
+            lizhi_headbutt:{id:"lizhi_headbutt",name:"孤帆远影",cost:1,type:"attack",rarity:"common",dmg:9,char:"lizhi",returnTop:true,desc:"孤帆远影 · 造成9点伤害 · 回抽牌堆"},
+            lizhi_cinder:{id:"lizhi_cinder",name:"鲸涛万里",cost:2,type:"attack",rarity:"common",dmg:17,char:"lizhi",exhaustTop:true,desc:"鲸涛万里 · 造成17点伤害 · 消耗牌堆顶1张牌"},
+            lizhi_moltenfist:{id:"lizhi_moltenfist",name:"捉月",cost:1,type:"attack",rarity:"common",dmg:10,exhaust:true,char:"lizhi",doubleVuln:true,desc:"捉月 · 造成10点伤害 · 消耗"},
+            lizhi_pommel:{id:"lizhi_pommel",name:"铁拳锤",cost:1,type:"attack",rarity:"common",dmg:9,draw:1,char:"lizhi",desc:"铁拳锤 · 造成9点伤害 · 抽1张牌"},
+            lizhi_setupstrike:{id:"lizhi_setupstrike",name:"墨痕剑",cost:1,type:"attack",rarity:"common",dmg:7,char:"lizhi",tempStr:2,desc:"墨痕剑 · 造成7点伤害 · 获得2点临时力量"},
+            lizhi_swordboomerang:{id:"lizhi_swordboomerang",name:"飞剑诀",cost:1,type:"attack",rarity:"common",dmg:3,hits:3,char:"lizhi",desc:"飞剑诀 · 造成3点伤害 ×3"},
+            lizhi_thunderclap:{id:"lizhi_thunderclap",name:"龙吟剑",cost:1,type:"attack",rarity:"common",dmg:4,debuff:"vuln",val:1,aoe:true,char:"lizhi",desc:"龙吟剑 · 造成4点伤害 · 全体 · 易伤1层"},
+            lizhi_twinstrike:{id:"lizhi_twinstrike",name:"双剑合璧",cost:1,type:"attack",rarity:"common",dmg:5,hits:2,char:"lizhi",desc:"双剑合璧 · 造成5点伤害 ×2"},
+            lizhi_wildstrike:{id:"lizhi_wildstrike",name:"风雷引",cost:1,type:"attack",rarity:"common",dmg:12,char:"lizhi",addWound:true,desc:"风雷引 · 造成12点伤害 · 伤口入牌堆"},
+            lizhi_unrelenting:{id:"lizhi_unrelenting",name:"百炼剑",cost:2,type:"attack",rarity:"common",dmg:12,char:"lizhi",nextAtkCost0:true,desc:"百炼剑 · 造成12点伤害 · 下一张攻击牌费用为0"},
+            lizhi_perfected:{id:"lizhi_perfected",name:"完美诗篇",cost:2,type:"attack",rarity:"common",dmg:6,char:"lizhi",dmgPerStrikeName:2,desc:"完美诗篇 · 造成6点伤害 · 牌组中每张含「诗」字牌伤害+2"},
+            lizhi_armaments:{id:"lizhi_armaments",name:"金甲护体",cost:1,type:"skill",rarity:"common",block:5,char:"lizhi",upgradeHand:true,desc:"金甲护体 · 获得5点格挡 · 升级手牌"},
+            lizhi_shrug:{id:"lizhi_shrug",name:"拂手云开",cost:1,type:"skill",rarity:"common",block:8,draw:1,char:"lizhi",desc:"拂手云开 · 获得8点格挡 · 抽1张牌"},
+            lizhi_truegrit:{id:"lizhi_truegrit",name:"沧海笑",cost:1,type:"skill",rarity:"common",block:7,char:"lizhi",exhaustRandom:true,desc:"沧海笑 · 获得7点格挡 · 随机消耗1张"},
+            lizhi_havoc:{id:"lizhi_havoc",name:"倾杯乐",cost:1,type:"skill",rarity:"common",char:"lizhi",playTopCard:true,desc:"倾杯乐 · 打出牌堆顶"},
+            lizhi_tremble:{id:"lizhi_tremble",name:"斩云诀",cost:1,type:"skill",rarity:"common",debuff:"vuln",val:2,char:"lizhi",desc:"斩云诀 · 易伤2层"},
+            lizhi_ashen:{id:"lizhi_ashen",name:"丹心照汗青",cost:1,type:"attack",rarity:"uncommon",dmg:6,char:"lizhi",dmgPerExhaust:3,desc:"丹心照汗青 · 造成6点伤害 · 每消耗牌+3"},
+            lizhi_bully:{id:"lizhi_bully",name:"欺霜傲雪",cost:0,type:"attack",rarity:"uncommon",dmg:4,char:"lizhi",dmgPerVuln:2,desc:"欺霜傲雪 · 造成4点伤害 · 敌人每层易伤伤害+2"},
+            lizhi_dismantle:{id:"lizhi_dismantle",name:"赤霄剑",cost:1,type:"attack",rarity:"uncommon",dmg:8,char:"lizhi",ifVulnHitTwice:true,desc:"赤霄剑 · 造成8点伤害 · 敌人易伤时攻击2次"},
+            lizhi_hemokinesis:{id:"lizhi_hemokinesis",name:"碧血剑",cost:1,type:"attack",rarity:"uncommon",dmg:14,selfDmg:2,char:"lizhi",desc:"碧血剑 · 造成14点伤害 · 自损2"},
+            lizhi_feed:{id:"lizhi_feed",name:"咸阳古道",cost:1,type:"attack",rarity:"uncommon",dmg:10,exhaust:true,char:"lizhi",killMaxHp:3,desc:"咸阳古道 · 造成10点伤害 · 消耗 · 击杀+3HP上限"},
+            lizhi_fiendfire:{id:"lizhi_fiendfire",name:"铁骑突出",cost:2,type:"attack",rarity:"uncommon",exhaust:true,char:"lizhi",dmgPerExhaust:7,exhaustHandAll:true,desc:"铁骑突出 · 消耗 · 每消耗牌+7"},
+            lizhi_grapple:{id:"lizhi_grapple",name:"落日熔金",cost:1,type:"attack",rarity:"uncommon",dmg:7,char:"lizhi",blockShrapnel:5,desc:"落日熔金 · 造成7点伤害 · 获得5点碎甲格挡"},
+            lizhi_howl:{id:"lizhi_howl",name:"狂歌痛饮",cost:3,type:"attack",rarity:"uncommon",dmg:16,aoe:true,char:"lizhi",playFromExhaust:true,desc:"狂歌痛饮 · 造成16点伤害 · 全体 · 打出所有消耗堆的攻击牌"},
+            lizhi_ironwave:{id:"lizhi_ironwave",name:"铁浪潮",cost:1,type:"attack",rarity:"uncommon",dmg:5,block:5,char:"lizhi",desc:"铁浪潮 · 造成5点伤害 · 获得5点格挡"},
+            lizhi_fightme:{id:"lizhi_fightme",name:"斗酒诗",cost:2,type:"attack",rarity:"uncommon",dmg:5,val:2,buff:"str",hits:2,char:"lizhi",enemyStr:1,desc:"斗酒诗 · 造成5点伤害 ×2 · +2力量"},
+            lizhi_pillage:{id:"lizhi_pillage",name:"抽刀断水",cost:1,type:"attack",rarity:"uncommon",dmg:6,char:"lizhi",drawToNonAttack:true,desc:"抽刀断水 · 造成6点伤害 · 抽至非攻击牌"},
+            lizhi_rampage:{id:"lizhi_rampage",name:"一剪梅·剑",cost:1,type:"attack",rarity:"uncommon",dmg:9,char:"lizhi",upgradePermanent:5,desc:"一剪梅·剑 · 造成9点伤害 · 每次打出永久+5伤害"},
+            lizhi_revenge:{id:"lizhi_revenge",name:"雪耻",cost:1,type:"attack",rarity:"uncommon",dmg:8,char:"lizhi",freeIfLostHp:true,desc:"雪耻 · 造成8点伤害 · 本回合若失去过生命费用为0"},
+            lizhi_shatter:{id:"lizhi_shatter",name:"破虚剑",cost:1,type:"attack",rarity:"uncommon",dmg:9,char:"lizhi",halfEnemyBlock:true,desc:"破虚剑 · 造成9点伤害 · 格挡减半"},
+            lizhi_soulstrike:{id:"lizhi_soulstrike",name:"魂魄击",cost:1,type:"attack",rarity:"uncommon",dmg:8,char:"lizhi",drawIfExhausted:true,desc:"魂魄击 · 造成8点伤害 · 若本回合消耗过牌抽1张牌"},
+            lizhi_uppercut:{id:"lizhi_uppercut",name:"上勾拳",cost:2,type:"attack",rarity:"uncommon",dmg:13,debuff:"weak",val:1,debuff2:"vuln",val2:1,char:"lizhi",desc:"上勾拳 · 造成13点伤害 · 虚弱1层"},
+            lizhi_wildcharge:{id:"lizhi_wildcharge",name:"横刀立马",cost:2,type:"attack",rarity:"uncommon",dmg:16,char:"lizhi",addStun:true,desc:"横刀立马 · 造成16点伤害 · 眩晕入手"},
+            lizhi_stomp:{id:"lizhi_stomp",name:"神机",cost:3,type:"attack",rarity:"uncommon",dmg:12,aoe:true,char:"lizhi",stompCostReduce:true,desc:"神机 · 造成12点伤害 · 全体 · 本回合每打出1张攻击牌费用-1"},
+            lizhi_bludgeon:{id:"lizhi_bludgeon",name:"千钧锤",cost:3,type:"attack",rarity:"uncommon",dmg:32,char:"lizhi",desc:"千钧锤 · 造成32点伤害"},
+            lizhi_battletrance:{id:"lizhi_battletrance",name:"长风吟",cost:0,type:"skill",rarity:"uncommon",draw:3,char:"lizhi",noMoreDraw:true,desc:"长风吟 · 抽3张牌 · 不可再抽"},
+            lizhi_burningpact:{id:"lizhi_burningpact",name:"饕餮",cost:0,type:"skill",rarity:"uncommon",char:"lizhi",burnPact:true,desc:"饕餮 · 消耗1张手牌 · 抽2张牌"},
+            lizhi_evileye:{id:"lizhi_evileye",name:"斜照",cost:1,type:"skill",rarity:"uncommon",block:8,char:"lizhi",blockIfExhausted:8,desc:"斜照 · 获得8点格挡 · 若本回合消耗过牌额外获得8点格挡"},
+            lizhi_expectfight:{id:"lizhi_expectfight",name:"竹剑阵",cost:2,type:"skill",rarity:"uncommon",char:"lizhi",energyPerAtkHand:true,desc:"竹剑阵 · 手牌中每有1张攻击牌获得1点能量"},
+            lizhi_flamebarrier:{id:"lizhi_flamebarrier",name:"火焰壁",cost:2,type:"skill",rarity:"uncommon",block:12,char:"lizhi",reflectDmg:4,desc:"火焰壁 · 获得8点格挡 · 敌人每攻击1次受到3点伤害"},
+            lizhi_forgotten:{id:"lizhi_forgotten",name:"万象",cost:1,type:"skill",rarity:"uncommon",char:"lizhi",forgetRitual:true,desc:"万象 · 本回合若消耗过牌则获得1点能量"},
+            lizhi_infernalblade:{id:"lizhi_infernalblade",name:"墨剑",cost:1,type:"skill",rarity:"uncommon",exhaust:true,char:"lizhi",addRandomAtk:true,freeThisTurn:true,desc:"墨剑 · 消耗 · 将1张随机攻击牌加入手牌 · 本回合费用为0"},
+            lizhi_rage:{id:"lizhi_rage",name:"狂怒",cost:0,type:"skill",rarity:"uncommon",char:"lizhi",rageBlockPerAtk:3,desc:"狂怒 · 本回合每打出1张攻击牌获得3点格挡"},
+            lizhi_secondwind:{id:"lizhi_secondwind",name:"二阵风",cost:1,type:"skill",rarity:"uncommon",char:"lizhi",exhaustNonAttack:true,blockPerExhaustNonAtk:5,desc:"二阵风 · 消耗所有非攻击牌 · 每消耗1张获得5点格挡"},
+            lizhi_taunt:{id:"lizhi_taunt",name:"挑衅",cost:1,type:"skill",rarity:"uncommon",block:7,debuff:"vuln",val:1,char:"lizhi",desc:"挑衅 · 获得6点格挡 · 施加2层易伤"},
+            lizhi_warhorn:{id:"lizhi_warhorn",name:"号角",cost:1,type:"skill",rarity:"uncommon",draw:1,gainEnergy:1,exhaust:true,char:"lizhi",desc:"号角 · 抽1张牌 · +1能量 · 消耗"},
+            lizhi_spite:{id:"lizhi_spite",name:"连血诀",cost:0,type:"attack",rarity:"uncommon",dmg:6,char:"lizhi",spiteDraw:true,desc:"连血诀 · 造成6点伤害 · 本回合若失去生命抽1张牌"},
+            lizhi_dominate:{id:"lizhi_dominate",name:"忘机",cost:0,type:"skill",rarity:"uncommon",exhaust:true,char:"lizhi",strPerVuln:true,desc:"忘机 · 消耗 · 敌人每有1层易伤获得1点力量"},
+            lizhi_drum:{id:"lizhi_drum",name:"孤筝",cost:0,type:"power",rarity:"uncommon",draw:2,char:"lizhi",exhaustTopStart:true,desc:"孤筝 · 抽2张牌 · 能力 · 每回合开始消耗牌堆顶1张牌"},
+            lizhi_feelnopain:{id:"lizhi_feelnopain",name:"无痛禅",cost:1,type:"power",rarity:"uncommon",char:"lizhi",feelNoPainBlock:3,desc:"无痛禅 · 能力 · 每消耗1张牌获得3点格挡"},
+            lizhi_inferno:{id:"lizhi_inferno",name:"炼火",cost:1,type:"power",rarity:"uncommon",aoe:true,char:"lizhi",selfDmgPerTurn:1,dmgOnHurt:6,desc:"炼火 · 全体 · 能力 · 每回合自损1 · 受伤时对全体敌人造成6点伤害"},
+            lizhi_inflame:{id:"lizhi_inflame",name:"烽火",cost:1,type:"power",rarity:"uncommon",val:2,buff:"str",char:"lizhi",desc:"烽火 · 获得2点力量"},
+            lizhi_juggling:{id:"lizhi_juggling",name:"云手",cost:1,type:"power",rarity:"uncommon",char:"lizhi",thirdAtkCopy:true,desc:"云手 · 能力 · 每回合第3张攻击牌复制入手"},
+            lizhi_stonearmor:{id:"lizhi_stonearmor",name:"石甲",cost:1,type:"power",rarity:"uncommon",char:"lizhi",armorThorns:4,desc:"石甲 · 获得6点格挡 · 获得3点荆棘反伤"},
+            lizhi_rupture:{id:"lizhi_rupture",name:"撕裂",cost:1,type:"power",rarity:"uncommon",char:"lizhi",ruptureStr:true,desc:"撕裂 · 能力 · 每回合首次失去生命时获得2点力量"},
+            lizhi_conflagration:{id:"lizhi_conflagration",name:"元始天火",cost:1,type:"attack",rarity:"rare",dmg:8,aoe:true,char:"lizhi",dmgPerAtkPlayed:2,desc:"元始天火 · 造成8点伤害 · 全体 · 本场战斗每打出1张攻击牌伤害+2"},
+            lizhi_tearasunder:{id:"lizhi_tearasunder",name:"撕裂一切",cost:2,type:"attack",rarity:"rare",dmg:5,char:"lizhi",hitsPerLostHp:true,desc:"撕裂一切 · 造成5点伤害 · 敌人每失去3HP追加1次攻击"},
+            lizhi_pactsend:{id:"lizhi_pactsend",name:"契约终结",cost:0,type:"attack",rarity:"rare",dmg:17,aoe:true,char:"lizhi",requireExhaust3:true,desc:"契约终结 · 造成17点伤害 · 全体 · 需要消耗堆至少3张牌"},
+            lizhi_primalforce:{id:"lizhi_primalforce",name:"原始力量",cost:1,type:"skill",rarity:"rare",char:"lizhi",transformAttacksToBoulder:true,desc:"原始力量 · 技能 · 手牌中所有攻击牌转化为「巨石」造成15点伤害 · 消耗"},
+            lizhi_stoke:{id:"lizhi_stoke",name:"重振精神",cost:1,type:"skill",rarity:"rare",exhaust:true,char:"lizhi",exhaustHandDrawN:true,desc:"重振精神 · 消耗 · 消耗所有手牌 · 每消耗1张抽1张牌"},
+            lizhi_heavyblade:{id:"lizhi_heavyblade",name:"重剑无锋",cost:2,type:"attack",rarity:"rare",dmg:14,char:"lizhi",dmgPerStr:3,desc:"重剑无锋 · 造成(力量×3)点伤害"},
+            lizhi_searingblow:{id:"lizhi_searingblow",name:"灼热之诗",cost:2,type:"attack",rarity:"rare",dmg:12,char:"lizhi",perUpgradeDmg:4,desc:"灼热之诗 · 造成12点伤害 · 每强化1次伤害+4"},
+            lizhi_immolate:{id:"lizhi_immolate",name:"不动如山",cost:2,type:"skill",rarity:"rare",block:30,exhaust:true,char:"lizhi",desc:"不动如山 · 获得30点格挡 · 消耗"},
+            lizhi_feedrare:{id:"lizhi_feedrare",name:"狂宴",cost:1,type:"attack",rarity:"rare",dmg:10,exhaust:true,char:"lizhi",killMaxHp:3,desc:"狂宴 · 造成10点伤害 · 消耗 · 击杀+3HP上限"},
+            lizhi_doublelift:{id:"lizhi_doublelift",name:"不屈意志",cost:1,type:"skill",rarity:"rare",char:"lizhi",nextCardDouble:true,desc:"不屈意志 · 技能 · 本回合下一张牌效果翻倍"},
+            lizhi_entrench:{id:"lizhi_entrench",name:"坚毅",cost:2,type:"skill",rarity:"rare",char:"lizhi",doubleBlock:true,desc:"坚毅 · 格挡翻倍"},
+            lizhi_limitbreak:{id:"lizhi_limitbreak",name:"极限突破",cost:1,type:"skill",rarity:"rare",exhaust:true,char:"lizhi",doubleStr:true,desc:"极限突破 · 消耗 · 力量翻倍"},
+            lizhi_offering:{id:"lizhi_offering",name:"献祭",cost:0,type:"skill",rarity:"rare",draw:3,selfDmg:6,gainEnergy:2,exhaust:true,char:"lizhi",desc:"献祭 · 抽3张牌 · 自损6 · +2能量 · 消耗"},
+            lizhi_crimson:{id:"lizhi_crimson",name:"山鬼",cost:1,type:"power",rarity:"rare",char:"lizhi",hurtStartBlock:8,selfDmgStart:1,desc:"山鬼 · 能力 · 每回合开始时自损1 · 获得8点格挡"},
+            lizhi_cruelty:{id:"lizhi_cruelty",name:"残暴",cost:1,type:"power",rarity:"rare",char:"lizhi",vulnExtraDmg:0.25,desc:"残暴 · 能力 · 易伤状态的敌人额外受到25%伤害"},
+            lizhi_darkembrace:{id:"lizhi_darkembrace",name:"黑暗之拥",cost:2,type:"power",rarity:"rare",char:"lizhi",drawOnExhaust:true,desc:"黑暗之拥 · 能力 · 每消耗1张牌抽1张牌"},
+            lizhi_demonform:{id:"lizhi_demonform",name:"诗魔",cost:3,type:"power",rarity:"rare",char:"lizhi",perTurnStr:2,desc:"诗魔 · 每回合+2力量"},
+            lizhi_juggernaut:{id:"lizhi_juggernaut",name:"金刚怒目",cost:2,type:"power",rarity:"rare",char:"lizhi",blockGainDmg:5,desc:"金刚怒目 · 能力 · 每获得1次格挡对敌人造成5点伤害"},
+            lizhi_aggression:{id:"lizhi_aggression",name:"侵略如火",cost:1,type:"power",rarity:"rare",char:"lizhi",startTurnGetRandomAtk:true,desc:"侵略如火 · 能力 · 每回合开始将弃牌堆1张随机攻击牌入手并升级"},
+            lizhi_barricade:{id:"lizhi_barricade",name:"壁垒",cost:3,type:"power",rarity:"rare",char:"lizhi",blockPersist:true,desc:"壁垒 · 格挡保留"},
+            lizhi_pyre:{id:"lizhi_pyre",name:"余火",cost:2,type:"power",rarity:"rare",char:"lizhi",perTurnEnergy:1,desc:"余火 · 每回合+1能量"},
+            lizhi_unmovable:{id:"lizhi_unmovable",name:"岿然不动",cost:2,type:"power",rarity:"rare",char:"lizhi",firstBlockDouble:true,desc:"岿然不动 · 能力 · 每回合首次获得格挡翻倍"},
+            lizhi_corruption:{id:"lizhi_corruption",name:"黄泉路",cost:3,type:"power",rarity:"ancient",char:"lizhi",skillCost0:true,exhaustSkill:true,desc:"黄泉路 · 能力 · 所有技能牌费用为0 · 打出后消耗"},
+            lizhi_break:{id:"lizhi_break",name:"崩击",cost:2,type:"attack",rarity:"ancient",dmg:20,debuff:"vuln",val:5,char:"lizhi",desc:"崩击 · 造成20点伤害 · 易伤5层"},
+            lizhi_rampageform:{id:"lizhi_rampageform",name:"凤凰涅槃",cost:3,type:"power",rarity:"ancient",char:"lizhi",selfDmgPerTurn:2,rampageStrTurn:4,desc:"凤凰涅槃 · 每回合+4力量"}
+,
+      // === 先古牌 ===
+      lizhi_ancient_phoenix:{id:"lizhi_ancient_phoenix",name:"凤凰涅槃·太古",cost:2,type:"power",rarity:"ancient",char:"lizhi",rampageStrTurn:6,selfDmgPerTurn:1,perTurnEnergy:1,desc:"太古凤凰·每回合自损1·+6力量·+1能量"}
     };
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -3324,16 +3499,16 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
     var CHARACTERS = [
       { id:'lizhi', name:'李 白', title:'诗仙', maxHp:80, energy:3,
         desc:'豪放飘逸，以酒入诗',
-        ability:'每回合第一张攻击牌伤害+3',
-        deck:['yinyong','yinyong','yinyong','yinyong','mosong','mosong','mosong','mosong','lizhi_jiutian','lizhi_tianhe'] },
+        startingRelic:'lizhi_shixianzhi',
+        deck:['lizhi_strike','lizhi_strike','lizhi_strike','lizhi_strike','lizhi_defend','lizhi_defend','lizhi_defend','lizhi_defend','lizhi_bash','lizhi_anger'] },
       { id:'sush', name:'苏 轼', title:'词圣', maxHp:100, energy:3,
         desc:'旷达洒脱，随遇而安',
-        ability:'每场战斗首次受伤-3',
+        startingRelic:'',
         deck:['yinyong','yinyong','yinyong','yinyong','mosong','mosong','mosong','mosong','sush_dajiang','sush_shuiyun'] },
       { id:'liqing', name:'李清照', title:'易安居士', maxHp:70, energy:3,
-        desc:'婉约细腻，以情入词',
-        ability:'每回合第一张技能牌效果+50%',
-        deck:['yinyong','yinyong','yinyong','yinyong','mosong','mosong','mosong','mosong','liqing_mandu','liqing_xunmi'] }
+        desc:'漱玉词心，暗香盈袖',
+        startingRelic:'liqing_shuyujuan',
+        deck:['liqing_strike','liqing_strike','liqing_strike','liqing_strike','liqing_strike','liqing_defend','liqing_defend','liqing_defend','liqing_defend','liqing_anxiang'] }
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -3430,10 +3605,30 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       { id:'dongpoyin', name:'东坡印', desc:'每回合首次格挡额外+3', effect:'firstBlockBonus', val:3, char:'sush', icon:'📜', rarity:'uncommon' },
       { id:'xuejiancha', name:'雪煎茶', desc:'战斗开始时获得8点格挡', effect:'battleStartBlock', val:8, char:'sush', icon:'🍵', rarity:'uncommon' },
       { id:'tengzhang', name:'竹杖', desc:'每回合回复2HP', effect:'turnHeal', val:2, char:'sush', icon:'🎋', rarity:'uncommon' },
-      // === 李清照专属遗器 ===
-      { id:'huanhuashi', name:'浣花石', desc:'使用技能牌时回复1HP', effect:'skillHeal', val:1, char:'liqing', icon:'🪨', rarity:'rare' },
-      { id:'lianyezhou', name:'莲叶舟', desc:'每回合第一张牌额外抽1张', effect:'firstCardExtraDraw', val:1, char:'liqing', icon:'🚣', rarity:'uncommon' },
-      { id:'qiuyunpa', name:'秋云帕', desc:'中毒/叠毒效果+2', effect:'poisonBonus', val:2, char:'liqing', icon:'🧣', rarity:'uncommon' }
+      // === 李白遗物（改编自铁甲战士） ===
+      { id:'lizhi_shixianzhi', name:'诗仙之血', desc:'初始遗物·战斗结束时回复6HP', effect:'battleEndHeal6', val:6, char:'lizhi', icon:'🩸', rarity:'starting' },
+      { id:'lizhi_fenshilu', name:'焚诗炉', desc:'每消耗一张牌，对所有敌人造成3点伤害', effect:'exhaustDmgAll3', val:3, char:'lizhi', icon:'🔥', rarity:'rare' },
+      { id:'lizhi_zhexiantong', name:'谪仙舌', desc:'首次自损生命时，回复等量HP', effect:'firstSelfDmgHeal', val:1, char:'lizhi', icon:'👅', rarity:'rare' },
+      { id:'lizhi_zhibailu', name:'纸白鹿', desc:'易伤状态的敌人受到的伤害增加75%（原为50%）', effect:'vulnBoost75', val:75, char:'lizhi', icon:'🦌', rarity:'uncommon' },
+      { id:'lizhi_chixialu', name:'赤霞颅', desc:'生命值低于50%时，获得3点力量', effect:'lowHpStr3', val:3, char:'lizhi', icon:'💀', rarity:'uncommon' },
+      { id:'lizhi_poqingguan', name:'破青冠', desc:'每场战斗首次获得的力量翻倍', effect:'firstStrDouble', val:1, char:'lizhi', icon:'👑', rarity:'uncommon' },
+      { id:'lizhi_heguangni', name:'和光泥', desc:'每当你失去生命，下回合获得3点格挡', effect:'lostHpNextBlock3', val:3, char:'lizhi', icon:'🏺', rarity:'uncommon' },
+      { id:'lizhi_duanzhang', name:'断章印', desc:'每回合获得1点能量，战斗开始时将2张"伤口"洗入抽牌堆', effect:'bossEnergyWound', val:1, char:'lizhi', icon:'📜', rarity:'boss' },
+      { id:'lizhi_xuanming', name:'玄冥血', desc:'战斗结束时回复10HP', effect:'battleEndHeal10', val:10, char:'lizhi', icon:'💧', rarity:'boss' },
+      { id:'lizhi_taibai', name:'太白金星令', desc:'每回合获得2点力量，但所有敌人获得1点力量', effect:'sulfurStr2', val:2, char:'lizhi', icon:'⭐', rarity:'shop' },
+      
+      // === 李清照专属遗物（改编自静谧猎手） ===
+      { id:'liqing_shuyujuan', name:'漱玉词卷', desc:'初始遗物·战斗开始时额外抽2张牌', effect:'extraDraw', val:2, char:'liqing', icon:'📜', rarity:'starting' },
+      { id:'liqing_huadian', name:'花钿', desc:'每打出一张"残花"，本回合获得1点敏捷', effect:'shivAgility', val:1, char:'liqing', icon:'💮', rarity:'rare' },
+      { id:'liqing_jinshilu', name:'金石录', desc:'战斗开始时，将3张"残花"加入手牌', effect:'startOfBattleShivs', val:3, char:'liqing', icon:'📚', rarity:'uncommon' },
+      { id:'liqing_shuyujian', name:'漱玉笺', desc:'虚弱状态下的敌人造成的伤害降低40%（原为25%）', effect:'weakBoost', val:40, char:'liqing', icon:'📃', rarity:'uncommon' },
+      { id:'liqing_hanmei', name:'寒梅枝', desc:'每当你施加中毒时，层数+1', effect:'poisonBonusPlus', val:1, char:'liqing', icon:'🌿', rarity:'uncommon' },
+      { id:'liqing_suijinling', name:'碎金铃', desc:'每丢弃一张牌，对随机敌人造成3点伤害', effect:'discardDmg', val:3, char:'liqing', icon:'🔔', rarity:'rare' },
+      { id:'liqing_huanhuajin', name:'浣花锦', desc:'每丢弃一张牌，获得3点格挡', effect:'discardBlock', val:3, char:'liqing', icon:'🧵', rarity:'rare' },
+      { id:'liqing_chouxu', name:'愁绪', desc:'战斗开始时，给予所有敌人4层中毒', effect:'startOfBattlePoisonAll', val:4, char:'liqing', icon:'🌫️', rarity:'uncommon' }
+      
+      
+      
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -3512,7 +3707,15 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
           {text:"开炉取丹", effects:{hp:-15,maxHp:15}, result:"丹药未成，你强行开炉！-15HP但体质增强。最大HP+15"},
           {text:"添柴续炼", effects:{}, result:"你添柴续炼片刻，练成一颗灵丹。获得一颗随机灵丹"},
           {text:"小心离开", effects:{}, result:"你不敢乱动，悄然离开。"}
-        ]}
+        ]},
+
+      { id:"ancient_phoenix", title:"凤凰台遗迹", desc:"你在金陵凤凰台旧址发现一处隐秘的祭坛，坛上刻满古老的凤凰图腾，中央悬浮着一团金色的火焰……",
+        choices:[
+          {text:"接受凤凰试炼", effects:{hp:-15,addCard:"lizhi_ancient_phoenix"}, result:"你伸手触碰金色火焰，焚身之痛过后，体内涌出太古之力！获得先古牌【凤凰涅槃·太古】。-15HP"},
+          {text:"细心研究图腾", effects:{maxHp:8}, result:"你将图腾仔细临摹下来，虽未获得凤凰之力，但悟性大增。最大HP+8"},
+          {text:"敬畏离开", effects:{}, result:"你对着祭坛深深鞠躬，悄然离开。什么也没有发生。"}
+        ]},
+
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -3536,6 +3739,16 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       var c=0;
       for(var i=0;i<G.relics.length;i++) if(G.relics[i]===id) c++;
       return c;
+    }
+
+    function getRelicName(id){
+      for(var i=0;i<RELICS.length;i++) if(RELICS[i].id===id) return RELICS[i].name;
+      return id || '无';
+    }
+
+    function getRelicDesc(id){
+      for(var i=0;i<RELICS.length;i++) if(RELICS[i].id===id) return RELICS[i].desc;
+      return '';
     }
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -3669,6 +3882,11 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
           fullMoon: false
         }
       };
+
+      // Apply starting relic
+      if(charData.startingRelic){
+        G.relics.push(charData.startingRelic);
+      }
 
       // Apply maxHp relics
       if(hasRelic('xuanhuangdan')) G.maxHp += 15;
@@ -3840,11 +4058,13 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
             } else {
               eData = pool[Math.floor(Math.random()*pool.length)];
             }
-            startBattle(eData);
-            // 群体战额外金币标记
+            // 群体标记必须在startBattle之前设置，确保首次renderBattle正确渲染
             if(eData && eData.isGroup){
+              if(!gBattle) gBattle = {};
               gBattle._isGroup = true;
             }
+            startBattle(eData);
+            // 群体战额外金币标记
             break;
           case 'elite':
             var ePool = getEnemyPool(G.act, true);
@@ -3974,7 +4194,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
     /* ══════ 卡牌奖励 & 获取 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
 
-    var RARITY_WEIGHTS = { common:50, uncommon:35, rare:15 };
+    var RARITY_WEIGHTS = { common:50, uncommon:35, rare:15, ancient:5 };
 
     function getRandomCards(count, poolType){
       var pool = [];
@@ -4026,7 +4246,6 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
     /* ═══════════════════════════════════════════════════════════════════════ */
     /* ══════ 战斗系统 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
-
 
     var PILLS = {
       hpPill:{name:'回春丹',desc:'回复10HP',icon:'💚',rarity:'common',effect:function(){ G.hp = Math.min(G.hp+10,G.maxHp); showEffectFloat(100,200,'回春+10'); }},
@@ -4084,6 +4303,9 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         hand:[],
         drawPile:[],
         discardPile:[],
+        playerAgil:0,
+        intangible:0,
+        shivsInHand:0,
         energy:G.maxEnergy,
         playerPoison:0,
         enemyPoison:0,
@@ -4095,7 +4317,26 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         isBoss: (eData.intentCycle.length >= 5),
         specialAbility: eData.specialAbility || null,
         canSummon: true
-      };
+      ,
+        exhaustPile:[],
+        _exhaustedThisTurn:false,
+        _selfDamagedThisTurn:false,
+        _spiteFlag:false,
+        _rageBlockPerAtk:0,
+        _blockShrapnel:0,
+        _exhaustPlayCards:[],
+        _firstBlockThisTurn:true,
+        noMoreDraw:false,
+        nextAtkCost0:0,
+        reflectDmg:0,
+        thorns:0,
+        _lostHpThisTurn:false,
+        _heguangniBlock:0,
+        _zhexiantongUsed:false,
+        _poqingguanUsed:false,
+        _chixialuActive:false,
+        _isGroup: !!(eData && eData.isGroup),
+};
 
       // Safety: rebuild deck if empty
       if(!G.deck || G.deck.length === 0){
@@ -4141,7 +4382,47 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       if(hasRelic('dongpoyin')){ gBattle.firstBlockBonus = 3; }
       if(hasRelic('jinxing')){ gBattle.attackFreeChance = 30; }
       if(hasRelic('huanhuashi')){ gBattle.skillHealAmt = 1; }
+
+      // === 李清照遗物-战斗开始效果 ===
+      // 金石录: 战斗开始时将3张残花加入手牌
+      if(hasRelic('liqing_jinshilu')){
+        var shivCount = 3;
+        for(var jsi=0; jsi<shivCount; jsi++){
+          var jShiv = JSON.parse(JSON.stringify(CARDS.liqing_canhua || {name:"残花",cost:0,type:"attack",dmg:4,exhaust:true,isShiv:true,desc:"零落成泥 · 4伤·消耗",rarity:"common",char:"liqing"}));
+          jShiv.id = 'start_shiv_'+Date.now()+'_'+jsi+'_'+Math.random().toString(36).substr(2,5);
+          G.deck.push(jShiv);
+          gBattle.hand.push(G.deck.length-1);
+        }
+      }
+      // 愁绪: 战斗开始时给予所有敌人4层中毒
+      if(hasRelic('liqing_chouxu')){
+        gBattle.enemyPoison += 4;
+      }
+      // 初始抽牌 (漱玉词卷 - handled by extraDraw relic)
+
+      // 追踪总抽牌数
+      gBattle._totalCardsDrawn = 0;
+      gBattle._skillsPlayedThisCombat = 0;
       if(hasRelic('lianyezhou')){ gBattle.firstCardExtraDraw = 1; }
+
+      // === 李白遗物 ===
+      if(hasRelic('lizhi_chixialu') && G.hp <= Math.floor(G.maxHp / 2)){
+        gBattle.playerStr += 3;
+      }
+      if(hasRelic('lizhi_duanzhang')){
+        gBattle.energy += 1;
+        G.maxEnergy = Math.max(G.maxEnergy, 4);
+        // 将2张"伤口"洗入抽牌堆
+        for(var dwi=0;dwi<2;dwi++){
+          var woundCard = {id:'wound_duan_'+Date.now()+'_'+dwi,name:'伤口',cost:1,type:'skill',desc:'废牌',rarity:'common'};
+          G.deck.push(woundCard);
+          gBattle.drawPile.push(G.deck.length-1);
+        }
+      }
+      if(hasRelic('lizhi_taibai')){
+        gBattle.playerStr += 2;
+        gBattle.buffs.str += 1;
+      }
 
       pickIntent(gBattle);
 
@@ -4182,6 +4463,10 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       setTimeout(function(){ showTurnAnnounce('第 1 回合'); }, 400);
       } catch(e){
         console.error('[诗境问道] startBattle 错误:', e, eData);
+        // 显示错误提示
+        var errorMsg = '战斗初始化失败: ' + e.message;
+        var screenEl = document.getElementById('sgBattle');
+        if(screenEl) screenEl.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:#ff6644;"><span style="font-size:2rem;">⚠️</span><p style="margin-top:1rem;">'+errorMsg+'</p><button class="sg-btn" onclick="showMap()" style="margin-top:1rem;">返回诗境</button></div>';
       }
     }
 
@@ -4397,7 +4682,8 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
     }
 
     function drawCards(n, animated){
-      if(!gBattle) return;
+      if(gBattle && gBattle.noMoreDraw) return;
+if(!gBattle) return;
       var extra = hasRelic('shizhen') ? 1 : 0;
       if(hasRelic('lianyezhou')) extra += 1;
       n = n + extra;
@@ -4415,6 +4701,16 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         }
         var cardIdx = gBattle.drawPile.pop();
         gBattle.hand.push(cardIdx);
+        // 李清照：抽牌时造成伤害
+        if(gBattle && G.powers && G.powers.dmgOnDraw && gBattle.hp > 0){
+          var drawDmg = G.powers.dmgOnDraw;
+          if(gBattle._isGroup){
+            if(gBattle.hp > 0) gBattle.hp -= drawDmg;
+            if(gBattle._groupHp2 > 0) gBattle._groupHp2 -= drawDmg;
+          } else {
+            gBattle.hp -= drawDmg;
+          }
+        }
       }
       // Track newly drawn card indices for animation
       gBattle._newlyDrawn = [];
@@ -4452,7 +4748,33 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         cost = Math.max(0, cost - 1);
       }
 
-      return gBattle.energy >= cost;
+      
+      // === 李白新机制: nextAtkCost0 ===
+      if(gBattle.nextAtkCost0 && card.type==='attack' && cost>0){
+        cost = 0;
+        gBattle.nextAtkCost0--;
+      }
+      // === freeIfLostHp ===
+      if(card.freeIfLostHp && G._everLostHp && cost>0){
+        cost = 0;
+      }
+      // === requireExhaust3 ===
+      if(card.requireExhaust3 && (!gBattle.exhaustPile || gBattle.exhaustPile.length<3)){
+        return false;
+      }
+
+
+      // === grandFinale - 仅在抽牌堆为空时打出 ===
+      if(card.grandFinale && gBattle.drawPile.length > 0){
+        return false;
+      }
+
+      // === hitsX (cost = -1, spend all energy) ===
+      if(card.hitsX && card.cost < 0){
+        // Allow if energy >= 0 (will consume all energy)
+      }
+
+return gBattle.energy >= cost;
     }
 
     // ── 卡牌音效（用Web Audio模拟古风乐器短音） ──
@@ -4515,6 +4837,41 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
           }
         }
       } catch(e){ /* audio sfx unavailable */ }
+    }
+
+    function playHoverSfx(){
+      try{
+        var ctx2 = gBgmCtx || (window.audioCtx || null);
+        if(!ctx2) return;
+        var osc = ctx2.createOscillator();
+        var gain = ctx2.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 660;
+        gain.gain.value = 0.03;
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx2.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx2.destination);
+        osc.start(ctx2.currentTime);
+        osc.stop(ctx2.currentTime + 0.08);
+      }catch(e){}
+    }
+    function playAncientSfx(){
+      try{
+        var ctx3 = gBgmCtx || (window.audioCtx || null);
+        if(!ctx3) return;
+        var notes = [528, 660, 792, 1056];
+        for(var ni=0;ni<notes.length;ni++){
+          var o = ctx3.createOscillator();
+          var g = ctx3.createGain();
+          o.type = 'triangle';
+          o.frequency.value = notes[ni];
+          g.gain.value = 0.08;
+          g.gain.exponentialRampToValueAtTime(0.001, ctx3.currentTime + 0.3 + ni*0.1);
+          o.connect(g); g.connect(ctx3.destination);
+          o.start(ctx3.currentTime + ni*0.08);
+          o.stop(ctx3.currentTime + 0.3 + ni*0.1);
+        }
+      }catch(e){}
     }
 
     function playCard(cardIdx){
@@ -4582,6 +4939,51 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         finalDmg += Math.floor(missing / 20);
       }
 
+      // === dmgPerAtkPlayed - 本回合每攻击牌伤害（终结技）===
+      if(card.dmgPerAtkPlayed){
+        finalDmg = card.dmgPerAtkPlayed * (gBattle.cardPlayedThisTurn || 1);
+      }
+
+      // === dmgPerSkillInHand - 手牌每技能牌伤害（飞镖）===
+      if(card.dmgPerSkillInHand){
+        var skillInHandCount = 0;
+        for(var sih=0; sih<gBattle.hand.length; sih++){
+          if(G.deck[gBattle.hand[sih]] && G.deck[gBattle.hand[sih]].type === 'skill') skillInHandCount++;
+        }
+        finalDmg = card.dmgPerSkillInHand * skillInHandCount;
+      }
+
+      // === dmgPerDiscard - 本回合每弃牌+伤害（临终仪式）===
+      if(card.dmgPerDiscard){
+        var discCount = gBattle._discardCountThisTurn || 0;
+        finalDmg += card.dmgPerDiscard * discCount;
+      }
+
+      // === dmgPerCardDrawn - 本场每抽牌+伤害（谋杀）===
+      if(card.dmgPerCardDrawn){
+        var totalDrawn = gBattle._totalCardsDrawn || 0;
+        finalDmg += card.dmgPerCardDrawn * totalDrawn;
+      }
+
+      // === extraIf5Hand - 手牌≥5额外攻击一次（贯彻）===
+      if(card.extraIf5Hand && gBattle.hand.length >= 5){
+        hits++;
+      }
+
+      // === dmgRedPerHand - 手牌每牌伤害减少（精准切割）===
+      if(card.dmgRedPerHand){
+        var handSize = gBattle.hand.length;
+        var redAmt = card.dmgRedPerHand * Math.max(0, handSize);
+        finalDmg = Math.max(0, finalDmg - redAmt);
+      }
+
+      // === enemyHpLossPerCard - 每打牌敌人失去生命（绞杀）===
+      if(card.enemyHpLossPerCard){
+        var cardsPlayedThisTurn = gBattle.cardPlayedThisTurn;
+        gBattle.hp -= card.enemyHpLossPerCard * cardsPlayedThisTurn;
+        if(gBattle.hp < 0) gBattle.hp = 0;
+      }
+
       // 新增特殊效果：敌半血翻倍
       if(card.enemyHalf && gBattle.hp < gBattle.maxHp / 2){
         finalDmg = Math.floor(finalDmg * 2);
@@ -4606,14 +5008,358 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       if(finalDmg < 0) finalDmg = 0;
 
       // Enemy debuffs
-      if(gBattle.buffs.vuln > 0 && card.type === 'attack') finalDmg = Math.floor(finalDmg * 1.5);
-      if(gBattle.buffs.weak > 0 && card.type === 'attack') finalDmg = Math.floor(finalDmg * 0.75);
+      if(gBattle.buffs.vuln > 0 && card.type === 'attack'){
+        var vulnMult = hasRelic('lizhi_zhibailu') ? 1.75 : 1.5;
+        finalDmg = Math.floor(finalDmg * vulnMult);
+      }
+      if(gBattle.buffs.weak > 0 && card.type === 'attack'){
+        if(G.powers && G.powers.weakDoubleDmg){
+          finalDmg = Math.floor(finalDmg * 2); // 虚弱敌人双倍伤害
+        } else {
+          finalDmg = Math.floor(finalDmg * 0.75);
+        }
+      }
       if(gBattle.buffs.strDown > 0 && card.type === 'attack'){
         finalDmg = Math.max(0, finalDmg - gBattle.buffs.strDown);
       }
       G.enemyStrDown = gBattle.buffs.strDown;
 
-      // AOE
+      // === 李白新机制: 消耗堆追踪 ===
+      if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+
+      // === dmgBlock ===
+      if(card.dmgBlock){
+        finalDmg = gBattle.playerBlock;
+      }
+
+      // === dmgPerExhaust ===
+      if(card.dmgPerExhaust && gBattle.exhaustPile){
+        finalDmg += card.dmgPerExhaust * gBattle.exhaustPile.length;
+      }
+
+      // === copyToDiscard ===
+      if(card.copyToDiscard){
+        var copyCard = JSON.parse(JSON.stringify(card));
+        copyCard.id = 'copy_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+        var copyIdx = G.deck.length;
+        G.deck.push(copyCard);
+        gBattle.discardPile.push(copyIdx);
+      }
+
+      // === returnTop ===
+      if(card.returnTop && gBattle.discardPile.length > 0){
+        var topIdx = gBattle.discardPile.pop();
+        gBattle.drawPile.push(topIdx);
+      }
+
+      // === exhaustTop ===
+      if(card.exhaustTop){
+        var exSrc = gBattle.drawPile;
+        if(exSrc.length === 0 && gBattle.discardPile.length > 0){
+          gBattle.drawPile = gBattle.discardPile.slice();
+          gBattle.discardPile = [];
+          shuffle(gBattle.drawPile);
+          exSrc = gBattle.drawPile;
+          gBattle.shuffledThisTurn = true;
+        }
+        if(exSrc.length > 0){
+          var exTop = exSrc.pop();
+          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+          gBattle.exhaustPile.push(exTop);
+          gBattle._exhaustedThisTurn = true;
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-80, '🔥 消耗牌堆顶');
+        }
+      }
+
+      // === doubleVuln ===
+      if(card.doubleVuln){
+        gBattle.buffs.vuln += (gBattle.buffs.vuln || 0);
+      }
+
+      // === addWound ===
+      if(card.addWound){
+        var woundCard = {id:'wound_'+Date.now(),name:'伤口',cost:1,type:'skill',desc:'废牌',rarity:'common'};
+        G.deck.push(woundCard);
+        gBattle.drawPile.push(G.deck.length-1);
+      }
+
+      // === nextAtkCost0 ===
+      if(card.nextAtkCost0){
+        gBattle.nextAtkCost0 = (gBattle.nextAtkCost0||0)+1;
+      }
+
+      // === upgradeHand ===
+      if(card.upgradeHand){
+        var upCandidates = [];
+        for(var ui=0;ui<gBattle.hand.length;ui++){
+          var uhidx = gBattle.hand[ui];
+          var uhc = G.deck[uhidx];
+          if(uhc && !uhc.upgraded) upCandidates.push(ui);
+        }
+        if(upCandidates.length>0){
+          var upPick = upCandidates[Math.floor(Math.random()*upCandidates.length)];
+          var upDidx = gBattle.hand[upPick];
+          var upCard = G.deck[upDidx];
+          applyUpgrade(upCard);
+        }
+      }
+
+      // === exhaustRandom ===
+      if(card.exhaustRandom && gBattle.hand.length>0){
+        var exRi = Math.floor(Math.random()*gBattle.hand.length);
+        var exRd = gBattle.hand.splice(exRi,1)[0];
+        if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+        gBattle.exhaustPile.push(exRd);
+        gBattle._exhaustedThisTurn = true;
+      }
+
+      // === playTopCard ===
+      if(card.playTopCard){
+        var topSrc = gBattle.drawPile;
+        if(topSrc.length===0 && gBattle.discardPile.length>0){
+          gBattle.drawPile = gBattle.discardPile.slice();
+          gBattle.discardPile = [];
+          shuffle(gBattle.drawPile);
+          topSrc = gBattle.drawPile;
+        }
+        if(topSrc.length>0){
+          var tpIdx = topSrc.pop();
+          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+          gBattle.exhaustPile.push(tpIdx);
+          gBattle._exhaustedThisTurn = true;
+        }
+      }
+
+      // === dmgPerVuln ===
+      if(card.dmgPerVuln){
+        finalDmg += card.dmgPerVuln * (gBattle.buffs.vuln||0);
+      }
+
+      // === noMoreDraw ===
+      if(card.noMoreDraw){
+        gBattle.noMoreDraw = true;
+      }
+
+      // === ifVulnHitTwice ===
+      if(card.ifVulnHitTwice && (gBattle.buffs.vuln||0) > 0 && hits===1){
+        hits = 2;
+      }
+
+      // === strPerVuln ===
+      if(card.strPerVuln){
+        gBattle.playerStr += (gBattle.buffs.vuln||0);
+      }
+
+      // === blockIfExhausted ===
+      if(card.blockIfExhausted && gBattle._exhaustedThisTurn){
+        gBattle.playerBlock += card.blockIfExhausted;
+      }
+
+      // === energyPerAtkHand ===
+      if(card.energyPerAtkHand){
+        var atkCount = 0;
+        for(var ei=0;ei<gBattle.hand.length;ei++){
+          if(G.deck[gBattle.hand[ei]] && G.deck[gBattle.hand[ei]].type==='attack') atkCount++;
+        }
+        gBattle.energy += atkCount;
+        gBattle._noExtraEnergy = true;
+      }
+
+      // === killMaxHp ===
+      if(card.killMaxHp && gBattle.hp<=0){
+        G.maxHp += card.killMaxHp;
+        G.hp = Math.min(G.hp+card.killMaxHp, G.maxHp);
+      }
+
+      // === exhaustHandAll ===
+      if(card.exhaustHandAll){
+        for(var xi=0;xi<gBattle.hand.length;xi++){
+          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+          gBattle.exhaustPile.push(gBattle.hand[xi]);
+        }
+        gBattle._exhaustedThisTurn = true;
+        gBattle.hand = [];
+      }
+
+      // === reflectDmg ===
+      if(card.reflectDmg){
+        gBattle.reflectDmg = (gBattle.reflectDmg||0) + card.reflectDmg;
+      }
+
+      // === blockShrapnel ===
+      if(card.blockShrapnel){
+        gBattle._blockShrapnel = (gBattle._blockShrapnel||0) + card.blockShrapnel;
+      }
+
+      // === playFromExhaust ===
+      if(card.playFromExhaust){
+        if(!gBattle._exhaustPlayCards) gBattle._exhaustPlayCards = [];
+        if(gBattle._exhaustPlayCards.indexOf(deckIdx)===-1) gBattle._exhaustPlayCards.push(deckIdx);
+      }
+
+      // === addRandomAtk + freeThisTurn ===
+      if(card.addRandomAtk){
+        var atkPool2 = [];
+        for(var aid2 in CARDS){
+          if(CARDS[aid2].type==='attack' && CARDS[aid2].rarity!=='basic') atkPool2.push(aid2);
+        }
+        if(atkPool2.length>0){
+          var rAtkId = atkPool2[Math.floor(Math.random()*atkPool2.length)];
+          var rAtk = JSON.parse(JSON.stringify(CARDS[rAtkId]));
+          rAtk.id = 'gen_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+          if(card.freeThisTurn) rAtk.cost = 0;
+          var raI = G.deck.length;
+          G.deck.push(rAtk);
+          gBattle.hand.push(raI);
+        }
+      }
+
+      // === giveBlockEqual ===
+      if(card.giveBlockEqual){
+        gBattle.playerBlock *= 2;
+      }
+
+      // === enemyStr ===
+      if(card.enemyStr){
+        gBattle.buffs.str = (gBattle.buffs.str||0) + card.enemyStr;
+      }
+
+      // === drawToNonAttack ===
+      if(card.drawToNonAttack){
+        var maxDraws = 15;
+        while(maxDraws-->0){
+          if(gBattle.drawPile.length===0){
+            if(gBattle.discardPile.length===0) break;
+            gBattle.drawPile = gBattle.discardPile.slice();
+            gBattle.discardPile = [];
+            shuffle(gBattle.drawPile);
+          }
+          var dnaIdx = gBattle.drawPile.pop();
+          gBattle.hand.push(dnaIdx);
+          if(G.deck[dnaIdx] && G.deck[dnaIdx].type!=='attack') break;
+        }
+        gBattle.shuffledThisTurn = true;
+        renderBattle(true);
+      }
+
+      // === upgradePermanent ===
+      if(card.upgradePermanent){
+        card.dmg = (card.dmg||0) + card.upgradePermanent;
+      }
+
+      // === freeIfLostHp ===
+      if(card.freeIfLostHp && G._everLostHp){
+        card._wasFree = true;
+      }
+
+      // === halfEnemyBlock ===
+      if(card.halfEnemyBlock){
+        gBattle.block = Math.floor((gBattle.block||0)/2);
+      }
+
+      // === drawIfExhausted ===
+      if(card.drawIfExhausted && gBattle._exhaustedThisTurn){
+        drawCards(1);
+      }
+
+      // === addStun ===
+      if(card.addStun){
+        var stunCard = {id:'stun_'+Date.now(),name:'眩晕',cost:0,type:'skill',desc:'混乱',rarity:'common'};
+        G.deck.push(stunCard);
+        gBattle.hand.push(G.deck.length-1);
+      }
+
+      // === stompCostReduce ===
+      if(card.stompCostReduce){
+        var atksPlayed = gBattle.cardPlayedThisTurn-1;
+        gBattle.energy += Math.min(atksPlayed, card.cost||3);
+      }
+
+      // === burnPact ===
+      if(card.burnPact && gBattle.hand.length>0){
+        var bpIdx = gBattle.hand.splice(Math.floor(Math.random()*gBattle.hand.length),1)[0];
+        if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+        gBattle.exhaustPile.push(bpIdx);
+        gBattle._exhaustedThisTurn = true;
+        drawCards(2);
+      }
+
+      // === forgetRitual ===
+      if(card.forgetRitual && gBattle._exhaustedThisTurn){
+        gBattle.energy += 1;
+      }
+
+      // === rageBlockPerAtk ===
+      if(card.rageBlockPerAtk){
+        gBattle._rageBlockPerAtk = card.rageBlockPerAtk;
+      }
+
+      // === exhaustNonAttack ===
+      if(card.exhaustNonAttack){
+        var naCount = 0;
+        for(var nai=gBattle.hand.length-1;nai>=0;nai--){
+          var naCard = G.deck[gBattle.hand[nai]];
+          if(naCard && naCard.type!=='attack'){
+            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+            gBattle.exhaustPile.push(gBattle.hand[nai]);
+            gBattle.hand.splice(nai,1);
+            naCount++;
+          }
+        }
+        if(naCount>0) gBattle._exhaustedThisTurn = true;
+        if(card.blockPerExhaustNonAtk){
+          gBattle.playerBlock += naCount * card.blockPerExhaustNonAtk;
+        }
+      }
+
+      // === spiteDraw ===
+      if(card.spiteDraw){
+        gBattle._spiteFlag = true;
+      }
+
+      // === dmgPerStrikeName ===
+      if(card.dmgPerStrikeName){
+        var pCount = 0;
+        for(var pci=0;pci<G.deck.length;pci++){
+          if(G.deck[pci] && G.deck[pci].name && G.deck[pci].name.indexOf('诗')!==-1) pCount++;
+        }
+        finalDmg += pCount * card.dmgPerStrikeName;
+      }
+
+      // === hitsPerLostHp ===
+      if(card.hitsPerLostHp){
+        hits = Math.max(1, Math.floor((G.maxHp - G.hp) / 3) + 1);
+      }
+
+      // === requireExhaust3 ===
+      if(card.requireExhaust3 && (!gBattle.exhaustPile || gBattle.exhaustPile.length < 3)){
+        // Can't play this card, return energy
+        gBattle.energy += (card.cost||0);
+        gBattle.hand.push(deckIdx);
+        renderBattle();
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '❌ 消耗不足3张');
+        return false;
+      }
+
+      // === spiteDraw ===
+      if(gBattle._spiteFlag && gBattle._selfDamagedThisTurn){
+        drawCards(1);
+        gBattle._spiteFlag = false;
+      }
+
+      // === exhaustHandDrawN ===
+      if(card.exhaustHandDrawN){
+        var handSize7 = gBattle.hand.length;
+        for(var hi7=gBattle.hand.length-1;hi7>=0;hi7--){
+          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+          gBattle.exhaustPile.push(gBattle.hand[hi7]);
+        }
+        gBattle._exhaustedThisTurn = true;
+        gBattle.hand = [];
+        drawCards(handSize7);
+      }
+
+// AOE
       var isAoe = card.aoe;
       var hits = card.hits || 1;
 
@@ -4628,15 +5374,60 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         }
       }
 
+      // === echoKill - 击杀重复 ===
+      if(card.echoKill && gBattle.hp <= 0){
+        gBattle._echoKillPending = true;
+      }
+      if(gBattle._echoKillPending && gBattle.hp <= 0 && !card.echoKill){
+        gBattle._echoKillPending = false;
+      }
       // killEnergy: 如果此卡击杀敌人，获得能量
       if(card.killEnergy && gBattle.hp <= 0){
         gBattle.energy += card.killEnergy;
         showEffectFloat(window.innerWidth/2, 60, '月影剑+'+card.killEnergy+'能量');
       }
 
+      // === killBonusReward - 致命获得额外奖励（狩猎）===
+      if(card.killBonusReward && gBattle.hp <= 0){
+        var bonusCards = Math.floor(Math.random() * 2) + 1;
+        for(var kr=0; kr<bonusCards; kr++){
+          var pool = [];
+          for(var pid in CARDS){
+            if(CARDS[pid].rarity === 'common' || CARDS[pid].rarity === 'uncommon') pool.push(pid);
+          }
+          if(pool.length > 0){
+            var pick = pool[Math.floor(Math.random() * pool.length)];
+            var newCard = JSON.parse(JSON.stringify(CARDS[pick]));
+            newCard.id = 'reward_'+Date.now()+'_'+kr;
+            G.deck.push(newCard);
+          }
+          G.gold = (G.gold || 0) + 15;
+        }
+      }
+
+      // === drawNextTurn - 下回合抽牌（掠食者）===
+      if(card.drawNextTurn){
+        gBattle._nextTurnExtraDraw = (gBattle._nextTurnExtraDraw||0) + card.drawNextTurn;
+      }
+
+      // === nextSkillCost0 - 下一张技能费用为0（猛扑）===
+      if(card.nextSkillCost0){
+        gBattle._nextSkillCost0Flag = true;
+      }
+
+      // === costDownPerSkill - 本回合每技能费用-1（精确打击）===
+      if(card.costDownPerSkill){
+        var skillsPlayedThisCombat = gBattle._skillsPlayedThisCombat || 0;
+        var reduction = Math.floor(skillsPlayedThisCombat / card.costDownPerSkill);
+        var refund = Math.min(reduction, Math.max(0, cost || 3));
+        gBattle.energy += refund;
+        if(refund > 0) showEffectFloat(window.innerWidth/2, window.innerHeight/2-30, '技能减免返还'+refund);
+      }
+
       // Block
       if(card.block){
         var blockVal = card.block;
+        if(gBattle.playerAgil) blockVal += gBattle.playerAgil;
         if(hasRelic('yinjiazhou')) blockVal += 2;
         // 李清照 ability: first skill +50%
         if(G.charId === 'liqing' && card.type === 'skill' && gBattle.cardPlayedThisTurn === 1){
@@ -4647,6 +5438,25 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
           blockVal += 3;
         }
         gBattle.playerBlock += blockVal;
+            if(blockVal > 0){
+              var _bpEl = document.getElementById('sgPlayerPortrait');
+              var _bx = _bpEl ? _bpEl.getBoundingClientRect().left + _bpEl.offsetWidth/2 : 120;
+              var _by = _bpEl ? _bpEl.getBoundingClientRect().top : window.innerHeight/2 + 80;
+              showEffectFloat(_bx, _by-10, '🛡️+' + blockVal);
+            }
+      if(gBattle._blockShrapnel && card.block){
+        damageEnemy(0, card.block, false);
+      }
+      }
+
+      // === blockNextTurn - 下回合格挡 ===
+      if(card.blockNextTurn){
+        gBattle._nextTurnBlock = Math.max(gBattle._nextTurnBlock||0, card.blockNextTurn);
+      }
+
+      // === blockPersist - 格挡不消失 ===
+      if(card.blockPersist){
+        gBattle._BattleBlockPersist = true;
       }
 
       // Poison
@@ -4669,7 +5479,14 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 
       // Self damage
       if(card.selfDmg){
+        var hpBefore = G.hp;
         damagePlayer(card.selfDmg);
+        var hpLost = hpBefore - G.hp;
+        if(hasRelic('lizhi_zhexiantong') && !gBattle._zhexiantongUsed && hpLost > 0){
+          G.hp = Math.min(G.hp + hpLost, G.maxHp);
+          gBattle._zhexiantongUsed = true;
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-50, '谪仙舌回复'+hpLost);
+        }
       }
 
       // Heal
@@ -4694,14 +5511,166 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         gBattle.energy += card.gainEnergy;
       }
 
+      // === nextSkillCost0Flag - 下一张技能牌费用0 ===
+      if(gBattle._nextSkillCost0Flag && card.type === 'skill' && cost > 0){
+        gBattle.energy += cost;
+        gBattle._nextSkillCost0Flag = false;
+      }
+
+      // === 李清照新机制 ===
+      // 敏捷（Agility）- 临时
+      if(card.tempAgil){
+        gBattle.playerAgil = (gBattle.playerAgil || 0) + card.tempAgil;
+        gBattle._tempAgilThisTurn = (gBattle._tempAgilThisTurn||0) + card.tempAgil;
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-20, '敏捷+'+card.tempAgil);
+      }
+      // 残花（Shiv）生成
+      if(card.addShivs){
+        for(var si=0; si<card.addShivs; si++){
+          var shivCard = JSON.parse(JSON.stringify(CARDS.liqing_canhua || {name:"残花",cost:0,type:"attack",dmg:4,exhaust:true,isShiv:true,desc:"零落成泥 · 4伤·消耗",rarity:"common",char:"liqing"}));
+          shivCard.id = 'shiv_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+          G.deck.push(shivCard);
+          gBattle.hand.push(G.deck.length-1);
+        }
+      }
+
+      // === 弃牌（Discard N from hand） ===
+      if(card.discard && gBattle.hand.length > 0){
+        var discN = card.discard;
+        for(var di=0; di<discN && gBattle.hand.length > 0; di++){
+          var rIdx = Math.floor(Math.random() * gBattle.hand.length);
+          var discIdx = gBattle.hand.splice(rIdx, 1)[0];
+          gBattle.discardPile.push(discIdx);
+          // 弃牌计数
+          gBattle._discardCountThisTurn = (gBattle._discardCountThisTurn||0) + 1;
+          // 遗物: 碎金铃 - 弃牌造成伤害
+          if(hasRelic('liqing_suijinling')){
+            var suijinDmg = 3;
+            if(gBattle._isGroup){
+              if(gBattle.hp > 0) gBattle.hp -= suijinDmg;
+              if(gBattle._groupHp2 > 0) gBattle._groupHp2 -= suijinDmg;
+            } else {
+              gBattle.hp -= suijinDmg;
+              showDmgFloat(document.getElementById('sgBattle')?.offsetLeft + 200 || 300, 80, ''+suijinDmg);
+            }
+          }
+          // 遗物: 浣花锦 - 弃牌获得格挡
+          if(hasRelic('liqing_huanhuajin')){
+            gBattle.playerBlock += 3;
+          }
+        }
+      }
+
+      // === 遗物: 花钿 - 打出残花获得敏捷 ===
+      if(card.isShiv && hasRelic('liqing_huadian')){
+        gBattle.playerAgil = (gBattle.playerAgil || 0) + 1;
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-20, '花钿·敏捷+1');
+      }
+
+      // === 遗物: 寒梅枝 - 中毒层数+1 ===
+      if(card.poison && hasRelic('liqing_hanmei')){
+        card.poison += 1;
+      }
+
+      // === poisonIfPoisoned - 敌人已中毒才施加 ===
+      if(card.poisonIfPoisoned){
+        if(gBattle.enemyPoison > 0){
+          gBattle.enemyPoison += card.poisonIfPoisoned;
+        }
+      }
+
+      // === enemyStrDownAll - 所有敌人本回合失去力量 ===
+      if(card.enemyStrDownAll){
+        gBattle.buffs.strDown = (gBattle.buffs.strDown||0) + card.enemyStrDownAll;
+        // 也减去敌人的力量
+        gBattle.buffs.str = Math.max(0, (gBattle.buffs.str||0) - card.enemyStrDownAll);
+      }
+
+      // === removeAllBlock - 移除敌人所有格挡 ===
+      if(card.removeAllBlock){
+        gBattle.block = 0;
+      }
+
+      // === drawToX - 抽牌至N张 ===
+      if(card.drawToX){
+        var need = card.drawToX - gBattle.hand.length;
+        if(need > 0) drawCards(need);
+      }
+
+      // === discardAllDrawEqual ===
+      if(card.discardAllDrawEqual){
+        var discardedCount = 0;
+        while(gBattle.hand.length > 0){
+          gBattle.discardPile.push(gBattle.hand.pop());
+          discardedCount++;
+        }
+        drawCards(discardedCount);
+      }
+
+      // === blockIfDrawnSkill ===
+      if(card.blockIfDrawnSkill && gBattle._lastDrawnCardType === 'skill'){
+        gBattle.playerBlock += card.blockIfDrawnSkill;
+      }
+
+      // === slyOneSkill - 为手牌中一张技能添加Sly ===
+      if(card.slyOneSkill){
+        for(var soi=0; soi<gBattle.hand.length; soi++){
+          var soCard = G.deck[gBattle.hand[soi]];
+          if(soCard && soCard.type === 'skill' && !soCard.sly){
+            soCard.sly = true;
+            showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '奇巧附加');
+            break;
+          }
+        }
+      }
+
+      // === blockPerCardPlayed (skill version) ===
+      if(card.blockPerCardPlayed && !card.typePowerEffect){
+        // Track total cards played
+        gBattle._blockPerCardPlayed = (gBattle._blockPerCardPlayed||0) + card.blockPerCardPlayed;
+      }
+
+      // === poisonPerDraw - 本回合每抽牌叠毒 ===
+      if(card.poisonPerDraw){
+        gBattle._poisonOnDraw = (gBattle._poisonOnDraw||0) + card.poisonPerDraw;
+      }
+
+      // === nextTurnBlock - 立即存储 ===
+      // (handled above in block section)
+
+      // === 毒对aoe伤害特殊处理: randomTargets ===
+      // randomTargets标记用于攻击，在攻击循环中处理
+      // 敏捷（Agility）- 临时
+      if(card.tempAgil){
+        gBattle.playerAgil = (gBattle.playerAgil || 0) + card.tempAgil;
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-20, '敏捷+'+card.tempAgil);
+      }
+      // 残花（Shiv）生成
+      if(card.addShivs){
+        for(var si=0; si<card.addShivs; si++){
+          var shivCard = JSON.parse(JSON.stringify(CARDS.liqing_canhua || {name:"残花",cost:0,type:"attack",dmg:4,exhaust:true,isShiv:true,desc:"零落成泥 · 4伤·消耗",rarity:"common",char:"liqing"}));
+          shivCard.id = 'shiv_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+          G.deck.push(shivCard);
+          gBattle.hand.push(G.deck.length-1);
+        }
+      }
+
       // Temp strength
       if(card.tempStr){
-        gBattle.playerStr += card.tempStr;
+        var strGain = card.tempStr;
+        if(hasRelic('lizhi_poqingguan') && !gBattle._poqingguanUsed){
+          strGain *= 2;
+          gBattle._poqingguanUsed = true;
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-60, '破青冠翻倍+'+strGain);
+        }
+        gBattle.playerStr += strGain;
       }
 
       // nextTurnStr
+      if(card.nextAgil){ gBattle.nextAgil = (gBattle.nextAgil||0) + card.nextAgil; }
       if(card.nextTurnStr){
         if(!gBattle.nextStr) gBattle.nextStr = 0;
+      if(!gBattle.nextAgil) gBattle.nextAgil = 0;
         gBattle.nextStr += card.nextTurnStr;
       }
 
@@ -4720,18 +5689,113 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         G.powers[card.power] = (G.powers[card.power] || 0) + 1;
       }
 
-      // Exhaust
+      // === 李白新power效果 ===
+      G.powers = G.powers || {};
+      if(card.perTurnStr){ G.powers.perTurnStr = (G.powers.perTurnStr||0) + card.perTurnStr; }
+      if(card.perTurnEnergy){ G.powers.perTurnEnergy = (G.powers.perTurnEnergy||0) + card.perTurnEnergy; }
+      if(card.exhaustTopStart){ G.powers.exhaustTopStart = true; }
+      if(card.drawOnExhaust){ G.powers.drawOnExhaust = (G.powers.drawOnExhaust||0) + 1; }
+      if(card.feelNoPainBlock){ G.powers.feelNoPainBlock = (G.powers.feelNoPainBlock||0) + card.feelNoPainBlock; }
+      if(card.blockGainDmg){ G.powers.blockGainDmg = (G.powers.blockGainDmg||0) + card.blockGainDmg; }
+      if(card.thirdAtkCopy){ G.powers.thirdAtkCopy = true; }
+      if(card.vulnExtraDmg){ G.powers.vulnExtraDmg = (G.powers.vulnExtraDmg||0) + card.vulnExtraDmg; }
+      if(card.blockPersist){ G.powers.blockPersist = true; }
+      if(card.firstBlockDouble){ G.powers.firstBlockDouble = true; }
+      if(card.doubleDmgTaken){ G.powers.doubleDmgTaken = true; }
+      if(card.allyHalfDmg){ G.powers.allyHalfDmg = true; }
+      if(card.selfDmgPerTurn){ G.powers.selfDmgPerTurn = (G.powers.selfDmgPerTurn||0) + card.selfDmgPerTurn; }
+      if(card.hurtStartBlock){ G.powers.hurtStartBlock = (G.powers.hurtStartBlock||0) + card.hurtStartBlock; }
+      if(card.selfDmgStart){ G.powers.selfDmgStart = (G.powers.selfDmgStart||0) + card.selfDmgStart; }
+      if(card.skillCost0){ G.powers.skillCost0 = true; }
+      if(card.exhaustSkill){ G.powers.exhaustSkill = true; }
+      if(card.rampageStrTurn){ G.powers.rampageStrTurn = (G.powers.rampageStrTurn||0) + card.rampageStrTurn; }
+      if(card.armorThorns){ G.powers.armorThorns = (G.powers.armorThorns||0) + card.armorThorns; }
+      if(card.ruptureStr){ G.powers.ruptureStr = true; }
+      if(card.startTurnGetRandomAtk){ G.powers.startTurnGetRandomAtk = true; }
+      if(card.autoPlayStrike){ G.powers.autoPlayStrike = true; }
+      if(card.startTurnSelfDmg){ G.powers.startTurnSelfDmg = (G.powers.startTurnSelfDmg||0) + card.startTurnSelfDmg; }
+      if(card.drawOnHurt){ G.powers.drawOnHurt = true; }
+      if(card.autoAtkEndTurn){ G.powers.autoAtkEndTurn = true; }
+      if(card.viciousDraw){ G.powers.viciousDraw = true; }
+      if(card.vulnProtect){ G.powers.vulnProtect = true; }
+      // === 李清照新power效果 ===
+      if(card.gainAgil){ gBattle.playerAgil = (gBattle.playerAgil||0) + card.gainAgil; showEffectFloat(window.innerWidth/2, window.innerHeight/2-20, '敏捷+'+card.gainAgil); }
+      if(card.intangible){ gBattle.intangible = (gBattle.intangible||0) + card.intangible; showEffectFloat(window.innerWidth/2, window.innerHeight/2-20, '无形+'+card.intangible); }
+      if(card.agilLossPerTurn){ G.powers.agilLossPerTurn = (G.powers.agilLossPerTurn||0) + card.agilLossPerTurn; }
+      if(card.thorns){ G.powers.thorns = (G.powers.thorns||0) + card.thorns; gBattle.thorns = (gBattle.thorns||0) + card.thorns; }
+      if(card.slyOnSkillPlay){ G.powers.slyOnSkillPlay = true; }
+      if(card.shivPerTurn){ G.powers.shivPerTurn = (G.powers.shivPerTurn||0) + card.shivPerTurn; }
+      if(card.shivAoe){ G.powers.shivAoe = true; }
+      if(card.shivRetain){ G.powers.shivRetain = true; }
+      if(card.firstShivDmgBonus){ G.powers.firstShivDmgBonus = (G.powers.firstShivDmgBonus||0) + card.firstShivDmgBonus; }
+      if(card.shivDmgBonus){ G.powers.shivDmgBonus = (G.powers.shivDmgBonus||0) + card.shivDmgBonus; }
+      if(card.retainCards){ G.powers.retainCards = (G.powers.retainCards||0) + card.retainCards; }
+      if(card.poisonPerTurn){ G.powers.poisonPerTurn = (G.powers.poisonPerTurn||0) + card.poisonPerTurn; }
+      if(card.poisonSpeedup){ G.powers.poisonSpeedup = (G.powers.poisonSpeedup||0) + card.poisonSpeedup; }
+      if(card.poisonTriggerEvery){ G.powers.poisonTriggerEvery = (G.powers.poisonTriggerEvery||0) + card.poisonTriggerEvery; if(!G.powers._poisonCounter) G.powers._poisonCounter = 0; }
+      if(card.poisonTriggerDmg){ G.powers.poisonTriggerDmg = (G.powers.poisonTriggerDmg||0) + card.poisonTriggerDmg; }
+      if(card.drawDiscardPerTurn){ G.powers.drawDiscardPerTurn = true; }
+      if(card.weakDoubleDmg){ G.powers.weakDoubleDmg = true; }
+      if(card.dmgPerCardPlayed){ G.powers.dmgPerCardPlayed = (G.powers.dmgPerCardPlayed||0) + card.dmgPerCardPlayed; }
+      if(card.dmgOnDraw){ G.powers.dmgOnDraw = (G.powers.dmgOnDraw||0) + card.dmgOnDraw; }
+      if(card.poisonOnUndealtDmg){ G.powers.poisonOnUndealtDmg = (G.powers.poisonOnUndealtDmg||0) + card.poisonOnUndealtDmg; }
+
+      // 每打出一张牌造成伤害（李清照：凤凰台上、群蛇形态等）
+      if(G.powers && G.powers.dmgPerCardPlayed && gBattle.hp > 0){
+        var cardDmg = G.powers.dmgPerCardPlayed;
+        if(gBattle._isGroup){
+          if(gBattle.hp > 0) gBattle.hp -= cardDmg;
+          if(gBattle._groupHp2 > 0) gBattle._groupHp2 -= cardDmg;
+        } else {
+          gBattle.hp -= cardDmg;
+          showDmgFloat(document.getElementById('sgBattle')?.offsetLeft + 200 || 300, 100, ''+cardDmg);
+        }
+      }
+
+// Exhaust
       if(!card.exhaust){
         gBattle.discardPile.push(deckIdx);
+      } else {
+        if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+        gBattle.exhaustPile.push(deckIdx);
+        gBattle._exhaustedThisTurn = true;
       }
 
       // 出牌音效
       playCardSfx(card.type);
 
+      // 焚诗炉: 本张牌消耗时对所有敌人造成3点伤害
+      if(hasRelic('lizhi_fenshilu') && gBattle._exhaustedThisTurn && gBattle.hp > 0){
+        damageEnemy(0, 3, true);
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-70, '🔥 焚诗炉3');
+      }
+
       // 出牌特效：全屏微闪 + 粒子
       var cardEl = document.querySelector('#sgHand .sg-card');
       if(cardEl){
         showPlayParticles(cardEl);
+      // 先古牌特殊特效
+      if(card.rarity === 'ancient'){
+        playAncientSfx();
+        // 额外粒子爆发
+        for(var api=0;api<12;api++){
+          var ap = document.createElement('div');
+          ap.style.cssText = 'position:fixed;width:'+(6+Math.random()*6)+'px;height:'+(6+Math.random()*6)+'px;border-radius:50%;pointer-events:none;z-index:200;background:'+['#ff44ff','#ff00ff','#cc00ff','#ff88ff','#ffaa00'][api%5]+';';
+          if(cardEl){ var arect = cardEl.getBoundingClientRect(); ap.style.left = (arect.left+arect.width/2)+'px'; ap.style.top = (arect.top+arect.height/2)+'px'; }
+          var aa = Math.random()*Math.PI*2;
+          var adist = 60+Math.random()*100;
+          ap.style.transition = 'all '+(0.5+Math.random()*0.3)+'s ease-out';
+          document.body.appendChild(ap);
+          requestAnimationFrame(function(){ ap.style.transform = 'translate('+Math.cos(aa)*adist+'px,'+Math.sin(aa)*adist+'px) scale(0)'; ap.style.opacity = '0'; });
+          setTimeout(function(){ if(ap.parentNode) ap.parentNode.removeChild(ap); }, 1000);
+        }
+        // 屏幕闪紫
+        var ancientFlash = document.createElement('div');
+        ancientFlash.style.cssText = 'position:fixed;inset:0;background:rgba(255,0,255,0.1);pointer-events:none;z-index:49;animation:sgFadeOut 0.5s ease forwards;';
+        document.body.appendChild(ancientFlash);
+        setTimeout(function(){ if(ancientFlash.parentNode) ancientFlash.parentNode.removeChild(ancientFlash); }, 550);
+      }
+
         // 卡片飞出动画
         cardEl.style.animation = 'sgCardPlay 0.25s ease forwards';
       }
@@ -4756,7 +5820,8 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       if(gBattle._isGroup){
         if(isAoe){
           // AOE: 两个敌人都受伤害
-          applyDmgToGroupEnemy1(dmg);
+          if(gBattle && gBattle.thorns>0){ G.hp -= Math.min(gBattle.thorns,Math.floor(dmg/2)); }
+      applyDmgToGroupEnemy1(dmg);
           applyDmgToGroupEnemy2(dmg);
         } else {
           // 单伤：攻击选中的目标
@@ -4787,6 +5852,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         }
       }
 
+      if(gBattle.intangible > 0){ dmg = Math.floor(dmg * 0.5); }
       gBattle.hp -= dmg;
       if(gBattle.hp < 0) gBattle.hp = 0;
 
@@ -4881,7 +5947,13 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
           dmg = 0;
         } else {
           dmg -= gBattle.playerBlock;
-          gBattle.playerBlock = 0;
+          // 格挡保留（blockPersist）
+      if(!(G.powers && G.powers.blockPersist) && !gBattle._BattleBlockPersist){
+        gBattle.playerBlock = 0;
+      } else {
+        gBattle.playerBlock = gBattle.playerBlock || 0;
+      }
+
         }
       }
 
@@ -4889,6 +5961,11 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
 
       G.hp -= dmg;
       if(G.hp < 0) G.hp = 0;
+
+      // 和光泥: 失去生命则标记，下回合获得格挡
+      if(dmg > 0 && hasRelic('lizhi_heguangni')){
+        gBattle._lostHpThisTurn = true;
+      }
 
       shakeScreen();
       showHitFlash(document.getElementById('sgPlayerPortrait'));
@@ -4952,9 +6029,14 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       var bgEl = document.querySelector('.sg-battle-bg');
       if(bgEl){ bgEl.style.transition = 'all .3s'; bgEl.style.transform = 'scale(1.03)'; }
       setTimeout(function(){
-        document.body.removeChild(overlay);
+        try { if(overlay && overlay.parentNode) document.body.removeChild(overlay); } catch(e){}
         if(callback) callback();
       }, 1200);
+      // 超时保护: 2秒后强制结束
+      setTimeout(function(){
+        try { if(overlay && overlay.parentNode) document.body.removeChild(overlay); } catch(e){}
+        if(callback) callback();
+      }, 2500);
     }
 
     function checkEnemyDeath(){
@@ -4966,18 +6048,25 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       if(hasRelic('qinglian')){
         G.hp = Math.min(G.hp + 3, G.maxHp);
       }
+      if(hasRelic('lizhi_shixianzhi')){
+        G.hp = Math.min(G.hp + 6, G.maxHp);
+      }
+      if(hasRelic('lizhi_xuanming')){
+        G.hp = Math.min(G.hp + 10, G.maxHp);
+      }
 
       // Gold reward
       var goldReward = gBattle.isBoss ? 40 : (gBattle.isElite ? 25 : 10 + Math.floor(Math.random() * 10));
       if(gBattle._isGroup) goldReward += 8; // 群体战额外金币
       G.gold += goldReward;
 
-      // 精英/Boss掉落遗物 — 改为结算界面点击领取
+      // 精英/Boss掉落遗物 — 改为结算界面点击领取（排除起始/首领/商店遗物）
       gPendingRelic = null;
       if(gBattle.isElite || gBattle.isBoss){
         var availR = [];
         for(var ri=0;ri<RELICS.length;ri++){
-          if(G.relics.indexOf(RELICS[ri].id) === -1 && (!RELICS[ri].char || RELICS[ri].char === G.charId)) availR.push(RELICS[ri]);
+          if(G.relics.indexOf(RELICS[ri].id) === -1 && (!RELICS[ri].char || RELICS[ri].char === G.charId) &&
+             RELICS[ri].rarity !== 'starting' && RELICS[ri].rarity !== 'boss' && RELICS[ri].rarity !== 'shop') availR.push(RELICS[ri]);
         }
         if(availR.length > 0){
           gPendingRelic = availR[Math.floor(Math.random() * availR.length)];
@@ -5036,13 +6125,13 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         var cardHtml = '';
         for(var ri=0;ri<rewardCards.length;ri++){
           var rc = rewardCards[ri];
-          var rarityColor = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+          var rarityColor = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
           var color = rarityColor[rc.rarity] || '#a8a8a8';
           cardHtml += '<div class="sg-card" data-card-id="'+rc.id+'" style="border-color:'+color+'">' +
             '<div class="sg-card-cost">'+(rc.cost||0)+'</div>' +
             '<div class="sg-card-name">'+rc.name+'</div>' +
             '<div class="sg-card-desc">'+(rc.desc||'')+'</div>' +
-            '<div class="sg-card-type">'+rc.type+(rc.rarity==='rare'?' ★':'')+'</div>' +
+            '<div class="sg-card-type">'+rc.type+((rc.rarity==='rare'||rc.rarity==='ancient')?' ◆':'')+'</div>' +
             '</div>';
         }
         document.getElementById('sgRewardCards').innerHTML = cardHtml;
@@ -5079,6 +6168,26 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         if(gBattle.hp < 0) gBattle.hp = 0;
         var el = document.getElementById('sgBattle');
         if(el) showDmgFloat(el.offsetLeft + el.offsetWidth/2, el.offsetTop + 80, '毒' + poisonDmg);
+        // 中毒加速：额外触发
+        if(G.powers && G.powers.poisonSpeedup){
+          for(var psi=0; psi<G.powers.poisonSpeedup; psi++){
+            gBattle.hp -= poisonDmg;
+            if(el) showDmgFloat(el.offsetLeft + el.offsetWidth/2, el.offsetTop + 80, '毒加速' + poisonDmg);
+          }
+        }
+        // 中毒爆发：根据触发频率造成额外伤害
+        if(G.powers && G.powers.poisonTriggerEvery){
+          if(!G.powers._poisonCounter) G.powers._poisonCounter = 0;
+          G.powers._poisonCounter += poisonDmg;
+          var triggerAt = G.powers.poisonTriggerEvery;
+          while(G.powers._poisonCounter >= triggerAt){
+            G.powers._poisonCounter -= triggerAt;
+            var burstDmg = G.powers.poisonTriggerDmg || 11;
+            gBattle.hp -= burstDmg;
+            if(gBattle.hp < 0) gBattle.hp = 0;
+            if(el) showDmgFloat(el.offsetLeft + el.offsetWidth/2, el.offsetTop + 60, '💥爆发' + burstDmg);
+          }
+        }
       }
       gBattle.enemyPoison = 0;
 
@@ -5138,7 +6247,13 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
         var hits2 = gBattle.intentHits || 1;
         if(gBattle.buffs.vuln > 0) atkDmg = Math.floor(atkDmg * 1.5);
         if(gBattle.buffs.weak > 0) atkDmg = Math.floor(atkDmg * 0.75);
-        if(gBattle.playerWeak > 0) atkDmg = Math.floor(atkDmg * 0.75);
+        if(gBattle.playerWeak > 0){
+          if(hasRelic('liqing_shuyujian')){
+            atkDmg = Math.floor(atkDmg * 0.6); // 虚弱+40%
+          } else {
+            atkDmg = Math.floor(atkDmg * 0.75);
+          }
+        }
 
         for(var hi2=0;hi2<hits2;hi2++){
           damagePlayer(atkDmg);
@@ -5153,7 +6268,11 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       if(!gBattle) return;
       if(gBattle.hp <= 0) return;
 
-      
+      // 重置本回合弃牌计数
+      gBattle._discardCountThisTurn = 0;
+      gBattle._echoKillPending = false;
+      gBattle._nextTurnExtraDraw = 0;
+
 
       // Special enemy abilities
       if(gBattle.specialAbility === "enrage" && gBattle.hp < gBattle.maxHp * 0.3){
@@ -5178,6 +6297,193 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
       if(hasRelic('tengzhang') && G.hp < G.maxHp){
         G.hp = Math.min(G.hp + 2, G.maxHp);
         showEffectFloat(100, 200, '竹杖+2HP');
+      }
+
+      // === 李白新机制: 回合重置标记 ===
+      gBattle._exhaustedThisTurn = false;
+      gBattle._selfDamagedThisTurn = false;
+      gBattle.noMoreDraw = false;
+      gBattle._rageBlockPerAtk = 0;
+      gBattle._blockShrapnel = 0;
+
+      // === 和光泥: 若上回合失去生命，获得3格挡 ===
+      if(hasRelic('lizhi_heguangni')){
+        if(gBattle._lostHpThisTurn){
+          gBattle._heguangniBlock = 3;
+        }
+        gBattle._lostHpThisTurn = false;
+        if(gBattle._heguangniBlock > 0){
+          gBattle.playerBlock += gBattle._heguangniBlock;
+          gBattle._heguangniBlock = 0;
+          showEffectFloat(100, 200, '和光泥+3格挡');
+        }
+      }
+
+      // === 赤霞颅: 动态检查半血力量 ===
+      if(hasRelic('lizhi_chixialu')){
+        var shouldBeActive = G.hp <= Math.floor(G.maxHp / 2);
+        if(shouldBeActive && !gBattle._chixialuActive){
+          gBattle.playerStr += 3;
+          gBattle._chixialuActive = true;
+          showEffectFloat(100, 160, '赤霞颅+3力量');
+        } else if(!shouldBeActive && gBattle._chixialuActive){
+          gBattle.playerStr -= 3;
+          gBattle._chixialuActive = false;
+        }
+      }
+
+      // === 太白金星令: 每回合+2力量(玩家)，+1力量(敌人) ===
+      if(hasRelic('lizhi_taibai')){
+        gBattle.playerStr += 2;
+        gBattle.buffs.str += 1;
+        showEffectFloat(100, 120, '太白金星令+2力量');
+      }
+      gBattle.nextAtkCost0 = 0;
+      if(gBattle._exhaustPlayCards && gBattle._exhaustPlayCards.length>0){
+        // Re-add exhausted replay cards to hand
+        for(var epi=0;epi<gBattle._exhaustPlayCards.length;epi++){
+          var epIdx = gBattle._exhaustPlayCards[epi];
+          // The card is in exhaust pile, add a copy to hand
+          if(G.deck[epIdx]){
+            var replayCard = JSON.parse(JSON.stringify(G.deck[epIdx]));
+            replayCard.id = 'replay_'+Date.now()+'_'+epi;
+            var replayIdx = G.deck.length;
+            G.deck.push(replayCard);
+            gBattle.hand.push(replayIdx);
+          }
+        }
+      }
+
+      // === 力量流每回合效果 ===
+      if(G.powers && G.powers.rampageStrTurn){
+        gBattle.playerStr += G.powers.rampageStrTurn;
+      }
+      if(G.powers && G.powers.perTurnStr){
+        gBattle.playerStr += G.powers.perTurnStr;
+      }
+      if(G.powers && G.powers.perTurnEnergy){
+        gBattle.energy += G.powers.perTurnEnergy;
+      }
+
+      // === 自伤类每回合效果 ===
+      if(G.powers && G.powers.selfDmgStart){
+        damagePlayer(G.powers.selfDmgStart);
+      }
+      if(G.powers && G.powers.selfDmgPerTurn){
+        damagePlayer(G.powers.selfDmgPerTurn);
+      }
+
+      // === 每回合格挡类效果 ===
+      if(G.powers && G.powers.hurtStartBlock){
+        gBattle.playerBlock += G.powers.hurtStartBlock;
+      }
+
+      // === 消耗牌堆顶效果 ===
+      if(G.powers && G.powers.exhaustTopStart){
+        if(gBattle.drawPile.length>0){
+          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+          gBattle.exhaustPile.push(gBattle.drawPile.pop());
+        }
+      }
+
+      // === 每回合获得攻击牌 ===
+      if(G.powers && G.powers.startTurnGetRandomAtk){
+        var atkPool3 = [];
+        for(var aId3 in CARDS){
+          if(CARDS[aId3].type==='attack' && CARDS[aId3].rarity!=='basic') atkPool3.push(aId3);
+        }
+        if(atkPool3.length>0 && gBattle.discardPile.length>0){
+          // Get from discard pile
+          for(var dpi=0;dpi<gBattle.discardPile.length;dpi++){
+            var dc = G.deck[gBattle.discardPile[dpi]];
+            if(dc && dc.type==='attack'){
+              var upgradedCard = JSON.parse(JSON.stringify(dc));
+              upgradedCard.id = 'recall_'+Date.now();
+              applyUpgrade(upgradedCard);
+              var recallIdx = G.deck.length;
+              G.deck.push(upgradedCard);
+              gBattle.hand.push(recallIdx);
+              gBattle.discardPile.splice(dpi,1);
+              break;
+            }
+          }
+        }
+      }
+
+      // === 荆棘装甲 ===
+      if(G.powers && G.powers.armorThorns){
+        gBattle.thorns = (gBattle.thorns||0) + G.powers.armorThorns;
+      }
+
+      // === 李清照新每回合效果 ===
+      // 敏捷流失
+      if(G.powers && G.powers.agilLossPerTurn && gBattle.intangible > 0){
+        gBattle.playerAgil = Math.max(0, (gBattle.playerAgil||0) - G.powers.agilLossPerTurn);
+      }
+      // 每回合自动叠毒
+      if(G.powers && G.powers.poisonPerTurn){
+        gBattle.enemyPoison += G.powers.poisonPerTurn;
+      }
+      // 每回合残花
+      if(G.powers && G.powers.shivPerTurn){
+        for(var spti=0; spti<G.powers.shivPerTurn; spti++){
+          var shivDef = CARDS.liqing_canhua || {name:"残花",cost:0,type:"attack",dmg:4,exhaust:true,isShiv:true,desc:"零落成泥 · 4伤·消耗",rarity:"common",char:"liqing"};
+          var spShiv = JSON.parse(JSON.stringify(shivDef));
+          spShiv.id = 'shiv_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+          G.deck.push(spShiv);
+          gBattle.hand.push(G.deck.length-1);
+        }
+      }
+      // 每回合弃牌抽牌
+      if(G.powers && G.powers.drawDiscardPerTurn){
+        if(gBattle.drawPile.length>0 || gBattle.discardPile.length>0){
+          // Draw 1
+          if(gBattle.drawPile.length===0 && gBattle.discardPile.length>0){
+            gBattle.drawPile = gBattle.discardPile.slice();
+            gBattle.discardPile = [];
+            shuffle(gBattle.drawPile);
+          }
+          if(gBattle.drawPile.length>0){
+            gBattle.hand.push(gBattle.drawPile.pop());
+          }
+          // Discard 1 random
+          if(gBattle.hand.length>1){
+            var rdi = Math.floor(Math.random()*(gBattle.hand.length-1));
+            gBattle.discardPile.push(gBattle.hand.splice(rdi,1)[0]);
+          }
+        }
+      }
+      // 保留手牌
+      if(G.powers && G.powers.retainCards){
+        gBattle._retainCount = G.powers.retainCards;
+      }
+
+      // === 格挡保留 ===
+      if(G.powers && G.powers.blockPersist){
+        // Don't reset playerBlock
+      }
+
+      // === 岿然不动: 首次格挡翻倍重置 ===
+      if(G.powers && G.powers.firstBlockDouble){
+        gBattle._firstBlockThisTurn = true;
+      }
+
+      // === 地狱使者: 自动打出打击牌 ===
+      if(G.powers && G.powers.autoPlayStrike && gBattle.hand.length>0){
+        for(var as=0;as<gBattle.hand.length;as++){
+          var asCard = G.deck[gBattle.hand[as]];
+          if(asCard && asCard.name && (asCard.name.indexOf('诗')!==-1 || asCard.type==='attack')){
+            // Auto play it (simplified: just deal its damage)
+            if(asCard.dmg){
+              var autoDmg = asCard.dmg + gBattle.playerStr;
+              if(gBattle.buffs.vuln>0) autoDmg = Math.floor(autoDmg*1.5);
+              damageEnemy(0, autoDmg, asCard.aoe);
+            }
+            gBattle.hand.splice(as,1);
+            gBattle.discardPile.push(G.deck.length-1);
+            break;
+          }
+        }
       }
 
 applyPoison();
@@ -5205,8 +6511,17 @@ applyPoison();
       if(G.powers && G.powers.energy){
         gBattle.energy += G.powers.energy;
       }
-      gBattle.playerBlock = 0;
+      // 格挡保留（blockPersist）
+      if(!(G.powers && G.powers.blockPersist) && !gBattle._BattleBlockPersist){
+        gBattle.playerBlock = 0;
+      }
+      // blockNextTurn - 下回合格挡
+      if(gBattle._nextTurnBlock){
+        gBattle.playerBlock += gBattle._nextTurnBlock;
+        gBattle._nextTurnBlock = 0;
+      }
       gBattle.cardPlayedThisTurn = 0;
+      gBattle._firstShivUsedThisTurn = false;
 
       // Next turn strength
       if(gBattle.nextStr && gBattle.nextStr > 0){
@@ -5233,14 +6548,52 @@ applyPoison();
       if(gBattle.buffs.vuln > 0) gBattle.buffs.vuln--;
       if(gBattle.buffs.weak > 0) gBattle.buffs.weak--;
 
-      // Discard hand
-      for(var hi3=0;hi3<gBattle.hand.length;hi3++){
+      // 无形回合结束递减
+      if(gBattle.intangible > 0){
+        gBattle.intangible--;
+        if(gBattle.intangible <= 0) gBattle.intangible = 0;
+      }
+      // 临时敏捷回合结束消失
+      if(gBattle.tempAgil){
+        gBattle.playerAgil = Math.max(0, (gBattle.playerAgil||0) - gBattle.tempAgil);
+        gBattle.tempAgil = 0;
+      }
+
+      // Discard hand (with Sly auto-play & shivRetain)
+      for(var hi3=gBattle.hand.length-1;hi3>=0;hi3--){
+        var discCard = G.deck[gBattle.hand[hi3]];
+        // 残花保留
+        if(discCard && discCard.isShiv && G.powers && G.powers.shivRetain){ continue; }
+        // Sly (奇巧) 自动打出
+        if(discCard && discCard.sly && gBattle.hp > 0){
+          var slyDmg = (discCard.dmg || 0) + gBattle.playerStr;
+          if(gBattle.buffs.vuln > 0 && discCard.type === 'attack') slyDmg = Math.floor(slyDmg * 1.5);
+          if(discCard.type === 'attack'){
+            for(var slyHi=0; slyHi<(discCard.hits||1); slyHi++){
+              damageEnemy(0, Math.floor(slyDmg/(discCard.hits||1)), discCard.aoe);
+            }
+          }
+          if(discCard.block) gBattle.playerBlock += discCard.block + (gBattle.playerAgil||0);
+          if(discCard.poison) gBattle.enemyPoison += discCard.poison;
+          if(discCard.exhaust){ if(!gBattle.exhaustPile) gBattle.exhaustPile = []; gBattle.exhaustPile.push(gBattle.hand[hi3]); }
+          else gBattle.discardPile.push(gBattle.hand[hi3]);
+          gBattle.hand.splice(hi3,1);
+          continue;
+        }
+        gBattle._discardCountThisTurn = (gBattle._discardCountThisTurn||0) + 1;
+        if(hasRelic('liqing_suijinling') && gBattle.hp > 0){ gBattle.hp -= 3; if(gBattle.hp<0) gBattle.hp=0; }
+        if(hasRelic('liqing_huanhuajin')) gBattle.playerBlock += 3;
         gBattle.discardPile.push(gBattle.hand[hi3]);
       }
       gBattle.hand = [];
 
       // Draw new hand
-      drawCards(5, true);
+      var drawAmt = 5;
+      if(gBattle._nextTurnExtraDraw){
+        drawAmt += gBattle._nextTurnExtraDraw;
+        gBattle._nextTurnExtraDraw = 0;
+      }
+      drawCards(drawAmt, true);
 
       gBattle.shuffledThisTurn = false;
 
@@ -5336,11 +6689,14 @@ function setBattleBackground(){
 
 /* ══════ 战斗渲染 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
-
     function renderBattle(animated){
       if(!gBattle) return;
 
-      // 记录动画标志
+      
+      // 手牌变化检测（性能优化）
+      var _handChanged = gBattle._lastHandHash !== gBattle.hand.join(',') + '|' + gBattle.energy;
+      gBattle._lastHandHash = gBattle.hand.join(',') + '|' + gBattle.energy;
+// 记录动画标志
       gBattle._animDraw = animated;
       updateStatusBar();
       updateRelicBar('sgBattleRelicBar');
@@ -5527,6 +6883,7 @@ function setBattleBackground(){
 
       document.getElementById('sgDeckCountNum').textContent = G.deck.length;
       // Hand cards
+      if(_handChanged || gBattle._animDraw || gBattle._animDraw===undefined){
       var handEl = document.getElementById('sgHand');
       handEl.innerHTML = '';
       // Fallback: show diagnostic when hand is empty
@@ -5542,7 +6899,7 @@ function setBattleBackground(){
         if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0) cost = Math.max(0, cost - 1);
 
         var canPlay = gBattle.energy >= cost;
-        var rarityColors = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+        var rarityColors = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', ancient:'#ff44ff'};
         var borderColor = rarityColors[card.rarity] || '#a8a8a8';
 
         var cardEl = document.createElement('div');
@@ -5552,8 +6909,10 @@ function setBattleBackground(){
           '<div class="sg-card-cost">' + (canPlay ? cost : ('<span style="color:#ff4444">' + cost + '</span>')) + '</div>' +
           '<div class="sg-card-name">' + card.name + '</div>' +
           '<div class="sg-card-desc">' + parseKeywords(card.desc || '') + (card.enchantDesc ? '<br><span style="color:var(--gold);font-size:.45rem;">✦ '+card.enchantDesc+'</span>' : '') + '</div>' +
-          '<div class="sg-card-type">' + card.type + (card.rarity === 'rare' ? ' ★' : '') + '</div>';
+          '<div class="sg-card-type">' + card.type + ((card.rarity === 'rare' || card.rarity === 'ancient') ? ' ★' : '') + '</div>';
 
+        // 鼠标悬停音效
+        cardEl.addEventListener('mouseenter', function(){ playHoverSfx(); });
         if(canPlay){
           (function(ci, el2){
             el2.draggable = 'true';
@@ -5610,6 +6969,7 @@ function setBattleBackground(){
       }
       gBattle._animDraw = false;
       gBattle._newlyDrawn = null;
+      }
 
       // Intent reveal
       if(gBattle.seeIntents || hasRelic('qingtongjing')){
@@ -5641,7 +7001,7 @@ function setBattleBackground(){
       for(var ri=0;ri<RELICS.length;ri++){
         if(G.relics.indexOf(RELICS[ri].id) === -1){
           if(!RELICS[ri].char || RELICS[ri].char === G.charId){
-            availRelics.push(RELICS[ri]);
+            if(RELICS[ri].rarity !== 'starting' && RELICS[ri].rarity !== 'boss') availRelics.push(RELICS[ri]);
           }
         }
       }
@@ -5656,7 +7016,7 @@ function setBattleBackground(){
       for(var si=0;si<shopCards.length;si++){
         var sc = shopCards[si];
         var price = Math.floor((sc.rarity === 'rare' ? 75 : (sc.rarity === 'uncommon' ? 50 : 30)) * discount);
-        var rarityColor2 = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+        var rarityColor2 = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
         var itemDiv = document.createElement('div');
         itemDiv.className = 'sg-shop-item';
         itemDiv.innerHTML =
@@ -5720,7 +7080,6 @@ function setBattleBackground(){
         };
       }
 
-
       // Heal
       var healAmt = 30;
       var healCost = Math.floor(healAmt * discount);
@@ -5779,7 +7138,7 @@ function setBattleBackground(){
         var cd = G.deck[ui];
         var cardEl = document.createElement('div');
         cardEl.className = 'sg-card sg-card-selectable';
-        var rColors2 = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+        var rColors2 = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
         cardEl.style.borderColor = (rColors2[cd.rarity]||'#a8a8a8');
         cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
         (function(ui2){
@@ -5994,21 +7353,18 @@ function setBattleBackground(){
         cardList.innerHTML = '';
         for(var ui=0;ui<G.deck.length;ui++){
           var cd = G.deck[ui];
-          var pCd = previewMode ? {name:cd.name, desc:cd.desc, cost:cd.cost, dmg:cd.dmg, block:cd.block, heal:cd.heal, poison:cd.poison, rarity:cd.rarity, type:cd.type} : cd;
+          var pCd = cd;
           if(previewMode){
+            pCd = JSON.parse(JSON.stringify(cd));
+            applyUpgrade(pCd);
             pCd.name = cd.name.replace(/†$/, '') + '†';
-            pCd.dmg = (cd.dmg||0) + 4;
-            pCd.block = (cd.block||0) + 3;
-            pCd.heal = cd.heal ? Math.floor(cd.heal * 1.5) : 0;
-            pCd.poison = (cd.poison||0) + 2;
-            pCd.cost = Math.max(0, (cd.cost||0) - 1);
             if(pCd.desc && pCd.desc.indexOf('†') === -1) pCd.desc += ' †升级';
           }
           var cardEl = document.createElement('div');
           cardEl.className = 'sg-card sg-card-selectable';
           if(previewMode) cardEl.style.borderColor = '#ffcc00';
           else {
-            var rCol = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+            var rCol = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
             cardEl.style.borderColor = (rCol[cd.rarity]||'#a8a8a8');
           }
           var upgradeBadge = (cd.upgraded) ? '<span style="position:absolute;top:-4px;right:-4px;font-size:.45rem;background:#22aa22;color:#fff;border-radius:6px;padding:1px 4px;line-height:1.2;z-index:2;">✦升</span>' : '';
@@ -6060,15 +7416,69 @@ function setBattleBackground(){
       renderCards();
     }
 
+    function applyUpgrade(card){
+      if(!card) return;
+      // === 伤害升级（按卡牌类型差异化）===
+      if(card.dmg){
+        if(card.perUpgradeDmg){
+          card.dmg += card.perUpgradeDmg; // 灼热之诗：每次+6
+        } else if(card.rampageStrTurn && card.rampageStrTurn > 0){
+          card.rampageStrTurn += 3; // 狂怒/凤凰涅槃：提升增量
+        } else if(card.hits && card.hits > 1){
+          card.dmg += 2; // 多段攻击：每段+2（飞剑诀3x2、双剑合璧、斗酒诗）
+        } else if(card.aoe){
+          card.dmg += 3; // 全体攻击：+3
+        } else if(card.cost === 0){
+          card.dmg += 3; // 零费攻击：+3
+        } else if(card.exhaust){
+          card.dmg += 5; // 消耗攻击：一次性高回报+5
+        } else if(card.selfDmg && card.selfDmg > 0){
+          card.dmg += 5; // 自残攻击：+5
+        } else if(card.dmgPerStr){
+          card.dmg += 5; // 力量倍率（重剑无锋）：+5
+        } else if(card.dmgPerStrikeName){
+          card.dmg += 2; // 完美诗篇：+2
+        } else {
+          card.dmg += 4; // 标准攻击：+4
+        }
+      }
+      // === 格挡升级 ===
+      if(card.block){
+        if(card.block >= 20){
+          card.block += 6; // 超高格挡（不动如山30→36）
+        } else if(card.block >= 12){
+          card.block += 4; // 高格挡（火焰壁12→16、碧血染16→20）
+        } else {
+          card.block += 3; // 标准格挡
+        }
+      }
+      // === 生命回复升级 ===
+      if(card.heal){
+        card.heal = Math.floor(card.heal * 1.5);
+      }
+      // === 中毒升级 ===
+      if(card.poison){
+        card.poison += 2;
+      }
+      // === 自残减免 ===
+      if(card.selfDmg && card.selfDmg > 0){
+        if(card.selfDmg > 3){
+          card.selfDmg = Math.max(0, card.selfDmg - 2); // 高自残（献祭6→4）
+        } else {
+          card.selfDmg = Math.max(0, card.selfDmg - 1); // 低自残（碧血染2→1等）
+        }
+      }
+      // === 费用降低（仅≥2费卡）===
+      if(card.cost && card.cost >= 2){
+        card.cost = Math.max(0, card.cost - 1); // 2费→1费，3费→2费
+      }
+      card.upgraded = true;
+    }
+
     function upgradeCard(deckIdx){
       if(!G || !G.deck[deckIdx]) return;
+      applyUpgrade(G.deck[deckIdx]);
       var card = G.deck[deckIdx];
-      if(card.dmg) card.dmg += 4;
-      if(card.block) card.block += 3;
-      if(card.heal) card.heal = Math.floor(card.heal * 1.5);
-      if(card.poison) card.poison += 2;
-      if(card.cost && card.cost > 0) card.cost = Math.max(0, card.cost - 1);
-      card.upgraded = true;
       card.name = card.name.replace(/†$/, '') + '†';
       if(card.desc && card.desc.indexOf('†') === -1) card.desc += ' †升级';
       var fx = document.getElementById('sgRest');
@@ -6114,7 +7524,7 @@ function setBattleBackground(){
         var card = G.deck[idx];
         var cardEl = document.createElement('div');
         cardEl.className = 'sg-card';
-        var rC = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+        var rC = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
         cardEl.style.cssText = 'border-color:'+(rC[card.rarity]||'#a8a8a8')+';cursor:pointer;width:100px;';
         cardEl.innerHTML = '<div class="sg-card-cost">'+(card.cost||0)+'</div><div class="sg-card-name">'+card.name+'</div><div class="sg-card-desc">'+(card.desc||'')+'</div>';
         (function(idx2){
@@ -6176,11 +7586,12 @@ function setBattleBackground(){
       // Show gold first
       var html = '💰 +' + goldAmt + ' 金币（总计：' + G.gold + '）';
 
-      // 宝箱必定获得一件遗物
+      // 宝箱必定获得一件遗物（排除起始/首领/商店遗物）
       if(relicEl){
         var availR = [];
         for(var ri=0;ri<RELICS.length;ri++){
-          if(G.relics.indexOf(RELICS[ri].id) === -1 && (!RELICS[ri].char || RELICS[ri].char === G.charId)) availR.push(RELICS[ri]);
+          if(G.relics.indexOf(RELICS[ri].id) === -1 && (!RELICS[ri].char || RELICS[ri].char === G.charId) &&
+             RELICS[ri].rarity !== 'starting' && RELICS[ri].rarity !== 'boss' && RELICS[ri].rarity !== 'shop') availR.push(RELICS[ri]);
         }
         if(availR.length > 0){
           var newRelic = availR[Math.floor(Math.random() * availR.length)];
@@ -6305,7 +7716,7 @@ function setBattleBackground(){
       if(pile.length === 0){
         panel.innerHTML += '<div style="text-align:center;color:var(--text-faint);padding:1rem 0;">牌堆为空</div>';
       } else {
-        var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+        var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', ancient:'#ff44ff'};
         panel.innerHTML += '<div class="sg-deck-grid">';
         // 展示牌堆时按原始顺序（从底到顶），也即倒序
         for(var pi=pile.length-1;pi>=0;pi--){
@@ -6340,8 +7751,188 @@ function setBattleBackground(){
     // ═══════════════════════════════════════════════════════════════════════
     // ══════ 图鉴专属背景故事与剧情（每个物品独一无二） ══════
     // ═══════════════════════════════════════════════════════════════════════
-    var CARD_FLAV = {};
-    var CARD_TIPS = {};
+        var CARD_FLAV = {
+      lizhi_strike:"李白少时在蜀中读书，常于清晨登峨眉山巅，对日长歌。山僧闻之，叹曰：\"此子声如金石，他日必以诗名动天下。\"",
+      lizhi_defend:"天宝初年，李白奉诏入京。玄宗亲自降辇步迎，以七宝床赐食。然李白心中自知，青云衣不过身外之物，诗心方是归处。",
+      lizhi_bash:"相传李白晚年醉游采石矶，见江中月影皎洁，以为天门洞开，一跃而入。后人虽知其乃醉酒坠江，却宁愿相信诗仙真的是踏月归去。",
+      lizhi_anger:"李白观公孙大娘弟子舞剑器，挥毫写下：\"来如雷霆收震怒，罢如江海凝清光。\"剑与诗本是一物——剑有锋，诗亦有锋。",
+      lizhi_bloodwall:"李白《战城南》有\"野战格斗死，败马号鸣向天悲\"之句。此牌取其浴血奋战、不退半步之意。碧血非为他人流，为自己心中的诗道长流。",
+      lizhi_bloodletting:"\"人生在世不称意，明朝散发弄扁舟。\"李白在长安遭谗言被赐金放还，放下官职如同放下枷锁。此牌以血换气，大起大落正是李白本色。",
+      lizhi_bodyslam:"李白游历河北时，见一老铁匠锻剑，锤落铿锵，火星四溅。李白叹曰：\"百炼成钢，诗亦如是。\"老铁匠赠其一柄铁剑，李白悬之腰间行遍天下。",
+      lizhi_breakthrough:"李白《梦游天姥吟留别》中有\"半壁见海日，空中闻天鸡\"之句。黎明时分，天鸡一唱，万鬼遁形。此牌以一人之血换天地清明。",
+      lizhi_headbutt:"黄鹤楼送孟浩然之广陵，李白目送孤帆消失在天际，久久不愿离去。\"孤帆远影碧空尽，唯见长江天际流\"——千古送别名句。",
+      lizhi_cinder:"李白《横江词》有\"浙江八月何如此，涛似连山喷雪来\"之句。鲸涛之势无可阻挡，但大浪淘沙也带走了沿途的一切。",
+      lizhi_moltenfist:"李白醉中捉月坠江的传说家喻户晓。此牌取其痴狂——明知不可为而为之。正如诗仙最后的纵身一跃，壮烈而浪漫。",
+      lizhi_pommel:"李白游侠时练就一身武艺，曾与山东豪侠比试拳脚。一拳打出，力透纸背。此诗牌如其人，直来直去，干净利落。",
+      lizhi_setupstrike:"李白作诗，往往醉后命笔，墨痕淋漓。墨迹未干，诗已成篇。\"兴酣落笔摇五岳，诗成笑傲凌沧洲\"——墨痕之中蕴藏着下一击的力量。",
+      lizhi_swordboomerang:"李白仗剑去国，辞亲远游。剑在手中，诗在心中。\"长剑一杯酒，男儿方寸心。\"此牌三击如三叠浪，一浪高过一浪。",
+      lizhi_thunderclap:"李白《梦游天姥吟留别》有\"熊咆龙吟殷岩泉，栗深林兮惊层巅\"之句。一声龙吟群兽震恐，配合易伤可为后续爆发铺垫。",
+      lizhi_twinstrike:"李白《塞下曲》有\"晓战随金鼓，宵眠抱玉鞍\"之句。战鼓声中双连击如同两次冲锋，简单而高效。",
+      lizhi_wildstrike:"李白《梁甫吟》有\"我欲攀龙见明主，雷公砰訇震天鼓\"之句。风雷之势固然惊人，留下的满地狼藉如同狂放的代价。",
+      lizhi_unrelenting:"李白少时学剑于峨眉，日炼百遍。师傅曰：\"剑术无他，唯手熟尔。\"百炼之后一招一式皆如行云流水，下一招便不费吹灰之力。",
+      lizhi_perfected:"李白作诗反复锤炼，\"吟安一个字，捻断数茎须。\"诗篇越是完美威力越强——正如诗仙对每一字每一句的精益求精。",
+      lizhi_armaments:"李白《北风行》有\"燕山雪花大如席，片片吹落轩辕台\"之句。金甲不仅护身更滋养战意，如同升级手牌为后续苦战做准备。",
+      lizhi_shrug:"\"拂手一挥手，如听万壑松。\"李白挥手之间云开雾散。八分格挡如壁垒，一分抽牌如转机。",
+      lizhi_truegrit:"李白游蓬莱观沧海，波涛汹涌中忽然大笑。旁人问其故，李白曰：\"沧海无情人却有情。\"此牌护身之余随机消耗一张。",
+      lizhi_havoc:"\"人生得意须尽欢，莫使金樽空对月。\"李白饮酒杯到即干。倾杯乐将命运交给下一张牌——是豪赌也是豪情。",
+      lizhi_tremble:"李白登山见云雾缭绕，挥剑斩之。山民笑其痴，李白正色道：\"云遮日月，我心不快。\"易伤便是斩开云雾的那一剑。",
+      lizhi_ashen:"安史之乱中李白避地庐山。闻永王李璘起兵慨然入幕，事后永王兵败，李白系狱浔阳。狱中写诗自明心迹——\"丹心照汗青\"。",
+      lizhi_bully:"梅花欺霜傲雪，李白亦如是。被赐金放还后不但不颓丧，反而游历天下诗名更盛。对易伤者造成额外伤害，愈冷愈绽放。",
+      lizhi_dismantle:"赤霄乃汉高祖斩白蛇之剑。李白佩剑游天下，遇不平事则拔剑相向。对易伤的敌人痛打落水狗，一击不成再来一击。",
+      lizhi_hemokinesis:"李白自称\"十步杀一人，千里不留行\"。此牌取其侠客本色——以血换命凌厉无双。少年时李白曾手刃数人，因任侠之气而逃罪。",
+      lizhi_feed:"\"乐游原上清秋节，咸阳古道音尘绝。\"李白西入长安求仕满怀壮志。若击杀敌人则生命力更上一层——从古都的沧桑中汲取养分。",
+      lizhi_fiendfire:"\"银瓶乍破水浆迸，铁骑突出刀枪鸣。\"此牌消耗所有手牌，每张化为七点伤害——如同将军将所有兵力投入最后一击。",
+      lizhi_grapple:"\"落日熔金，暮云合璧。\"李白观落日于泰山之巅，金光铺满天地。每获得格挡便有金光散射伤人——攻防一体。",
+      lizhi_howl:"\"我本楚狂人，凤歌笑孔丘。\"李白之狂千古第一。更妙的是每回合从消耗堆回归——狂人的精神永不消逝。",
+      lizhi_ironwave:"李白《横江词》有\"浪打天门石壁开\"之句。铁浪既是攻击也是防守——如同潮水拍岸看似柔和实则蕴含千钧之力。",
+      lizhi_fightme:"李白与山东豪侠斗酒斗剑，越战越狂。每一剑都激发出更强的斗志——但对手也被点燃了战意。一场公平的对决，勇者胜。",
+      lizhi_pillage:"\"抽刀断水水更流，举杯消愁愁更愁。\"李白抽剑横扫连消带打。攻击之后继续抽牌直至找到非攻击牌。",
+      lizhi_rampage:"\"一剪梅花，两行离泪。\"李白以梅喻剑愈战愈利。每场战斗中伤害递增——如同宝剑经战火淬炼愈发锋利。",
+      lizhi_revenge:"李白被流放夜郎途中遇赦而返。历经磨难之后诗风更加苍劲。若是逆境之中打出便不耗能量——绝境中的反击。",
+      lizhi_shatter:"\"吴山楚水，碎为微尘。\"李白游巫山见石壁上有古诗句，以拳击之石屑纷飞。不但造成伤害更粉碎敌人的防御。",
+      lizhi_soulstrike:"李白《魂魄》诗中有\"魂魄一去，将同秋草\"之句。在消耗牌后触发——如同魂魄附体，消耗的牌化为新的生机。",
+      lizhi_uppercut:"李白与侠客切磋时创此招——一拳上勾令敌虚弱又露出破绽。一石二鸟的妙招，正如他的诗句意蕴多重。",
+      lizhi_wildcharge:"李白《横江词》有\"一风三日吹倒山\"之句。此牌威力巨大但会添入一张\"眩晕\"——如同狂风过后的混乱。",
+      lizhi_stomp:"李白登高而呼，声震四野。\"与君歌一曲，请君为我倾耳听。\"此牌气势磅礴，且随攻击打出而费用递减。",
+      lizhi_bludgeon:"\"力拔山兮气盖世。\"李白虽为文人却力能扛鼎。此牌以千钧之力直击敌人，简单粗暴，直冲云霄。",
+      lizhi_battletrance:"\"长风万里送秋雁，对此可以酣高楼。\"李白登高而吟长风灌袖。一口气抽三张牌如酒到酣处，但此后再不可续。",
+      lizhi_burningpact:"李白《将进酒》\"烹羊宰牛且为乐，会须一饮三百杯。\"消耗一张牌换取两张——如同饕餮盛宴，以旧换新。",
+      lizhi_evileye:"\"浮云游子意，落日故人情。\"斜阳余晖温暖而短暂。若消耗过牌则格挡翻倍——逝去的时光留下了一抹余温。",
+      lizhi_expectfight:"李白游江南时以竹为剑与村童比剑。竹剑虽轻但握在手中便能感到一股剑气。手中剑多则气壮山河。",
+      lizhi_flamebarrier:"李白《火》诗中有\"燧火燃回春浩浩\"之句。火焰之壁不仅护身更能灼伤来犯之敌——豪放中暗藏锋芒。",
+      lizhi_forgotten:"李白游道观，见\"道生一，一生二，二生三，三生万物\"。本回合若消耗过牌则得悟天地之道。",
+      lizhi_infernalblade:"李白以墨为剑以诗为锋。挥毫之间剑气纵横。兴之所至随手拈来便是佳句——召来一张随机攻击牌免费打出。",
+      lizhi_rage:"李白醉后狂歌，每出一诗便有豪气护体。此牌让本回合每张攻击牌都化为护体罡气。",
+      lizhi_secondwind:"\"大鹏一日同风起，扶摇直上九万里。\"消耗所有非攻击牌化为格挡——风起之时杂念尽去，纯以诗心迎敌。",
+      lizhi_taunt:"李白醉中令高力士脱靴，权贵侧目。格挡之后施加易伤——诗人的傲骨便是最大的挑衅。",
+      lizhi_warhorn:"\"戍客望边色，思归多苦颜。高楼当此夜，叹息未应闲。\"号角声中李白整装待发。简洁高效——一声号角能量与手牌皆备。",
+      lizhi_spite:"\"人生飘忽百年内，且须酣畅万古情。\"本回合若失去生命则抽一张牌——诗人的悲愤化为前进的动力。",
+      lizhi_dominate:"\"忘机\"出自《庄子》。李白\"我醉欲眠卿且去，明朝有意抱琴来。\"放下机心从敌人的脆弱中汲取力量。",
+      lizhi_drum:"李白《听蜀僧浚弹琴》有\"为我一挥手，如听万壑松\"之句。孤筝清越高亢。但琴声过处余音散尽——每回合消耗一张牌清空杂念。",
+      lizhi_feelnopain:"李白游金山寺听高僧讲《心经》\"照见五蕴皆空，度一切苦厄\"。每消耗一张牌便得内心安宁——无痛而禅。",
+      lizhi_inferno:"李白在庐山隐居时见熔炉炼铁。烈火熔金百炼成钢。每一次受伤都化作烈火灼烧全体敌人——苦难是诗人的燃料。",
+      lizhi_inflame:"\"烽火连三月，家书抵万金。\"烽火台上狼烟起诗人的斗志随之昂扬。获得力量如同将士临阵磨枪。",
+      lizhi_juggling:"\"云想衣裳花想容，春风拂槛露华浓。\"李白之诗如行云流水自然天成。第三张攻击牌复制入手——云手翻覆间招式连绵不绝。",
+      lizhi_stonearmor:"李白游泰山见千年石壁不倒。石甲加身荆棘护体——任何攻击者都将被石棱所伤。正如诗人的傲骨不容侵犯。",
+      lizhi_rupture:"李白《战城南》描绘狂战士般的战斗。每在回合中失去生命便力量暴涨——痛苦是诗人的养分。",
+      lizhi_conflagration:"李白观天火陨石作《天火行》。天火乃元始之力摧枯拉朽。每打出一张攻击牌伤害便叠加——如同天火蔓延越烧越旺。",
+      lizhi_tearasunder:"李白一生历经大起大落。每承受一次伤害便多一次还击——经历的苦难越多爆发越猛烈。",
+      lizhi_pactsend:"李白与天地立约——诗心不灭。当消耗堆积累至三张以上时方可打出此牌。以三界之力涤荡群魔。",
+      lizhi_primalforce:"李白醉中握笔忽觉天地皆在掌中。手牌中的所有攻击牌化为\"巨石\"——原始的力量无需技巧。",
+      lizhi_stoke:"李白在流放途中千帆过尽。消耗所有手牌重整旗鼓——每消耗一张便抽一张，置之死地而后生。",
+      lizhi_heavyblade:"\"重剑无锋，大巧不工。\"李白从一铁匠处得此真言。每点力量化为三点伤害——力量流的核心终结技。",
+      lizhi_searingblow:"李白作诗常反复锤炼。\"吟安一个字，捻断数茎须。\"每升级一次威力便永久提升——精益求精永无止境。",
+      lizhi_immolate:"李白登华山见万丈深渊而坐。\"不动如山\"——三十点格挡如诗仙之淡定。消耗自身以求全身而退。",
+      lizhi_feedrare:"\"人生得意须尽欢。\"李白在盛宴中击杀敌人汲取生命精华。最大生命值永久提升——诗仙之道在于不断超越。",
+      lizhi_doublelift:"李白醉中舞剑，一剑化作两剑旁人以为眼花。此牌让下一张卡牌双重出击——月光下的影子一实一虚。",
+      lizhi_entrench:"\"安能摧眉折腰事权贵，使我不得开心颜。\"李白之坚毅在于坚守本心。格挡翻倍——诗人的意志愈压愈强。",
+      lizhi_limitbreak:"李白登太白山顶仰天长啸声震百里。此番突破极限如内力暴涨。力量翻倍——诗仙之志没有上限。",
+      lizhi_offering:"李白晚年痴迷炼丹求仙。割腕滴血入丹炉虽未成仙却写出了\"仙人抚我顶，结发受长生\"的绝唱。以血换命置之死地而后生。",
+      lizhi_crimson:"屈原《九歌》有山鬼篇。李白游楚地夜闻山中鬼哭。以血祭山神换取护体之力——虽付代价却获得强大的防御。",
+      lizhi_cruelty:"李白《战城南》描述战场之惨烈。残暴不是目的而是手段——对已陷入易伤的敌人发动致命一击。",
+      lizhi_darkembrace:"李白《夜泊牛渚怀古》\"牛渚西江夜，青天无片云。\"每消耗一张牌便能汲取一张——黑夜中的星光失之东隅收之桑榆。",
+      lizhi_demonform:"杜甫《春日忆李白》\"笔落惊风雨，诗成泣鬼神。\"诗入魔境天地变色。每回合增长力量——如诗魔附体越战越强。",
+      lizhi_juggernaut:"李白游洛阳龙门石窟见金刚怒目像震撼不已。\"金刚怒目所以降伏四魔。\"每一次格挡都伴随着雷霆一击。",
+      lizhi_aggression:"\"其疾如风，其徐如林，侵掠如火，不动如山。\"每回合从弃牌堆中召回一张攻击牌并升级——战火中不断重生的意志。",
+      lizhi_barricade:"李白登长城见万里雄关叹曰：\"固国不以山溪之险。\"心中的壁垒才是真正的固若金汤。格挡永不消退——诗仙心中的城墙历千年不倒。",
+      lizhi_pyre:"\"炉火照天地，红星乱紫烟。\"李白夜宿冶铁坊见铁水奔流余火不灭。每回合提供持续能量——炉中余火助你挥洒更多诗篇。",
+      lizhi_unmovable:"\"岿然不动\"出自李白《大鹏赋》：\"岿然而立，浩然而行。\"第一次格挡翻倍——大鹏展翅风雷不能撼。",
+      lizhi_corruption:"\"上有六龙回日之高标，下有冲波逆折之回川。\"李白《蜀道难》中的黄泉路步步惊心。所有技能变为免费但打出即消耗——踏上不归路义无反顾。",
+      lizhi_break:"\"总为浮云能蔽日，长安不见使人愁。\"李白挥剑斩浮云一刺见血。重创之余在敌人体内种下深深的破绽。",
+      lizhi_rampageform:"\"凤凰台上凤凰游，凤去台空江自流。\"李白登金陵凤凰台感怀古今。每回合浴火重生——以血换力如凤凰涅槃。",
+      lizhi_ancient_phoenix:"李白登金陵凤凰台，见凤凰浴火重生之象。此牌乃太古遗珍，每回合以血换力——六点力量如凤凰振翅，一点能量如涅槃之火。得此牌者，天地同寿。"
+    };
+        var CARD_TIPS = {
+      lizhi_strike:"基础攻击牌，是卡组输出的基石",
+      lizhi_defend:"基础防御牌，维持血量健康的基础保障",
+      lizhi_bash:"造成易伤状态，为后续爆发创造窗口",
+      lizhi_anger:"零费复制自身，快速填充卡组循环",
+      lizhi_bloodwall:"自损换高额格挡，防反流核心防御牌",
+      lizhi_bloodletting:"以血换能量，一回合打出多个组合技的关键",
+      lizhi_bodyslam:"格挡转化为伤害，护盾流核心输出",
+      lizhi_breakthrough:"自损AOE清场，群战利器",
+      lizhi_headbutt:"回收弃牌堆关键牌，卡组循环引擎",
+      lizhi_cinder:"高伤但消耗牌堆顶，需谨慎使用",
+      lizhi_moltenfist:"易伤翻倍消耗，终结技前的铺垫",
+      lizhi_pommel:"伤害过牌兼顾，稳定节奏的中枢",
+      lizhi_setupstrike:"临时力量加成，为后续爆发蓄力",
+      lizhi_swordboomerang:"三段攻击，破盾破防效果极佳",
+      lizhi_thunderclap:"群体易伤，AOE流派启动牌",
+      lizhi_twinstrike:"双段攻击，朴实高效的基础攻击",
+      lizhi_wildstrike:"高伤但会污染牌库，慎用",
+      lizhi_unrelenting:"高伤并使下张攻击免费，节奏核心",
+      lizhi_perfected:"卡组中同名牌越多越强，核心输出",
+      lizhi_armaments:"格挡兼升级手牌，成长型防御牌",
+      lizhi_shrug:"中量格挡抽牌，防守反击的枢纽",
+      lizhi_truegrit:"格挡伴随机消耗，滤牌与防御一体",
+      lizhi_havoc:"随机打出牌堆顶牌，高风险高回报",
+      lizhi_tremble:"施加易伤，为高爆发创造窗口",
+      lizhi_ashen:"消耗堆越多伤害越高，消耗流核心",
+      lizhi_bully:"易伤层数联动，配合易伤流使用",
+      lizhi_dismantle:"易伤双打，易伤流高效攻击牌",
+      lizhi_hemokinesis:"以血换高额伤害，强攻利器",
+      lizhi_feed:"击杀成长，精英战和Boss战大放异彩",
+      lizhi_fiendfire:"消耗手牌爆发，消耗流终结技",
+      lizhi_grapple:"格挡联动伤害，护盾流续航输出",
+      lizhi_howl:"AOE消耗回归，每回合持续清场",
+      lizhi_ironwave:"攻防一体，节奏紧凑的基础牌",
+      lizhi_fightme:"双刃剑，敌我同时成长需谨慎使用",
+      lizhi_pillage:"连击抽牌，快速滤牌寻找关键卡",
+      lizhi_rampage:"战斗成长，越战越强的核心输出",
+      lizhi_revenge:"受伤后免费，绝境翻盘的利器",
+      lizhi_shatter:"减半敌人格挡，破防专用",
+      lizhi_soulstrike:"消耗联动抽牌，消耗流续航",
+      lizhi_uppercut:"双重debuff，全面削弱敌人",
+      lizhi_wildcharge:"高伤代价，需平衡手牌管理",
+      lizhi_stomp:"AOE费用递减，后期爆发手段",
+      lizhi_bludgeon:"超高单体伤害，简单粗暴",
+      lizhi_battletrance:"大量过牌但限制后续抽牌，爆发核心",
+      lizhi_burningpact:"消耗换抽牌，消耗流引擎",
+      lizhi_evileye:"消耗联动格挡，消耗流防御牌",
+      lizhi_expectfight:"手牌攻击越多能量越多，攻击流核心",
+      lizhi_flamebarrier:"防御兼反伤，对多段攻击敌人效果拔群",
+      lizhi_forgotten:"消耗联动能量，消耗流续航",
+      lizhi_infernalblade:"随机攻击免费打出，灵活应变",
+      lizhi_rage:"攻击联动格挡，攻击型防御牌",
+      lizhi_secondwind:"消耗非攻击牌换格挡，极致防守",
+      lizhi_taunt:"格挡易伤一体，攻防兼备",
+      lizhi_warhorn:"过牌回能消耗，节奏发动机",
+      lizhi_spite:"受伤联动抽牌，卖血流辅助",
+      lizhi_dominate:"易伤转化力量，爆发前的蓄力",
+      lizhi_drum:"过牌消耗联动，每回合滤牌",
+      lizhi_feelnopain:"消耗获得格挡，消耗流防御基石",
+      lizhi_inferno:"受伤AOE反击，卖血流核心",
+      lizhi_inflame:"稳定力量成长，力量流核心",
+      lizhi_juggling:"第三击复制，攻击流续航引擎",
+      lizhi_stonearmor:"荆棘反伤，被动输出手段",
+      lizhi_rupture:"受伤成长力量，卖血流核心",
+      lizhi_conflagration:"攻击联动AOE，攻击流清场技",
+      lizhi_tearasunder:"受伤次数联动，卖血流收割技",
+      lizhi_pactsend:"消耗堆条件AOE，消耗流终结技",
+      lizhi_primalforce:"攻击牌强力转化，爆发核心",
+      lizhi_stoke:"消耗手牌重抽，消耗流过牌引擎",
+      lizhi_heavyblade:"力量加成极高，力量流核心终结技",
+      lizhi_searingblow:"升级成长，可无限强化的输出牌",
+      lizhi_immolate:"至高格挡消耗，保命王牌",
+      lizhi_feedrare:"击杀成长，精英战核心",
+      lizhi_doublelift:"卡牌效果翻倍，组合技核心",
+      lizhi_entrench:"格挡翻倍，护盾流核心辅助",
+      lizhi_limitbreak:"力量翻倍消耗，力量流爆发核心",
+      lizhi_offering:"血换能量手牌，万能爆发引擎",
+      lizhi_crimson:"自损换每回合格挡，卖血防御流",
+      lizhi_cruelty:"易伤增伤，易伤流核心倍率组件",
+      lizhi_darkembrace:"消耗抽牌，消耗流核心引擎",
+      lizhi_demonform:"每回合力量成长，越战越强",
+      lizhi_juggernaut:"格挡转化为攻击，护盾流核心输出",
+      lizhi_aggression:"回收攻击牌并升级，成长型引擎",
+      lizhi_barricade:"格挡保留，护盾流核心",
+      lizhi_pyre:"每回合能量成长，能量流核心",
+      lizhi_unmovable:"格挡翻倍，护盾流关键组件",
+      lizhi_corruption:"技能零费消耗，极强但高风险",
+      lizhi_break:"超高爆发深层易伤，精英战终结技",
+      lizhi_rampageform:"每回合高额力量成长，终极力量流",
+      lizhi_ancient_phoenix:"先古神牌·每回合巨额力量成长+能量，终极力量流核心中的核心"
+    }
     var RELIC_FLAV = {};
     var PILL_FLAV = {};
     var ENEMY_FLAV = {};
@@ -6522,32 +8113,32 @@ function setBattleBackground(){
     CARD_FLAV.sush_kuangda2='苏轼在儋州，每日与黎民百姓相处。有人问他为何不怨天尤人，苏轼笑道："吾生无恶，死且不恨。"此等胸襟，千古少有。';
     CARD_TIPS.sush_kuangda2='格挡过牌，攻守兼备的中费实用牌';
     // 李清照专属
-    CARD_FLAV.liqing_xunmi='李清照南渡后，国破家亡。寻寻觅觅，冷冷清清，凄凄惨惨戚戚。乍暖还寒时候，最难将息。满地菊花堆积，憔悴损，如今有谁堪摘？';
-    CARD_TIPS.liqing_xunmi='零费虚弱，削弱敌人的高效手段';
-    CARD_FLAV.liqing_mandu='李清照东篱把酒黄昏后，暗香盈袖。帘卷西风，人比黄花瘦。此词寄给远方的丈夫赵明诚，写尽相思之苦。';
-    CARD_TIPS.liqing_mandu='李清照核心输出，中费高效伤害';
-    CARD_FLAV.liqing_wutong='李清照独坐窗前，听雨打梧桐。梧桐更兼细雨，到黄昏点点滴滴。这次第，怎一个愁字了得。此词写亡国之痛，丧夫之悲，层层叠叠，无以复加。';
-    CARD_TIPS.liqing_wutong='中费格挡，李清照的防御基础';
-    CARD_FLAV.liqing_yanzi='晏殊见燕子归来，想起去年在此筑巢的燕子。无可奈何花落去，似曾相识燕归来。小园香径独徘徊。物是人非，唯有燕子年年来。';
-    CARD_TIPS.liqing_yanzi='过牌消耗，危机时刻寻找翻盘机会';
-    CARD_FLAV.liqing_lianxin='王维山居秋暝，莲动下渔舟。竹喧归浣女，莲动下渔舟。随意春芳歇，王孙自可留。此词写田园之静美，莲心之纯净。';
-    CARD_TIPS.liqing_lianxin='伤害加虚弱，小幅削弱的灵活攻击';
-    CARD_FLAV.liqing_chunyi='李清照看到雨后海棠，试问卷帘人。知否知否，应是绿肥红瘦。此词写春日将尽的感伤，惜春之情溢于言表。';
-    CARD_TIPS.liqing_chunyi='零费格挡过牌，保持节奏的关键低费卡';
-    CARD_FLAV.liqing_hehua='李清照少女时与友人游湖，误入藕花深处。争渡争渡，惊起一滩鸥鹭。那时的快乐灿若夏花，是后来苦难岁月中最温暖的回忆。';
-    CARD_TIPS.liqing_hehua='双段攻击，破格挡效果优秀';
-    CARD_FLAV.liqing_shengge='李清照与友人宴会后，沉醉不知归路。兴尽晚回舟的快乐时光已一去不返，南渡后再无此等欢乐。';
-    CARD_TIPS.liqing_shengge='消耗型大量回血，绝境保命的最后底牌';
-    CARD_FLAV.liqing_meihua='李清照赏梅，想起远方的丈夫。此花不与群花比，梅花的孤傲正如她的品格。江南无所有，聊赠一枝春。';
-    CARD_TIPS.liqing_meihua='叠毒加伤，毒流派的核心输出';
-    CARD_FLAV.liqing_xianglian='李清照独上西楼，帘卷西风。西风帘卷处，人在天涯。此词写思念远方的亲人，帘卷西风的画面千百年来让人动容。';
-    CARD_TIPS.liqing_xianglian='格挡回能，攻守兼备的中费实用牌';
-    CARD_FLAV.liqing_jingmeng='李煜从梦中惊醒，南唐故国已成往事。剪不断理还乱是离愁，别是一般滋味在心头。此词写亡国之痛，字字泣血。';
-    CARD_TIPS.liqing_jingmeng='高伤加深层易伤，爆发核心';
-    CARD_FLAV.liqing_wanque='李清照的词风以婉约著称，但婉约不是柔弱。在婉约的外表下，是坚韧不拔的品格。此卡即体现李清照词中那种柔中带刚的力量。';
-    CARD_TIPS.liqing_wanque='每回合自动回血，持久战的续航核心';
-    CARD_FLAV.liqing_hehua2='李清照晚年回忆往昔，误入藕花深处的少女时光已如梦。如今国破家亡，只能在词中寻找片刻慰藉。荷花年年开，人却不似少年时。';
-    CARD_TIPS.liqing_hehua2='攻击回血双效，续航输出兼具';
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // 无色牌
     CARD_FLAV.wuse_wuxin='程颢春日偶成，云淡风轻近午天。傍花随柳过前川。时人不识余心乐，将谓偷闲学少年。万物静观皆自得。';
     CARD_TIPS.wuse_wuxin='通用零费格挡，任何牌组都可携带的万金油';
@@ -6561,6 +8152,194 @@ function setBattleBackground(){
     CARD_TIPS.wuse_mozhan='无色终极AOE，群战清场的核武器';
     CARD_FLAV.wuse_siyuan='陆机《文赋》云："诗缘情而绮靡。"诗歌因情感而生，因文采而美。此卡即取诗缘情之意，情感所至，诗亦至焉。';
     CARD_TIPS.wuse_siyuan='零费过牌消耗，快速滤牌找关键组合';
+
+    
+  // 李清照全新卡牌背景故事
+  // ── 攻击牌 ──
+  CARD_FLAV.liqing_strike='漱玉词乃李清照词集之名，取"漱玉"二字，意为清泉漱石、玉振金声。此乃李清照最基础的词笔，一字一句皆从心底流出，看似平凡却蕴含千钧之力。';
+  CARD_TIPS.liqing_strike='基础攻击牌，卡组输出的基石';
+  CARD_FLAV.liqing_anxiang='"东篱把酒黄昏后，有暗香盈袖。莫道不销魂，帘卷西风，人比黄花瘦。"暗香者，幽微之香气也。以柔克刚，以弱化强，此即李清照词中暗香之真意。';
+  CARD_TIPS.liqing_anxiang='零费攻击附虚弱，削弱敌人的高效起手';
+  CARD_FLAV.liqing_qingmei='"和羞走，倚门回首，却把青梅嗅。"少女时代的李清照天真烂漫，青梅之嗅藏着未说出口的心事。此牌如惊鸿一瞥，固有在手，一击即退。';
+  CARD_TIPS.liqing_qingmei='固有零费爆发，开局即用，消耗退场';
+  CARD_FLAV.liqing_luanhong='"泪眼问花花不语，乱红飞过秋千去。"乱红纷飞，如词人心中的思绪漫天飘散。此牌如落花骤雨，对全体敌人施以连绵不断的打击。';
+  CARD_TIPS.liqing_luanhong='AOE双段攻击，清杂兵的利器';
+  CARD_FLAV.liqing_zhiqingmei='李清照"和羞走"之后，那枚青梅便一直藏在心底。多年后国破家亡，她依然记得那个春日——掷出的青梅已成往事，却化为了词中的力量。';
+  CARD_TIPS.liqing_zhiqingmei='伤害过牌弃牌，卡组循环的核心节奏牌';
+  CARD_FLAV.liqing_fengzhu='"风住尘香花已尽，日晚倦梳头。"风停之后尘土中仍有花香，正如李清照历经磨难后依然倔强。此牌攻守兼备，在绝境中同时提供格挡与反击。';
+  CARD_TIPS.liqing_fengzhu='格挡伤害兼具，中费全能攻防牌';
+  CARD_FLAV.liqing_jiuwanli='"九万里风鹏正举，风休住，蓬舟吹取三山去。"李清照晚年豪情不减，借庄子逍遥游之典抒写壮阔胸怀。此牌如大鹏展翅，击杀一人便再击一人，越战越勇。';
+  CARD_TIPS.liqing_jiuwanli='AOE连续追击，对群怪有奇效';
+  CARD_FLAV.liqing_yihanmei='"此情无计可消除，才下眉头，却上心头。"一剪寒梅，百转千回。每打出一张攻击牌便追加一击，如词中层层叠叠的愁绪，绵绵不绝。';
+  CARD_TIPS.liqing_yihanmei='攻击联动爆发，高连击时的终结技';
+  CARD_FLAV.liqing_mandi='"满地黄花堆积，憔悴损，如今有谁堪摘？"黄花满地，如词人散落的心事。每张技能牌便是一朵黄花，此牌以落花为刃，技能愈多，伤害愈烈。';
+  CARD_TIPS.liqing_mandi='技能联动爆发，技能流核心输出';
+  CARD_FLAV.liqing_lvfei='"知否？知否？应是绿肥红瘦。"绿肥红瘦四字，写尽春去之伤感。此牌如暮春之风，对全体敌人生灭交替之击，附有奇巧之意。';
+  CARD_TIPS.liqing_lvfei='AOE奇巧，可配合弃牌体系自动打出';
+  CARD_FLAV.liqing_eran='济南二安——李清照（易安居士）与辛弃疾（幼安）并称。此牌取二安之"安"字，手牌愈多，攻势愈稳，如二安之词，厚积薄发。';
+  CARD_TIPS.liqing_eran='手牌数量联动，过牌流优质输出';
+  CARD_FLAV.liqing_zaibudong='"只恐双溪舴艋舟，载不动许多愁。"国破家亡之痛，夫死物散之悲，皆凝聚于此。牌库空时方显真容，一击定乾坤如决堤之水。';
+  CARD_TIPS.liqing_zaibudong='牌库空时终极爆发，需要精密计算';
+  CARD_FLAV.liqing_liuyan='"柳眼梅腮，已觉春心动。"春意萌动时，柳芽如眼，梅苞如腮。此牌召来两片残花，春意之中暗藏锋芒。';
+  CARD_TIPS.liqing_liuyan='生成残花，小刀流启动核心';
+  CARD_FLAV.liqing_wushi='"物是人非事事休，欲语泪先流。"万事皆空，唯有往事不堪回首。每弃置一张牌便多一分惆怅——惆怅亦是力量。';
+  CARD_TIPS.liqing_wushi='弃牌联动爆发，弃牌流核心输出';
+  CARD_FLAV.liqing_jiangshan='"江山留与后人愁。"李清照南渡后见山河破碎，悲从中来。每抽一张牌便积一分愁，愁到极处便是雷霆一击。';
+  CARD_TIPS.liqing_jiangshan='抽牌联动爆发，过牌流终结技';
+  CARD_FLAV.liqing_caixia='"才下眉头，却上心头。"此情无计可消除的愁绪，在心头眉间往来反复。每打出一张技能牌便减一费，如愁绪在心头辗转，终将释放。';
+  CARD_TIPS.liqing_caixia='技能减费高伤，后期核心爆发';
+  CARD_FLAV.liqing_lianjuan='"帘卷西风，人比黄花瘦。"帘起西风，寒意刺骨。西风不仅带来寒意，更携来无形的毒——以词句为毒，浸入骨髓。';
+  CARD_TIPS.liqing_lianjuan='中毒叠层攻击，毒流派的起手式';
+  CARD_FLAV.liqing_zhameng='"只恐双溪舴艋舟，载不动许多愁。"舴艋虽小，却能载愁破浪。冲入敌阵之后，下一张技能牌便可免费使出。';
+  CARD_TIPS.liqing_zhameng='高伤后技能免费，攻守转换节奏牌';
+  CARD_FLAV.liqing_yueman='"雁字回时，月满西楼。"雁群飞过，西楼月圆。手中牌愈少，月愈圆，剑愈利——孤独的剑客，也是孤独的词人。';
+  CARD_TIPS.liqing_yueman='手牌控制型高伤，空手时威力最大';
+  CARD_FLAV.liqing_xinghe='"天接云涛连晓雾，星河欲转千帆舞。"星河璀璨，千帆竞舞。此牌如星河倒转，造成致命伤害后为下回合储备更多词句。';
+  CARD_TIPS.liqing_xinghe='高伤且下回合过牌，爆发续航兼备';
+  CARD_FLAV.liqing_ouhua='"兴尽晚回舟，误入藕花深处。"少女时代的误入藕花深处，如今已化为词中妙境。此牌如荷塘中的回响，弹跳之间处处生花。';
+  CARD_TIPS.liqing_ouhua='随机弹射奇巧，弃牌体系优质AOE';
+  CARD_FLAV.liqing_qiqican='"寻寻觅觅，冷冷清清，凄凄惨惨戚戚。"七组叠字，层层深入，将愁写到了极致。此牌如叠字一般，反复穿透敌人的防线。';
+  CARD_TIPS.liqing_qiqican='X费贯穿伤害，能量越多伤害越高';
+  CARD_FLAV.liqing_wutongyu='"梧桐更兼细雨，到黄昏、点点滴滴。"梧桐叶落，细雨如丝。轻轻一刀，如雨滴落在梧桐叶上，细小却连绵不断。';
+  CARD_TIPS.liqing_wutongyu='零费补刀，灵活的低费攻击选择';
+  CARD_FLAV.liqing_chousun='"愁损北人，不惯起来听。"北人南渡，满耳皆是陌生的声音。每打出一张牌便是一声叹息，叹息声中敌人的生命力悄然流失。';
+  CARD_TIPS.liqing_chousun='出牌联动持续伤害，高连击时效果拔群';
+  CARD_FLAV.liqing_renbi='"莫道不销魂，帘卷西风，人比黄花瘦。"人比黄花，瘦而弥坚。看似柔弱的一击，却暗藏削弱之力。';
+  CARD_TIPS.liqing_renbi='伤害附虚弱，攻防兼备的高效攻击';
+  CARD_FLAV.liqing_bingqi='"病起萧萧两鬓华，卧看残月上窗纱。"病中起身，两鬓已白，但词心未老。固有在手，带病出征，一举削弱群敌。';
+  CARD_TIPS.liqing_bingqi='固有AOE虚弱，开局控场核心';
+  CARD_FLAV.liqing_pengzhou='"九万里风鹏正举，风休住，蓬舟吹取三山去。"李清照以蓬舟自喻，乘风破浪。若一击致命便可乘风去往更高处——获得额外奖励。';
+  CARD_TIPS.liqing_pengzhou='击杀奖励，精英战和Boss战大放异彩';
+  CARD_FLAV.liqing_xinlai='"新来瘦，非干病酒，不是悲秋。"近来消瘦，不是因酒也不是因秋——只因那无法言说的愁。固有一击，附带易伤，一击即退。';
+  CARD_TIPS.liqing_xinlai='固有易伤，为后续高伤创造窗口';
+
+  // ── 技能牌 ──
+  CARD_FLAV.liqing_defend='漱玉词中的"玉"不仅是美玉，更是坚贞。此壁虽薄，却如玉之坚，在风雨中岿然不动。';
+  CARD_TIPS.liqing_defend='基础防御牌，维持血量健康';
+  CARD_FLAV.liqing_dongli='"东篱把酒黄昏后，有暗香盈袖。"黄昏把酒，东篱采菊。此牌如陶渊明之东篱，悠然见南山——从容不迫中化解危机。';
+  CARD_TIPS.liqing_dongli='中费格挡弃牌，防守兼滤牌';
+  CARD_FLAV.liqing_rumeng='"常记溪亭日暮，沉醉不知归路。""如梦令"乃李清照成名之作，少女时代的欢快跃然纸上。此牌如梦中穿梭，抽牌弃牌如行云流水。';
+  CARD_TIPS.liqing_rumeng='大量过牌弃牌，弃牌流核心引擎';
+  CARD_FLAV.liqing_yimen='"和羞走，倚门回首，却把青梅嗅。"倚门回首的那一刻，少女的娇羞化为了敏捷的身法。此牌赋予词人超然的反应速度。';
+  CARD_TIPS.liqing_yimen='临时敏捷，一回合爆发防御';
+  CARD_FLAV.liqing_wuling='"闻说双溪春尚好，也拟泛轻舟。""武陵春"词牌写春日的轻愁。此牌如春水泛舟，格挡之后还能抽得新词。';
+  CARD_TIPS.liqing_wuling='格挡过牌两不误，防守反击的枢纽';
+  CARD_FLAV.liqing_zhengdu='"争渡争渡，惊起一滩鸥鹭。"少女们在藕花深处奋力划船，惊起满滩鸥鹭。此牌如群鸟飞起，召来三片残花共舞。';
+  CARD_TIPS.liqing_zhengdu='召残花核心，小刀流启动引擎';
+  CARD_FLAV.liqing_liandong='"竹喧归浣女，莲动下渔舟。"莲叶摇动处，渔舟缓缓而出。此牌如莲叶护身，既得格挡又有残花在手。';
+  CARD_TIPS.liqing_liandong='格挡召残花，攻防一体的启动牌';
+  CARD_FLAV.liqing_baowu='"薄雾浓云愁永昼，瑞脑销金兽。"薄雾浓云笼罩着漫长的白昼，正如中毒一般慢慢侵蚀。此牌以浓云之雾施毒于敌。';
+  CARD_TIPS.liqing_baowu='单体叠毒，毒流派的起手';
+  CARD_FLAV.liqing_queba='"却把青梅嗅"的灵动瞬间，被李清照化作了一招轻盈的闪避。不费吹灰之力便化解了眼前的危机。';
+  CARD_TIPS.liqing_queba='零费格挡，灵活的低费防御选择';
+  CARD_FLAV.liqing_hongou='"红藕香残玉簟秋。"红藕香残，秋意渐浓。此牌不仅提供当下之格挡，更为下回合预留了一份秋意。';
+  CARD_TIPS.liqing_hongou='两回合格挡，持续性防御技能';
+  CARD_FLAV.liqing_shengsheng2='"寻寻觅觅，冷冷清清，凄凄惨惨戚戚。"声声慢开篇十四叠字，写尽秋日之寂寥。此牌如哀婉的歌声，令所有敌人的力量为之消减。';
+  CARD_TIPS.liqing_shengsheng2='全体减力，群体虚弱效果极佳';
+  CARD_FLAV.liqing_chenzui='"常记溪亭日暮，沉醉不知归路。"沉醉是青春的特权。微醺之中抽一张牌、弃一张牌，一切如行云流水。';
+  CARD_TIPS.liqing_chenzui='零费弃牌过牌，弃牌流润滑剂';
+  CARD_FLAV.liqing_dongliju='东篱之菊，经霜愈艳。李清照以菊为喻，将傲霜之志化为剧毒，层层入侵敌人的心脉。';
+  CARD_TIPS.liqing_dongliju='高效单体叠毒，毒流派优质输出';
+  CARD_FLAV.liqing_ruinao='"瑞脑销金兽"——瑞脑香在金兽炉中慢慢燃尽。此牌如瑞脑之香，氤氲不散，给予坚实的守护。';
+  CARD_TIPS.liqing_ruinao='高额格挡，纯防御核心牌';
+  CARD_FLAV.liqing_yudian='"红藕香残玉簟秋。"玉簟（竹席）虽凉，却有留住温暖的神奇。此牌所获格挡不会在回合结束时消失。';
+  CARD_TIPS.liqing_yudian='格挡保留，护盾流核心组件';
+  CARD_FLAV.liqing_yushu='"昨夜雨疏风骤，浓睡不消残酒。"雨疏风骤的夜晚过后，残酒未消。此牌如风雨中的毒雾，随机散落在敌人身上。';
+  CARD_TIPS.liqing_yushu='随机多层叠毒，毒流派高效输出';
+  CARD_FLAV.liqing_anxiangying='"东篱把酒黄昏后，有暗香盈袖。"暗香从袖中溢出，如毒从敌人内部蔓延。若敌人已中毒，则此香更烈。';
+  CARD_TIPS.liqing_anxiangying='中毒后追加剧毒，毒流派爆发牌';
+  CARD_FLAV.liqing_ciqing='"此情无计可消除，才下眉头，却上心头。"此情不可消，此愁不可解。索性将手牌全部弃去，换回同样数量的希望。';
+  CARD_TIPS.liqing_ciqing='弃牌重抽，弃牌流核心过牌引擎';
+  CARD_FLAV.liqing_shiwen='"试问卷帘人，却道海棠依旧。"试问卷帘人，窗外如何？此牌如卷帘一问——若抽到技能牌（好消息），便获得意外之喜。';
+  CARD_TIPS.liqing_shiwen='抽牌联动格挡，技能流润滑剂';
+  CARD_FLAV.liqing_qingjie='"轻解罗裳，独上兰舟。"轻解罗裳，从容登舟。此牌让词人抽牌直至手握六张，从容应对一切变故。';
+  CARD_TIPS.liqing_qingjie='补牌至六张，过牌流核心引擎';
+  CARD_FLAV.liqing_lianjuan2='"帘卷西风，人比黄花瘦。"西风卷帘，一切伪装无所遁形。此牌揭去敌人的所有格挡与护甲，使其暴露在攻击之下。';
+  CARD_TIPS.liqing_lianjuan2='破甲易伤，破防核心技能';
+  CARD_FLAV.liqing_xianyun='"险韵诗成，扶头酒醒。"险韵（生僻的韵脚）写成后如释重负。此牌在防御之余赋予一张技能牌奇巧之性——弃置时可自动打出。';
+  CARD_TIPS.liqing_xianyun='赋予奇巧，弃牌流核心辅助';
+  CARD_FLAV.liqing_modao='"莫道不销魂，帘卷西风，人比黄花瘦。"莫道消魂——不要说这不会令人断魂。浓重的毒雾弥漫全场的每一个角落。';
+  CARD_TIPS.liqing_modao='全屏叠毒，毒流派AOE核心';
+  CARD_FLAV.liqing_jiuxing='"险韵诗成，扶头酒醒。"酒醒之后灵台清明。弃去杂乱心绪，换来两片残花的锋利。';
+  CARD_TIPS.liqing_jiuxing='弃牌召残花，弃牌与小刀流枢纽';
+  CARD_FLAV.liqing_huanghun='"东篱把酒黄昏后。"黄昏时分，天地交融。每抽一张牌便如黄昏的一缕余晖，毒染全场。';
+  CARD_TIPS.liqing_huanghun='抽牌联动全屏叠毒，毒流派核心引擎';
+  CARD_FLAV.liqing_xianyunshi='"险韵诗成，扶头酒醒。"险韵诗成的那一刻，灵感如泉涌。以诗换能，以词换牌——灵感的代价是消耗自身。';
+  CARD_TIPS.liqing_xianyunshi='回能过牌消耗，万能爆发引擎';
+  CARD_FLAV.liqing_queshang='"才下眉头，却上心头。"愁绪才下眉头又上心头。弃一张牌便抽来两张——挥之不去的思念。';
+  CARD_TIPS.liqing_queshang='弃牌过牌，弃牌流高效滤牌';
+  CARD_FLAV.liqing_liangchu='"玉枕纱橱，半夜凉初透。"玉枕纱橱，秋夜微凉。凉意沁人心脾，化作一层无形的屏障。';
+  CARD_TIPS.liqing_liangchu='零费高额格挡，灵活防御选择';
+  CARD_FLAV.liqing_huazi='"花自飘零水自流。"花落水流，本是自然之理。每打出一张牌，便有一片花瓣化为格挡——落红不是无情物。';
+  CARD_TIPS.liqing_huazi='出牌联动格挡，高连击时效果惊人';
+  CARD_FLAV.liqing_xiangying='暗香盈袖的余韵，化为了词人敏捷的身法。获得永久敏捷，每一丝香气都让格挡更加坚实。';
+  CARD_TIPS.liqing_xiangying='永久敏捷成长，敏捷流核心';
+  CARD_FLAV.liqing_yongzhou='"薄雾浓云愁永昼。"永昼——漫长的白昼，毒雾在每一个回合开始时弥漫。日复一日，毒入骨髓。';
+  CARD_TIPS.liqing_yongzhou='每回合自动叠毒，毒流派核心能力';
+  CARD_FLAV.liqing_yifan='"一番风，一番雨，一番愁。"一番风雨一番愁。每施加三次中毒便引发一次爆发——如夏日的雷雨，来得猛烈。';
+  CARD_TIPS.liqing_yifan='中毒触发连锁爆发，毒流派AOE核心';
+  CARD_FLAV.liqing_lvyi='"绿蚁新醅酒，红泥小火炉。"绿蚁（酒面上浮起的绿色泡沫）是初酿之酒的标记。此牌加速毒的发作——让毒性更快地吞噬敌人。';
+  CARD_TIPS.liqing_lvyi='毒发加速，毒流派倍率组件';
+  CARD_FLAV.liqing_jieyu='解语花——能理解人言的花朵。李清照以解语花自喻，攻击中暗藏毒素，未格挡之伤便是毒种入骨。';
+  CARD_TIPS.liqing_jieyu='攻击叠毒，攻毒双修核心';
+  CARD_FLAV.liqing_jiambuduan='"剪不断，理还乱，是离愁。"离愁如丝，剪不断理还乱。此牌让残花化为漫天飞刃，并且召来四片残花。';
+  CARD_TIPS.liqing_jiambuduan='残花AOE爆发，小刀流核心启动';
+  CARD_FLAV.liqing_lihailuan='理还乱的愁绪，在每一个回合开始时化作一片残花。挥之不去的离愁，源源不断的词句。';
+  CARD_TIPS.liqing_lihailuan='每回合自动召残花，小刀流续航引擎';
+  CARD_FLAV.liqing_yian='易安居士之"易安"二字，取"审时度势、随遇而安"之意。每打出一张技能牌便赋予其奇巧之性——绝境中亦能泰然处之。';
+  CARD_TIPS.liqing_yian='技能赋予奇巧，弃牌流核心辅助';
+  CARD_FLAV.liqing_chuixiao='"吹箫人去玉楼空，肠断与谁同倚。"吹箫人已去，只余空楼。残花在手中凝结不散，第一片残花带着故人的思念飞出——气象万千。';
+  CARD_TIPS.liqing_chuixiao='残花保留加伤，小刀流核心增伤';
+  CARD_FLAV.liqing_fenghuang='"凤凰台上凤凰游，凤去台空江自流。"凤凰台上，凤凰已去。但每打出一张牌，便有一只无形的凤凰飞向敌人。';
+  CARD_TIPS.liqing_fenghuang='出牌联动随机伤害，万能输出引擎';
+  CARD_FLAV.liqing_guichu='"我报路长嗟日暮，学诗谩有惊人句。九万里风鹏正举，风休住，蓬舟吹取三山去。"归何处？归向那词中的三山仙境。每抽一张牌便惊起满天诗意。';
+  CARD_TIPS.liqing_guichu='抽牌联动AOE伤害，过牌流输出引擎';
+  CARD_FLAV.liqing_jiushi='"旧时天气旧时衣，只有情怀不似旧家时。"天气依旧，衣裳依旧，只有心情不同了。每回合开始，抽一张、弃一张——时光流转如旧。';
+  CARD_TIPS.liqing_jiushi='每回合自动弃牌过牌，弃牌流持续引擎';
+  CARD_FLAV.liqing_chuimei='"吹梅笛怨，春意知几许。"笛声吹落梅花，春意不知几许。虚弱的敌人在此牌面前如同待宰之羊——承受双倍伤害。';
+  CARD_TIPS.liqing_chuimei='虚弱敌人双倍伤害，虚弱流核心倍率';
+  CARD_FLAV.liqing_chunyi='"春意知几许。"春意盎然中，词人精心策划每一首词。回合结束时保留一张牌，为下一回合留下希望的种子。';
+  CARD_TIPS.liqing_chunyi='回合结束保留牌，过牌流关键辅助';
+  CARD_FLAV.liqing_hunmeng='李清照南渡后，常于梦中与亡夫赵明诚相见。幽魂之形使词人化入梦境，不受凡尘之伤——但每次醒来都失去一分灵动。';
+  CARD_TIPS.liqing_hunmeng='无形保命，代价是失去敏捷，终极防御';
+
+  // ── 能力牌 ──
+  CARD_FLAV.liqing_nianyu='碾玉为尘，化入词中。敏捷与荆棘并生，奇巧之性藏于其中——如碾碎的玉屑，虽细小却处处锋芒。';
+  CARD_TIPS.liqing_nianyu='敏捷荆棘奇巧，多功能成长能力';
+  CARD_FLAV.liqing_lvyi2='绿蚁新醅酒的微醺中，毒的韵律加速跳动。每一次毒发都更加猛烈——如酒意渐浓。';
+  CARD_TIPS.liqing_lvyi2='毒发加速，毒流派倍率核心';
+  CARD_FLAV.liqing_jinshi='李清照与赵明诚合著《金石录》，一生致力于金石之学。此牌以金石之坚强化残花——每一片残花都如金石般锋利。';
+  CARD_TIPS.liqing_jinshi='残花增伤，小刀流核心增伤能力';
+  CARD_FLAV.liqing_huazi2='"花自飘零水自流。一种相思，两处闲愁。"花自飘零——每打出一张牌便是一片落花，化作护体的屏障。';
+  CARD_TIPS.liqing_huazi2='出牌联动格挡，高连击防御核心';
+  CARD_FLAV.liqing_jieyu2='解语花不仅能解语，更能以花为毒。未格挡的攻击在敌人体内种下花毒——每一朵解语花都是一枚毒种。';
+  CARD_TIPS.liqing_jieyu2='攻击叠毒，攻毒双修持续核心';
+  CARD_FLAV.liqing_jiambuduan2='"剪不断，理还乱。"离愁如丝，越理越乱。残花化为利刃斩向所有敌人，同时召来四片新的残花。';
+  CARD_TIPS.liqing_jiambuduan2='残花AOE加召唤，小刀流终极启动';
+  CARD_FLAV.liqing_qingzhou='"轻解罗裳，独上兰舟。"轻舟一叶，自在漂流。敏捷的身法让词人在词海中进退自如。';
+  CARD_TIPS.liqing_qingzhou='永久敏捷成长，敏捷流核心';
+  CARD_FLAV.liqing_qianfan='"星河欲转千帆舞。"千帆竞舞，壮阔非凡。每回合开始，一叶诗帆（残花）落入手中。';
+  CARD_TIPS.liqing_qianfan='每回合自动召残花，小刀流续航核心';
+  CARD_FLAV.liqing_yian2='易安之智，审时度势。每张技能牌都被赋予了奇巧之性——被弃置时自动打出，如易安之词，虽弃而不废。';
+  CARD_TIPS.liqing_yian2='技能赋予奇巧，弃牌流终极引擎';
+  CARD_FLAV.liqing_yongzhou2='永昼之毒，日复一日。每一个回合的黎明，毒雾都会重新弥漫战场——永不消散。';
+  CARD_TIPS.liqing_yongzhou2='每回合自动叠毒，毒流派持续核心';
+  CARD_FLAV.liqing_yifan2='一番风雨一番愁。中毒爆发更加频繁——从每三次触发改为每两次触发。风雨更急，愁绪更浓。';
+  CARD_TIPS.liqing_yifan2='毒发频率翻倍，毒流派爆发核心';
+  CARD_FLAV.liqing_chuixiao2='吹箫人去玉楼空，但箫声犹在。残花凝结不去，第一片残花的余韵更加绵长。';
+  CARD_TIPS.liqing_chuixiao2='残花保留加伤，小刀流持续增伤';
+  CARD_FLAV.liqing_fenghuang2='"凤凰台上凤凰游。"凤凰虽去，但其神力仍在。每张牌都带着凤凰的余焰飞向敌人。';
+  CARD_TIPS.liqing_fenghuang2='出牌联动随机伤害，万能输出引擎';
+  CARD_FLAV.liqing_guichu2='归去来兮！每抽一张牌便激起漫天诗意。诗意的风暴席卷所有敌人。';
+  CARD_TIPS.liqing_guichu2='抽牌联动AOE，过牌输出持续引擎';
+  CARD_FLAV.liqing_jiushi2='旧时的习惯难以改变。每回合开始，词人习惯性地抽一张、弃一张——旧时天气旧时衣。';
+  CARD_TIPS.liqing_jiushi2='每回合自动弃牌过牌，弃牌流持续引擎';
+  CARD_FLAV.liqing_chuimei2='笛声吹落梅花，虚弱的敌人在词人面前不堪一击。此能力让虚弱变为致命的破绽。';
+  CARD_TIPS.liqing_chuimei2='虚弱翻倍伤害，虚弱流核心倍率';
+  CARD_FLAV.liqing_chunyi2='"春意知几许。"春意盎然中，词人可以精心保留更多牌在手中——如春日的花瓣，不忍放手。';
+  CARD_TIPS.liqing_chunyi2='保留更多牌，过牌流关键辅助';
+  CARD_FLAV.liqing_hunmeng2='南渡之后，李清照常在梦中与亡夫相会。幽魂之形虽能保命，但每次化为幽魂都会失去一分灵动——敏捷随梦而逝。';
+  CARD_TIPS.liqing_hunmeng2='更强无形保命，终极防御能力的极致';
 
     // ── 遗器背景故事 ──
     RELIC_FLAV.yuhuruan='和靖先生林逋隐居西湖孤山，梅妻鹤子。冬日拥玉壶于怀，暖意自生。此壶乃其妻梅所赠，虽人去壶空，余温犹在。';
@@ -6589,6 +8368,28 @@ function setBattleBackground(){
     RELIC_FLAV.lianyezhou='李清照误入藕花深处时所乘小舟，舟形如莲叶。此舟轻巧灵便，载着少女的欢笑穿梭于荷塘。后随清照南渡，漂泊江海。';
     RELIC_FLAV.qiuyunpa='秋云为帛，裁而成帕。上有李清照手绣的菊花图案，针脚细密如词。秋云帕拭泪，泪痕化为诗句。';
 
+    
+  // ── 李清照遗物背景故事 ──
+  RELIC_FLAV.liqing_shuyujuan='李清照号易安居士，其词集名《漱玉词》，取"漱玉"二字，意为清泉漱石、玉振金声。相传李清照每作一词，便投一词稿于水中，稿纸化为玉片，故曰漱玉。此卷乃其手稿之精华，字字珠玑。';
+  RELIC_FLAV.liqing_huadian='李清照少女时爱在鬓边簪花，尤喜梅花。她常以花钿（花形首饰）自喻，花钿虽小，却是整个妆面的点睛之笔。残花如钿，虽细小却能点缀全局。';
+  RELIC_FLAV.liqing_jinshilu='《金石录》乃李清照与丈夫赵明诚合著的金石学巨著，收录二人毕生收集的青铜器铭文与碑刻拓片。赵明诚去世后，李清照独自完成此书，"虽万死而不辞"。此录中不仅藏有金石，更藏有二人二十余年的深情。';
+  RELIC_FLAV.liqing_shuyujian='漱玉笺是李清照常用的花笺纸，纸上有淡淡的菊花纹路。她在这笺上写下无数动人的词句。笺纸虽薄，却承载着最深沉的情感——正如愁绪虽无形，却能压垮一切。';
+  RELIC_FLAV.liqing_hanmei='李清照酷爱梅花，曾有"此花不与群花比"之赞。南渡之后，她将一枝寒梅带在身边，历经战火而不凋。梅枝上的刺虽细，却暗藏剧毒——正如词人的笔锋，看似柔弱实则犀利。';
+  RELIC_FLAV.liqing_suijinling='李清照珍藏着一串金铃，是赵明诚赠予的定情之物。南渡途中金铃碎裂，碎片散落。每当她弃去一件旧物，碎金铃便发出一声脆响——每一次舍弃都伴随着刺痛，却也伴随着力量。';
+  RELIC_FLAV.liqing_huanhuajin='浣花锦是蜀中名锦，以锦江之水浣洗，色泽如花。此锦质地柔韧，可用来包扎伤口。李清照南渡时带了一匹浣花锦，每遇伤痛便扯下一段——锦在，希望就在。';
+  RELIC_FLAV.liqing_chouxu='李清照南渡之后，满腔愁绪无处排遣。"只恐双溪舴艋舟，载不动许多愁。"愁不仅是情感，更是一种力量——它弥漫在空气中，如毒雾般渗入每一个角落。此物便是她那化解不开的愁思所凝结。';
+
+  // ── 李白遗物背景故事 ──
+    RELIC_FLAV.lizhi_shixianzhi='李白仗剑出蜀时，庐山道士赠其一瓶血酒，饮后气血如龙。每战罢，血中自生新力，虽伤重而不倒。后人称之"诗仙之血"，乃太白血脉中流淌的天地灵气。';
+    RELIC_FLAV.lizhi_fenshilu='李白在金陵凤凰台偶遇一异僧，僧以旧诗卷投炉，炉中飞出千百蝴蝶。李白叹曰："诗稿虽焚，诗意不死。"遂得此炉，每焚一诗，便化一道剑气。';
+    RELIC_FLAV.lizhi_zhexiantong='贺知章初见李白，惊呼"谪仙人"。赠其一舌形玉佩，云："此乃当年大禹治水时，一仙人遗落之物。含之辨百毒，尝而知天地味。"李白含之，觉满口生香，诗思如泉。';
+    RELIC_FLAV.lizhi_zhibailu='李白游华山时，遇一白鹿引路至万丈悬崖。白鹿回首望之，目光清澈。太白抚其背，白鹿化为一纸，上有仙人手迹："乘白鹿、访名山、诗千古。"';
+    RELIC_FLAV.lizhi_chixialu='安史之乱时，李白避难于庐山。偶入一洞，见赤色骷髅端坐石上，骷髅口中含一丹丸，色如朝霞。丹丸入腹，顿觉力大无穷，自此面不改色，虽身陷绝境而气愈壮。';
+    RELIC_FLAV.lizhi_poqingguan='李白少年时戴的青布冠，破旧不堪。其母欲为换新，李白不肯，曰："此冠乃我第一次作诗时所戴。诗道之路，由此而始。"后来每遇瓶颈，便戴此冠，文思必如泉涌。';
+    RELIC_FLAV.lizhi_heguangni='李白与杜甫相遇于洛阳，两人把酒论诗，醉后杜甫取洛阳城外一抔黄土，和以酒水，捏成一尊小像。曰："君之诗如光，和光同尘。此泥天地为证。"';
+    RELIC_FLAV.lizhi_duanzhang='李白《蜀道难》未完稿，因酒醉而遗失半张诗稿。后人在剑门关拾得残章，纸已泛黄，字迹如剑。此断章虽残，但其气韵之雄奇，令见者无不震撼。';
+    RELIC_FLAV.lizhi_xuanming='李白晚年游历洞庭湖，夜半见水中一道玄光。探手入水，捞起一玉瓶，瓶中有黑色液体如墨如血。饮之顿觉通体清澈，彷佛重回少年。此乃洞庭龙君所赠玄冥之水。';
+    RELIC_FLAV.lizhi_taibai='李白出生时，其母梦太白金星入怀。后有人献一令牌，上刻星图，正中太白星熠熠生辉。得此令者，得其星辰庇护，锋芒愈盛，却也会引动天地之气，令万物共鸣。';
     // ── 丹药背景故事 ──
     PILL_FLAV.hpPill='华佗游历山川，偶遇百岁老者。老者面如童颜，自云常服此丹。华佗求其方，老者笑曰："春采百花，夏取清露，秋收百草，冬藏雪水，合而炼之。"';
     PILL_FLAV.strPill='张飞与关羽比试力气，各服此丹一粒。张飞力举千斤鼎，关羽单手托石狮。诸葛亮笑曰："此丹虽好，不如智慧之力。"';
@@ -6653,11 +8454,11 @@ function setBattleBackground(){
     function showCardDetail(cardKey){
       var c = CARDS[cardKey];
       if(!c) return;
-      var rarityNames = {basic:'基础',common:'普通',uncommon:'精良',rare:'稀有'};
-      var rarityDesc = {basic:'初学入门之诗',common:'寻常可见之句',uncommon:'匠心独运之作',rare:'千古绝唱之名篇'};
+      var rarityNames = {basic:'基础',common:'普通',uncommon:'精良',rare:'稀有',ancient:'先古'};
+      var rarityDesc = {basic:'初学入门之诗',common:'寻常可见之句',uncommon:'匠心独运之作',rare:'千古绝唱之名篇',ancient:'太古遗珍·天地同寿'};
       var typeNames = {attack:'攻击牌',skill:'技能牌',power:'能力牌'};
       var typeIcons = {attack:'⚔',skill:'🌀',power:'✨'};
-      var rColors = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+      var rColors = {ancient:'#ff44ff',basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
       var flavor = CARD_FLAV[cardKey] || '"诗中有画，画中有诗。"';
       var tip = CARD_TIPS[cardKey] || '';
       var upgradeNote = '';
@@ -6671,7 +8472,7 @@ function setBattleBackground(){
       var strategyHtml = tip ? '<div class="sg-cdb-field" style="margin-top:0.3rem;padding:0.3rem;background:var(--gold-dim);border-radius:6px;"><b>&#128220; 策略提示：</b>'+tip+'</div>' : '';
       showCollectionDetail(c.name,
         '<div class="sg-cdb-field" style="text-align:center;font-size:1.5rem;margin-bottom:0.3rem;color:'+(rColors[c.rarity]||'#a8a8a8')+';">' +
-          (c.rarity==='rare'?'&#9733;':'') + (c.rarity==='uncommon'?'&#9670;':'') +
+          (c.rarity==='rare'?'&#9733;':(c.rarity==='ancient'?'&#9830;':'')) + (c.rarity==='uncommon'?'&#9670;':'') +
         '</div>' +
         '<div class="sg-cdb-field"><b>'+(typeIcons[c.type]||'')+' 类型：</b>'+(typeNames[c.type]||c.type)+' | <b>费用：</b>'+(c.cost||0)+' 气</div>' +
         '<div class="sg-cdb-field"><b>稀有度：</b>'+(rarityNames[c.rarity]||c.rarity)+' — '+(rarityDesc[c.rarity]||'')+'</div>' +
@@ -6691,8 +8492,8 @@ function setBattleBackground(){
           if(CHARACTERS[cci].id===relic.char){ charName=CHARACTERS[cci].name; break; }
         }
       }
-      var rarityLabels = {common:'普通', uncommon:'精良', rare:'稀世'};
-      var rarityColors = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+      var rarityLabels = {common:'普通', uncommon:'精良', rare:'稀世', ancient:'先古', starting:'初始', boss:'首领', shop:'商店'};
+      var rarityColors = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', starting:'#66ccff', boss:'#ff5555', shop:'#55dd88'};
       var rRarity = rarityLabels[relic.rarity] || '';
       var rColor = rarityColors[relic.rarity] || '#a8a8a8';
       var rIcon = relic.icon || '🔮';
@@ -6710,8 +8511,8 @@ function setBattleBackground(){
     function showPillDetail(pillKey){
       var p = PILLS[pillKey];
       if(!p) return;
-      var rarityLabels = {common:'普通', uncommon:'精良', rare:'稀世'};
-      var rarityColors = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+      var rarityLabels = {common:'普通', uncommon:'精良', rare:'稀世', ancient:'先古'};
+      var rarityColors = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
       var pRarity = rarityLabels[p.rarity] || '';
       var pColor = rarityColors[p.rarity] || '#a8a8a8';
       var tip = getPillTip(p.name);
@@ -6797,8 +8598,8 @@ function setBattleBackground(){
         '</div>';
 
       // Rarity color map
-      var rC = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
-      var rarityNames = {basic:'基础',common:'普通',uncommon:'精良',rare:'稀有'};
+      var rC = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', ancient:'#ff44ff'};
+      var rarityNames = {basic:'基础',common:'普通',uncommon:'精良',rare:'稀有',ancient:'先古'};
       var typeNames = {attack:'攻击',skill:'技能',power:'能力'};
 
       // Tabs
@@ -6827,51 +8628,81 @@ function setBattleBackground(){
         else if(tabId === 'enemies') renderEnemiesTab();
       }
 
-      function renderCardsTab(currentRarity){
+      function renderCardsTab(currentRarity, currentChar){
         var cardKeys = Object.keys(CARDS);
-        var rarityOrder = ['basic','common','uncommon','rare'];
+        var rarityOrder = ['basic','common','uncommon','rare','ancient'];
         var subRarity = currentRarity || 'all';
-        var html = '<div class="sg-collection-subtabs" id="sgCollSubTabs">' +
+        var subChar = currentChar || 'all';
+        var charIcons = {lizhi:'\u{1F319}', sush:'\u{1F30A}', liqing:'\u{1F338}'};
+        var html = '<div class="sg-collection-char-tabs" id="sgCollCharTabs">' +
+          '<button class="sg-collection-char-tab '+(subChar==='all'?'active':'')+'" data-char="all">\u{1F4D6} 全部</button>' +
+          '<button class="sg-collection-char-tab '+(subChar==='lizhi'?'active':'')+'" data-char="lizhi">\u{1F319} 李白</button>' +
+          '<button class="sg-collection-char-tab '+(subChar==='sush'?'active':'')+'" data-char="sush">\u{1F30A} 苏轼</button>' +
+          '<button class="sg-collection-char-tab '+(subChar==='liqing'?'active':'')+'" data-char="liqing">\u{1F338} 李清照</button>' +
+          '</div>';
+        html += '<div class="sg-collection-subtabs" id="sgCollSubTabs">' +
           '<button class="sg-collection-subtab '+(subRarity==='all'?'active':'')+'" data-rarity="all">全部</button>' +
           '<button class="sg-collection-subtab '+(subRarity==='basic'?'active':'')+'" data-rarity="basic">基础</button>' +
           '<button class="sg-collection-subtab '+(subRarity==='common'?'active':'')+'" data-rarity="common">普通</button>' +
           '<button class="sg-collection-subtab '+(subRarity==='uncommon'?'active':'')+'" data-rarity="uncommon">精良</button>' +
           '<button class="sg-collection-subtab '+(subRarity==='rare'?'active':'')+'" data-rarity="rare">稀有</button>' +
+          '<button class="sg-collection-subtab '+(subRarity==='ancient'?'active':'')+'" data-rarity="ancient">先古</button>' +
           '</div>';
         html += '<div class="sg-collection-grid">';
+        var filteredKeys = cardKeys.filter(function(k){
+          var c = CARDS[k];
+          if(!c) return false;
+          if(subRarity !== 'all' && c.rarity !== subRarity) return false;
+          if(subChar !== 'all' && c.char !== subChar) return false;
+          return true;
+        });
+        var grouped = {};
+        for(var fi=0;fi<filteredKeys.length;fi++){
+          var ckf = filteredKeys[fi];
+          var rf = CARDS[ckf].rarity;
+          if(!grouped[rf]) grouped[rf] = [];
+          grouped[rf].push(ckf);
+        }
         for(var ri=0;ri<rarityOrder.length;ri++){
           var r = rarityOrder[ri];
-          if(subRarity !== 'all' && subRarity !== r) continue;
-          var cardsInRarity = cardKeys.filter(function(k){ return CARDS[k] && CARDS[k].rarity === r; });
-          if(cardsInRarity.length === 0) continue;
+          if(!grouped[r] || grouped[r].length === 0) continue;
           if(subRarity === 'all'){
-            html += '<div style="width:100%;font-size:0.6rem;color:var(--text-faint);padding:0.2rem 0 0.1rem;border-top:1px dashed var(--border);margin-top:0.1rem;">— '+(rarityNames[r]||r)+' —</div>';
+            html += '<div style="width:100%;font-size:0.6rem;color:var(--text-faint);padding:0.2rem 0 0.1rem;border-top:1px dashed var(--border);margin-top:0.1rem;">\u2014 '+(rarityNames[r]||r)+' \u2014</div>';
           }
-          for(var cki=0;cki<cardsInRarity.length;cki++){
-            var ck = cardsInRarity[cki];
-            var c = CARDS[ck];
-            html += '<div class="sg-card" data-card-key="'+ck+'" style="border-color:'+(rC[c.rarity]||'#a8a8a8')+';cursor:pointer;">' +
+          for(var gi=0;gi<grouped[r].length;gi++){
+            var ck2 = grouped[r][gi];
+            var c = CARDS[ck2];
+            var charIcon = charIcons[c.char] || '';
+            html += '<div class="sg-card" data-card-key="'+ck2+'" style="border-color:'+(rC[c.rarity]||'#a8a8a8')+';cursor:pointer;">' +
               '<div class="sg-card-cost">'+(c.cost||0)+'</div>' +
               '<div class="sg-card-name">'+c.name+'</div>' +
               '<div class="sg-card-desc">'+(c.desc||'')+'</div>' +
-              '<div class="sg-card-type">'+(typeNames[c.type]||c.type)+(c.rarity==='rare'?' &#9733;':'')+'</div></div>';
+              '<div class="sg-card-type">'+charIcon+' '+(typeNames[c.type]||c.type)+(c.rarity==='rare'||c.rarity==='ancient'?' \u2605':'')+'</div></div>';
           }
         }
         html += '</div>';
         content.innerHTML = html;
 
-        // Bind sub-tab clicks
+        var charTabs = document.getElementById('sgCollCharTabs');
+        if(charTabs){
+          charTabs.querySelectorAll('.sg-collection-char-tab').forEach(function(ct){
+            ct.addEventListener('click', function(e){
+              e.stopPropagation();
+              renderCardsTab(subRarity, ct.getAttribute('data-char'));
+            });
+          });
+        }
+
         var subTabs = document.getElementById('sgCollSubTabs');
         if(subTabs){
           subTabs.querySelectorAll('.sg-collection-subtab').forEach(function(st){
             st.addEventListener('click', function(e){
               e.stopPropagation();
-              renderCardsTab(st.getAttribute('data-rarity'));
+              renderCardsTab(st.getAttribute('data-rarity'), subChar);
             });
           });
         }
 
-        // Bind card detail clicks
         content.querySelectorAll('.sg-card[data-card-key]').forEach(function(cardEl){
           cardEl.addEventListener('click', function(e){
             e.stopPropagation();
@@ -6883,7 +8714,7 @@ function setBattleBackground(){
       function renderRelicsTab(){
         var html = '<div class="sg-collection-grid" style="gap:8px;">';
         var rarityLabels = {common:'·普通', uncommon:'·精良', rare:'·稀世'};
-        var rarityColors2 = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+        var rarityColors2 = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
         for(var ri=0;ri<RELICS.length;ri++){
           var r = RELICS[ri];
           var charMark = '';
@@ -6918,7 +8749,7 @@ function setBattleBackground(){
         var pillKeys = Object.keys(PILLS);
         var html = '<div class="sg-collection-grid" style="gap:8px;">';
         var rarityLabels = {common:'·普通', uncommon:'·精良', rare:'·稀世'};
-        var rarityColors2 = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+        var rarityColors2 = {common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
         for(var pi=0;pi<pillKeys.length;pi++){
           var pk = pillKeys[pi];
           var p = PILLS[pk];
@@ -6967,7 +8798,9 @@ function setBattleBackground(){
             html += '<div style="width:100%;font-size:0.6rem;color:var(--text-faint);padding:0.2rem 0 0.1rem;border-top:1px dashed var(--border);margin-top:0.1rem;">— '+currentSection+' —</div>';
           }
           var ed = allEnemies[ei].data;
-          var isGrp = ed.isGroup ? '&#128101;' : '&#128128;';
+          var enemyEmojis2 = {lichou:'心',qiusi:'叶',yeyu:'雨',guhong:'鸿',zhuangzhi:'火',chouchang:'愁',piaobo:'萍',saihong:'雁',muyu:'笠',changfeng:'风',feixu:'絮',zhengyan:'燕',kuangfeng:'飓',canhun:'魂',xingshuang:'霜',fengchen:'尘',canghai:'海',qingyun:'云',fusheng:'沫',mingshi:'亡',zhanshen:'战',wushuang:'冠',cimo:'禅',shihun:'卷',wenqu:'星',shuimo:'墨',bihun:'笔',exam:'经',master:'君',saint:'圣',qun_maque:'雀',qun_yinghuo:'萤',qun_luanshi:'石',qun_shuangye:'叶',qun_fengdie:'蝶',qun_jianyu:'刃',qun_yanwu:'雾'};
+          var _eEmoji = enemyEmojis2[ed.id] || (ed.isGroup ? '众' : '魔');
+          var isGrp = '<span style="font-size:1.2rem;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a1a0a,#1a0a00);color:#e8d5b0;text-shadow:0 0 4px rgba(232,213,176,.3);">'+_eEmoji+'</span>';
           html += '<div class="sg-collection-item-card" data-enemy-id="'+ed.id+'">' +
             '<div class="sg-cic-icon">'+isGrp+'</div>' +
             '<div class="sg-cic-name">'+ed.name+'</div>' +
@@ -7080,7 +8913,7 @@ function setBattleBackground(){
         '<span style="cursor:pointer;font-size:1rem;color:var(--text-faint);" onclick="document.getElementById(\'sgDeckPopup\').style.display=\'none\';">✕</span>' +
         '</div></div>';
       html += '<div class="sg-deck-grid">';
-      var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00'};
+      var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', ancient:'#ff44ff'};
       var raritySort = {basic:0, common:1, uncommon:2, rare:3};
       var sorted = G.deck.slice().sort(function(a,b){
         var ra = raritySort[a.rarity]||0;
@@ -7126,7 +8959,7 @@ function setBattleBackground(){
         var cd = G.deck[ui];
         var cardEl = document.createElement('div');
         cardEl.className = 'sg-card sg-card-selectable';
-        var rCol = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+        var rCol = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
         cardEl.style.borderColor = (rCol[cd.rarity]||'#a8a8a8');
         cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
         (function(ui2){
@@ -7161,7 +8994,7 @@ function setBattleBackground(){
       var orders = G.deck.slice().map(function(c,i){return i;});
       var sortedEl = document.createElement('div');
       sortedEl.style.cssText = 'display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-height:50vh;overflow-y:auto;padding:.3rem 0;';
-      var rColS = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00'};
+      var rColS = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
       var pendingSwap = null;
       for(var ui=0;ui<G.deck.length;ui++){
         var cd = G.deck[ui];
@@ -7205,7 +9038,6 @@ function setBattleBackground(){
     /* ═══════════════════════════════════════════════════════════════════════ */
     /* ══════ UI 事件绑定 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
-
 
     /* ═══════════════════════════════════════════════════════════════════════ */
     /* ══════ BGM系统 ══════ */
@@ -7609,12 +9441,20 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
                 '</div>' +
                 '<div class="sg-cs-detail">' +
                 '<div class="sg-cs-hp">❤️ 最大生命：'+ch.maxHp+'</div>' +
-                '<div class="sg-cs-ability">✨ '+ch.ability+'</div>' +
+                '<div class="sg-cs-ability">✨ 初始遗物：'+getRelicName(ch.startingRelic)+'</div>' +
                 '<div class="sg-cs-desc">📜 '+ch.desc+'</div>' +
                 '</div>' +
                 '</div>';
             }
             container.innerHTML = html2;
+            // Back button
+            var backBtn = document.getElementById('sgCharSelectBack');
+            if(backBtn){
+              backBtn.addEventListener('click', function(){
+                hideAllScreens();
+                showScreen('sgTitle');
+              });
+            }
 
             var charCards = container.querySelectorAll('.sg-cs-portrait-card');
             for(var ci2=0;ci2<charCards.length;ci2++){
@@ -7648,7 +9488,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
                   overlay.appendChild(infoEl);
                   var abilEl = document.createElement('div');
                   abilEl.style.cssText = 'font-size:.7rem;color:var(--gold);margin-top:.2rem;';
-                  abilEl.textContent = '✨ ' + ch.ability;
+                  abilEl.textContent = '✨ 初始遗物：' + getRelicName(ch.startingRelic);
                   overlay.appendChild(abilEl);
                   // 确认按钮
                   var btnRow = document.createElement('div');
@@ -7861,7 +9701,20 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
       bindUI();
     }
 
-    // Also try to bind after a short delay for dynamic loading
+    
+    // Status bar hover tooltips (Feature 2)
+    (function initStatTooltips(){
+      var items = document.querySelectorAll('.sg-stat-tip');
+      for(var si=0;si<items.length;si++){(function(el){
+        var tip = el.querySelector('.sg-stat-tooltip') || el.querySelector('.sg-power-tip');
+        if(tip){
+          el.addEventListener('mouseenter', function(){ tip.style.display = 'block'; });
+          el.addEventListener('mouseleave', function(){ tip.style.display = 'none'; });
+        }
+      })(items[si]);}
+    })();
+
+// Also try to bind after a short delay for dynamic loading
     setTimeout(function(){
       bindUI();
       // Show title screen
