@@ -1,0 +1,26 @@
+# Generated images
+generated_images/
+
+# Browser profiles
+browser_output/
+UsersqingdAppDataLocalMicrosoftEdgeUser Data/
+
+# Test scripts
+browser_helper.js
+check_game.js
+check_tongyi.js
+check_version.js
+copy_cookies.js
+download_images.js
+edge_genimg.js
+extract_from_page.js
+extract_images.js
+generate_and_crop.js
+generate_api_images.js
+generate_batch.js
+generate_images.js
+just_images.js
+retry_images.js
+test_game.js
+test_game2.js
+tongyi_login.js
