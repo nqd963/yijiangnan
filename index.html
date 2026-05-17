@@ -3700,7 +3700,9 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
       sush_qingfeng:{name:"清风",cost:0,type:"skill",draw:1,channel:"feng",char:"sush",desc:"清风徐来 · 抽1·充能一个风球",rarity:"common"},
       sush_yueguang:{name:"月光",cost:1,type:"attack",dmg:6,char:"sush",desc:"月光如水 · 6伤·每有月球+2伤",rarity:"common",
         onCalc:function(dmg,card,gB){return dmg + getOrbCount('yue')*2;}},
-      sush_bolang:{name:"波浪",cost:1,type:"skill",block:8,char:"sush",desc:"波浪层层 · 8格挡·每有江球+2挡",rarity:"common",sush_liuxing:{name:"流星",cost:1,type:"attack",dmg:5,aoe:true,char:"sush",desc:"流星飒沓 · 全体5伤",rarity:"common"},sush_songfeng:{name:"松风",cost:1,type:"skill",block:6,nextAtkBonus:5,char:"sush",desc:"松风清耳 · 6格挡·下次攻击+5",rarity:"common"},
+      sush_bolang:{name:"波浪",cost:1,type:"skill",block:8,char:"sush",desc:"波浪层层 · 8格挡·每有江球+2挡",rarity:"common"},
+      sush_liuxing:{name:"流星",cost:1,type:"attack",dmg:5,aoe:true,char:"sush",desc:"流星飒沓 · 全体5伤",rarity:"common"},
+      sush_songfeng:{name:"松风",cost:1,type:"skill",block:6,nextAtkBonus:5,char:"sush",desc:"松风清耳 · 6格挡·下次攻击+5",rarity:"common"},
       // ── 精良卡 ──
       sush_shuangyue:{name:"双月",cost:2,type:"skill",channel2:"yue",char:"sush",desc:"双月悬空 · 充能2个月球",rarity:"uncommon"},
       sush_shuangjiang:{name:"双江",cost:2,type:"skill",channel2:"jiang",block:4,char:"sush",desc:"双江汇流 · 4格挡·充能2个江球",rarity:"uncommon"},
@@ -3865,7 +3867,7 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
         deck:['lizhi_strike','lizhi_strike','lizhi_strike','lizhi_strike','lizhi_defend','lizhi_defend','lizhi_defend','lizhi_defend','lizhi_bash','lizhi_anger'] },
       { id:'sush', name:'苏 轼', title:'词圣', maxHp:100, energy:3,
         desc:'旷达洒脱，随遇而安',
-        startingRelic:'sush_shuangyu'',
+        startingRelic:'sush_shuangyu',
         deck:['sush_strike','sush_strike','sush_strike','sush_strike','sush_defend','sush_defend','sush_defend','sush_defend','sush_yueya','sush_shuangzhu'] },
       { id:'liqing', name:'李清照', title:'易安居士', maxHp:70, energy:3,
         desc:'漱玉词心，暗香盈袖',
@@ -3886,7 +3888,7 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
         { id:"zhuangzhi", name:"壮志", baseHp:26, hpGain:7, baseDmg:11, dmgGain:3, desc:"壮志饥餐胡虏肉", intentCycle:["attack_big","defend","attack_big"] },
         { id:"chouchang", name:"惆怅", baseHp:20, hpGain:6, baseDmg:5, dmgGain:2, desc:"此情可待成追忆", intentCycle:["attack_d","attack_2x","attack_d"], specialAbility:"curse" },
         { id:"piaobo", name:"漂泊", baseHp:26, hpGain:7, baseDmg:7, dmgGain:2, desc:"萍水相逢尽是他乡客", intentCycle:["attack_d","defend","attack_2x"], specialAbility:"regen" },
-        { id:"cailian", name:"采莲", baseHp:16, hpGain:4, baseDmg:4, dmgGain:1, desc:"采莲归去"， intentCycle:["attack_d","defend","heal","defend"], specialAbility:"regen" },
+        { id:"cailian", name:"采莲", baseHp:16, hpGain:4, baseDmg:4, dmgGain:1, desc:"采莲归去", intentCycle:["attack_d","defend","heal","defend"], specialAbility:"regen" },
         { id:"saixia", name:"塞下", baseHp:28, hpGain:8, baseDmg:9, dmgGain:2, desc:"塞下秋来风景异", intentCycle:["attack_big","attack_big","attack_d","defend"] },
         // === 群体活动的小怪（低HP高伤害，复数出现）===
         { id:"qun_maque", name:"麻雀诗群", baseHp:12, hpGain:3, baseDmg:5, dmgGain:1, desc:"两个黄鹂鸣翠柳", intentCycle:["attack_d","attack_d"], isGroup:true },
@@ -3919,7 +3921,7 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
         { id:"zhanshen", name:"战神", baseHp:35, hpGain:9, baseDmg:12, dmgGain:3, desc:"一将功成万骨枯", intentCycle:["buff_str","attack_big","attack_big","attack_aoe"], specialAbility:"enrage" },
         { id:"wushuang", name:"无双", baseHp:30, hpGain:8, baseDmg:8, dmgGain:2, desc:"天下英雄谁敌手", intentCycle:["attack_2x","attack_2x","attack_3x","attack_big"], specialAbility:"summon" },
         { id:"shiqiu", name:"诗囚", baseHp:30, hpGain:9, baseDmg:10, dmgGain:3, desc:"郊寒岛瘦", intentCycle:["attack_big","attack_big","defend","attack_big"] },
-        { id:"cizong", name:"词宗", baseHp:28, hpGain:8, baseDmg:8, dmgGain:2, desc:"词中之龙"， intentCycle:["attack_aoe","attack_big","buff_str","attack_aoe"], specialAbility:"enrage" },
+        { id:"cizong", name:"词宗", baseHp:28, hpGain:8, baseDmg:8, dmgGain:2, desc:"词中之龙", intentCycle:["attack_aoe","attack_big","buff_str","attack_aoe"], specialAbility:"enrage" },
         // === 群体活动敌人（三境）===
         { id:"qun_jianyu", name:"剑雨阵", baseHp:16, hpGain:5, baseDmg:8, dmgGain:3, desc:"男儿何不带吴钩", intentCycle:["attack_d","attack_d","attack_d"], isGroup:true },
         { id:"qun_yanwu", name:"烟舞群", baseHp:14, hpGain:4, baseDmg:6, dmgGain:2, desc:"烟笼寒水月笼沙", intentCycle:["attack_2x","defend","attack_2x"], isGroup:true },
@@ -3999,8 +4001,8 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
       { id:'liqing_hanmei', name:'寒梅枝', desc:'每当你施加中毒时，层数+1', effect:'poisonBonusPlus', val:1, char:'liqing', icon:'🌿', rarity:'uncommon' },
       { id:'liqing_suijinling', name:'碎金铃', desc:'每丢弃一张牌，对随机敌人造成3点伤害', effect:'discardDmg', val:3, char:'liqing', icon:'🔔', rarity:'rare' },
       { id:'liqing_huanhuajin', name:'浣花锦', desc:'每丢弃一张牌，获得3点格挡', effect:'discardBlock', val:3, char:'liqing', icon:'🧵', rarity:'rare' },
-      { id:'liqing_chouxu', name:'愁绪', desc:'战斗开始时，给予所有敌人4层中毒', effect:'startOfBattlePoisonAll', val:4, char:'liqing', icon:'🌫️', rarity:'uncommon' 
-      { id:"sush_shuangyu", name:"双鱼佩", desc:"初始遗物·激发球体时额外获得2点格挡", effect:"evokeBlock", val:2, char:"sush", icon:"🐟", rarity:"starting" }
+      { id:'liqing_chouxu', name:'愁绪', desc:'战斗开始时，给予所有敌人4层中毒', effect:'startOfBattlePoisonAll', val:4, char:'liqing', icon:'🌫️', rarity:'uncommon' },
+      { id:"sush_shuangyu", name:"双鱼佩", desc:"初始遗物·激发球体时额外获得2点格挡", effect:"evokeBlock", val:2, char:"sush", icon:"🐟", rarity:"starting" },
       { id:"dongpoyin2", name:"东坡砚", desc:"战斗开始时生成1个月球", effect:"startChannelYue", val:1, char:"sush", icon:"🪨", rarity:"common" },
       { id:"shigu", name:"石鼓", desc:"战斗开始时获得1点焦点", effect:"startFocus", val:1, char:"sush", icon:"🥁", rarity:"common" },
       { id:"beihuanshi", name:"悲欢石", desc:"上一回合受伤则本回合触发所有球体被动", effect:"dmgTriggerPas", val:1, char:"sush", icon:"💔", rarity:"rare" },
@@ -4008,10 +4010,6 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
       { id:"tongquezhong", name:"铜雀钟", desc:"首次充能7个球时全体15伤", effect:"sevenOrbBomb", val:15, char:"sush", icon:"🔔", rarity:"rare" },
       { id:"qiankundai", name:"乾坤袋", desc:"球体上限+3", effect:"orbSlotPlus3", val:3, char:"sush", icon:"👜", rarity:"shop" },
       { id:"mochi", name:"墨池", desc:"战斗开始时生成1个山球", effect:"startChannelShan", val:1, char:"sush", icon:"🖌️", rarity:"uncommon" },
-,}
-      
-      
-      
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -8735,7 +8733,8 @@ CARD_TIPS.sush_zengfu="强化下一张技能/能力牌，配合高费牌收益�
 CARD_TIPS.sush_liebian="终极爆发·激发全屏抽牌回能。";
 CARD_TIPS.sush_sichong="四重激发·先古之力。";
 var RELIC_FLAV = {};
-    var PILL_FLAV = {}
+    var PILL_FLAV = {};
+    var ENEMY_FLAV = {};
     ENEMY_FLAV.cailian="王昌龄《采莲曲》'荷叶罗裙一色裁，芙蓉向脸两边开'。采莲少女轻歌曼舞于莲叶间，看似柔弱，实则暗藏莲茎之韧。它能回复生命，诗境中的一抹温柔绿意。";
     ENEMY_FLAV.saixia="范仲淹《渔家傲》'塞下秋来风景异，衡阳雁去无留意'。塞外苦寒之地，常年风沙弥漫。塞下之敌身披铁甲，以重击撼动来犯者——边塞诗的苍凉在此化为战力。";
     ENEMY_FLAV.qun_chunchao="韦应物《滁州西涧》'春潮带雨晚来急，野渡无人舟自横'。春潮涌动，如千军万马之势。虽是一群小浪花，汇聚起来也能掀起滔天巨浪。";
@@ -8748,8 +8747,6 @@ var RELIC_FLAV = {};
     ENEMY_FLAV.diaoxue="柳宗元《江雪》'千山鸟飞绝，万径人踪灭。孤舟蓑笠翁，独钓寒江雪'。钓雪是诗境中最孤高的精英，他在寒江之上独钓千年，每一钓都携带着冰雪的刺骨寒意。";
     ENEMY_FLAV.zuiweng="欧阳修《醉翁亭记》'醉翁之意不在酒，在乎山水之间也'。醉翁看似醉态可掬，实则暗藏机锋。他以醉态迷惑敌人，在觥筹交错间发动致命反击。";
     ENEMY_FLAV.shigui="李贺《秋来》'思牵今夜肠应直，雨冷香魂吊书客'。诗鬼李贺以奇崛诡异的诗风著称。他笔下的世界光怪陆离，令人防不胜防。作为最终关底之一，诗鬼的每一击都带着来自幽冥的诅咒之力。";
-;
-    var ENEMY_FLAV = {};
 
     // ── 诗牌背景故事 ──
     CARD_FLAV.yinyong='相传李白少年时在蜀中读书，偶遇一位老道。老道问他："诗为何物？"李白答："志之所之也。"老道笑而不语，留下一卷泛黄的《诗大序》便飘然而去。此后李白吟咏不辍，终成诗仙。';
@@ -9471,7 +9468,7 @@ var RELIC_FLAV = {};
     var subRarity = currentRarity || 'all';
     var subChar = currentChar || 'all';
     var searchQ = (searchTerm || '').toLowerCase().trim();
-    var charIcons = {lizhi:'\u{1F319}', sush:'\u{1F30A}', liqing:'\u{1F338}'};
+    var charIcons = {lizhi:'\u{1F319}', sush:'\u{1F4D6}', liqing:'\u{1F338}', wuse:'\u{2B50}'};
 
     var totalCards = cardKeys.length;
     var statsHtml = '<div class="sg-collection-stats">' +
@@ -9483,7 +9480,7 @@ var RELIC_FLAV = {};
       '<div class="sg-collection-char-tabs" id="sgCollCharTabs">' +
       '<button class="sg-collection-char-tab '+(subChar==='all'?'active':'')+'" data-char="all">\u{1F4D6} \u5168\u90E8</button>' +
       '<button class="sg-collection-char-tab '+(subChar==='lizhi'?'active':'')+'" data-char="lizhi">\u{1F319} \u674E\u767D</button>' +
-      '<button class="sg-collection-char-tab '+(subChar==='sush'?'active':'')+'" data-char="sush">\u{1F30A} \u82CF\u8F6C</button>' +
+      '<button class="sg-collection-char-tab '+(subChar==='sush'?'active':'')+'" data-char="sush">\u{1F4D6} \u82CF\u8F95</button>' +
       '<button class="sg-collection-char-tab '+(subChar==='liqing'?'active':'')+'" data-char="liqing">\u{1F338} \u674E\u6E05\u7167</button>' +
       '<button class="sg-collection-char-tab '+(subChar==='wuse'?'active':'')+'" data-char="wuse">\u{2B50} \u65E0\u8272</button>' +
       '</div>';
@@ -9586,7 +9583,7 @@ var RELIC_FLAV = {};
     var statusCards = [
       {name:'\u4F24\u53E3',cost:1,type:'skill',desc:'\u5E9F\u724C (\u6D88\u80171\u70B9\u8D39\u7528\uFF0C\u65E0\u4EFB\u4F55\u6548\u679C)',rarity:'common',icon:'\u{1F4A7}',flavor:'"\u4F24\u60C5\u5904\uFF0C\u9AD8\u57CE\u671B\u65AD\uFF0C\u706F\u706B\u5DF2\u9EC4\u660F."\u2014\u2014\u79E6\u89C2\u300A\u6EE1\u5EAD\u82B3\u300B\u3002\u4F24\u53E3\u662F\u6218\u6597\u4E2D\u7559\u4E0B\u7684\u5370\u8BB0\uFF0C\u62D6\u7D2F\u8BD7\u4EBA\u7684\u6B65\u4F10\u3002\u53EA\u6709\u5C3D\u5FEB\u5C06\u5176\u4ECE\u724C\u7EC4\u4E2D\u79FB\u9664\uFF0C\u624D\u80FD\u6062\u590D\u8BD7\u5FC3\u7684\u7EAF\u51C0\u3002'},
       {name:'\u6B8B\u82B1(\u5C0F\u5200)',cost:0,type:'attack',desc:'\u9020\u62104\u70B9\u4F24\u5BB3 \u00B7 \u6D88\u8017',rarity:'common',icon:'\u{1F338}',flavor:'"\u82B1\u81EA\u98D8\u96F6\u6C34\u81EA\u6D41."\u2014\u2014\u674E\u6E05\u7167\u300A\u4E00\u526A\u6885\u300B\u3002\u843D\u82B1\u4E0D\u662F\u65E0\u60C5\u7269\uFF0C\u5316\u4F5C\u6B8B\u5203\u66F4\u62A4\u8BCD\u3002'},
-      {name:'\u865A\u65E0',cost:1,type:'skill',desc:'\u8FD8\u6CA1\u60F3\u597D\u600E\u4E48\u7528\u7684\u4E00\u5F20\u724C',rarity:'common',icon:'\u{1F32A}',flavor:'"\u6B64\u4E2D\u6709\u771F\u610F\uFF0C\u6B32\u8FA8\u5DF2\u5FD8\u8A00."\u2014\u2014\u9676\u6E0A\u660E\u300A\u996E\u9152\u300B\u3002\u865A\u65E0\u4E4B\u724C\uFF0C\u5982\u8BD7\u4E2D\u7684\u7559\u767D\uFF0C\u5C1A\u672A\u843D\u7B14\uFF0C\u5374\u5DF2\u5145\u6EE1\u53EF\u80FD\u3002'},
+      {name:'\u865A\u65E0',cost:1,type:'skill',desc:'\u62BD\u724C\u9632\u5FA1\u724C\u00B7\u62BD2\u5F20\u724C\uFF0C\u83B7\u5F974\u70B9\u683C\u6321\uFF0C\u6D88\u8017',rarity:'common',icon:'\u{1F32A}',flavor:'"\u6B64\u4E2D\u6709\u771F\u610F\uFF0C\u6B32\u8FA8\u5DF2\u5FD8\u8A00."\u2014\u2014\u9676\u6E0A\u660E\u300A\u996E\u9152\u300B\u3002\u865A\u65E0\u4E4B\u724C\uFF0C\u5982\u8BD7\u4E2D\u7684\u7559\u767D\uFF0C\u5C1A\u672A\u843D\u7B14\uFF0C\u5374\u5DF2\u5145\u6EE1\u53EF\u80FD\u3002'},
     ];
     var html2 = '<div class="sg-collection-stats">' +
       '<span class="sg-collection-stat">\u72B6\u6001\u724C: <b>'+statusCards.length+'</b> \u79CD</span>' +
@@ -9721,6 +9718,7 @@ var RELIC_FLAV = {};
     ];
     var html2 = '<div class="sg-collection-stats">' +
       '<span class="sg-collection-stat">\u6218\u6597\u673A\u5236: <b>'+(mechanics.length+keywords.length)+'</b> \u79CD</span>' +
+      '<span class="sg-collection-stat">\u7403\u4F53\u7CFB\u7EDF: <b>7</b> \u79CD</span>' +
       '<span class="sg-collection-stat">\u654C\u4EBA\u4E13\u5C5E: <b>'+enemyMechanics.length+'</b> \u79CD</span>' +
       '</div>';
     html2 += '<div style="border-bottom:1px dashed rgba(201,168,76,0.12);padding-bottom:0.2rem;margin-bottom:0.3rem;">' +
@@ -9740,6 +9738,34 @@ var RELIC_FLAV = {};
         '</div>';
     }
     html2 += '</div>';
+
+    // ── 苏轼·球体系统 ──
+    var orbMechs = [
+      {name:'月球',icon:'🌙',color:'#ffcc00',desc:'攻击型球体。被动：回合结束时对随机敌人造成(3+焦点/3)伤害。激发：对敌人造成(10+焦点×2)伤害。',flavor:'"明月几时有，把酒问青天。"——苏轼《水调歌头》。月球乃苏轼诗心所化，清辉遍洒，伤人于无形。'},
+      {name:'江球',icon:'🌊',color:'#44ccff',desc:'防御型球体。被动：回合结束时获得(2+焦点/2)格挡。激发：获得(8+焦点×1.5)格挡。',flavor:'"大江东去，浪淘尽，千古风流人物。"——苏轼《念奴娇》。江球如苏轼之胸襟，以柔克刚，化险为夷。'},
+      {name:'风球',icon:'🍃',color:'#66dd88',desc:'辅助型球体。被动：每2回合抽1张牌。激发：抽(2+焦点/2)张牌并获得1能量。',flavor:'"清风徐来，水波不兴。"——苏轼《赤壁赋》。风球得天地之清气，助诗人挥洒自如。'},
+      {name:'山球',icon:'⛰️',color:'#cc8844',desc:'增益型球体。被动：回合结束时获得(1+焦点/3)力量。激发：获得(2+焦点/2)力量与格挡。',flavor:'"横看成岭侧成峰，远近高低各不同。"——苏轼《题西林壁》。山球沉稳如山，厚积薄发。'},
+      {name:'焦点',icon:'🧿',color:'#ff88dd',desc:'增强所有球体的效果数值。每点焦点提升球体被动与激发的效果。',flavor:'"欲把西湖比西子，淡妆浓抹总相宜。"——苏轼《饮湖上初晴后雨》。焦点如诗眼，一点而全篇俱活。'},
+      {name:'充能',icon:'⚡',color:'#ffcc44',desc:'生成一个指定类型的球体放入球体栏。若球体栏已满，则激发最旧的球体后再充能。',flavor:'"竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。"——苏轼《定风波》。充能如蓄势待发，随时准备惊艳全场。'},
+      {name:'激发',icon:'💥',color:'#ff6644',desc:'触发指定球体的激发效果，将其从球体栏中移除。激发是球体系统的主要输出手段。',flavor:'"乱石穿空，惊涛拍岸，卷起千堆雪。"——苏轼《念奴娇》。瞬间爆发之力，如诗之高潮，震撼人心。'},
+    ];
+    html2 += '<div style="border-bottom:1px dashed rgba(201,168,76,0.12);padding-bottom:0.2rem;margin:0.35rem 0 0.25rem;">' +
+      '<span style="font-size:0.65rem;color:var(--gold);">🔮 苏轼·球体系统</span>' +
+      '<div style="font-size:0.48rem;color:var(--text-faint);margin-top:0.05rem;">苏轼独创的四种球体——月、江、风、山——以及焦点、充能、激发等核心机制，构成了一套独特的战斗体系</div></div>';
+    html2 += '<div style="display:flex;flex-wrap:wrap;gap:5px;">';
+    for(var omi=0;omi<orbMechs.length;omi++){
+      var om = orbMechs[omi];
+      html2 += '<div style="flex:0 0 calc(33% - 5px);min-width:135px;background:rgba(201,168,76,0.03);border-radius:8px;padding:0.3rem;border:1px solid ' + om.color + '30;cursor:pointer;" ' +
+        'onclick="showCollectionDetail(\'' + om.name.replace(/'/g,"\\'") + '\', \'<div style=text-align:center;font-size:2rem;margin-bottom:0.3rem;>' + om.icon + '</div><div class=sg-cdb-field><b>效果：</b>' + om.desc + '</div><div class=sg-cdb-flavor style=margin-top:0.3rem;>' + om.flavor + '</div>\')">' +
+        '<div style="display:flex;align-items:center;gap:4px;">' +
+        '<span style="font-size:1.2rem;">' + om.icon + '</span>' +
+        '<span style="font-size:0.58rem;font-weight:700;color:' + om.color + ';">' + om.name + '</span>' +
+        '</div>' +
+        '<div style="font-size:0.45rem;color:var(--text-faint);margin-top:0.1rem;">' + om.desc + '</div>' +
+        '</div>';
+    }
+    html2 += '</div>';
+
     html2 += '<div style="border-bottom:1px dashed rgba(201,168,76,0.12);padding-bottom:0.2rem;margin:0.35rem 0 0.25rem;">' +
       '<span style="font-size:0.65rem;color:var(--gold);">\u{1F479} \u654C\u4EBA\u4E13\u5C5E\u673A\u5236</span>' +
       '<div style="font-size:0.48rem;color:var(--text-faint);margin-top:0.05rem;">\u7CBE\u82F1\u4E0E\u9996\u9886\u638C\u63E1\u7684\u7279\u6B8A\u80FD\u529B\uFF0C\u8003\u9A8C\u8BD7\u4EBA\u7684\u771F\u6B63\u5B9E\u529B</div></div>';
