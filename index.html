@@ -3739,7 +3739,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
       sush_baofeng:{name:"暴风雨",cost:2,type:"skill",char:"sush",desc:"暴风雨·充能3随机球",rarity:"uncommon",onPlay:function(){channelRandomN(3);}},
       sush_binghe:{name:"冰河",cost:2,type:"skill",block:8,channel2:"jiang",char:"sush",desc:"冰河千里·8挡·充能2江球",rarity:"uncommon"},
       sush_fenli:{name:"分离",cost:1,type:"skill",char:"sush",evokeRightmost:1,draw:2,desc:"分离·激发最右球·抽2",rarity:"uncommon"},
-      sush_chaopin:{name:"超频",cost:0,type:"skill",draw:2,char:"sush",desc:"超频·抽2·加灼伤",rarity:"uncommon",onPlay:function(){var bc={id:"burn_"+Date.now(),name:"灼伤",cost:1,type:"skill",desc:"废牌",rarity:"common"};G.deck.push(bc);gBattle.drawPile.push(G.deck.length-1);}},
+      sush_chaopin:{name:"超频",cost:0,type:"skill",draw:2,char:"sush",desc:"超频·抽2·加灼伤",rarity:"uncommon",onPlay:function(){var bc={id:"burn_"+Date.now(),name:"灼伤",cost:0,type:"status",desc:"[状态] 不能打出。回合结束若在手牌则受到2点伤害。",burn:true,unplayable:true,rarity:"common"};G.deck.push(bc);gBattle.drawPile.push(G.deck.length-1);}},
       sush_hundun:{name:"混沌",cost:2,type:"skill",char:"sush",desc:"混沌·充能3随机球",rarity:"uncommon",onPlay:function(){channelRandomN(3);}},
       sush_tongbu:{name:"同步",cost:1,type:"skill",char:"sush",desc:"同步·≥3种球+3焦点",rarity:"uncommon",onPlay:function(){if(countDistinctOrbTypes()>=3&&G.orbs){G.orbs.focus=(G.orbs.focus||0)+3;showEffectFloat(200,80,"🧿 同步+3");}}},
       sush_duochong:{name:"多重释放",cost:2,type:"skill",char:"sush",desc:"多重释放·全能量·多次激发最右",rarity:"rare",onPlay:function(){var en=gBattle.playerEnergy||0;for(var xi=0;xi<Math.min(en,9);xi++){if(!G.orbs||G.orbs.slots.length===0)break;evokeOrb(G.orbs.slots.length-1);}gBattle.playerEnergy=0;}},
@@ -4010,10 +4010,26 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
       { id:"tongquezhong", name:"铜雀钟", desc:"首次充能7个球时全体15伤", effect:"sevenOrbBomb", val:15, char:"sush", icon:"🔔", rarity:"rare" },
       { id:"qiankundai", name:"乾坤袋", desc:"球体上限+3", effect:"orbSlotPlus3", val:3, char:"sush", icon:"👜", rarity:"shop" },
       { id:"mochi", name:"墨池", desc:"战斗开始时生成1个山球", effect:"startChannelShan", val:1, char:"sush", icon:"🖌️", rarity:"uncommon" },
+      // === 诅咒牌相关遗物 ===
+      { id:"duannianzhu", name:"断念珠", desc:"每场战斗首次抽到诅咒牌时，将其消耗并获得1点能量", effect:"curseExhaustEnergy", val:1, icon:"📿", rarity:"uncommon" },
+      { id:"dichenquan", name:"涤尘泉", desc:"每回合首次抽到状态牌时，将其消耗并抽1张牌", effect:"statusExhaustDraw", val:1, icon:"💧", rarity:"rare" },
+      { id:"lianyuqian", name:"炼狱签", desc:"每消耗一张状态牌或诅咒牌，对所有敌人造成3点伤害", effect:"exhaustCurseDmg", val:3, icon:"🏷️", rarity:"rare" },
+      { id:"shiqingshi", name:"忘情石", desc:"战斗开始时消耗牌组中所有诅咒牌，每张获得4点格挡", effect:"startExhaustCursesBlock", val:4, icon:"🪨", rarity:"boss" },
+      { id:"forgotten_song", name:"忘川吟", desc:"每回合首次受到伤害时，抽1张牌", effect:"firstHitDraw", val:1, icon:"🎵", rarity:"rare" },
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
-    /* ══════ 事件数据 ══════ */
+    /* ══════ 诅咒牌数据 ══════ */
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
+    var CURSES = {
+      chouxu:{name:'愁绪',cost:1,type:'curse',desc:'[诅咒] 不能打出。回合结束若在手牌，失去等同于手牌数的生命。',unplayable:true,curse:true,rarity:'curse',icon:'💔',flavor:'"此情无计可消除，才下眉头，却上心头。"——李清照《一剪梅》。愁绪如丝，缠绕心间，诗意愈浓，伤怀愈重。'},
+      yilv:{name:'疑虑',cost:1,type:'curse',desc:'[诅咒] 不能打出。回合结束若在手牌，获得1层虚弱。',unplayable:true,curse:true,rarity:'curse',icon:'🌀',flavor:'"抽刀断水水更流，举杯消愁愁更愁。"——李白《宣州谢朓楼饯别校书叔云》。疑虑如水，越想断绝越是汹涌。'},
+      xiucan:{name:'羞惭',cost:1,type:'curse',desc:'[诅咒] 不能打出。回合结束若在手牌，获得1层易伤。',unplayable:true,curse:true,rarity:'curse',icon:'😊',flavor:'"少年不识愁滋味，爱上层楼。"——辛弃疾《丑奴儿》。羞惭如影，越是遮掩越是显露。'},
+      zhinian:{name:'执念',cost:0,type:'curse',desc:'[诅咒] 不能打出。固有。永恒——无法从牌组中移除。',unplayable:true,curse:true,eternal:true,innate:true,rarity:'curse',icon:'⛓️',flavor:'"衣带渐宽终不悔，为伊消得人憔悴。"——柳永《蝶恋花》。执念入骨，即使明知是错，也不愿放手。'},
+    };
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
 
     var EVENTS = [
@@ -4096,7 +4112,37 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
           {text:"细心研究图腾", effects:{maxHp:8}, result:"你将图腾仔细临摹下来，虽未获得凤凰之力，但悟性大增。最大HP+8"},
           {text:"敬畏离开", effects:{}, result:"你对着祭坛深深鞠躬，悄然离开。什么也没有发生。"}
         ]},
-
+      // ══ 诅咒牌事件 ══
+      { id:"curse_tomb", title:"古墓遗珍", desc:"一座被盗过半的古墓深处，你发现了一柄镶嵌宝玉的青铜古剑，但剑身缠绕着幽幽黑气……",
+        choices:[
+          {text:"取走古剑", effects:{gold:80,addCurse:"zhinian"}, result:"你拿起古剑的瞬间，一股执念涌入心中！金币+80，获得诅咒【执念】。"},
+          {text:"只取宝玉", effects:{gold:30,addCurse:"chouxu"}, result:"你小心翼翼地撬下宝玉，但心中始终放不下那柄剑……金币+30，获得诅咒【愁绪】。"},
+          {text:"掩埋离去", effects:{}, result:"你将墓门重新封好，让秘密永埋地下。"}
+        ]},
+      { id:"curse_spring", title:"灵泉许愿", desc:"你找到一眼传说中能实现愿望的灵泉，水面上映出你的身影……",
+        choices:[
+          {text:"许愿强身", effects:{maxHp:20,hp:20,addCurse:"chouxu"}, result:"灵泉涌出金色光芒，你感到脱胎换骨！最大HP+20，回复20HP。但心中泛起莫名的愁绪，获得诅咒【愁绪】。"},
+          {text:"许愿财富", effects:{gold:60,addCurse:"yilv"}, result:"泉水化作金币涌出！金币+60。但你开始怀疑这到底是不是幻觉……获得诅咒【疑虑】。"},
+          {text:"浅尝辄止", effects:{hp:8}, result:"你只喝了一口泉水，清甜甘洌。回复8HP。许愿的机会留给了后来人。"}
+        ]},
+      { id:"curse_library", title:"禁书阁", desc:"一座被查封的书阁中，你发现了一卷被重重封印的古卷，上面写着《天地诗心·逆卷》……",
+        choices:[
+          {text:"破封阅读", effects:{addCurse:"yilv",upgradeAll:true}, result:"你强行破开封印，无数诗句涌入脑海——你的诗心得到淬炼！所有卡牌被强化。但从此心怀疑虑，获得诅咒【疑虑】。"},
+          {text:"取走换钱", effects:{gold:40,addCurse:"xiucan"}, result:"你把这卷书卖给黑市商人，得40金币。但你总觉得做了亏心事……获得诅咒【羞惭】。"},
+          {text:"放回原处", effects:{maxHp:5}, result:"你尊重先人遗志，将书卷放回。心境略有提升。最大HP+5。"}
+        ]},
+      { id:"curse_demon", title:"诗魔的交易", desc:"一个自称"诗魔"的黑影出现在你面前，他愿意用惊世诗才换取你的一部分灵魂……",
+        choices:[
+          {text:"献出灵魂", effects:{maxHp:-10,hp:40,gold:50,addRelic:"forgotten_song"}, result:"诗魔大笑着将一枚古老的玉佩塞到你手中，你感到诗才暴涨但灵魂仿佛缺了一块。最大HP-10，回复40HP，金币+50，获得遗物【忘川吟】。"},
+          {text:"虚与委蛇", effects:{addCurse:"zhinian",addRelic:"forgotten_song"}, result:"你假装答应，趁诗魔不备夺走玉佩就跑！诗魔的执念却缠上了你……获得遗物【忘川吟】和诅咒【执念】。"},
+          {text:"断然拒绝", effects:{}, result:"你正气凛然地拒绝了诗魔。他冷笑一声消失不见。"}
+        ]},
+      { id:"curse_mirror", title:"孽镜台", desc:"一面古老的铜镜立在路旁，镜中映出的不是你，而是你内心最深的恐惧与悔恨……",
+        choices:[
+          {text:"直面心魔", effects:{maxHp:10,addCurse:"chouxu"}, result:"你凝视镜中的自己，直面所有悔恨与恐惧。心境豁然开朗，最大HP+10。但那些情绪并未消失……获得诅咒【愁绪】。"},
+          {text:"击碎铜镜", effects:{gold:30,addCurse:"xiucan"}, result:"你一拳打碎铜镜，碎片中掉出几枚金币。金币+30。但破碎的镜片仿佛映出你的羞惭……获得诅咒【羞惭】。"},
+          {text:"转身离去", effects:{}, result:"你不敢面对镜中的自己，快步离开。"}
+        ]},
     ];
 
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -4812,7 +4858,7 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
         G.maxEnergy = Math.max(G.maxEnergy, 4);
         // 将2张"伤口"洗入抽牌堆
         for(var dwi=0;dwi<2;dwi++){
-          var woundCard = {id:'wound_duan_'+Date.now()+'_'+dwi,name:'伤口',cost:1,type:'skill',desc:'废牌',rarity:'common'};
+          var woundCard = {id:'wound_duan_'+Date.now()+'_'+dwi,name:'伤口',cost:0,type:'status',desc:'[状态] 不能打出。占据手牌。',unplayable:true,rarity:'common'};
           G.deck.push(woundCard);
           gBattle.drawPile.push(G.deck.length-1);
         }
@@ -4820,6 +4866,25 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
       if(hasRelic('lizhi_taibai')){
         gBattle.playerStr += 2;
         gBattle.buffs.str += 1;
+      }
+
+      // 忘情石：战斗开始时消耗所有诅咒牌
+      if(hasRelic('shiqingshi') && G.deck){
+        var _exhaustedCurses = 0;
+        for(var sci=G.deck.length-1;sci>=0;sci--){
+          if(G.deck[sci] && G.deck[sci].curse){
+            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+            gBattle.exhaustPile.push(sci);
+            // 从drawPile/discardPile/hand中移除
+            var _epIdx = gBattle.drawPile.indexOf(sci);
+            if(_epIdx !== -1) gBattle.drawPile.splice(_epIdx, 1);
+            _exhaustedCurses++;
+          }
+        }
+        if(_exhaustedCurses > 0){
+          gBattle.playerBlock += _exhaustedCurses * 4;
+          showEffectFloat(250, 80, '忘情石·净化'+_exhaustedCurses+'诅咒 +'+(_exhaustedCurses*4)+'格挡');
+        }
       }
 
       pickIntent(gBattle);
@@ -4849,7 +4914,21 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
       var etBtn = document.getElementById('sgEndTurnBtn');
       if(etBtn) etBtn.style.display = '';
 
-      drawCards(5, true);
+      // 固有（innate）卡牌：战斗开始时必定在手牌
+      for(var ini=gBattle.drawPile.length-1;ini>=0;ini--){
+        var _innateCard = G.deck[gBattle.drawPile[ini]];
+        if(_innateCard && _innateCard.innate){
+          gBattle.hand.push(gBattle.drawPile[ini]);
+          gBattle.drawPile.splice(ini, 1);
+        }
+      }
+      // 扣除固有卡占用的初始抽牌数
+      var _innateCount = gBattle.hand.length;
+      if(gBattle.hand.length > 5){
+        drawCards(0, true); // 手牌已满，只刷新界面
+      } else {
+        drawCards(5 - _innateCount, true);
+      }
       // Set battle background from generated SVG data (ink-wash painting)
       setBattleBackground();
       console.log('[诗境问道] 战斗开始:', {deckSize:G.deck.length, drawPile:gBattle.drawPile.length, handSize:gBattle.hand.length, charId:G.charId});
@@ -5113,6 +5192,37 @@ if(!gBattle) return;
         }
         var cardIdx = gBattle.drawPile.pop();
         gBattle.hand.push(cardIdx);
+        // 虚空：抽到此牌时失去1能量并消耗
+        var drawnCard = G.deck[cardIdx];
+        if(drawnCard && drawnCard.void){
+          gBattle.energy = Math.max(0, (gBattle.energy||0) - 1);
+          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+          gBattle.exhaustPile.push(cardIdx);
+          gBattle.hand.pop(); // 从手牌移除（虚空不进入手牌直接消耗）
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-50, '\uD83C\uDF2A \u865A\u7A7A\uFF1A\u80FD\u91CF-1\u00B7\u6D88\u8017');
+          checkLianyuqian(drawnCard);
+        }
+        // 断念珠：首次抽到诅咒牌时消耗并获得能量
+        if(drawnCard && drawnCard.curse && hasRelic('duannianzhu') && !gBattle._duannianzhuUsed){
+          gBattle._duannianzhuUsed = true;
+          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+          gBattle.exhaustPile.push(cardIdx);
+          gBattle.hand.pop();
+          gBattle.energy = Math.min((gBattle.energy||0) + 1, 99);
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-50, '\uD83D\uDCCF \u65AD\u5FF5\u73E0\uFF1A\u6D88\u8017\u8BC5\u5492+\u80FD\u91CF');
+          checkLianyuqian(drawnCard);
+        }
+        // 涤尘泉：每回合首次抽到状态牌时消耗并抽1张
+        if(drawnCard && !drawnCard.curse && drawnCard.unplayable && hasRelic('dichenquan') && !gBattle._dichenquanUsed && !drawnCard.void){
+          gBattle._dichenquanUsed = true;
+          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+          gBattle.exhaustPile.push(cardIdx);
+          gBattle.hand.pop();
+          // 补抽1张
+          n++; // 增加本次抽牌数量以补偿
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-50, '\uD83D\uDCA7 \u6DA4\u5C18\u6CC9\uFF1A\u6D88\u8017\u72B6\u6001\u724C+\u62BD\u724C');
+          checkLianyuqian(drawnCard);
+        }
         // 李清照：抽牌时造成伤害
         if(gBattle && G.powers && G.powers.dmgOnDraw && gBattle.hp > 0){
           var drawDmg = G.powers.dmgOnDraw;
@@ -5144,6 +5254,22 @@ if(!gBattle) return;
           }, p*80);
         }
         setTimeout(function(){ renderBattle(true); }, 60);
+      }
+    }
+
+    // 炼狱签：消耗状态/诅咒牌时对敌人造成伤害
+    function checkLianyuqian(cardObj){
+      if(!gBattle || gBattle.hp <= 0) return;
+      if(!hasRelic('lianyuqian')) return;
+      if(cardObj && (cardObj.unplayable || cardObj.curse)){
+        var dmg = 3;
+        if(gBattle._isGroup){
+          if(gBattle.hp > 0) gBattle.hp -= dmg;
+          if(gBattle._groupHp2 > 0) gBattle._groupHp2 -= dmg;
+        } else {
+          gBattle.hp -= dmg;
+        }
+        showEffectFloat(250, 80, '🏷️ 炼狱签-'+dmg);
       }
     }
 
@@ -5292,6 +5418,14 @@ return gBattle.energy >= cost;
       if(deckIdx === undefined) return false;
       var card = G.deck[deckIdx];
       if(!card) return false;
+
+      // 状态牌/诅咒牌 不能打出
+      if(card.unplayable){
+        gBattle._cantPlayFeedback = true;
+        setTimeout(function(){ gBattle._cantPlayFeedback = false; }, 800);
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '\u26D4 \u8FD9\u5F20\u724C\u4E0D\u80FD\u6253\u51FA');
+        return false;
+      }
 
       var cost = card.cost || 0;
       if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0){
@@ -5573,7 +5707,7 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
 
       // === addWound ===
       if(card.addWound){
-        var woundCard = {id:'wound_'+Date.now(),name:'伤口',cost:1,type:'skill',desc:'废牌',rarity:'common'};
+        var woundCard = {id:'wound_'+Date.now(),name:'伤口',cost:0,type:'status',desc:'[状态] 不能打出。占据手牌。',unplayable:true,rarity:'common'};
         G.deck.push(woundCard);
         gBattle.drawPile.push(G.deck.length-1);
       }
@@ -5759,7 +5893,7 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
 
       // === addStun ===
       if(card.addStun){
-        var stunCard = {id:'stun_'+Date.now(),name:'眩晕',cost:0,type:'skill',desc:'混乱',rarity:'common'};
+        var stunCard = {id:'stun_'+Date.now(),name:'眩晕',cost:0,type:'status',desc:'[状态] 不能打出。虚无（回合结束自动消耗）。',unplayable:true,ethereal:true,rarity:'common'};
         G.deck.push(stunCard);
         gBattle.hand.push(G.deck.length-1);
       }
@@ -6433,6 +6567,16 @@ gBattle.playerBlock += blockVal;
         gBattle.sushFirstHitUsed = true;
       }
 
+      // Relic:忘川吟 每回合首次受伤抽1张牌
+      if(dmg > 0 && hasRelic('forgotten_song') && !gBattle._forgottenSongUsed){
+        gBattle._forgottenSongUsed = true;
+        // 延迟抽牌以避免递归
+        setTimeout(function(){
+          drawCards(1, false);
+          showEffectFloat(250, 80, '🎵 忘川吟·抽牌');
+        }, 100);
+      }
+
       // Relic:麒麟符 block chance
       if(hasRelic('qilinfu') && Math.random() * 100 < 25 && dmg > 0){
         dmg = Math.max(0, dmg - 3);
@@ -7050,6 +7194,9 @@ applyPoison();
 
       // Reset for next turn
       gBattle.turn++;
+      // 涤尘泉·忘川吟每回合重置
+      gBattle._dichenquanUsed = false;
+      gBattle._forgottenSongUsed = false;
       // 回合宣告
       setTimeout(function(){ showTurnAnnounce('第 ' + (gBattle.turn + 1) + ' 回合'); }, 300);
       gBattle.energy = G.maxEnergy;
@@ -7102,6 +7249,84 @@ applyPoison();
       if(gBattle.tempAgil){
         gBattle.playerAgil = Math.max(0, (gBattle.playerAgil||0) - gBattle.tempAgil);
         gBattle.tempAgil = 0;
+      }
+
+      // ══ 诅咒牌·状态牌·回合结束效果（在手牌中触发）══
+      var curseBurnDmg = 0;
+      var curseDoubt = 0;
+      var curseShame = 0;
+      var curseRegretCount = 0;
+      var _curseHandSize = gBattle.hand.length;
+      var _etherealToExhaust = [];
+      for(var hci = gBattle.hand.length-1; hci >= 0; hci--){
+        var hcCard = G.deck[gBattle.hand[hci]];
+        if(!hcCard) continue;
+        // 虚无（ethereal）：回合结束在手牌则消耗
+        if(hcCard.ethereal){
+          _etherealToExhaust.push(hci);
+          continue;
+        }
+        // 灼伤（burn）：回合结束若在手牌则造成伤害
+        if(hcCard.name === '\u7092\u4F24' || hcCard.burn){
+          curseBurnDmg += 2;
+          continue;
+        }
+        // 诅咒牌效果
+        if(hcCard.curse){
+          if(hcCard.name === '\u6101\u7EEA'){ // 愁绪：失去等同手牌数的生命
+            curseRegretCount++;
+          } else if(hcCard.name === '\u7591\u8651'){ // 疑虑：获得1层虚弱
+            curseDoubt++;
+          } else if(hcCard.name === '\u7F9E\u6B8B'){ // 羞惭：获得1层易伤
+            curseShame++;
+          }
+        }
+      }
+      // 执行灼伤伤害（以生命损失形式，可被格挡减半）
+      if(curseBurnDmg > 0 && gBattle.hp > 0){
+        var burnDamage = gBattle._isGroup ? Math.floor(curseBurnDmg/2) : curseBurnDmg;
+        if(gBattle.playerBlock > 0){
+          if(gBattle.playerBlock >= burnDamage){
+            gBattle.playerBlock -= burnDamage;
+          } else {
+            if(gBattle._isGroup) gBattle.hp -= Math.floor((burnDamage - gBattle.playerBlock)/2);
+            else gBattle.hp -= (burnDamage - gBattle.playerBlock);
+            gBattle.playerBlock = 0;
+          }
+        } else {
+          gBattle.hp -= burnDamage;
+        }
+        if(gBattle.hp < 0) gBattle.hp = 0;
+        showEffectFloat(250, 80, '\uD83D\uDD25 \u7092\u4F24\uFF1A-'+curseBurnDmg+'HP');
+      }
+      // 执行诅咒效果
+      if(curseDoubt > 0){
+        gBattle.playerWeak += curseDoubt;
+        showEffectFloat(250, 100, '\uD83D\uDCA4 \u7591\u8651\uFF1A\u865A\u5F31+' + curseDoubt);
+      }
+      if(curseShame > 0){
+        gBattle.playerVuln += curseShame;
+        showEffectFloat(200, 120, '\uD83D\uDE06 \u7F9E\u6B8B\uFF1A\u6613\u4F24+' + curseShame);
+      }
+      if(curseRegretCount > 0){
+        var regretDmg = _curseHandSize * curseRegretCount;
+        // 直接生命损失，不计算格挡（如STD的悔恨）
+        gBattle.hp -= regretDmg;
+        if(gBattle.hp < 0) gBattle.hp = 0;
+        showEffectFloat(250, 60, '\uD83D\uDC94 \u6101\u7EEA\uFF1A-'+regretDmg+'HP');
+      }
+      // 执行虚无（ethereal）消耗
+      for(var eti = _etherealToExhaust.length-1; eti >= 0; eti--){
+        var etIdx = _etherealToExhaust[eti];
+        if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+        var etCard = G.deck[gBattle.hand[etIdx]];
+        gBattle.exhaustPile.push(gBattle.hand[etIdx]);
+        gBattle.hand.splice(etIdx, 1);
+        checkLianyuqian(etCard);
+      }
+      if(_etherealToExhaust.length > 0){
+        showEffectFloat(250, 140, '\uD83C\uDF2A \u865A\u65E0\u6D88\u8017\u00D7' + _etherealToExhaust.length);
+        gBattle._discardCountThisTurn = (gBattle._discardCountThisTurn||0) + _etherealToExhaust.length;
       }
 
       // Discard hand (with Sly auto-play & shivRetain)
@@ -7455,9 +7680,9 @@ function setBattleBackground(){
         var cost = card.cost || 0;
         if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0) cost = Math.max(0, cost - 1);
 
-        var canPlay = gBattle.energy >= cost;
+        var canPlay = !card.unplayable && gBattle.energy >= cost;
         var rarityColors = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', ancient:'#ff44ff'};
-        var borderColor = rarityColors[card.rarity] || '#a8a8a8';
+        var borderColor = card.curse ? '#993333' : (card.unplayable ? '#994433' : (rarityColors[card.rarity] || '#a8a8a8'));
 
         var cardEl = document.createElement('div');
         cardEl.className = 'sg-card' + (canPlay ? '' : ' disabled');
@@ -7712,6 +7937,10 @@ function setBattleBackground(){
         cardEl.innerHTML = '<div class="sg-card-cost">'+(cd.cost||0)+'</div><div class="sg-card-name'+(cd.upgraded?' sg-upgraded-name':'')+'">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
         (function(ui2){
           cardEl.addEventListener('click', function(){
+            if(G.deck[ui2] && G.deck[ui2].eternal){
+              showEffectFloat(window.innerWidth/2, window.innerHeight/2, '\u26D4 \u6C38\u6052\u8BC5\u5492\u65E0\u6CD5\u79FB\u9664');
+              return;
+            }
             if(G.gold >= 50){
               G.gold -= 50;
               G.deck.splice(ui2, 1);
@@ -7846,6 +8075,40 @@ function setBattleBackground(){
           G.gold += 10;
           descEl.textContent += ' 获得重复灵丹折现10金';
         }
+      }
+      // 事件系统：诅咒牌
+      if(effects.addCurse && CURSES[effects.addCurse]){
+        var curseDef = CURSES[effects.addCurse];
+        var curseCard = JSON.parse(JSON.stringify(curseDef));
+        curseCard.id = 'curse_'+effects.addCurse+'_'+Date.now();
+        addCardToDeck(curseCard);
+        if(descEl) descEl.textContent += ' 获得诅咒牌：' + curseDef.name;
+      }
+      // 事件系统：遗物
+      if(effects.addRelic){
+        var relicId = effects.addRelic;
+        var relicFound = false;
+        for(var rei=0;rei<RELICS.length;rei++){
+          if(RELICS[rei].id===relicId){
+            G.relics.push(relicId);
+            showNewCollectAnimation({icon:RELICS[rei].icon, name:RELICS[rei].name});
+            if(descEl) descEl.textContent += ' 获得遗物：' + RELICS[rei].name;
+            relicFound = true;
+            break;
+          }
+        }
+        if(!relicFound) console.warn('[事件] 未找到遗物：'+relicId);
+      }
+      // 事件系统：升级所有卡牌
+      if(effects.upgradeAll && G.deck){
+        var upgradedCount = 0;
+        for(var uai=0;uai<G.deck.length;uai++){
+          if(G.deck[uai] && G.deck[uai].id && CARDS[G.deck[uai].id] && !G.deck[uai].upgraded && G.deck[uai].rarity !== 'basic'){
+            applyUpgrade(G.deck[uai]);
+            upgradedCount++;
+          }
+        }
+        if(descEl) descEl.textContent += ' 已强化'+upgradedCount+'张卡牌！';
       }
     }
 
@@ -9436,7 +9699,7 @@ var RELIC_FLAV = {};
 
   html += '<div class="sg-collection-tabs" id="sgCollTabs">' +
     '<button class="sg-collection-tab active" data-tab="cards">\u{1F0CF} \u8BD7\u724C</button>' +
-    '<button class="sg-collection-tab" data-tab="status" style="color:#cc6644;">\u{1F4A7} \u72B6\u6001</button>' +
+    '<button class="sg-collection-tab" data-tab="status" style="color:#d4a853;">\u{1F4A7} \u72B6\u6001\u00B7\u8BC5\u5492</button>' +
     '<button class="sg-collection-tab" data-tab="relics">\u{1F52E} \u9057\u5668</button>' +
     '<button class="sg-collection-tab" data-tab="pills">\u{1F3E0} \u4E39\u836F</button>' +
     '<button class="sg-collection-tab" data-tab="mechanics">\u{1F4D6} \u673A\u5236</button>' +
@@ -9582,22 +9845,24 @@ var RELIC_FLAV = {};
   function renderStatusTab(){
     // \u72B6\u6001\u724C\u2014\u6218\u6597\u4E2D\u4E34\u65F6\u751F\u6210\uFF0C\u901A\u5E38\u5E26\u6709\u8D1F\u9762\u6548\u679C\u4F46\u4E5F\u6709\u53EF\u5229\u7528\u4E4B\u5904
     var statusCards = [
-      {name:'\u4F24\u53E3',cost:1,type:'skill',desc:'\u5E9F\u724C (\u6D88\u80171\u70B9\u8D39\u7528\uFF0C\u65E0\u4EFB\u4F55\u6548\u679C)',rarity:'common',icon:'\u{1F4A7}',flavor:'"\u4F24\u60C5\u5904\uFF0C\u9AD8\u57CE\u671B\u65AD\uFF0C\u706F\u706B\u5DF2\u9EC4\u660F."\u2014\u2014\u79E6\u89C2\u300A\u6EE1\u5EAD\u82B3\u300B\u3002\u4F24\u53E3\u662F\u6218\u6597\u4E2D\u7559\u4E0B\u7684\u5370\u8BB0\uFF0C\u62D6\u7D2F\u8BD7\u4EBA\u7684\u6B65\u4F10\u3002\u53EA\u6709\u5C3D\u5FEB\u5C06\u5176\u4ECE\u724C\u7EC4\u4E2D\u79FB\u9664\uFF0C\u624D\u80FD\u6062\u590D\u8BD7\u5FC3\u7684\u7EAF\u51C0\u3002'},
-      {name:'\u6B8B\u82B1(\u5C0F\u5200)',cost:0,type:'attack',desc:'\u9020\u62104\u70B9\u4F24\u5BB3 \u00B7 \u6D88\u8017',rarity:'common',icon:'\u{1F338}',flavor:'"\u82B1\u81EA\u98D8\u96F6\u6C34\u81EA\u6D41."\u2014\u2014\u674E\u6E05\u7167\u300A\u4E00\u526A\u6885\u300B\u3002\u843D\u82B1\u4E0D\u662F\u65E0\u60C5\u7269\uFF0C\u5316\u4F5C\u6B8B\u5203\u66F4\u62A4\u8BCD\u3002'},
-      {name:'\u865A\u65E0',cost:1,type:'skill',desc:'\u62BD\u724C\u9632\u5FA1\u724C\u00B7\u62BD2\u5F20\u724C\uFF0C\u83B7\u5F974\u70B9\u683C\u6321\uFF0C\u6D88\u8017',rarity:'common',icon:'\u{1F32A}',flavor:'"\u6B64\u4E2D\u6709\u771F\u610F\uFF0C\u6B32\u8FA8\u5DF2\u5FD8\u8A00."\u2014\u2014\u9676\u6E0A\u660E\u300A\u996E\u9152\u300B\u3002\u865A\u65E0\u4E4B\u724C\uFF0C\u5982\u8BD7\u4E2D\u7684\u7559\u767D\uFF0C\u5C1A\u672A\u843D\u7B14\uFF0C\u5374\u5DF2\u5145\u6EE1\u53EF\u80FD\u3002'},
-      {name:'\u7729\u6655',cost:0,type:'skill',desc:'\u6DF7\u4E71',rarity:'common',icon:'\u{1F4AB}',flavor:'"\u9189\u91CC\u6311\u706F\u770B\u5251\uFF0C\u68A6\u56DE\u5439\u89D2\u8FDE\u8425."\u2014\u2014\u8F9B\u5F03\u75BE\u300A\u7834\u9635\u5B50\u300B\u3002\u7729\u6655\u5982\u9189\uFF0C\u5FC3\u795E\u6447\u8361\uFF0C\u4EE4\u4EBA\u65E0\u6CD5\u96C6\u4E2D\u610F\u5FD7\u3002'},
+      {name:'\u4F24\u53E3',cost:0,type:'status',desc:'[\u72B6\u6001] \u4E0D\u80FD\u6253\u51FA\u3002\u5360\u636E\u624B\u724C\u3002',rarity:'common',icon:'\u{1F4A7}',flavor:'"\u4F24\u60C5\u5904\uFF0C\u9AD8\u57CE\u671B\u65AD\uFF0C\u706F\u706B\u5DF2\u9EC4\u660F."\u2014\u2014\u79E6\u89C2\u300A\u6EE1\u5EAD\u82B3\u300B\u3002\u4F24\u53E3\u662F\u6218\u6597\u4E2D\u7559\u4E0B\u7684\u5370\u8BB0\uFF0C\u62D6\u7D2F\u8BD7\u4EBA\u7684\u6B65\u4F10\u3002'},
+      {name:'\u7729\u6655',cost:0,type:'status',desc:'[\u72B6\u6001] \u4E0D\u80FD\u6253\u51FA\u3002\u865A\u65E0\uFF08\u56DE\u5408\u7ED3\u675F\u81EA\u52A8\u6D88\u8017\uFF09\u3002',rarity:'common',icon:'\u{1F4AB}',flavor:'"\u9189\u91CC\u6311\u706F\u770B\u5251\uFF0C\u68A6\u56DE\u5439\u89D2\u8FDE\u8425。"\u2014\u2014\u8F9B\u5F03\u75BE\u300A\u7834\u9635\u5B50\u300B\u3002\u7729\u6655\u5982\u9189\uFF0C\u5FC3\u795E\u6447\u8361\u3002'},
+      {name:'\u7092\u4F24',cost:0,type:'status',desc:'[\u72B6\u6001] \u4E0D\u80FD\u6253\u51FA\u3002\u56DE\u5408\u7ED3\u675F\u82E5\u5728\u624B\u724C\u5219\u53D7\u52302\u70B9\u4F24\u5BB3\u3002',rarity:'common',icon:'\u{1F525}',flavor:'"\u5343\u6DD8\u4E07\u6FF8\u8662\u8F9B\u82E6\uFF0C\u5439\u5C3D\u72C2\u6C99\u59CB\u5230\u91D1。"\u2014\u2014\u5218\u79B9\u9521\u300A\u6D6A\u6DD8\u6C99\u300B\u3002\u7092\u4F24\u662F\u529B\u91CF\u8FC7\u8F7D\u7684\u4EE3\u4EF7\u3002'},
+      {name:'\u865A\u7A7A',cost:0,type:'status',desc:'[\u72B6\u6001] \u4E0D\u80FD\u6253\u51FA\u3002\u62BD\u5230\u5373\u5931\u53BB1\u80FD\u91CF\u5E76\u6D88\u8017\u3002',rarity:'common',icon:'\u{1F573}',flavor:'"\u4E16\u4E8B\u4E00\u573A\u5927\u68A6\uFF0C\u4EBA\u751F\u51E0\u5EA6\u79CB\u51C9."\u2014\u2014\u82CF\u8F7C\u300A\u897F\u6C5F\u6708\u300B\u3002\u865A\u7A7A\u5982\u68A6\uFF0C\u8F6C\u77AC\u5373\u901D\uFF0C\u5374\u5E26\u8D70\u4E00\u8EAB\u6C14\u529B\u3002'},
     ];
-    // \u8BC5\u5492\u724C\u2014\u8D1F\u9762\u6548\u679C\u724C\uFF0C\u7531\u7279\u5B9A\u5361\u724C\u6216\u654C\u4EBA\u80FD\u529B\u585E\u5165\u724C\u5E93
+    // \u8BC5\u5492\u724C\u2014\u7279\u6B8A\u4E8B\u4EF6\u83B7\u5F97\uFF0C\u6C38\u4E45\u5C01\u5B58\u5728\u724C\u5E93\u4E2D
     var curseCards = [
-      {name:'\u707C\u4F24',cost:1,type:'skill',desc:'\u5E9F\u724C (\u6D88\u80171\u70B9\u8D39\u7528\uFF0C\u65E0\u4EFB\u4F55\u6548\u679C)',rarity:'common',icon:'\u{1F525}',flavor:'"\u5343\u6DD8\u4E07\u6FF8\u8662\u8F9B\u82E6\uFF0C\u5439\u5C3D\u72C2\u6C99\u59CB\u5230\u91D1."\u2014\u2014\u5218\u79B9\u9521\u300A\u6D6A\u6DD8\u6C99\u300B\u3002\u707C\u4F24\u662F\u529B\u91CF\u8FC7\u8F7D\u7684\u4EE3\u4EF7\uFF0C\u71C3\u70E7\u7684\u8BD7\u5FC3\u9700\u8981\u65F6\u95F4\u5E73\u590D\u3002'},
+      {name:'\u6101\u7EEA',cost:1,type:'curse',desc:'[\u8BC5\u5492] \u4E0D\u80FD\u6253\u51FA\u3002\u56DE\u5408\u7ED3\u675F\u82E5\u5728\u624B\u724C\uFF0C\u5931\u53BB\u7B49\u540C\u4E8E\u624B\u724C\u6570\u7684\u751F\u547D\u3002\u6C38\u6052\u3002',rarity:'curse',icon:'\u{1F494}',flavor:'"\u6B64\u60C5\u65E0\u8BA1\u53EF\u6D88\u9664\uFF0C\u624D\u4E0B\u7709\u5934\uFF0C\u5374\u4E0A\u5FC3\u5934."\u2014\u2014\u674E\u6E05\u7167\u300A\u4E00\u526A\u6885\u300B\u3002\u6101\u7EEA\u5982\u4E1D\uFF0C\u7F20\u7ED5\u5FC3\u95F4\u3002'},
+      {name:'\u7591\u8651',cost:1,type:'curse',desc:'[\u8BC5\u5492] \u4E0D\u80FD\u6253\u51FA\u3002\u56DE\u5408\u7ED3\u675F\u82E5\u5728\u624B\u724C\uFF0C\u83B7\u5F971\u5C42\u865A\u5F31\u3002\u6C38\u6052\u3002',rarity:'curse',icon:'\u{1F300}',flavor:'"\u62BD\u5200\u65AD\u6C34\u6C34\u66F4\u6D41\uFF0C\u4E3E\u676F\u6D88\u6101\u6101\u66F4\u6101."\u2014\u2014\u674E\u767D\u300A\u5BA3\u5DDE\u8C22\u8D6B\u697C\u9970\u522B\u6821\u4E66\u53D4\u4E91\u300B\u3002\u7591\u8651\u5982\u6C34\uFF0C\u8D8A\u60F3\u65AD\u7EDD\u8D8A\u662F\u6D8C\u6D6A\u3002'},
+      {name:'\u7F9E\u60ED',cost:1,type:'curse',desc:'[\u8BC5\u5492] \u4E0D\u80FD\u6253\u51FA\u3002\u56DE\u5408\u7ED3\u675F\u82E5\u5728\u624B\u724C\uFF0C\u83B7\u5F971\u5C42\u6613\u4F24\u3002\u6C38\u6052\u3002',rarity:'curse',icon:'\u{1F633}',flavor:'"\u5C11\u5E74\u4E0D\u8BC6\u6101\u59FF\u5473\uFF0C\u7231\u4E0A\u5C42\u697C."\u2014\u2014\u8F9B\u5F03\u75BE\u300A\u4E11\u5974\u513F\u300B\u3002\u7F9E\u60ED\u5982\u5F71\uFF0C\u8D8A\u662F\u906E\u63A9\u8D8A\u662F\u663E\u9732\u3002'},
+      {name:'\u6267\u5FF5',cost:0,type:'curse',desc:'[\u8BC5\u5492] \u4E0D\u80FD\u6253\u51FA\u3002\u56FA\u6709\u3002\u6C38\u6052\u2014\u2014\u65E0\u6CD5\u4ECE\u724C\u7EC4\u4E2D\u79FB\u9664\u3002',rarity:'curse',icon:'\u{26D3}',flavor:'"\u8863\u5E26\u9010\u5BBD\u7EC8\u4E0D\u6094\uFF0C\u4E3A\u4F0A\u6D88\u5F97\u4EBA\u6194\u60B4."\u2014\u2014\u67F3\u6C38\u300A\u8776\u604B\u82B1\u300B\u3002\u6267\u5FF5\u5165\u9AA8\uFF0C\u5373\u4F7F\u660E\u77E5\u662F\u9519\uFF0C\u4E5F\u4E0D\u613F\u653E\u624B\u3002'},
     ];
     var html2 = '<div class="sg-collection-stats">' +
       '<span class="sg-collection-stat"><span style="color:#d4a853;">\u25C6</span> \u72B6\u6001\u724C: <b>'+statusCards.length+'</b> \u79CD</span>' +
       '<span class="sg-collection-stat"><span style="color:var(--red-seal);">\u25C6</span> \u8BC5\u5492\u724C: <b>'+curseCards.length+'</b> \u79CD</span>' +
-      '<span class="sg-collection-stat">\u6218\u6597\u4E2D\u88AB\u4E34\u65F6\u751F\u6210</span>' +
       '</div>';
     html2 += '<div style="font-size:0.5rem;color:var(--text-faint);margin-bottom:0.4rem;padding:0.3rem 0.5rem;background:rgba(194,58,43,0.06);border-radius:6px;border-left:2px solid rgba(194,58,43,0.2);">' +
-      '\u26A0 \u72B6\u6001\u724C\u4E0E\u8BC5\u5492\u724C\u7531\u6218\u6597\u4E2D\u7684\u5361\u724C\u6548\u679C\u6216\u654C\u4EBA\u80FD\u529B\u751F\u6210\uFF0C\u4E0D\u5C5E\u4E8E\u5361\u7EC4\u6536\u85CF\u3002\u4E86\u89E3\u5B83\u4EEC\u80FD\u5E2E\u4F60\u66F4\u597D\u5730\u5E94\u5BF9\u6218\u6597\u3002' +
+      '\u26A0 \u72B6\u6001\u724C\u7531\u6218\u6597\u4E2D\u7684\u5361\u724C\u6548\u679C\u6216\u654C\u4EBA\u80FD\u529B\u751F\u6210\uFF0C\u6218\u6597\u7ED3\u675F\u540E\u81EA\u52A8\u6D88\u5931\u3002\u8BC5\u5492\u724C\u901A\u8FC7\u7279\u6B8A\u4E8B\u4EF6\u83B7\u5F97\uFF0C\u4F1A\u6C38\u4E45\u5C01\u5B58\u5728\u724C\u5E93\u4E2D\u3002' +
       '</div>';
     // \u72B6\u6001\u724C\u533A\u57DF
     html2 += '<div class="sg-collection-section-header" style="display:flex;align-items:center;gap:0.3rem;font-size:0.65rem;font-weight:700;color:#d4a853;padding:0.2rem 0;margin-bottom:0.3rem;border-bottom:1px solid #d4a853;">\u{1F4CB} \u72B6\u6001\u724C <span style="font-weight:400;font-size:0.5rem;color:var(--text-faint);">\u6218\u6597\u4E2D\u751F\u6210 \u00B7 \u90E8\u5206\u53EF\u8D44\u5229\u7528</span></div>';
