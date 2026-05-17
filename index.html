@@ -9580,31 +9580,53 @@ var RELIC_FLAV = {};
   }
 
   function renderStatusTab(){
+    // \u72B6\u6001\u724C\u2014\u6218\u6597\u4E2D\u4E34\u65F6\u751F\u6210\uFF0C\u901A\u5E38\u5E26\u6709\u8D1F\u9762\u6548\u679C\u4F46\u4E5F\u6709\u53EF\u5229\u7528\u4E4B\u5904
     var statusCards = [
       {name:'\u4F24\u53E3',cost:1,type:'skill',desc:'\u5E9F\u724C (\u6D88\u80171\u70B9\u8D39\u7528\uFF0C\u65E0\u4EFB\u4F55\u6548\u679C)',rarity:'common',icon:'\u{1F4A7}',flavor:'"\u4F24\u60C5\u5904\uFF0C\u9AD8\u57CE\u671B\u65AD\uFF0C\u706F\u706B\u5DF2\u9EC4\u660F."\u2014\u2014\u79E6\u89C2\u300A\u6EE1\u5EAD\u82B3\u300B\u3002\u4F24\u53E3\u662F\u6218\u6597\u4E2D\u7559\u4E0B\u7684\u5370\u8BB0\uFF0C\u62D6\u7D2F\u8BD7\u4EBA\u7684\u6B65\u4F10\u3002\u53EA\u6709\u5C3D\u5FEB\u5C06\u5176\u4ECE\u724C\u7EC4\u4E2D\u79FB\u9664\uFF0C\u624D\u80FD\u6062\u590D\u8BD7\u5FC3\u7684\u7EAF\u51C0\u3002'},
       {name:'\u6B8B\u82B1(\u5C0F\u5200)',cost:0,type:'attack',desc:'\u9020\u62104\u70B9\u4F24\u5BB3 \u00B7 \u6D88\u8017',rarity:'common',icon:'\u{1F338}',flavor:'"\u82B1\u81EA\u98D8\u96F6\u6C34\u81EA\u6D41."\u2014\u2014\u674E\u6E05\u7167\u300A\u4E00\u526A\u6885\u300B\u3002\u843D\u82B1\u4E0D\u662F\u65E0\u60C5\u7269\uFF0C\u5316\u4F5C\u6B8B\u5203\u66F4\u62A4\u8BCD\u3002'},
       {name:'\u865A\u65E0',cost:1,type:'skill',desc:'\u62BD\u724C\u9632\u5FA1\u724C\u00B7\u62BD2\u5F20\u724C\uFF0C\u83B7\u5F974\u70B9\u683C\u6321\uFF0C\u6D88\u8017',rarity:'common',icon:'\u{1F32A}',flavor:'"\u6B64\u4E2D\u6709\u771F\u610F\uFF0C\u6B32\u8FA8\u5DF2\u5FD8\u8A00."\u2014\u2014\u9676\u6E0A\u660E\u300A\u996E\u9152\u300B\u3002\u865A\u65E0\u4E4B\u724C\uFF0C\u5982\u8BD7\u4E2D\u7684\u7559\u767D\uFF0C\u5C1A\u672A\u843D\u7B14\uFF0C\u5374\u5DF2\u5145\u6EE1\u53EF\u80FD\u3002'},
+      {name:'\u7729\u6655',cost:0,type:'skill',desc:'\u6DF7\u4E71',rarity:'common',icon:'\u{1F4AB}',flavor:'"\u9189\u91CC\u6311\u706F\u770B\u5251\uFF0C\u68A6\u56DE\u5439\u89D2\u8FDE\u8425."\u2014\u2014\u8F9B\u5F03\u75BE\u300A\u7834\u9635\u5B50\u300B\u3002\u7729\u6655\u5982\u9189\uFF0C\u5FC3\u795E\u6447\u8361\uFF0C\u4EE4\u4EBA\u65E0\u6CD5\u96C6\u4E2D\u610F\u5FD7\u3002'},
+    ];
+    // \u8BC5\u5492\u724C\u2014\u8D1F\u9762\u6548\u679C\u724C\uFF0C\u7531\u7279\u5B9A\u5361\u724C\u6216\u654C\u4EBA\u80FD\u529B\u585E\u5165\u724C\u5E93
+    var curseCards = [
+      {name:'\u707C\u4F24',cost:1,type:'skill',desc:'\u5E9F\u724C (\u6D88\u80171\u70B9\u8D39\u7528\uFF0C\u65E0\u4EFB\u4F55\u6548\u679C)',rarity:'common',icon:'\u{1F525}',flavor:'"\u5343\u6DD8\u4E07\u6FF8\u8662\u8F9B\u82E6\uFF0C\u5439\u5C3D\u72C2\u6C99\u59CB\u5230\u91D1."\u2014\u2014\u5218\u79B9\u9521\u300A\u6D6A\u6DD8\u6C99\u300B\u3002\u707C\u4F24\u662F\u529B\u91CF\u8FC7\u8F7D\u7684\u4EE3\u4EF7\uFF0C\u71C3\u70E7\u7684\u8BD7\u5FC3\u9700\u8981\u65F6\u95F4\u5E73\u590D\u3002'},
     ];
     var html2 = '<div class="sg-collection-stats">' +
-      '<span class="sg-collection-stat">\u72B6\u6001\u724C: <b>'+statusCards.length+'</b> \u79CD</span>' +
+      '<span class="sg-collection-stat"><span style="color:#d4a853;">\u25C6</span> \u72B6\u6001\u724C: <b>'+statusCards.length+'</b> \u79CD</span>' +
+      '<span class="sg-collection-stat"><span style="color:var(--red-seal);">\u25C6</span> \u8BC5\u5492\u724C: <b>'+curseCards.length+'</b> \u79CD</span>' +
       '<span class="sg-collection-stat">\u6218\u6597\u4E2D\u88AB\u4E34\u65F6\u751F\u6210</span>' +
       '</div>';
     html2 += '<div style="font-size:0.5rem;color:var(--text-faint);margin-bottom:0.4rem;padding:0.3rem 0.5rem;background:rgba(194,58,43,0.06);border-radius:6px;border-left:2px solid rgba(194,58,43,0.2);">' +
-      '\u26A0 \u72B6\u6001\u724C\u7531\u6218\u6597\u4E2D\u7684\u5361\u724C\u6548\u679C\u6216\u654C\u4EBA\u80FD\u529B\u751F\u6210\uFF0C\u4E0D\u5C5E\u4E8E\u5361\u7EC4\u6536\u85CF\u3002\u4E86\u89E3\u5B83\u4EEC\u80FD\u5E2E\u4F60\u66F4\u597D\u5730\u5E94\u5BF9\u6218\u6597\u3002' +
+      '\u26A0 \u72B6\u6001\u724C\u4E0E\u8BC5\u5492\u724C\u7531\u6218\u6597\u4E2D\u7684\u5361\u724C\u6548\u679C\u6216\u654C\u4EBA\u80FD\u529B\u751F\u6210\uFF0C\u4E0D\u5C5E\u4E8E\u5361\u7EC4\u6536\u85CF\u3002\u4E86\u89E3\u5B83\u4EEC\u80FD\u5E2E\u4F60\u66F4\u597D\u5730\u5E94\u5BF9\u6218\u6597\u3002' +
       '</div>';
+    // \u72B6\u6001\u724C\u533A\u57DF
+    html2 += '<div class="sg-collection-section-header" style="display:flex;align-items:center;gap:0.3rem;font-size:0.65rem;font-weight:700;color:#d4a853;padding:0.2rem 0;margin-bottom:0.3rem;border-bottom:1px solid #d4a853;">\u{1F4CB} \u72B6\u6001\u724C <span style="font-weight:400;font-size:0.5rem;color:var(--text-faint);">\u6218\u6597\u4E2D\u751F\u6210 \u00B7 \u90E8\u5206\u53EF\u8D44\u5229\u7528</span></div>';
     html2 += '<div class="sg-collection-grid">';
     for(var si=0;si<statusCards.length;si++){
       var s = statusCards[si];
-      html2 += '<div class="sg-card" style="border-color:'+(rC[s.rarity]||'#a8a8a8')+';cursor:pointer;position:relative;" data-sidx="'+si+'">' +
+      html2 += '<div class="sg-card" style="border-color:#d4a853;cursor:pointer;position:relative;background:linear-gradient(135deg,rgba(212,168,83,0.04),transparent 60%);" data-category="status" data-sidx="'+si+'">' +
         '<div class="sg-card-cost">'+s.cost+'</div>' +
         '<div class="sg-card-name">'+s.name+'</div>' +
         '<div class="sg-card-desc">'+s.desc+'</div>' +
         '<div class="sg-card-type">'+s.icon+' '+(typeNames[s.type]||s.type)+'</div></div>';
     }
     html2 += '</div>';
+    // \u8BC5\u5492\u724C\u533A\u57DF
+    html2 += '<div class="sg-collection-section-header" style="display:flex;align-items:center;gap:0.3rem;font-size:0.65rem;font-weight:700;color:var(--red-seal);padding:0.2rem 0;margin:0.6rem 0 0.3rem 0;border-bottom:1px solid var(--red-seal);">\u2620 \u8BC5\u5492\u724C <span style="font-weight:400;font-size:0.5rem;color:var(--text-faint);">\u8D1F\u9762\u724C \u00B7 \u5C3D\u65E9\u79FB\u9664</span></div>';
+    html2 += '<div class="sg-collection-grid">';
+    for(var ci=0;ci<curseCards.length;ci++){
+      var c = curseCards[ci];
+      html2 += '<div class="sg-card" style="border-color:var(--red-seal);cursor:pointer;position:relative;background:linear-gradient(135deg,rgba(194,58,43,0.06),transparent 60%);" data-category="curse" data-cidx="'+ci+'">' +
+        '<div class="sg-card-cost">'+c.cost+'</div>' +
+        '<div class="sg-card-name">'+c.name+'</div>' +
+        '<div class="sg-card-desc">'+c.desc+'</div>' +
+        '<div class="sg-card-type">'+c.icon+' '+(typeNames[c.type]||c.type)+'</div></div>';
+    }
+    html2 += '</div>';
     content.innerHTML = html2;
 
-    content.querySelectorAll('.sg-card[data-sidx]').forEach(function(el){
+    // \u72B6\u6001\u724C\u70B9\u51FB\u4E8B\u4EF6
+    content.querySelectorAll('.sg-card[data-category="status"]').forEach(function(el){
       el.addEventListener('click', function(e){
         e.stopPropagation();
         var idx = parseInt(el.getAttribute('data-sidx'));
@@ -9612,9 +9634,24 @@ var RELIC_FLAV = {};
         if(!s) return;
         showCollectionDetail(s.name,
           '<div class="sg-cdb-field" style="text-align:center;font-size:2rem;margin-bottom:0.2rem;">'+s.icon+'</div>' +
-          '<div class="sg-cdb-field"><b>\u7C7B\u578B\uFF1A</b>\u72B6\u6001\u724C | <b>\u8D39\u7528\uFF1A</b>'+s.cost+' \u6C14</div>' +
+          '<div class="sg-cdb-field"><b>\u7C7B\u578B\uFF1A</b><span style="color:#d4a853;">\u72B6\u6001\u724C</span> | <b>\u8D39\u7528\uFF1A</b>'+s.cost+' \u6C14</div>' +
           '<div class="sg-cdb-field"><b>\u6548\u679C\uFF1A</b>'+s.desc+'</div>' +
           '<div class="sg-cdb-flavor">'+s.flavor+'</div>'
+        );
+      });
+    });
+    // \u8BC5\u5492\u724C\u70B9\u51FB\u4E8B\u4EF6
+    content.querySelectorAll('.sg-card[data-category="curse"]').forEach(function(el){
+      el.addEventListener('click', function(e){
+        e.stopPropagation();
+        var idx = parseInt(el.getAttribute('data-cidx'));
+        var c = curseCards[idx];
+        if(!c) return;
+        showCollectionDetail(c.name,
+          '<div class="sg-cdb-field" style="text-align:center;font-size:2rem;margin-bottom:0.2rem;">'+c.icon+'</div>' +
+          '<div class="sg-cdb-field"><b>\u7C7B\u578B\uFF1A</b><span style="color:var(--red-seal);">\u8BC5\u5492\u724C</span> | <b>\u8D39\u7528\uFF1A</b>'+c.cost+' \u6C14</div>' +
+          '<div class="sg-cdb-field"><b>\u6548\u679C\uFF1A</b>'+c.desc+'</div>' +
+          '<div class="sg-cdb-flavor">'+c.flavor+'</div>'
         );
       });
     });
