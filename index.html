@@ -48,7 +48,7 @@
     "price": "0",
     "priceCurrency": "CNY"
   }
-}
+}</script><script>
     /* ═══════════════════════════════════════════════════════════════════════ */
     /* ══════ 苏轼·球体引擎 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
@@ -4607,6 +4607,7 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
           fullMoon: false
         }
       };
+      window.G = G;
 
       // Apply starting relic
       if(charData.startingRelic){
@@ -10703,6 +10704,7 @@ var RELIC_FLAV = {};
         setTimeout(function(el){ try{ if(el && el.parentNode) el.parentNode.removeChild(el); }catch(e){} }, 350, last);
       }
       // Fade out after 3 seconds
+      var _newCollectTimer;
       if(_newCollectTimer) clearTimeout(_newCollectTimer);
       _newCollectTimer = setTimeout(function(){
         var items = bar.querySelectorAll('.sg-ncb-item');
@@ -11222,6 +11224,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
       // Global restart helper
       function restartGame(){
         G = null;
+        window.G = null;
         gBattle = null;
         gIsBattling = false;
         gMapData = [];
