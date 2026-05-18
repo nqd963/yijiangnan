@@ -2304,16 +2304,38 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
 }
 .sg-collection-item-card{
   display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:0.45rem 0.55rem;border-radius:10px;
-  background:linear-gradient(145deg, rgba(201,168,76,0.03), rgba(139,90,43,0.03));
-  border:1px solid rgba(201,168,76,0.1);
-  cursor:pointer;transition:all 0.25s;width:112px;text-align:center;
+  padding:0.5rem 0.35rem 0.4rem;border-radius:10px;
+  background:linear-gradient(180deg, var(--bg-card-alt) 0%, var(--bg-card) 100%);
+  border:1px solid var(--border);
+  cursor:pointer;transition:all 0.25s cubic-bezier(.4,0,.2,1);width:96px;text-align:center;
+  box-shadow:0 1px 4px var(--shadow);
 }
 .sg-collection-item-card:hover{
-  transform:translateY(-4px);
+  transform:translateY(-4px) scale(1.03);
   border-color:var(--gold);
-  box-shadow:0 6px 20px rgba(0,0,0,0.18),0 0 0 1px rgba(201,168,76,0.06);
+  box-shadow:0 8px 20px rgba(0,0,0,.15),0 0 12px rgba(201,168,76,.08);
   background:linear-gradient(145deg, rgba(201,168,76,0.07), rgba(139,90,43,0.05));
+}
+.sg-cic-enemy-icon{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:44px;height:44px;border-radius:10px;
+  background:radial-gradient(circle at 35% 30%, #3a1a0a, #1a0a00);
+  border:1px solid rgba(201,168,76,0.15);
+  overflow:hidden;transition:border-color .2s, transform .2s;
+}
+.sg-collection-item-card:hover .sg-cic-enemy-icon{
+  border-color:rgba(201,168,76,0.4);transform:scale(1.06);
+}
+.sg-cic-enemy-emoji{
+  font-size:1.4rem;line-height:1;
+  color:#e8d5b0;text-shadow:0 0 6px rgba(232,213,176,.3);
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.3));
+}
+.sg-cic-enemy-badge{
+  position:absolute;bottom:-1px;right:-1px;
+  font-size:0.4rem;padding:0 3px;border-radius:3px;
+  background:rgba(201,168,76,0.2);color:var(--text-faint);
+  line-height:1.4;border:1px solid rgba(201,168,76,0.1);
 }
 .sg-collection-item-card .sg-cic-icon{
   font-size:1.8rem;width:48px;height:48px;line-height:48px;text-align:center;
@@ -2326,7 +2348,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
   border-color:var(--gold);background:radial-gradient(circle at 30% 30%, rgba(255,215,0,0.22), rgba(139,90,43,0.1));
   transform:scale(1.08);
 }
-.sg-collection-item-card .sg-cic-name{font-size:0.6rem;font-weight:700;color:var(--text);}
+.sg-collection-item-card .sg-cic-name{font-size:0.6rem;font-weight:700;color:var(--text);margin-top:1px;}
 .sg-collection-item-card .sg-cic-type{font-size:0.5rem;color:var(--text-faint);}
 /* 移动端适配 */
 @media(max-width:600px){
@@ -2427,14 +2449,29 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
   0%{opacity:1;transform:translate(0,0) scale(0.5) rotate(0deg);}
   100%{opacity:0;transform:translate(var(--vx),var(--vy)) scale(1.2) rotate(360deg);}
 }
-/* 奖励卡牌消散动画 */
+/* 奖励卡牌消散动画 — 增强版 */
 @keyframes sgCardDissolve{
   0%{opacity:1;transform:scale(1) translateY(0) rotate(0deg);}
-  25%{opacity:0.9;transform:scale(1.06) translateY(-6px);filter:brightness(1.6);}
-  100%{opacity:0;transform:scale(0.2) translateY(40px) rotate(30deg);filter:brightness(0.2) blur(3px);}
+  20%{opacity:0.95;transform:scale(1.08) translateY(-8px);filter:brightness(1.7) saturate(1.3);}
+  50%{opacity:0.7;transform:scale(0.8) translateY(10px) rotate(10deg);filter:brightness(0.8) saturate(0.5);}
+  100%{opacity:0;transform:scale(0.15) translateY(60px) rotate(40deg);filter:brightness(0.1) blur(4px);}
+}
+@keyframes sgCardChosen{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.12);box-shadow:0 0 40px rgba(255,204,0,.5),0 20px 60px rgba(0,0,0,.3);}
+  70%{transform:scale(1.05);}
+  100%{transform:scale(1.08);box-shadow:0 0 30px rgba(255,204,0,.4),0 16px 40px rgba(0,0,0,.25);}
 }
 .sg-card-reward-done{pointer-events:none!important;cursor:default!important;}
-.sg-card-dissolve{animation:sgCardDissolve 0.55s ease-out forwards!important;}
+.sg-card-dissolve{
+  animation:sgCardDissolve 0.6s ease-out forwards!important;
+  transition:none!important;
+}
+.sg-card-chosen{
+  animation:sgCardChosen 0.5s cubic-bezier(.34,1.56,.64,1) forwards!important;
+  border-color:var(--gold)!important;
+  transition:none!important;
+}
 /* 效果浮动增强 */
 .sg-effect-float{
   position:fixed;z-index:99998;pointer-events:none;
@@ -7105,30 +7142,36 @@ gBattle.playerBlock += blockVal;
         }
         document.getElementById('sgRewardCards').innerHTML = cardHtml;
 
-        // Bind card click to add to deck — 选牌后其他牌消失
+        // Bind card click to add to deck — 选牌后其他牌消失（增强动画）
         var cardEls = document.getElementById('sgRewardCards').querySelectorAll('.sg-card');
         for(var ci=0;ci<cardEls.length;ci++){
-          (function(cel, allEls){
+          (function(cel, allEls, idx){
             cel.addEventListener('click',function(){
               if(cel.classList.contains('sg-card-taken')) return;
               var cid = cel.getAttribute('data-card-id');
               if(CARDS[cid]){
                 addCardToDeck({id:cid, ...CARDS[cid]});
-                showEffectFloat(cel.offsetLeft, cel.offsetTop, '已加入卡组');
-                // 选中后所有牌标记为已选 — 其他牌消散特效（CSS类）
-                for(var xci=0;xci<allEls.length;xci++){
-                  allEls[xci].classList.add('sg-card-taken');
-                  allEls[xci].classList.add('sg-card-reward-done');
-                  if(allEls[xci] !== cel){
-                    allEls[xci].classList.add('sg-card-dissolve');
-                    allEls[xci].style.animationDelay = ((xci < ci ? ci - xci : xci - ci) * 0.06) + 's';
+                // 选中卡牌：先播放选中动画
+                cel.classList.add('sg-card-chosen');
+                // 延迟加入卡组提示
+                setTimeout(function(){
+                  showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '📜 已加入卡组');
+                }, 200);
+                // 其他卡牌延迟消散（先让选中卡牌突出）
+                setTimeout(function(){
+                  for(var xci=0;xci<allEls.length;xci++){
+                    allEls[xci].classList.add('sg-card-taken');
+                    allEls[xci].classList.add('sg-card-reward-done');
+                    if(allEls[xci] !== cel){
+                      allEls[xci].classList.add('sg-card-dissolve');
+                      var dist = Math.abs(xci - idx);
+                      allEls[xci].style.animationDelay = (dist * 0.08) + 's';
+                    }
                   }
-                }
-                cel.style.borderColor = 'var(--gold)';
-                cel.style.boxShadow = '0 0 15px rgba(201,168,76,.4)';
+                }, 120);
               }
             });
-          })(cardEls[ci], cardEls);
+          })(cardEls[ci], cardEls, ci);
         }
 
         showScreen('sgReward');
@@ -10570,11 +10613,13 @@ var RELIC_FLAV = {};
       var ed = allEnemies[ei].data;
       var enemyEmojis2 = {lichou:'\u5FC3',qiusi:'\u53F6',yeyu:'\u96E8',guhong:'\u9E3F',zhuangzhi:'\u706B',chouchang:'\u6101',piaobo:'\u840D',saihong:'\u96C1',muyu:'\u7B20',changfeng:'\u98CE',feixu:'\u7D6E',zhengyan:'\u71D5',kuangfeng:'\u98D7',canhun:'\u9B42',xingshuang:'\u971C',fengchen:'\u5C18',canghai:'\u6D77',qingyun:'\u4E91',fusheng:'\u6CAB',mingshi:'\u4EA1',zhanshen:'\u6218',wushuang:'\u51A0',cimo:'\u7985',shihun:'\u5377',wenqu:'\u661F',shuimo:'\u58A8',bihun:'\u7B14',exam:'\u7ECF',master:'\u541B',saint:'\u5723',qun_maque:'\u96C0',qun_yinghuo:'\u8424',qun_luanshi:'\u77F3',qun_shuangye:'\u53F6',qun_fengdie:'\u8776',qun_jianyu:'\u5203',qun_yanwu:'\u96FE',cailian:'\u83B2',saixia:'\u6208',qun_chunchao:'\u6F6E',fenghuo:'\u70FD',hujia:'\u7B46',qun_huangsha:'\u6C99',shiqiu:'\u56DA',cizong:'\u5B97',qun_qingfeng:'\u98CE',diaoxue:'\u9493',zuiweng:'\u9189',shigui:'\u9B3C'};
       var _eEmoji = enemyEmojis2[ed.id] || (ed.isGroup ? '\u4F17' : '\u9B54');
-      var isGrp = '<span style="font-size:1.2rem;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a1a0a,#1a0a00);color:#e8d5b0;text-shadow:0 0 4px rgba(232,213,176,.3);">'+_eEmoji+'</span>';
+      var isGrp = '<div class="sg-cic-enemy-icon">' +
+        '<span class="sg-cic-enemy-emoji">'+_eEmoji+'</span>' +
+        '<span class="sg-cic-enemy-badge">'+(ed.isGroup?'\u7FA4':'\u5355')+'</span>' +
+        '</div>';
       html2 += '<div class="sg-collection-item-card" data-enemy-id="'+ed.id+'">' +
         '<div class="sg-cic-icon">'+isGrp+'</div>' +
         '<div class="sg-cic-name">'+ed.name+'</div>' +
-        '<div class="sg-cic-type" style="font-size:0.5rem;">'+(ed.isGroup?'\u7FA4\u4F53':'\u5355\u4F53')+'</div>' +
         '</div>';
     }
     html2 += '</div>';
