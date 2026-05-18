@@ -393,7 +393,7 @@ var ENEMY_SVGS = {
         0 0 0 0 0.28
         0 0 0 0 0.15
         0 0 0 0.10 0" result="tint"/>
-      <feComposite in="tint" in2="SourceGraphic" operator="multiply" result="mul"/>
+      <feBlend in="tint" in2="SourceGraphic" mode="multiply" result="mul"/>
       <feComponentTransfer>
         <feFuncA type="table" tableValues="0 0.35"/>
       </feComponentTransfer>
