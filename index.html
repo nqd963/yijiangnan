@@ -4802,6 +4802,7 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
             // 群体标记必须在startBattle之前设置，确保首次renderBattle正确渲染
             if(eData && eData.isGroup){
               if(!gBattle) gBattle = {};
+              window.gBattle = gBattle;
               gBattle._isGroup = true;
             }
             startBattle(eData);
@@ -5014,7 +5015,7 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
       liqingHeartPill:{name:'莲心丹',desc:'回复8HP',icon:'💗',rarity:'common',effect:function(){ G.hp = Math.min(G.hp+8, G.maxHp); showEffectFloat(100,200,'莲心+8HP'); }}
     };
 
-    var gBattle = null; // { enemy, hp, maxHp, intent, buffs, turn, block, ... }
+    var gBattle = null; window.gBattle = null; // { enemy, hp, maxHp, intent, buffs, turn, block, ... }
     var gPendingPill = null; // 战后待领取的丹药
     var gPendingRelic = null; // 战后待领取的遗物
 
@@ -5027,7 +5028,7 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
     function startBattle(eData){
       try {
       var stats = getEnemyStats(eData, G.act);
-      gBattle = {
+      window.gBattle = gBattle = {
         id:eData.id,
         name:eData.name,
         maxHp:stats.maxHp,
@@ -11225,7 +11226,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
       function restartGame(){
         G = null;
         window.G = null;
-        gBattle = null;
+        gBattle = null; window.gBattle = null;
         gIsBattling = false;
         gMapData = [];
         hideAllScreens();
@@ -11245,7 +11246,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
           if(!gBattle || !G) { restartGame(); return; }
           if(confirm('确认要重开本场战斗吗？')){
             // 保留角色和卡组，重置战斗
-            gBattle = null;
+            gBattle = null; window.gBattle = null;
             gIsBattling = false;
             // 重新触发当前节点的战斗
             if(G.curNode && G.mapData){
