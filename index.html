@@ -8028,6 +8028,10 @@ function setBattleBackground(){
 
         // Enemy poison
         document.getElementById('sgEnemyPoison').textContent = gBattle.enemyPoison;
+        // 立即强制敌人区域可见
+        try{ document.getElementById('sgEnemyArea').style.display = 'flex'; }catch(ee){}
+        try{ document.getElementById('sgEnemy').style.display = ''; }catch(ee){}
+        try{ document.getElementById('sgEnemy2').style.display = ''; }catch(ee){}
       }
       // 检查敌人立绘是否正确加载，失败则显示emoji
       try{
@@ -8037,6 +8041,13 @@ function setBattleBackground(){
           if(gBattle._isGroup) _checkPortraitLoaded('sgEnemyPortrait2', fallbackEmoji);
         }
       }catch(e){}
+      // 立即强制敌人区域可见
+      try{
+        var _eaImm = document.getElementById('sgEnemyArea');
+        if(_eaImm) _eaImm.style.display = 'flex';
+        var _eImm = document.getElementById('sgEnemy');
+        if(_eImm) _eImm.style.display = '';
+      }catch(ee){}
       // 延迟再次检查（解决部分浏览器SVG渲染延迟问题）
       setTimeout(function(){
         try{
@@ -8045,6 +8056,20 @@ function setBattleBackground(){
           if(gBattle._isGroup) _checkPortraitLoaded('sgEnemyPortrait2', fb2);
         }catch(ee){}
       }, 300);
+      // 50ms快速检查
+      setTimeout(function(){
+        try{
+          var fbFast = enemyEmojis[gBattle.id] || '魔';
+          var epFast = document.getElementById('sgEnemyPortrait');
+          if(epFast && (!epFast.innerHTML || epFast.innerHTML.trim() === '')){
+            epFast.innerHTML = '<span style="font-size:2rem;">'+fbFast+'</span>';
+          }
+          var _eaFast = document.getElementById('sgEnemyArea');
+          if(_eaFast) _eaFast.style.display = 'flex';
+          var _eFast = document.getElementById('sgEnemy');
+          if(_eFast) _eFast.style.display = '';
+        }catch(ee){}
+      }, 50);
       // 800ms再次强制检查（含敌人状态区域）
       setTimeout(function(){
         try{
@@ -8057,7 +8082,12 @@ function setBattleBackground(){
           var _eArea2 = document.getElementById('sgEnemyArea');
           if(_eArea2) _eArea2.style.display = 'flex';
           var _eEl2 = document.getElementById('sgEnemy');
-          if(_eEl2) _eEl2.style.display = 'flex';
+          if(_eEl2) _eEl2.style.display = '';
+          // 如果立绘为空（罕见情况），显示后备
+          var epFinal = document.getElementById('sgEnemyPortrait');
+          if(epFinal && (!epFinal.innerHTML || epFinal.innerHTML.trim() === '')){
+            epFinal.innerHTML = '<span style="font-size:2rem;color:#c9a84c;">⚔</span>';
+          }
         }catch(ee){}
       }, 800);
 
@@ -8097,6 +8127,13 @@ function setBattleBackground(){
             var _fb = enemyEmojis[gBattle.id] || '魔';
             _epEl.innerHTML = '<span style="font-size:2rem;">'+_fb+'</span>';
           }
+        }
+        // 确保敌人卡片可见
+        var _eElMain = document.getElementById('sgEnemy');
+        if(_eElMain) _eElMain.style.display = '';
+        if(gBattle && gBattle._isGroup){
+          var _eElMain2 = document.getElementById('sgEnemy2');
+          if(_eElMain2) _eElMain2.style.display = '';
         }
       }catch(_ee){}
 
