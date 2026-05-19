@@ -7866,24 +7866,54 @@ function setBattleBackground(){
         qun_jianyu:'刃',qun_yanwu:'雾'
       };
       var enemyEmoji = enemyEmojis[gBattle.id] || '魔';
+      // Debug: check SVG availability
+      var _svgAvail = (typeof ENEMY_SVGS !== 'undefined');
+      var _svgFound = _svgAvail ? ENEMY_SVGS[gBattle.id] : null;
+      console.log('[PortraitDebug] enemy='+gBattle.id+' SVG_global='+_svgAvail+' SVG_found='+!!_svgFound+' emoji='+enemyEmoji);
       // Use generated SVG portrait if available, fall back to emoji
-      var enemySvg = (typeof ENEMY_SVGS !== 'undefined') ? ENEMY_SVGS[gBattle.id] : null;
+      var enemySvg = _svgFound;
       var portraitHtml;
-      if(enemySvg){
+      // On file:// protocol, skip SVG (SVG filters often fail silently)
+      var _isFileProtocol = (window.location && window.location.protocol === 'file:');
+      if(enemySvg && !_isFileProtocol){
         // Deduplicate SVG IDs to avoid conflicts when multiple SVGs coexist
         var uid = '_e' + (gBattle.id || 'x') + (gBattle._portraitUid || (gBattle._portraitUid = Date.now() % 9999));
         var safeSvg = enemySvg.replace(/id="([^"]+)"/g, 'id="$1'+uid+'"').replace(/url\(#([^)]+)\)/g, 'url(#$1'+uid+')');
         portraitHtml = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">'+safeSvg+'</div>';
       } else {
+        if(_isFileProtocol && enemySvg) console.log('[PortraitDebug] 已检测到file://协议，跳过SVG使用emoji');
         portraitHtml = '<span style="font-size:1.6rem;line-height:1;">'+enemyEmoji+'</span>';
       }
       // Fallback: if portrait container is empty after render, force emoji
       var _checkPortraitLoaded = function(containerId, emojiFallback){
         var el = document.getElementById(containerId);
-        if(el && (!el.innerHTML || el.innerHTML.trim() === '' || el.innerHTML.indexOf('svg') === -1)){
+        if(el && (!el.innerHTML || el.innerHTML.trim() === '' || (el.innerHTML.indexOf('<svg') === -1 && el.innerHTML.indexOf('svg-portrait') === -1))){
+          console.log('[PortraitDebug] 触发emoji回退:', containerId, emojiFallback);
           el.innerHTML = '<span style="font-size:2rem;">'+emojiFallback+'</span>';
+        } else if(el && el.innerHTML.indexOf('<svg') !== -1){
+          // SVG存在但可能未渲染，检查尺寸
+          var _sv = el.querySelector('svg');
+          if(_sv && (_sv.offsetWidth === 0 || _sv.offsetHeight === 0)){
+            console.log('[PortraitDebug] SVG尺寸为0，强制emoji回退:', containerId);
+            el.innerHTML = '<span style="font-size:2rem;">'+emojiFallback+'</span>';
+          }
         }
       };
+      // 1500ms最终保障：如果立绘仍不可见，强制显示emoji
+      setTimeout(function(){
+        try{
+          var _fe = enemyEmojis[gBattle.id] || '魔';
+          ['sgEnemyPortrait','sgEnemyPortrait2'].forEach(function(_pid){
+            var _pel = document.getElementById(_pid);
+            if(_pel && _pel.offsetParent !== null){ // only check visible elements
+              if(!_pel.querySelector('span') && !_pel.querySelector('svg')){
+                console.log('[PortraitDebug] 1.5s最终保障触发:', _pid);
+                _pel.innerHTML = '<span style="font-size:2rem;">'+_fe+'</span>';
+              }
+            }
+          });
+        }catch(_ee){}
+      }, 1500);
       var enemyArea = document.getElementById('sgEnemyArea');
       if(gBattle._isGroup){
         // 群体敌人：显示两个敌人框（Item 3）
@@ -8072,24 +8102,19 @@ function setBattleBackground(){
           if(_eFast) _eFast.style.display = '';
         }catch(ee){}
       }, 50);
-      // 800ms再次强制检查（含敌人状态区域）
+      // 800ms再次强制检查（用_checkPortraitLoaded确保生效）
       setTimeout(function(){
         try{
-          var fb3 = enemyEmojis[gBattle.id] || '魔';
-          var epEl = document.getElementById('sgEnemyPortrait');
-          if(epEl && (!epEl.innerHTML || epEl.innerHTML.trim() === '' || epEl.innerHTML.indexOf('<span') === -1)){
-            epEl.innerHTML = '<span style="font-size:2rem;">'+fb3+'</span>';
+          if(typeof _checkPortraitLoaded === 'function'){
+            var fb3 = enemyEmojis[gBattle.id] || '魔';
+            _checkPortraitLoaded('sgEnemyPortrait', fb3);
+            if(gBattle._isGroup) _checkPortraitLoaded('sgEnemyPortrait2', fb3);
           }
           // 确保敌人区域可见
           var _eArea2 = document.getElementById('sgEnemyArea');
           if(_eArea2) _eArea2.style.display = 'flex';
           var _eEl2 = document.getElementById('sgEnemy');
           if(_eEl2) _eEl2.style.display = '';
-          // 如果立绘为空（罕见情况），显示后备
-          var epFinal = document.getElementById('sgEnemyPortrait');
-          if(epFinal && (!epFinal.innerHTML || epFinal.innerHTML.trim() === '')){
-            epFinal.innerHTML = '<span style="font-size:2rem;color:#c9a84c;">⚔</span>';
-          }
         }catch(ee){}
       }, 800);
 
