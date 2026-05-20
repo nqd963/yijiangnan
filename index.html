@@ -5769,6 +5769,8 @@ return gBattle.energy >= cost;
 
       var cost = card.cost || 0;
       if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0){
+        cost = Math.max(0, cost - 1);
+      }
 
       // ══ 苏轼·球体效果 ══
       if(card.channel && G && G.orbs){ channelOrb(card.channel); }
@@ -5847,8 +5849,6 @@ return gBattle.energy >= cost;
         gBattle._echoTrigger = true;
       }
 if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch(e){} }
-        cost = Math.max(0, cost - 1);
-      }
 
       // jinxing: 攻击牌有30%概率不消耗能量
       if(hasRelic('jinxing') && card.type === 'attack' && Math.random() * 100 < 30 && cost > 0){
@@ -7862,8 +7862,7 @@ function setBattleBackground(){
         shiqiu:'囚',cizong:'宗',cimo:'禅',shihun:'卷',wenqu:'星',shuimo:'墨',bihun:'笔',shigui:'鬼',
         exam:'经',master:'君',saint:'圣',zuiweng:'醉',diaoxue:'钓',
         qun_maque:'雀',qun_yinghuo:'萤',qun_luanshi:'石',qun_chunchao:'潮',qun_huangsha:'沙',
-        qun_shuangye:'叶',qun_fengdie:'蝶',qun_jianyu:'刃',qun_yanwu:'雾',qun_qingfeng:'风',
-        qun_jianyu:'刃',qun_yanwu:'雾'
+        qun_shuangye:'叶',qun_fengdie:'蝶',qun_jianyu:'刃',qun_yanwu:'雾',qun_qingfeng:'风'
       };
       var enemyEmoji = enemyEmojis[gBattle.id] || '魔';
       // Debug: check SVG availability
@@ -7873,8 +7872,10 @@ function setBattleBackground(){
       // Use generated SVG portrait if available, fall back to emoji
       var enemySvg = _svgFound;
       var portraitHtml;
-      // On file:// protocol, skip SVG (SVG filters often fail silently)
-      var _isFileProtocol = (window.location && window.location.protocol === 'file:');
+      // On file:// protocol, skip SVG (SVG filters often fail silently in browsers)
+      // But in Electron, file:// SVGs work fine, so detect Electron via __electron flag
+      var _isElectronApp = (typeof window.__electron !== 'undefined' && window.__electron.isElectron);
+      var _isFileProtocol = (window.location && window.location.protocol === 'file:' && !_isElectronApp);
       if(enemySvg && !_isFileProtocol){
         // Deduplicate SVG IDs to avoid conflicts when multiple SVGs coexist
         var uid = '_e' + (gBattle.id || 'x') + (gBattle._portraitUid || (gBattle._portraitUid = Date.now() % 9999));
@@ -10715,7 +10716,9 @@ var RELIC_FLAV = {};
     });
   });
   renderTab('cards');
-}function showNewCollectAnimation(item){
+}
+    var _newCollectTimer;
+    function showNewCollectAnimation(item){
       var bar = document.getElementById('sgNewCollectBar');
       if(!bar) return;
       bar.style.display = 'flex';
@@ -10730,7 +10733,6 @@ var RELIC_FLAV = {};
         setTimeout(function(el){ try{ if(el && el.parentNode) el.parentNode.removeChild(el); }catch(e){} }, 350, last);
       }
       // Fade out after 3 seconds
-      var _newCollectTimer;
       if(_newCollectTimer) clearTimeout(_newCollectTimer);
       _newCollectTimer = setTimeout(function(){
         var items = bar.querySelectorAll('.sg-ncb-item');
