@@ -1,0 +1,59 @@
+{
+  "name": "yijiangnan",
+  "version": "1.2.0",
+  "description": "忆江南·清秋晚 - 宋词主题卡牌策略游戏",
+  "main": "main.js",
+  "author": "CherryClaw",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win --config",
+    "build:win-portable": "electron-builder --win portable --config",
+    "pack": "electron-builder --dir --win"
+  },
+  "build": {
+    "appId": "com.yijiangnan.shici-game",
+    "productName": "忆江南·清秋晚",
+    "copyright": "Copyright © 2026",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "main.js",
+      "preload.js",
+      "generated_images/**/*",
+      "images/**/*",
+      "*.png",
+      "*.mp3",
+      "*.svg",
+      "*.xml",
+      "!*.md",
+      "!.git*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": null
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "忆江南·清秋晚",
+      "unicode": true
+    },
+    "portable": {
+      "artifactName": "忆江南-清秋晚-便携版-${version}.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}
