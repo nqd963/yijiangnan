@@ -6206,7 +6206,7 @@ function startBattle(eData){
       }
 
       // === skillCost0（黄泉路·所有技能费用为0） ===
-      if(G.powers.skillCost0 && card.type === 'skill' && cost > 0){
+      if((G.powers||{}).skillCost0 && card.type === 'skill' && cost > 0){
         cost = 0;
       }
 
@@ -6393,7 +6393,7 @@ return gBattle.energy >= cost;
       }
 
       // === skillCost0（黄泉路·所有技能费用为0） ===
-      if(G.powers.skillCost0 && card.type === 'skill' && cost > 0){
+      if((G.powers||{}).skillCost0 && card.type === 'skill' && cost > 0){
         cost = 0;
       }
 
