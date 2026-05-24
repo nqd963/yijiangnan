@@ -1428,7 +1428,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-enemy-portrait.sg-enemy-enhanced{
   position:relative;display:inline-flex;align-items:center;justify-content:center;
   width:100px;height:88px;border-radius:10px;margin:0 auto 3px;
-  background:radial-gradient(circle at 40% 30%, #f5ead8 0%, #dac8ae 55%, #b8987a 100%);
+  background:radial-gradient(circle at 40% 30%, #f0e6d6 0%, #e2d4c0 55%, #c4b5a3 100%);
   border:1px solid rgba(201,168,76,0.35);
   overflow:visible;font-size:2rem;padding:.15rem;cursor:pointer;
   transition:border-color .3s,box-shadow .3s;
@@ -1448,7 +1448,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 }
 /* Boss立绘 —— 暖红实底画框 */
 .sg-enemy-portrait.sg-enemy-enhanced.sg-etype-boss{
-  background:radial-gradient(circle at 40% 30%, #f5d8c8 0%, #d69070 55%, #b85538 100%);
+  background:radial-gradient(circle at 40% 30%, #e8d0b8 0%, #d4a080 55%, #c07050 100%);
   border-color:rgba(220,60,40,0.55);
   box-shadow:0 0 25px rgba(200,50,30,0.25),inset 0 1px 0 rgba(255,220,200,0.25);
 }
@@ -6174,14 +6174,18 @@ function startBattle(eData){
         cost = Math.max(0, cost - 1);
       }
 
-      
+
       // === 李白新机制: nextAtkCost0 ===
       if(gBattle.nextAtkCost0 && card.type==='attack' && cost>0){
         cost = 0;
-        gBattle.nextAtkCost0--;
+        // 注意：不在检查函数中递减，实际打出时才递减
       }
       // === freeIfLostHp ===
       if(card.freeIfLostHp && G._everLostHp && cost>0){
+        cost = 0;
+      }
+      // === freeThisTurn ===
+      if(card._freeThisTurn){
         cost = 0;
       }
       // === requireExhaust3 ===
@@ -6199,6 +6203,26 @@ function startBattle(eData){
       if(card.stompCostReduce && cost > 0){
         var atksPlayed = gBattle.cardPlayedThisTurn;
         if(atksPlayed > 0) cost = Math.max(0, cost - atksPlayed);
+      }
+
+      // === skillCost0（黄泉路·所有技能费用为0） ===
+      if(G.powers.skillCost0 && card.type === 'skill' && cost > 0){
+        cost = 0;
+      }
+
+      // === nextSkillCost0（蚱蜢舟·下一张技能费用为0） ===
+      if(gBattle._nextSkillCost0Flag && card.type === 'skill' && cost > 0){
+        cost = 0;
+        // 注意：不在检查函数中清除标记，实际打出时才清除
+      }
+
+      // === costDownPerSkill（才下眉头·本局每技能费用-1） ===
+      if(card.costDownPerSkill && card.type === 'attack'){
+        var skillsPlayedThisCombat = gBattle._skillsPlayedThisCombat || 0;
+        var reduction = Math.floor(skillsPlayedThisCombat / card.costDownPerSkill);
+        if(reduction > 0){
+          cost = Math.max(0, cost - reduction);
+        }
       }
 
       // === hitsX (cost = -1, spend all energy) ===
@@ -6342,6 +6366,50 @@ return gBattle.energy >= cost;
       var cost = card.cost || 0;
       if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0){
         cost = Math.max(0, cost - 1);
+      }
+
+      // === 李白新机制: nextAtkCost0 ===
+      if(gBattle.nextAtkCost0 && card.type==='attack' && cost>0){
+        cost = 0;
+        gBattle.nextAtkCost0--;
+      }
+
+      // === freeIfLostHp ===
+      if(card.freeIfLostHp && G._everLostHp && cost>0){
+        cost = 0;
+      }
+
+      // === freeThisTurn ===
+      if(card._freeThisTurn){
+        cost = 0;
+        // 移除标记，防止下回合继续免费
+        delete card._freeThisTurn;
+      }
+
+      // === stompCostReduce（神机·动态减费） ===
+      if(card.stompCostReduce && cost > 0){
+        var atksPlayed = gBattle.cardPlayedThisTurn;
+        if(atksPlayed > 0) cost = Math.max(0, cost - atksPlayed);
+      }
+
+      // === skillCost0（黄泉路·所有技能费用为0） ===
+      if(G.powers.skillCost0 && card.type === 'skill' && cost > 0){
+        cost = 0;
+      }
+
+      // === nextSkillCost0（蚱蜢舟·下一张技能费用为0） ===
+      if(gBattle._nextSkillCost0Flag && card.type === 'skill' && cost > 0){
+        cost = 0;
+        gBattle._nextSkillCost0Flag = false;
+      }
+
+      // === costDownPerSkill（才下眉头·本局每技能费用-1） ===
+      if(card.costDownPerSkill && card.type === 'attack'){
+        var skillsPlayedThisCombat = gBattle._skillsPlayedThisCombat || 0;
+        var reduction = Math.floor(skillsPlayedThisCombat / card.costDownPerSkill);
+        if(reduction > 0){
+          cost = Math.max(0, cost - reduction);
+        }
       }
 
       // ══ 苏轼·球体效果 ══
@@ -6768,7 +6836,10 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
           var rAtkId = atkPool2[Math.floor(Math.random()*atkPool2.length)];
           var rAtk = JSON.parse(JSON.stringify(CARDS[rAtkId]));
           rAtk.id = 'gen_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
-          if(card.freeThisTurn) rAtk.cost = 0;
+          if(card.freeThisTurn) {
+            rAtk.cost = 0;
+            rAtk._freeThisTurn = true; // 添加标记表示本回合免费获得
+          }
           var raI = G.deck.length;
           G.deck.push(rAtk);
           gBattle.hand.push(raI);
@@ -6813,6 +6884,8 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
         card._wasFree = true;
       }
 
+      // === freeIfLostHp === (已在费用计算部分处理，移除重复代码)
+
       // === halfEnemyBlock ===
       if(card.halfEnemyBlock){
         gBattle.block = Math.floor((gBattle.block||0)/2);
@@ -6830,11 +6903,7 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
         gBattle.hand.push(G.deck.length-1);
       }
 
-      // === stompCostReduce ===
-      if(card.stompCostReduce){
-        var atksPlayed = gBattle.cardPlayedThisTurn-1;
-        gBattle.energy += Math.min(atksPlayed, card.cost||3);
-      }
+      // === stompCostReduce === (已在费用计算部分处理，移除重复代码)
 
       // === burnPact（由玩家选择消耗牌） ===
       if(card.burnPact && gBattle.hand.length>0){
@@ -6995,14 +7064,7 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
         gBattle._nextSkillCost0Flag = true;
       }
 
-      // === costDownPerSkill - 本回合每技能费用-1（精确打击）===
-      if(card.costDownPerSkill){
-        var skillsPlayedThisCombat = gBattle._skillsPlayedThisCombat || 0;
-        var reduction = Math.floor(skillsPlayedThisCombat / card.costDownPerSkill);
-        var refund = Math.min(reduction, Math.max(0, cost || 3));
-        gBattle.energy += refund;
-        if(refund > 0) showEffectFloat(window.innerWidth/2, window.innerHeight/2-30, '技能减免返还'+refund);
-      }
+      // === costDownPerSkill === (已在费用计算部分处理，移除重复代码)
 
       // Block
       if(card.block){
@@ -7102,11 +7164,7 @@ gBattle.playerBlock += blockVal;
         gBattle.energy += card.gainEnergy;
       }
 
-      // === nextSkillCost0Flag - 下一张技能牌费用0 ===
-      if(gBattle._nextSkillCost0Flag && card.type === 'skill' && cost > 0){
-        gBattle.energy += cost;
-        gBattle._nextSkillCost0Flag = false;
-      }
+      // === nextSkillCost0Flag === (已在费用计算部分处理，移除重复代码)
 
       // === 李清照新机制 ===
       // 敏捷（Agility）- 临时
@@ -8029,6 +8087,18 @@ gBattle.playerBlock += blockVal;
       gBattle._discardCountThisTurn = 0;
       gBattle._echoKillPending = false;
       gBattle._nextTurnExtraDraw = 0;
+
+      // 重置苏轼·球体效果标记
+      gBattle._orPowerApplied_block = false;
+      gBattle._orPowerApplied_strBlock = false;
+      gBattle._orPowerApplied_strUp = false;
+      gBattle._orPowerApplied_energy = false;
+      gBattle._orPowerApplied_mega = false;
+      gBattle._orPowerApplied_focus = false;
+      gBattle._orPowerApplied_loop = false;
+      gBattle._orPowerApplied_defrag = false;
+      gBattle._orPowerApplied_echo = false;
+      gBattle._orPowerApplied_ml = false;
 
 
       // Special enemy abilities
