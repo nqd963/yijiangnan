@@ -6114,8 +6114,8 @@ function startBattle(eData){
     }
 
     function drawCards(n, animated){
-      if(gBattle && gBattle.noMoreDraw) return;
-      if(!gBattle) return;
+      if(gBattle && gBattle.noMoreDraw) return [];
+      if(!gBattle) return [];
       if(typeof n !== 'number' || n <= 0) return [];
       var extra = hasRelic('shizhen') ? 1 : 0;
       if(hasRelic('lianyezhou')) extra += 1;
@@ -7531,8 +7531,7 @@ gBattle.playerBlock += blockVal;
       if(gBattle._isGroup){
         if(isAoe){
           // AOE: 两个敌人都受伤害
-          if(gBattle && gBattle.thorns>0){ G.hp -= Math.min(gBattle.thorns,Math.floor(dmg/2)); }
-      applyDmgToGroupEnemy1(dmg);
+          applyDmgToGroupEnemy1(dmg);
           applyDmgToGroupEnemy2(dmg);
         } else {
           // 单伤：攻击选中的目标
@@ -7746,6 +7745,20 @@ gBattle.playerBlock += blockVal;
       // 和光泥: 失去生命则标记，下回合获得格挡
       if(dmg > 0 && hasRelic('lizhi_heguangni')){
         gBattle._lostHpThisTurn = true;
+      }
+
+      // === 荆棘：受到伤害时对攻击者造成荆棘伤害（无视格挡） ===
+      if(dmg > 0 && gBattle.thorns > 0 && (gBattle.hp > 0 || (gBattle._isGroup && gBattle._groupHp2 > 0))){
+        if(gBattle._isGroup){
+          var _thorns1 = Math.ceil(gBattle.thorns / 2);
+          var _thorns2 = Math.floor(gBattle.thorns / 2);
+          gBattle.hp -= _thorns1; if(gBattle.hp < 0) gBattle.hp = 0;
+          gBattle._groupHp2 -= _thorns2; if(gBattle._groupHp2 < 0) gBattle._groupHp2 = 0;
+        } else {
+          gBattle.hp -= gBattle.thorns;
+          if(gBattle.hp < 0) gBattle.hp = 0;
+        }
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '🌵 荆棘反伤'+gBattle.thorns);
       }
 
       // === 火焰壁·反伤：每受1次攻击对敌人造成reflectDmg伤害 ===
@@ -8145,11 +8158,11 @@ gBattle.playerBlock += blockVal;
 
 
       // Special enemy abilities
-      if(gBattle.specialAbility === "enrage" && gBattle.hp < gBattle.maxHp * 0.3){
+      if(gBattle.specialAbility === "enrage" && gBattle.hp <= gBattle.maxHp * 0.3){
         gBattle.buffs.str += 3;
         showEffectFloat(250, 60, "暴怒+3力量");
       }
-      if(gBattle.specialAbility === "regen" && gBattle.hp < gBattle.maxHp * 0.5 && gBattle.hp > 0){
+      if(gBattle.specialAbility === "regen" && gBattle.hp <= gBattle.maxHp * 0.5 && gBattle.hp > 0){
         var regenAmt = Math.floor(gBattle.maxHp * 0.08);
         gBattle.hp = Math.min(gBattle.hp + regenAmt, gBattle.maxHp);
         showEffectFloat(250, 60, "再生+"+regenAmt);
@@ -8319,10 +8332,8 @@ gBattle.noMoreDraw = false;
         }
       }
 
-      // === 荆棘装甲 ===
-      if(G.powers && G.powers.armorThorns){
-        gBattle.thorns = (gBattle.thorns||0) + G.powers.armorThorns;
-      }
+      // === 荆棘装甲：每回合将总荆棘同步到战斗状态（不累加，重新计算） ===
+      gBattle.thorns = (G.powers && G.powers.thorns ? G.powers.thorns : 0) + (G.powers && G.powers.armorThorns ? G.powers.armorThorns : 0);
 
       // === 李清照新每回合效果 ===
       // 敏捷流失
@@ -8799,7 +8810,11 @@ function setBattleBackground(){
       if(enemySvg && !_isFileProtocol){
         // Deduplicate SVG IDs to avoid conflicts when multiple SVGs coexist
         var uid = '_e' + (gBattle.id || 'x') + (gBattle._portraitUid || (gBattle._portraitUid = Date.now() % 9999));
-        var safeSvg = enemySvg.replace(/id="([^"]+)"/g, 'id="$1'+uid+'"').replace(/url\(#([^)]+)\)/g, 'url(#$1'+uid+')');
+        var safeSvg = enemySvg
+          .replace(/id="([^"]+)"/g, 'id="$1'+uid+'"')
+          .replace(/url\(#([^)]+)\)/g, 'url(#$1'+uid+')')
+          .replace(/href="#([^"]+)"/g, 'href="#$1'+uid+'"')
+          .replace(/xlink:href="#([^"]+)"/g, 'xlink:href="#$1'+uid+'"');
         portraitHtml = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">'+safeSvg+'</div>';
       } else {
         if(_isFileProtocol && enemySvg) console.log('[PortraitDebug] 已检测到file://协议，跳过SVG使用emoji');
