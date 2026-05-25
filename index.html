@@ -1831,6 +1831,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
 .sg-card-selectable:hover{transform:translateY(-2px) scale(1.02);
   box-shadow:0 6px 20px rgba(0,0,0,.35),0 0 0 1px var(--gold-dim);z-index:2;}
 .sg-card-selectable:active{transform:scale(.97);}
+.sg-card-selected{box-shadow:0 0 0 3px var(--gold),0 0 12px var(--gold-dim)!important;transform:translateY(-4px) scale(1.05);border-color:var(--gold)!important;}
 /* 模态框动画 */
 @keyframes sgFadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes sgScaleIn{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
@@ -6182,6 +6183,10 @@ function startBattle(eData){
             gBattle.hp -= drawDmg;
           }
         }
+        // poisonPerDraw: 本回合每抽一张牌叠毒
+        if(gBattle._poisonOnDraw && gBattle._poisonOnDraw > 0 && (gBattle.hp > 0 || (gBattle._isGroup && gBattle._groupHp2 > 0))){
+          gBattle.enemyPoison += gBattle._poisonOnDraw;
+        }
       }
       // Track newly drawn card indices for animation
       gBattle._newlyDrawn = [];
@@ -6409,6 +6414,31 @@ return gBattle.energy >= cost;
       }catch(e){}
     }
 
+    // === triggerSlyCard: 弃牌时自动打出奇巧牌 ===
+    function triggerSlyCard(discIdx, discCard){
+      if(!gBattle || !discCard) return;
+      // 攻击效果
+      if(discCard.dmg){
+        var slyDmg = (discCard.dmg || 0) + gBattle.playerStr;
+        if(gBattle.buffs.vuln > 0 && discCard.type === 'attack') slyDmg = Math.floor(slyDmg * 1.5);
+        if(discCard.type === 'attack'){
+          for(var slyHi=0; slyHi<(discCard.hits||1); slyHi++){
+            damageEnemy(0, Math.floor(slyDmg/(discCard.hits||1)), discCard.aoe);
+          }
+        }
+      }
+      // 格挡
+      if(discCard.block) gBattle.playerBlock += discCard.block + (gBattle.playerAgil||0);
+      // 中毒
+      if(discCard.poison) gBattle.enemyPoison += discCard.poison;
+      // 抽牌
+      if(discCard.draw && discCard.draw > 0) drawCards(discCard.draw);
+      // 消耗或弃牌
+      if(discCard.exhaust){ if(!gBattle.exhaustPile) gBattle.exhaustPile = []; gBattle.exhaustPile.push(discIdx); }
+      else gBattle.discardPile.push(discIdx);
+      showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '奇巧·打出');
+    }
+
     function playCard(cardIdx){
       if(!gBattle || !G) return false;
       var deckIdx = gBattle.hand[cardIdx];
@@ -6555,10 +6585,28 @@ return gBattle.energy >= cost;
         showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '金星砚免费');
       }
 
+      // === slyOnSkillPlay: 打出技能牌时给手牌中下一张技能添加奇巧 ===
+      if(card.type === 'skill' && G.powers && G.powers.slyOnSkillPlay){
+        for(var _slyI = 0; _slyI < gBattle.hand.length; _slyI++){
+          var _slyC = G.deck[gBattle.hand[_slyI]];
+          if(_slyC && _slyC.type === 'skill' && !_slyC.sly){
+            _slyC.sly = true;
+            showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '奇巧附加');
+            break;
+          }
+        }
+      }
+
       if(gBattle.energy < cost) return false;
 
       gBattle.energy -= cost;
       gBattle.cardPlayedThisTurn++;
+
+      // blockPerCardPlayed: 每打出一张牌获得格挡
+      if(gBattle._blockPerCardPlayed && gBattle._blockPerCardPlayed > 0){
+        gBattle.playerBlock += gBattle._blockPerCardPlayed;
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-30, '格挡+'+gBattle._blockPerCardPlayed);
+      }
 
       // Remove from hand
       gBattle.hand.splice(cardIdx, 1);
@@ -7086,6 +7134,10 @@ return gBattle.energy >= cost;
           var hitDmg = Math.floor(finalDmg / hits);
           if(hi === 0) hitDmg = finalDmg - hitDmg * (hits - 1);
           damageEnemy(0, hitDmg, isAoe);
+          // poisonPerHit: 每次击中叠毒
+          if(card.poisonPerHit && card.poison){
+            gBattle.enemyPoison += card.poison;
+          }
         }
       }
 
@@ -7257,7 +7309,13 @@ gBattle.playerBlock += blockVal;
         for(var di=0; di<discN && gBattle.hand.length > 0; di++){
           var rIdx = Math.floor(Math.random() * gBattle.hand.length);
           var discIdx = gBattle.hand.splice(rIdx, 1)[0];
-          gBattle.discardPile.push(discIdx);
+          var discCard = G.deck[discIdx];
+          // 奇巧(Sly)：弃牌时自动打出
+          if(discCard && discCard.sly && (gBattle.hp > 0 || (gBattle._isGroup && gBattle._groupHp2 > 0))){
+            triggerSlyCard(discIdx, discCard);
+          } else {
+            gBattle.discardPile.push(discIdx);
+          }
           // 弃牌计数
           gBattle._discardCountThisTurn = (gBattle._discardCountThisTurn||0) + 1;
           // 遗物: 碎金铃 - 弃牌造成伤害
@@ -7317,8 +7375,16 @@ gBattle.playerBlock += blockVal;
       // === discardAllDrawEqual ===
       if(card.discardAllDrawEqual){
         var discardedCount = 0;
-        while(gBattle.hand.length > 0){
-          gBattle.discardPile.push(gBattle.hand.pop());
+        for(var _dal=gBattle.hand.length-1; _dal>=0; _dal--){
+          var _daIdx = gBattle.hand[_dal];
+          var _daCard = G.deck[_daIdx];
+          if(_daCard && _daCard.sly && (gBattle.hp > 0 || (gBattle._isGroup && gBattle._groupHp2 > 0))){
+            gBattle.hand.splice(_dal, 1);
+            triggerSlyCard(_daIdx, _daCard);
+          } else {
+            gBattle.hand.splice(_dal, 1);
+            gBattle.discardPile.push(_daIdx);
+          }
           discardedCount++;
         }
         drawCards(discardedCount);
@@ -7590,6 +7656,11 @@ gBattle.playerBlock += blockVal;
       }
       gBattle.hp -= dmg;
       if(gBattle.hp < 0) gBattle.hp = 0;
+
+      // poisonOnUndealtDmg: 未格挡伤害（实际血量损失）时施加中毒
+      if(dmg > 0 && G.powers && G.powers.poisonOnUndealtDmg){
+        gBattle.enemyPoison += G.powers.poisonOnUndealtDmg;
+      }
 
       // Float damage
       var el = blockEl || document.getElementById('sgBattle');
@@ -8624,13 +8695,31 @@ applyPoison();
           if(discCard.type === 'attack'){
             for(var slyHi=0; slyHi<(discCard.hits||1); slyHi++){
               damageEnemy(0, Math.floor(slyDmg/(discCard.hits||1)), discCard.aoe);
+              // poisonPerHit
+              if(discCard.poisonPerHit && discCard.poison) gBattle.enemyPoison += discCard.poison;
             }
           }
           if(discCard.block) gBattle.playerBlock += discCard.block + (gBattle.playerAgil||0);
-          if(discCard.poison) gBattle.enemyPoison += discCard.poison;
+          if(discCard.poison && !discCard.poisonPerHit) gBattle.enemyPoison += discCard.poison;
+          if(discCard.draw && discCard.draw > 0) drawCards(discCard.draw);
+          if(discCard.tempAgil){ gBattle.playerAgil = (gBattle.playerAgil||0) + discCard.tempAgil; gBattle.tempAgil = (gBattle.tempAgil||0) + discCard.tempAgil; }
+          if(discCard.addShivs){
+            for(var slySi=0; slySi<discCard.addShivs; slySi++){
+              var shivCard = JSON.parse(JSON.stringify(CARDS.liqing_canhua || {name:"残花",cost:0,type:"attack",dmg:4,exhaust:true,isShiv:true,desc:"零落成泥 · 4伤·消耗",rarity:"common",char:"liqing"}));
+              shivCard.id = 'shiv_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+              G.deck.push(shivCard);
+              gBattle.hand.push(G.deck.length-1);
+            }
+          }
+          if(discCard.poisonIfPoisoned && gBattle.enemyPoison > 0) gBattle.enemyPoison += discCard.poisonIfPoisoned;
+          if(discCard.removeAllBlock) gBattle.block = 0;
+          if(discCard.enemyStrDownAll){ gBattle.buffs.strDown = (gBattle.buffs.strDown||0) + discCard.enemyStrDownAll; gBattle.buffs.str = Math.max(0, (gBattle.buffs.str||0) - discCard.enemyStrDownAll); }
+          if(discCard.gainEnergy) gBattle.energy += discCard.gainEnergy;
+          // 消耗或弃牌
           if(discCard.exhaust){ if(!gBattle.exhaustPile) gBattle.exhaustPile = []; gBattle.exhaustPile.push(gBattle.hand[hi3]); }
           else gBattle.discardPile.push(gBattle.hand[hi3]);
           gBattle.hand.splice(hi3,1);
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '奇巧·打出');
           continue;
         }
         gBattle._discardCountThisTurn = (gBattle._discardCountThisTurn||0) + 1;
@@ -9454,6 +9543,69 @@ function setBattleBackground(){
       closeBtn.textContent = '取消 ✕';
       closeBtn.onclick = function(){ document.body.removeChild(overlay); if(callback) callback(-1); };
       box.appendChild(closeBtn);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+    }
+
+    // 弃牌选择提示框
+    function showDiscardPrompt(count){
+      if(!gBattle || !gBattle.hand || gBattle.hand.length <= 1) return;
+      var overlay = document.createElement('div');
+      overlay.className = 'sg-modal-overlay';
+      var box = document.createElement('div');
+      box.className = 'sg-modal-box';
+      var title = document.createElement('div');
+      title.className = 'sg-modal-title';
+      title.textContent = '🗑️ 选择要弃掉的卡牌';
+      box.appendChild(title);
+      var grid = document.createElement('div');
+      grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:0.5rem;max-height:50vh;overflow-y:auto;';
+      var selectedCount = 0;
+      var selectedIndices = [];
+      for(var di=0; di<gBattle.hand.length; di++){
+        var cdIdx = gBattle.hand[di];
+        var cd = G.deck[cdIdx];
+        if(!cd) continue;
+        var cardEl = document.createElement('div');
+        cardEl.className = 'sg-card sg-card-selectable';
+        var rC = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
+        cardEl.style.borderColor = (rC[cd.rarity]||'#a8a8a8');
+        cardEl.innerHTML = '<div class="sg-card-cost">'+_sgCardCost(cd)+'</div><div class="sg-card-name'+(cd.upgraded?' sg-upgraded-name':'')+'">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
+        (function(ci, cIdx, el){
+          el.addEventListener('click', function(){
+            if(el.classList.contains('sg-card-selected')){
+              el.classList.remove('sg-card-selected');
+              var si = selectedIndices.indexOf(ci);
+              if(si >= 0) selectedIndices.splice(si, 1);
+              selectedCount--;
+            } else if(selectedCount < count){
+              el.classList.add('sg-card-selected');
+              selectedIndices.push(ci);
+              selectedCount++;
+            }
+          });
+        })(di, cdIdx, cardEl);
+        grid.appendChild(cardEl);
+      }
+      box.appendChild(grid);
+      var confirmBtn = document.createElement('button');
+      confirmBtn.className = 'sg-modal-close';
+      confirmBtn.textContent = '确认弃牌 ✓';
+      confirmBtn.onclick = function(){
+        document.body.removeChild(overlay);
+        // 从后往前删除，避免索引偏移
+        selectedIndices.sort(function(a,b){return b-a;});
+        for(var si=0; si<selectedIndices.length; si++){
+          var pos = selectedIndices[si];
+          if(pos < gBattle.hand.length){
+            var discarded = gBattle.hand.splice(pos, 1)[0];
+            gBattle.discardPile.push(discarded);
+            gBattle._discardCountThisTurn = (gBattle._discardCountThisTurn||0) + 1;
+          }
+        }
+        renderBattle();
+      };
+      box.appendChild(confirmBtn);
       overlay.appendChild(box);
       document.body.appendChild(overlay);
     }
