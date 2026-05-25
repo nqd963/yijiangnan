@@ -5903,6 +5903,7 @@ function startBattle(eData){
         case 'attack_d':
           battle.intent = 'attack';
           battle.intentVal = baseDmg;
+          battle.intentHits = 1;
           break;
         case 'attack_2x':
           battle.intent = 'attack';
@@ -5917,14 +5918,17 @@ function startBattle(eData){
         case 'attack_big':
           battle.intent = 'attack';
           battle.intentVal = Math.floor(baseDmg * 1.5);
+          battle.intentHits = 1;
           break;
         case 'attack_aoe':
           battle.intent = 'attack';
           battle.intentVal = Math.floor(baseDmg * 0.8);
+          battle.intentHits = 1;
           break;
         case 'defend':
           battle.intent = 'defend';
           battle.intentVal = Math.floor(baseDmg * 0.5) + 3;
+          battle.intentHits = 1;
           break;
         case 'vuln_1':
           battle.intent = 'debuff';
@@ -5968,7 +5972,10 @@ function startBattle(eData){
         default:
           battle.intent = 'attack';
           battle.intentVal = baseDmg;
+          battle.intentHits = 1;
       }
+      // 重置 intentAmount 为 1，防止上一次 debuff 的 intentAmount 残留
+      if(battle.intent !== 'debuff') battle.intentAmount = 1;
     }
 
     /* ── 术语系统 ── */
@@ -7759,6 +7766,10 @@ gBattle.playerBlock += blockVal;
           if(gBattle.hp < 0) gBattle.hp = 0;
         }
         showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '🌵 荆棘反伤'+gBattle.thorns);
+        // 荆棘伤害可能击杀敌人，需要检查（但不中断当前函数，保证受击反馈正常显示）
+        if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)){
+          checkEnemyDeath();
+        }
       }
 
       // === 火焰壁·反伤：每受1次攻击对敌人造成reflectDmg伤害 ===
@@ -8874,10 +8885,20 @@ function setBattleBackground(){
         document.getElementById('sgEnemyHp').textContent = (typeof gBattle.hp === 'number' && !isNaN(gBattle.hp)) ? gBattle.hp : 0; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
         document.getElementById('sgEnemyBlockNum').textContent = (typeof gBattle.block === 'number' && !isNaN(gBattle.block)) ? gBattle.block : 0;
         document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
-        // 敌人2
+        // 敌人2 — 使用独立的 SVG ID 后缀避免与敌人1冲突
         var e2El = document.getElementById('sgEnemyPortrait2');
         if(e2El){
-          e2El.innerHTML = portraitHtml;
+          var portraitHtml2 = portraitHtml;
+          if(enemySvg && !_isFileProtocol){
+            var uid2 = '_e2' + (gBattle.id || 'x') + (gBattle._portraitUid || (gBattle._portraitUid = Date.now() % 9999));
+            var safeSvg2 = enemySvg
+              .replace(/id="([^"]+)"/g, 'id="$1'+uid2+'"')
+              .replace(/url\(#([^)]+)\)/g, 'url(#$1'+uid2+'"')
+              .replace(/href="#([^"]+)"/g, 'href="#$1'+uid2+'"')
+              .replace(/xlink:href="#([^"]+)"/g, 'xlink:href="#$1'+uid2+'"');
+            portraitHtml2 = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">'+safeSvg2+'</div>';
+          }
+          e2El.innerHTML = portraitHtml2;
           e2El.onmouseenter = function(e){ showPortraitBuffTip(e, 'enemy2'); };
           e2El.onmousemove = function(e){ movePortraitBuffTip(e); };
           e2El.onmouseleave = function(){ hidePortraitBuffTip(); };
@@ -9367,14 +9388,17 @@ function setBattleBackground(){
         };
       }
     
-      // Pill shop
-      var pBtn = document.createElement('button');
-      pBtn.id = 'sgShopPillBtn';
-      pBtn.className = 'sg-btn';
+      // Pill shop — 避免重复创建（每次 showShop 调用时先检查）
+      var pBtn = document.getElementById('sgShopPillBtn');
+      if(!pBtn){
+        pBtn = document.createElement('button');
+        pBtn.id = 'sgShopPillBtn';
+        pBtn.className = 'sg-btn';
+        pBtn.style.cssText = 'font-size:0.75rem;margin-top:0.5rem;';
+        var pItems = document.getElementById('sgShopItems');
+        if(pItems && pItems.parentNode) pItems.parentNode.insertBefore(pBtn, pItems.nextSibling);
+      }
       pBtn.textContent = '💊 买灵丹（25金）';
-      pBtn.style.cssText = 'font-size:0.75rem;margin-top:0.5rem;';
-      var pItems = document.getElementById('sgShopItems');
-      if(pItems && pItems.parentNode) pItems.parentNode.insertBefore(pBtn, pItems.nextSibling);
       pBtn.onclick = function(){
         if(G.gold < 25){ showEffectFloat(pBtn.offsetLeft, pBtn.offsetTop, '金币不足'); return; }
         if(G.pills.length >= (G.pillBagLimit||3)){ showEffectFloat(pBtn.offsetLeft, pBtn.offsetTop, '灵丹已满'); return; }
@@ -9530,22 +9554,24 @@ function setBattleBackground(){
       if(!G) return;
       var resultMsg = '';
 
-      if(effects.gold){
+      if(effects.gold !== undefined && effects.gold !== null){
         G.gold += effects.gold;
         if(effects.gold > 0) resultMsg += '金币+' + effects.gold + ' ';
         else resultMsg += '金币' + effects.gold + ' ';
       }
-      if(effects.hp){
+      if(effects.hp !== undefined && effects.hp !== null){
         G.hp += effects.hp;
         if(effects.hp > 0) resultMsg += 'HP+' + effects.hp + ' ';
         else resultMsg += 'HP' + effects.hp + ' ';
       }
       if(effects.maxHp){
         G.maxHp += effects.maxHp;
+        if(G.maxHp < 1) G.maxHp = 1; // 最大HP至少为1
         resultMsg += '最大HP+' + effects.maxHp + ' ';
       }
       if(G.hp > G.maxHp) G.hp = G.maxHp;
       if(G.hp < 0) G.hp = 0;
+      if(G.gold < 0) G.gold = 0; // 金币不应为负数
 
       // Show result briefly
       var descEl = document.getElementById('sgEventDesc');
@@ -9784,8 +9810,8 @@ function setBattleBackground(){
         cardList.innerHTML = '';
         for(var ui=0;ui<G.deck.length;ui++){
           var cd = G.deck[ui];
-          // 诅咒/状态牌不可升级
-          if(cd.curse || cd.type === 'curse' || cd.type === 'status') continue;
+          // 诅咒/状态牌/已升级牌不可升级
+          if(cd.curse || cd.type === 'curse' || cd.type === 'status' || cd.upgraded) continue;
           var pCd = cd;
           if(previewMode){
             pCd = JSON.parse(JSON.stringify(cd));
@@ -9851,6 +9877,8 @@ function setBattleBackground(){
 
     function applyUpgrade(card){
       if(!card) return;
+      // 已升级的卡牌不再重复升级
+      if(card.upgraded) return;
       // === 伤害升级（按卡牌类型差异化）===
       if(card.dmg){
         if(card.perUpgradeDmg){
