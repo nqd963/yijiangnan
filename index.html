@@ -5422,17 +5422,17 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
       }
 
       var result = [];
+      var tempPool = pool.slice();
+      var tempWeight = weights.slice();
       // Enemy-type weight bonus: boss/elite get higher rare/ancient chance
       if(poolType === "boss" || poolType === "elite"){
         var bonus = poolType === "boss" ? 1.5 : 1.2;
-        for(var wi=0;wi<weights.length;wi++){
+        for(var wi=0;wi<tempWeight.length;wi++){
           var c2 = CARDS[tempPool[wi]];
-          if(c2 && c2.rarity === "rare") weights[wi] = Math.floor(weights[wi] * bonus);
-          if(c2 && c2.rarity === "ancient") weights[wi] = Math.floor(weights[wi] * (bonus + 0.3));
+          if(c2 && c2.rarity === "rare") tempWeight[wi] = Math.floor(tempWeight[wi] * bonus);
+          if(c2 && c2.rarity === "ancient") tempWeight[wi] = Math.floor(tempWeight[wi] * (bonus + 0.3));
         }
       }
-      var tempPool = pool.slice();
-      var tempWeight = weights.slice();
 
       for(var ci=0;ci<count && tempPool.length>0;ci++){
         var totalW = 0;
@@ -6542,8 +6542,6 @@ return gBattle.energy >= cost;
         gBattle._echoUsedThisTurn = true;
         gBattle._echoTrigger = true;
       }
-if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch(e){} }
-
       // jinxing: 攻击牌有30%概率不消耗能量
       if(hasRelic('jinxing') && card.type === 'attack' && Math.random() * 100 < 30 && cost > 0){
         cost = 0;
@@ -6557,6 +6555,9 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
 
       // Remove from hand
       gBattle.hand.splice(cardIdx, 1);
+
+      // onPlay 回调在费用扣除后执行，避免回调中修改能量/费用导致出牌失败
+      if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch(e){} }
 
       // Calculate damage with bonuses
       var baseDmg = card.dmg || 0;
@@ -7722,13 +7723,7 @@ gBattle.playerBlock += blockVal;
         } else {
           blockedDmg = gBattle.playerBlock;
           dmg -= gBattle.playerBlock;
-          // 格挡保留（blockPersist）
-      if(!(G.powers && G.powers.blockPersist) && !gBattle._BattleBlockPersist){
-        gBattle.playerBlock = 0;
-      } else {
-        gBattle.playerBlock = 0; // blockPersist仅防止回合末重置，伤害仍然消耗格挡
-      }
-
+          gBattle.playerBlock = 0;
         }
       }
       if(blockedDmg > 0){
@@ -8104,7 +8099,7 @@ gBattle.playerBlock += blockVal;
       if(gBattle.intent === 'attack'){
         var atkDmg = gBattle.intentVal + (gBattle.buffs.str || 0);
         var hits2 = gBattle.intentHits || 1;
-        if(gBattle.buffs.vuln > 0) atkDmg = Math.floor(atkDmg * 1.5);
+        // 注：buffs.vuln 是敌人身上的易伤（影响玩家对敌人的伤害），不应影响敌人攻击
         if(gBattle.buffs.weak > 0) atkDmg = Math.floor(atkDmg * 0.75);
         if(gBattle.buffs.strDown > 0) atkDmg = Math.max(1, atkDmg - gBattle.buffs.strDown);
         if(gBattle.playerWeak > 0){
@@ -8828,7 +8823,7 @@ function setBattleBackground(){
       // 1500ms最终保障：如果立绘仍不可见，强制显示emoji
       // 避免多次renderBattle堆积多个定时器
       if(gBattle._portraitFallbackTimer) clearTimeout(gBattle._portraitFallbackTimer);
-      gBattle._portraitFallbackTimer = setTimeout(function(){
+      gBattle._renderTimers.push(setTimeout(function(){
         try{
           var _fe = enemyEmojis[gBattle.id] || '魔';
           ['sgEnemyPortrait','sgEnemyPortrait2'].forEach(function(_pid){
@@ -8841,7 +8836,7 @@ function setBattleBackground(){
             }
           });
         }catch(_ee){}
-      }, 1500);
+      }, 1500));
       var enemyArea = document.getElementById('sgEnemyArea');
       if(gBattle._isGroup){
         // 群体敌人：显示两个敌人框（Item 3）
@@ -9023,16 +9018,16 @@ function setBattleBackground(){
         var _eImm = document.getElementById('sgEnemy');
         if(_eImm) _eImm.style.display = '';
       }catch(ee){}
-      // 延迟再次检查（解决部分浏览器SVG渲染延迟问题）
-      setTimeout(function(){
+      // 延迟再次检查（解决部分浏览器SVG渲染延迟问题）— 纳入 _renderTimers 管理
+      gBattle._renderTimers.push(setTimeout(function(){
         try{
           var fb2 = enemyEmojis[gBattle.id] || '魔';
           _checkPortraitLoaded('sgEnemyPortrait', fb2);
           if(gBattle._isGroup) _checkPortraitLoaded('sgEnemyPortrait2', fb2);
         }catch(ee){}
-      }, 300);
+      }, 300));
       // 50ms快速检查
-      setTimeout(function(){
+      gBattle._renderTimers.push(setTimeout(function(){
         try{
           var fbFast = enemyEmojis[gBattle.id] || '魔';
           var epFast = document.getElementById('sgEnemyPortrait');
@@ -9044,9 +9039,9 @@ function setBattleBackground(){
           var _eFast = document.getElementById('sgEnemy');
           if(_eFast) _eFast.style.display = '';
         }catch(ee){}
-      }, 50);
+      }, 50));
       // 800ms再次强制检查（用_checkPortraitLoaded确保生效）
-      setTimeout(function(){
+      gBattle._renderTimers.push(setTimeout(function(){
         try{
           if(typeof _checkPortraitLoaded === 'function'){
             var fb3 = enemyEmojis[gBattle.id] || '魔';
@@ -9059,7 +9054,7 @@ function setBattleBackground(){
           var _eEl2 = document.getElementById('sgEnemy');
           if(_eEl2) _eEl2.style.display = '';
         }catch(ee){}
-      }, 800);
+      }, 800));
 
       // Player Portrait (Item 6) — 带Buff浮层
       var charPortraits = {lizhi:'月',sush:'浪',liqing:'花'};
@@ -9135,7 +9130,7 @@ function setBattleBackground(){
         if(card.stompCostReduce && cost > 0 && gBattle.cardPlayedThisTurn > 0) cost = Math.max(0, cost - gBattle.cardPlayedThisTurn);
 
         var canPlay = !card.unplayable && gBattle.energy >= cost;
-        var rarityColors = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', ancient:'#ff44ff'};
+        var rarityColors = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
         var borderColor = card.curse ? '#993333' : (card.unplayable ? '#994433' : (rarityColors[card.rarity] || '#a8a8a8'));
 
         var cardEl = document.createElement('div');
@@ -9845,6 +9840,8 @@ function setBattleBackground(){
       if(card.dmg){
         if(card.perUpgradeDmg){
           card.dmg += card.perUpgradeDmg;
+        } else if(card.dmgPerStr){ card.dmg += 5; // dmgPerStr 优先于通用升级
+        } else if(card.dmgPerStrikeName){ card.dmg += 2; // dmgPerStrikeName 优先于通用升级
         } else if(card.rampageStrTurn && card.rampageStrTurn > 0){
           card.rampageStrTurn += 3;
         } else if(card.hits && card.hits > 1 && card.aoe){
@@ -9861,8 +9858,6 @@ function setBattleBackground(){
           card.dmg += 5;
         } else if(card.hitsX){
           card.dmg += 2;
-        } else if(card.dmgPerStr){ card.dmg += 5;
-        } else if(card.dmgPerStrikeName){ card.dmg += 2;
         } else if(card.grandFinale){ card.dmg += 20;
         } else if(card.dmgPerAtkPlayed){ card.dmgPerAtkPlayed += 2;
         } else if(card.dmgPerSkillInHand){ card.dmgPerSkillInHand += 2;
@@ -10379,7 +10374,7 @@ function setBattleBackground(){
       if(pile.length === 0){
         panel.innerHTML += '<div style="text-align:center;color:var(--text-faint);padding:1rem 0;">牌堆为空</div>';
       } else {
-        var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', ancient:'#ff44ff'};
+        var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
         panel.innerHTML += '<div class="sg-deck-grid">';
         // 展示牌堆时按原始顺序（从底到顶），也即倒序
         for(var pi=pile.length-1;pi>=0;pi--){
@@ -12018,7 +12013,7 @@ var RELIC_FLAV = {};
         '<span style="cursor:pointer;font-size:1rem;color:var(--text-faint);" onclick="document.getElementById(\'sgDeckPopup\').style.display=\'none\';">✕</span>' +
         '</div></div>';
       html += '<div class="sg-deck-grid">';
-      var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff', ancient:'#ff44ff'};
+      var rarityColors3 = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
       var raritySort = {basic:0, common:1, uncommon:2, rare:3};
       var sorted = G.deck.slice().sort(function(a,b){
         var ra = raritySort[a.rarity]||0;
