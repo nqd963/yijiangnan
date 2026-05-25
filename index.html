@@ -5806,8 +5806,7 @@ function startBattle(eData){
         var _exhaustedCurses = 0;
         for(var sci=G.deck.length-1;sci>=0;sci--){
           if(G.deck[sci] && G.deck[sci].curse){
-            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-            gBattle.exhaustPile.push(sci);
+            exhaustCard(sci);
             // 从drawPile/discardPile/hand中移除
             var _epIdx = gBattle.drawPile.indexOf(sci);
             if(_epIdx !== -1) gBattle.drawPile.splice(_epIdx, 1);
@@ -6146,8 +6145,7 @@ function startBattle(eData){
         var drawnCard = G.deck[cardIdx];
         if(drawnCard && drawnCard.void){
           gBattle.energy = Math.max(0, (gBattle.energy||0) - 1);
-          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-          gBattle.exhaustPile.push(cardIdx);
+          exhaustCard(cardIdx);
           gBattle.hand.pop(); // 从手牌移除（虚空不进入手牌直接消耗）
           showEffectFloat(window.innerWidth/2, window.innerHeight/2-50, '\uD83C\uDF2A \u865A\u7A7A\uFF1A\u80FD\u91CF-1\u00B7\u6D88\u8017');
           checkLianyuqian(drawnCard);
@@ -6155,8 +6153,7 @@ function startBattle(eData){
         // 断念珠：首次抽到诅咒牌时消耗并获得能量
         if(drawnCard && drawnCard.curse && hasRelic('duannianzhu') && !gBattle._duannianzhuUsed){
           gBattle._duannianzhuUsed = true;
-          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-          gBattle.exhaustPile.push(cardIdx);
+          exhaustCard(cardIdx);
           gBattle.hand.pop();
           gBattle.energy = Math.min((gBattle.energy||0) + 1, 99);
           showEffectFloat(window.innerWidth/2, window.innerHeight/2-50, '\uD83D\uDCCF \u65AD\u5FF5\u73E0\uFF1A\u6D88\u8017\u8BC5\u5492+\u80FD\u91CF');
@@ -6165,8 +6162,7 @@ function startBattle(eData){
         // 涤尘泉：每回合首次抽到状态牌时消耗并抽1张
         if(drawnCard && !drawnCard.curse && drawnCard.unplayable && hasRelic('dichenquan') && !gBattle._dichenquanUsed && !drawnCard.void){
           gBattle._dichenquanUsed = true;
-          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-          gBattle.exhaustPile.push(cardIdx);
+          exhaustCard(cardIdx);
           gBattle.hand.pop();
           // 补抽1张
           n++; // 增加本次抽牌数量以补偿
@@ -6414,6 +6410,18 @@ return gBattle.energy >= cost;
       }catch(e){}
     }
 
+    // === exhaustCard: 将牌加入消耗堆并触发 drawOnExhaust ===
+    function exhaustCard(deckIdx){
+      if(!gBattle) return;
+      if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+      gBattle.exhaustPile.push(deckIdx);
+      gBattle._exhaustedThisTurn = true;
+      // drawOnExhaust: 黑暗之拥 - 每消耗1张牌抽1张
+      if(G.powers && G.powers.drawOnExhaust){
+        drawCards(G.powers.drawOnExhaust);
+      }
+    }
+
     // === triggerSlyCard: 弃牌时自动打出奇巧牌 ===
     function triggerSlyCard(discIdx, discCard){
       if(!gBattle || !discCard) return;
@@ -6434,7 +6442,7 @@ return gBattle.energy >= cost;
       // 抽牌
       if(discCard.draw && discCard.draw > 0) drawCards(discCard.draw);
       // 消耗或弃牌
-      if(discCard.exhaust){ if(!gBattle.exhaustPile) gBattle.exhaustPile = []; gBattle.exhaustPile.push(discIdx); }
+      if(discCard.exhaust){ exhaustCard(discIdx); }
       else gBattle.discardPile.push(discIdx);
       showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '奇巧·打出');
     }
@@ -6789,9 +6797,7 @@ return gBattle.energy >= cost;
         }
         if(exSrc.length > 0){
           var exTop = exSrc.pop();
-          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-          gBattle.exhaustPile.push(exTop);
-          gBattle._exhaustedThisTurn = true;
+          exhaustCard(exTop);
           showEffectFloat(window.innerWidth/2, window.innerHeight/2-80, '🔥 消耗牌堆顶');
         }
       }
@@ -6836,17 +6842,13 @@ return gBattle.energy >= cost;
           if(_exhIdx >= 0 && gBattle.hand.indexOf(_exhIdx) >= 0){
             var _exhPos = gBattle.hand.indexOf(_exhIdx);
             gBattle.hand.splice(_exhPos,1);
-            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-            gBattle.exhaustPile.push(_exhIdx);
-            gBattle._exhaustedThisTurn = true;
+            exhaustCard(_exhIdx);
           } else {
             // 玩家取消或无效选择，随机消耗一张
             if(gBattle.hand.length > 0){
               var _exRi = Math.floor(Math.random()*gBattle.hand.length);
               var _exRd = gBattle.hand.splice(_exRi,1)[0];
-              if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-              gBattle.exhaustPile.push(_exRd);
-              gBattle._exhaustedThisTurn = true;
+              exhaustCard(_exRd);
             }
           }
         }, '🔥 沧海笑 · 选择要消耗的卡牌');
@@ -6863,9 +6865,7 @@ return gBattle.energy >= cost;
         }
         if(topSrc.length>0){
           var tpIdx = topSrc.pop();
-          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-          gBattle.exhaustPile.push(tpIdx);
-          gBattle._exhaustedThisTurn = true;
+          exhaustCard(tpIdx);
         }
       }
 
@@ -6912,12 +6912,26 @@ return gBattle.energy >= cost;
 
       // === exhaustHandAll ===
       if(card.exhaustHandAll){
-        for(var xi=0;xi<gBattle.hand.length;xi++){
-          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-          gBattle.exhaustPile.push(gBattle.hand[xi]);
+        if(gBattle.hand.length > 0 && typeof showExhaustFromHandDialog === 'function'){
+          var _exAllCard = card; // 闭包保存
+          showExhaustFromHandDialog(null, 0, function(selected){
+            for(var xi=0; xi<selected.length; xi++){
+              var pos = selected[xi];
+              if(pos < gBattle.hand.length){
+                exhaustCard(gBattle.hand[pos]);
+                gBattle.hand.splice(pos, 1);
+              }
+            }
+            // 继续处理后续效果
+            renderBattle();
+          }, '🔥 选择要消耗的手牌（全部）');
+        } else {
+          // 无手牌或对话框不可用，直接消耗所有
+          for(var xi=0;xi<gBattle.hand.length;xi++){
+            exhaustCard(gBattle.hand[xi]);
+          }
+          gBattle.hand = [];
         }
-        gBattle._exhaustedThisTurn = true;
-        gBattle.hand = []; // 消耗所有手牌后清空
       // 虚无handler moved to endTurn
       }
 
@@ -7026,18 +7040,14 @@ return gBattle.energy >= cost;
             // 玩家选择了要消耗的牌
             var _bpPos = gBattle.hand.indexOf(_bpIdx);
             gBattle.hand.splice(_bpPos,1);
-            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-            gBattle.exhaustPile.push(_bpIdx);
-            gBattle._exhaustedThisTurn = true;
+            exhaustCard(_bpIdx);
             drawCards(2);
           } else {
             // 玩家取消或无效选择，随机消耗一张
             if(gBattle.hand.length > 0){
               var _bpRi = Math.floor(Math.random()*gBattle.hand.length);
               var _bpRd = gBattle.hand.splice(_bpRi,1)[0];
-              if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-              gBattle.exhaustPile.push(_bpRd);
-              gBattle._exhaustedThisTurn = true;
+              exhaustCard(_bpRd);
               drawCards(2);
             }
           }
@@ -7056,19 +7066,38 @@ return gBattle.energy >= cost;
 
       // === exhaustNonAttack ===
       if(card.exhaustNonAttack){
-        var naCount = 0;
-        for(var nai=gBattle.hand.length-1;nai>=0;nai--){
-          var naCard = G.deck[gBattle.hand[nai]];
-          if(naCard && naCard.type!=='attack'){
-            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-            gBattle.exhaustPile.push(gBattle.hand[nai]);
-            gBattle.hand.splice(nai,1);
-            naCount++;
+        // 让玩家选择要消耗的非攻击牌
+        if(typeof showExhaustFromHandDialog === 'function'){
+          var _naCard = card;
+          showExhaustFromHandDialog(function(c){ return c.type !== 'attack'; }, 0, function(selected){
+            var naCount = 0;
+            for(var ni=0; ni<selected.length; ni++){
+              var pos = selected[ni];
+              if(pos < gBattle.hand.length){
+                exhaustCard(gBattle.hand[pos]);
+                gBattle.hand.splice(pos, 1);
+                naCount++;
+              }
+            }
+            if(_naCard.blockPerExhaustNonAtk && naCount > 0){
+              gBattle.playerBlock += naCount * _naCard.blockPerExhaustNonAtk;
+            }
+            renderBattle();
+          }, '🔥 选择要消耗的非攻击牌');
+        } else {
+          // 对话框不可用，自动消耗所有非攻击牌
+          var naCount = 0;
+          for(var nai=gBattle.hand.length-1;nai>=0;nai--){
+            var naCard = G.deck[gBattle.hand[nai]];
+            if(naCard && naCard.type!=='attack'){
+              exhaustCard(gBattle.hand[nai]);
+              gBattle.hand.splice(nai,1);
+              naCount++;
+            }
           }
-        }
-        if(naCount>0) gBattle._exhaustedThisTurn = true;
-        if(card.blockPerExhaustNonAtk){
-          gBattle.playerBlock += naCount * card.blockPerExhaustNonAtk;
+          if(card.blockPerExhaustNonAtk && naCount > 0){
+            gBattle.playerBlock += naCount * card.blockPerExhaustNonAtk;
+          }
         }
       }
 
@@ -7110,13 +7139,25 @@ return gBattle.energy >= cost;
       // === exhaustHandDrawN ===
       if(card.exhaustHandDrawN){
         var handSize7 = gBattle.hand.length;
-        for(var hi7=gBattle.hand.length-1;hi7>=0;hi7--){
-          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-          gBattle.exhaustPile.push(gBattle.hand[hi7]);
+        if(handSize7 > 0 && typeof showExhaustFromHandDialog === 'function'){
+          showExhaustFromHandDialog(null, 0, function(selected){
+            for(var si=0; si<selected.length; si++){
+              var pos = selected[si];
+              if(pos < gBattle.hand.length){
+                exhaustCard(gBattle.hand[pos]);
+                gBattle.hand.splice(pos, 1);
+              }
+            }
+            drawCards(selected.length);
+            renderBattle();
+          }, '🔥 选择要消耗的手牌（每消耗1张抽1张）');
+        } else {
+          for(var hi7=gBattle.hand.length-1;hi7>=0;hi7--){
+            exhaustCard(gBattle.hand[hi7]);
+          }
+          gBattle.hand = [];
+          drawCards(handSize7);
         }
-        gBattle._exhaustedThisTurn = true;
-        gBattle.hand = [];
-        drawCards(handSize7);
       }
 
 // AOE
@@ -7529,13 +7570,12 @@ gBattle.playerBlock += blockVal;
         }
       }
 
-// Exhaust (能力牌自动消耗)
-      if(!card.exhaust && card.type !== 'power'){
+// Exhaust (能力牌自动消耗 / 黄泉路技能消耗)
+      var _shouldExhaust = card.exhaust || card.type === 'power' || (card.type === 'skill' && G.powers && G.powers.exhaustSkill);
+      if(!_shouldExhaust){
         gBattle.discardPile.push(deckIdx);
       } else {
-        if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-        gBattle.exhaustPile.push(deckIdx);
-        gBattle._exhaustedThisTurn = true;
+        exhaustCard(deckIdx);
         // 消耗特效
         var _exEl = document.querySelector('#sgHand .sg-card:nth-child('+(cardIdx+1)+')');
         if(_exEl){
@@ -8385,8 +8425,7 @@ gBattle.noMoreDraw = false;
       // === 消耗牌堆顶效果 ===
       if(G.powers && G.powers.exhaustTopStart){
         if(gBattle.drawPile.length>0){
-          if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-          gBattle.exhaustPile.push(gBattle.drawPile.pop());
+          exhaustCard(gBattle.drawPile.pop());
         }
       }
 
@@ -8669,12 +8708,11 @@ applyPoison();
       // 执行虚无（ethereal）消耗
       for(var eti = _etherealToExhaust.length-1; eti >= 0; eti--){
         var etIdx = _etherealToExhaust[eti];
-        if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
         var etCard = G.deck[gBattle.hand[etIdx]];
         // 虚无特效
         var _etEl = document.querySelector('#sgHand .sg-card:nth-child('+(etIdx+1)+')');
         if(_etEl) _etEl.classList.add('sg-card-ethereal');
-        gBattle.exhaustPile.push(gBattle.hand[etIdx]);
+        exhaustCard(gBattle.hand[etIdx]);
         gBattle.hand.splice(etIdx, 1);
         checkLianyuqian(etCard);
       }
@@ -8716,7 +8754,7 @@ applyPoison();
           if(discCard.enemyStrDownAll){ gBattle.buffs.strDown = (gBattle.buffs.strDown||0) + discCard.enemyStrDownAll; gBattle.buffs.str = Math.max(0, (gBattle.buffs.str||0) - discCard.enemyStrDownAll); }
           if(discCard.gainEnergy) gBattle.energy += discCard.gainEnergy;
           // 消耗或弃牌
-          if(discCard.exhaust){ if(!gBattle.exhaustPile) gBattle.exhaustPile = []; gBattle.exhaustPile.push(gBattle.hand[hi3]); }
+          if(discCard.exhaust){ exhaustCard(gBattle.hand[hi3]); }
           else gBattle.discardPile.push(gBattle.hand[hi3]);
           gBattle.hand.splice(hi3,1);
           showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '奇巧·打出');
@@ -8736,10 +8774,8 @@ applyPoison();
         for(var vi=gBattle.hand.length-1; vi>=0; vi--){
           var vCard = G.deck[gBattle.hand[vi]];
           if(vCard && (vCard.void || (vCard.desc && vCard.desc.indexOf("虚无") >= 0))){
-            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-            gBattle.exhaustPile.push(gBattle.hand[vi]);
+            exhaustCard(gBattle.hand[vi]);
             gBattle.hand.splice(vi, 1);
-            gBattle._exhaustedThisTurn = true;
           }
         }
       }
@@ -9543,6 +9579,90 @@ function setBattleBackground(){
       closeBtn.textContent = '取消 ✕';
       closeBtn.onclick = function(){ document.body.removeChild(overlay); if(callback) callback(-1); };
       box.appendChild(closeBtn);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+    }
+
+    // 从手牌中选择消耗牌的对话框（支持过滤和数量选择）
+    // filterFn: function(card) 返回true表示可被选择消耗
+    // count: 需要选择的数量（0或1表示选1张，>1表示选N张）
+    // callback: function(selectedIndices) 传入手牌索引数组（从后往前排序），取消则为空数组
+    // titleText: 标题
+    function showExhaustFromHandDialog(filterFn, count, callback, titleText){
+      if(!gBattle || !gBattle.hand || gBattle.hand.length === 0){
+        if(callback) callback([]);
+        return;
+      }
+      // 过滤可选的牌
+      var eligible = [];
+      for(var ei=0; ei<gBattle.hand.length; ei++){
+        var ec = G.deck[gBattle.hand[ei]];
+        if(ec && (!filterFn || filterFn(ec))){
+          eligible.push(ei);
+        }
+      }
+      if(eligible.length === 0){
+        if(callback) callback([]);
+        return;
+      }
+      var overlay = document.createElement('div');
+      overlay.className = 'sg-modal-overlay';
+      var box = document.createElement('div');
+      box.className = 'sg-modal-box';
+      var title = document.createElement('div');
+      title.className = 'sg-modal-title';
+      title.textContent = titleText || '🔥 选择要消耗的卡牌';
+      box.appendChild(title);
+      // 提示文字
+      var hint = document.createElement('div');
+      hint.style.cssText = 'text-align:center;font-size:0.75rem;color:var(--text-faint);margin-bottom:0.3rem;';
+      var selectCount = (count && count > 1) ? count : eligible.length;
+      hint.textContent = '选择 ' + selectCount + ' 张牌消耗';
+      box.appendChild(hint);
+      var grid = document.createElement('div');
+      grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:0.5rem;max-height:50vh;overflow-y:auto;';
+      var selectedIndices = [];
+      // 只显示符合条件的牌
+      for(var ei2=0; ei2<gBattle.hand.length; ei2++){
+        var cdIdx = gBattle.hand[ei2];
+        var cd = G.deck[cdIdx];
+        if(!cd) continue;
+        if(filterFn && !filterFn(cd)) continue;
+        var cardEl = document.createElement('div');
+        cardEl.className = 'sg-card sg-card-selectable';
+        var rC = {basic:'#8b7355',common:'#a8a8a8',uncommon:'#55cc55',rare:'#ffcc00',ancient:'#ff44ff'};
+        cardEl.style.borderColor = (rC[cd.rarity]||'#a8a8a8');
+        cardEl.innerHTML = '<div class="sg-card-cost">'+_sgCardCost(cd)+'</div><div class="sg-card-name'+(cd.upgraded?' sg-upgraded-name':'')+'">'+cd.name+'</div><div class="sg-card-desc">'+(cd.desc||'')+'</div><div class="sg-card-type">'+cd.type+'</div>';
+        (function(ci, el){
+          el.addEventListener('click', function(){
+            var si = selectedIndices.indexOf(ci);
+            if(si >= 0){
+              el.classList.remove('sg-card-selected');
+              selectedIndices.splice(si, 1);
+            } else if(selectedIndices.length < selectCount){
+              el.classList.add('sg-card-selected');
+              selectedIndices.push(ci);
+            }
+          });
+        })(ei2, cardEl);
+        grid.appendChild(cardEl);
+      }
+      box.appendChild(grid);
+      var confirmBtn = document.createElement('button');
+      confirmBtn.className = 'sg-modal-close';
+      confirmBtn.textContent = '确认消耗 ✓';
+      confirmBtn.onclick = function(){
+        document.body.removeChild(overlay);
+        selectedIndices.sort(function(a,b){return b-a;});
+        if(callback) callback(selectedIndices);
+      };
+      box.appendChild(confirmBtn);
+      var cancelBtn = document.createElement('button');
+      cancelBtn.className = 'sg-modal-close';
+      cancelBtn.style.cssText = 'margin-top:0.3rem;background:rgba(100,100,100,0.3);';
+      cancelBtn.textContent = '取消 ✕';
+      cancelBtn.onclick = function(){ document.body.removeChild(overlay); if(callback) callback([]); };
+      box.appendChild(cancelBtn);
       overlay.appendChild(box);
       document.body.appendChild(overlay);
     }
