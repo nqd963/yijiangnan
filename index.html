@@ -247,6 +247,36 @@
           }
         }
       }
+
+      // 悲欢石：上回合受伤则本回合额外触发所有球体被动一次
+      if(gBattle._beihuanshiActive && gBattle._selfDamagedLastTurn){
+        for(var bi = 0; bi < slots.length; bi++){
+          var bt = ORB_TYPES[slots[bi].type];
+          if(!bt) continue;
+          if(slots[bi].type === 'jiang'){ var b2 = bt.passive(focus); if(b2>0){ gBattle.playerBlock+=b2; window._showEffectFloat(200+bi*30,100,'🌊 悲欢·+'+b2+'挡');} }
+          else if(slots[bi].type === 'yue'){ var d2 = bt.passive(focus); if(d2>0&&(gBattle.hp>0||(gBattle._isGroup&&gBattle._groupHp2>0))){ if(gBattle._isGroup){var h2=Math.floor(d2/2);gBattle.hp-=h2;if(gBattle.hp<0)gBattle.hp=0;gBattle._groupHp2-=h2;if(gBattle._groupHp2<0)gBattle._groupHp2=0;}else{gBattle.hp-=d2;} window._showDmgFloat(300+bi*20,50,''+d2,'orb'); window._showEffectFloat(300+bi*20,30,'🌙 悲欢·'+d2+'伤');} }
+          else if(slots[bi].type === 'shan'){ var s2 = bt.passive(focus); if(s2>0){ gBattle.playerStr=(gBattle.playerStr||0)+s2; window._showEffectFloat(200+bi*30,130,'⛰️ 悲欢·+'+s2+'力');} }
+        }
+      }
+
+      // 金络索：最右侧球体被动触发2次
+      if(gBattle._jinluosuoActive && slots.length > 0){
+        var lastIdx = slots.length - 1;
+        var lastType = slots[lastIdx].type;
+        var lastDef = ORB_TYPES[lastType];
+        if(lastDef && lastDef.passive){
+          var passiveVal = lastDef.passive(focus);
+          if(passiveVal > 0){
+            if(lastType === 'jiang'){ gBattle.playerBlock += passiveVal; window._showEffectFloat(200+lastIdx*30,100,'⛓️ 金络索·+'+passiveVal+'挡'); }
+            else if(lastType === 'shan'){ gBattle.playerStr = (gBattle.playerStr||0) + passiveVal; window._showEffectFloat(200+lastIdx*30,130,'⛓️ 金络索·+'+passiveVal+'力'); }
+            else if(lastType === 'yue' && (gBattle.hp>0||(gBattle._isGroup&&gBattle._groupHp2>0))){
+              if(gBattle._isGroup){var h3=Math.floor(passiveVal/2);gBattle.hp-=h3;if(gBattle.hp<0)gBattle.hp=0;gBattle._groupHp2-=h3;if(gBattle._groupHp2<0)gBattle._groupHp2=0;}else{gBattle.hp-=passiveVal;}
+              window._showDmgFloat(300+lastIdx*20,50,''+passiveVal,'orb'); window._showEffectFloat(300+lastIdx*20,30,'⛓️ 金络索·'+passiveVal+'伤');
+            }
+          }
+        }
+      }
+
       renderOrbs();
     }
 
@@ -5482,7 +5512,11 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
           _shopRemovedCard:!!G._shopRemovedCard,
           easterEggs:G.easterEggs?JSON.parse(JSON.stringify(G.easterEggs)):{},
           mapData:JSON.parse(JSON.stringify(gMapData)),
-          prevIdx:gPrevNodeIdx
+          prevIdx:gPrevNodeIdx,
+          // 保存战斗内获得的永久能力（力量、敏捷、荆棘等）
+          powers:G.powers?JSON.parse(JSON.stringify(G.powers)):{},
+          // 保存是否失去过生命（影响 freeIfLostHp 卡牌）
+          _everLostHp:!!G._everLostHp
         };
         if(G.char==='sush' && G.orbs) sd.orbs = JSON.parse(JSON.stringify(G.orbs));
         for(var si=0;si<G.deck.length;si++){
@@ -5527,7 +5561,9 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
         pills:(d.pills||["hpPill","strPill"]).slice(),
         pillBagLimit:d.pillBagLimit||3,
         _restUsed:d._restUsed||null, _shopRemovedCard:!!d._shopRemovedCard,
-        easterEggs:d.easterEggs?JSON.parse(JSON.stringify(d.easterEggs)):{}
+        easterEggs:d.easterEggs?JSON.parse(JSON.stringify(d.easterEggs)):{},
+        powers:d.powers||{},
+        _everLostHp:!!d._everLostHp
       }; window.G=G;
       if(G.char==="sush"){
         G.orbs=d.orbs?JSON.parse(JSON.stringify(d.orbs)):{slots:[],maxOrbs:3,focus:0,_windCounter:0};
@@ -5608,10 +5644,12 @@ function startBattle(eData){
         exhaustPile:[],
         _exhaustedThisTurn:false,
         _selfDamagedThisTurn:false,
+        _selfDamagedLastTurn:false,
         _spiteFlag:false,
         _rageBlockPerAtk:0,
         _blockShrapnel:0,
         _exhaustPlayCards:[],
+        _renderTimers:[], // 用于清理 renderBattle 中的 setTimeout
         _firstBlockThisTurn:true,
         noMoreDraw:false,
         nextAtkCost0:0,
@@ -5693,6 +5731,22 @@ function startBattle(eData){
       if(hasRelic('dongpoyin')){ gBattle.firstBlockBonus = 3; }
       if(hasRelic('jinxing')){ gBattle.attackFreeChance = 30; }
       if(hasRelic('huanhuashi')){ gBattle.skillHealAmt = 1; }
+
+      // === 苏轼·球体遗物-战斗开始效果 ===
+      // 乾坤袋: 球体上限+3
+      if(hasRelic('qiankundai') && G.orbs){ G.orbs.maxOrbs = (G.orbs.maxOrbs||3) + 3; }
+      // 石鼓: 战斗开始时获得1点焦点
+      if(hasRelic('shigu') && G.orbs){ G.orbs.focus = (G.orbs.focus||0) + 1; }
+      // 墨池: 战斗开始时生成1个山球
+      if(hasRelic('mochi') && G.orbs){ G.orbs.slots.push({type:'shan'}); }
+      // 东坡砚: 战斗开始时生成1个月球
+      if(hasRelic('dongpoyin2') && G.orbs){ G.orbs.slots.push({type:'yue'}); }
+      // 悲欢石: 上一回合受伤则本回合触发所有球体被动
+      if(hasRelic('beihuanshi')){ gBattle._beihuanshiActive = true; }
+      // 金络索: 最右侧球体被动触发2次
+      if(hasRelic('jinluosuo')){ gBattle._jinluosuoActive = true; }
+      // 铜雀钟: 首次充能7个球时全体15伤
+      if(hasRelic('tongquezhong')){ gBattle._tongquezhongCount = 0; }
 
       // === 李清照遗物-战斗开始效果 ===
       // 金石录: 战斗开始时将3张残花加入手牌
@@ -7469,6 +7523,7 @@ gBattle.playerBlock += blockVal;
 
     function damageEnemy(enemyIdx, dmg, isAoe){
       if(!gBattle) return;
+      if(typeof dmg !== 'number' || isNaN(dmg) || dmg <= 0) return; // 防御NaN和负数
       if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)) return;
 
       // 群体敌人：玩家点击选择攻击目标（Item 7）
@@ -7633,9 +7688,10 @@ gBattle.playerBlock += blockVal;
 
     function damagePlayer(dmg){
       if(!gBattle) return;
+      if(typeof dmg !== 'number' || isNaN(dmg) || dmg <= 0) return; // 防御NaN和负数
 
-      // 苏轼 ability: first damage -3
-      if(G.charId === 'sush' && !gBattle.sushFirstHitUsed){
+      // 苏轼 ability: first damage -3（仅在真正受到伤害时消耗）
+      if(G.charId === 'sush' && !gBattle.sushFirstHitUsed && dmg > 0){
         dmg = Math.max(0, dmg - 3);
         gBattle.sushFirstHitUsed = true;
       }
@@ -8121,6 +8177,8 @@ gBattle.playerBlock += blockVal;
 
       // === 李白新机制: 回合重置标记 ===
       gBattle._exhaustedThisTurn = false;
+      // 保存自伤状态供下回合悲欢石判断
+      gBattle._selfDamagedLastTurn = gBattle._selfDamagedThisTurn;
       gBattle._selfDamagedThisTurn = false;
       
       // 苏轼·球体被动触发(回合结束)
@@ -8701,6 +8759,11 @@ function setBattleBackground(){
     function renderBattle(animated){
       if(!gBattle) return;
       if(!gBattle || !gBattle.id){ console.warn('[安全] renderBattle: 无有效战斗数据'); return; }
+      // 清理上一轮的 setTimeout 防止内存泄漏
+      if(gBattle._renderTimers && gBattle._renderTimers.length > 0){
+        for(var ti=0;ti<gBattle._renderTimers.length;ti++){ clearTimeout(gBattle._renderTimers[ti]); }
+        gBattle._renderTimers = [];
+      }
       var _rEls=["sgEnemy","sgEnemy2"];for(var _ri=0;_ri<_rEls.length;_ri++){var _r=document.getElementById(_rEls[_ri]);if(_r){if(_r.style.transform)_r.style.transform="";if(_r.style.opacity==="0")_r.style.opacity="";}}
 
       
