@@ -4339,9 +4339,9 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
       sush_shuidiao:{name:"水调歌头",cost:2,type:"power",char:"sush",orPower:"strBlock",val:1,val2:2,desc:"水调歌头 · 每回合+1力量+2格挡",rarity:"rare"},
       sush_niannu:{name:"念奴娇",cost:3,type:"attack",dmg:16,aoe:true,char:"sush",desc:"念奴娇 · 全体16伤",rarity:"rare"},
       sush_dingfeng:{name:"定风波",cost:2,type:"power",char:"sush",orPower:"focus",val:1,desc:"定风波 · +1焦点(球体效果增强)",rarity:"rare",
-        onPlay:function(){ if(G.orbs) G.orbs.focus = (G.orbs.focus||0)+1; showEffectFloat(window.innerWidth/2, window.innerHeight/2-30,'焦点+1');}},
+        onPlay:function(){ /* orPower focus 已处理焦点+1，此处仅保留空回调防止报错 */ }},
       sush_jiaodian:{name:"焦点",cost:1,type:"skill",char:"sush",addFocus:1,desc:"焦点凝聚 · +1焦点(永久)",rarity:"rare",
-        onPlay:function(){ if(G.orbs) G.orbs.focus = (G.orbs.focus||0)+1; showEffectFloat(window.innerWidth/2, window.innerHeight/2-30,'🧿 焦点+1');}},
+        onPlay:function(){ /* addFocus 已处理焦点+1，此处仅保留空回调 */ }},
       sush_manjiang:{name:"满江红",cost:3,type:"power",char:"sush",orPower:"strUp",val:2,desc:"满江红 · 每回合+2力量",rarity:"rare"},
       sush_xijiang:{name:"西江月",cost:2,type:"power",char:"sush",orPower:"energy",val:1,desc:"西江月 · 每回合+1能量",rarity:"rare"},
       sush_rongna:{name:"容纳",cost:1,type:"power",char:"sush",orPower:"orbSlot",desc:"容纳 · 球体上限+1",rarity:"rare",
@@ -6211,7 +6211,7 @@ function startBattle(eData){
       }
 
       // === nextSkillCost0（蚱蜢舟·下一张技能费用为0） ===
-      if(gBattle._nextSkillCost0Flag && card.type === 'skill' && cost > 0){
+      if(gBattle._nextSkillCost0Flag && card.type === 'skill'){
         cost = 0;
         // 注意：不在检查函数中清除标记，实际打出时才清除
       }
@@ -6398,9 +6398,9 @@ return gBattle.energy >= cost;
       }
 
       // === nextSkillCost0（蚱蜢舟·下一张技能费用为0） ===
-      if(gBattle._nextSkillCost0Flag && card.type === 'skill' && cost > 0){
-        cost = 0;
-        gBattle._nextSkillCost0Flag = false;
+      if(gBattle._nextSkillCost0Flag && card.type === 'skill'){
+        if(cost > 0) cost = 0;
+        gBattle._nextSkillCost0Flag = false; // 无论费用是否为0都要清除标记
       }
 
       // === costDownPerSkill（才下眉头·本局每技能费用-1） ===
@@ -6720,8 +6720,8 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
       }
 
       // === exhaustRandom（由玩家选择消耗牌） ===
+      // 注意：showExhaustChoiceDialog 是异步对话框
       if(card.exhaustRandom && gBattle.hand.length>0){
-        var _exhChosen = false;
         showExhaustChoiceDialog(function(_exhIdx){
           if(_exhIdx >= 0 && gBattle.hand.indexOf(_exhIdx) >= 0){
             var _exhPos = gBattle.hand.indexOf(_exhIdx);
@@ -6729,14 +6729,15 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
             if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
             gBattle.exhaustPile.push(_exhIdx);
             gBattle._exhaustedThisTurn = true;
-            _exhChosen = true;
-          }
-          if(!_exhChosen && gBattle.hand.length > 0){
-            var _exRi = Math.floor(Math.random()*gBattle.hand.length);
-            var _exRd = gBattle.hand.splice(_exRi,1)[0];
-            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-            gBattle.exhaustPile.push(_exRd);
-            gBattle._exhaustedThisTurn = true;
+          } else {
+            // 玩家取消或无效选择，随机消耗一张
+            if(gBattle.hand.length > 0){
+              var _exRi = Math.floor(Math.random()*gBattle.hand.length);
+              var _exRd = gBattle.hand.splice(_exRi,1)[0];
+              if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+              gBattle.exhaustPile.push(_exRd);
+              gBattle._exhaustedThisTurn = true;
+            }
           }
         }, '🔥 沧海笑 · 选择要消耗的卡牌');
       }
@@ -6806,7 +6807,7 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
           gBattle.exhaustPile.push(gBattle.hand[xi]);
         }
         gBattle._exhaustedThisTurn = true;
-        
+        gBattle.hand = []; // 消耗所有手牌后清空
       // 虚无handler moved to endTurn
       }
 
@@ -6906,25 +6907,29 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
       // === stompCostReduce === (已在费用计算部分处理，移除重复代码)
 
       // === burnPact（由玩家选择消耗牌） ===
+      // 注意：showExhaustChoiceDialog 是异步对话框，回调在用户点击后执行
+      // 取消时 callback(-1) 也会触发，此时随机消耗一张
       if(card.burnPact && gBattle.hand.length>0){
-        var _bpChosen = false;
+        var _bpCard = card; // 闭包保存当前卡牌引用
         showExhaustChoiceDialog(function(_bpIdx){
           if(_bpIdx >= 0 && gBattle.hand.indexOf(_bpIdx) >= 0){
+            // 玩家选择了要消耗的牌
             var _bpPos = gBattle.hand.indexOf(_bpIdx);
             gBattle.hand.splice(_bpPos,1);
             if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
             gBattle.exhaustPile.push(_bpIdx);
             gBattle._exhaustedThisTurn = true;
             drawCards(2);
-            _bpChosen = true;
-          }
-          if(!_bpChosen && gBattle.hand.length > 0){
-            var _bpRi = Math.floor(Math.random()*gBattle.hand.length);
-            var _bpRd = gBattle.hand.splice(_bpRi,1)[0];
-            if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
-            gBattle.exhaustPile.push(_bpRd);
-            gBattle._exhaustedThisTurn = true;
-            drawCards(2);
+          } else {
+            // 玩家取消或无效选择，随机消耗一张
+            if(gBattle.hand.length > 0){
+              var _bpRi = Math.floor(Math.random()*gBattle.hand.length);
+              var _bpRd = gBattle.hand.splice(_bpRi,1)[0];
+              if(!gBattle.exhaustPile) gBattle.exhaustPile = [];
+              gBattle.exhaustPile.push(_bpRd);
+              gBattle._exhaustedThisTurn = true;
+              drawCards(2);
+            }
           }
         }, '🔥 饕餮 · 选择要消耗的卡牌');
       }
@@ -7015,9 +7020,8 @@ if(card.onPlay && typeof card.onPlay === "function"){ try{ card.onPlay(); }catch
           showEffectFloat(window.innerWidth/2, window.innerHeight/2-70, '\u{1F97E} 发条靴·强效！');
         }
         for(var hi=0;hi<hits;hi++){
-          var hitDmg = Math.floor(finalDmg / (hi === 0 ? 1 : 1)) - (hi > 0 ? Math.floor(finalDmg * (hits-1)/hits) : 0);
-          // Simplified: distribute damage evenly
-          hitDmg = Math.floor(finalDmg / hits);
+          // 均匀分配伤害，第一张牌承担余数
+          var hitDmg = Math.floor(finalDmg / hits);
           if(hi === 0) hitDmg = finalDmg - hitDmg * (hits - 1);
           damageEnemy(0, hitDmg, isAoe);
         }
@@ -7135,6 +7139,7 @@ gBattle.playerBlock += blockVal;
         var hpBefore = G.hp;
         damagePlayer(card.selfDmg);
         var hpLost = hpBefore - G.hp;
+        if(hpLost > 0) gBattle._selfDamagedThisTurn = true; // 标记本回合失去过生命
         if(hasRelic('lizhi_zhexiantong') && !gBattle._zhexiantongUsed && hpLost > 0){
           G.hp = Math.min(G.hp + hpLost, G.maxHp);
           gBattle._zhexiantongUsed = true;
@@ -7171,6 +7176,7 @@ gBattle.playerBlock += blockVal;
       if(card.tempAgil){
         gBattle.playerAgil = (gBattle.playerAgil || 0) + card.tempAgil;
         gBattle._tempAgilThisTurn = (gBattle._tempAgilThisTurn||0) + card.tempAgil;
+        gBattle.tempAgil = (gBattle.tempAgil||0) + card.tempAgil; // 记录用于回合结束清除
         showEffectFloat(window.innerWidth/2, window.innerHeight/2-20, '敏捷+'+card.tempAgil);
       }
       // 残花（Shiv）生成
@@ -7289,21 +7295,7 @@ gBattle.playerBlock += blockVal;
 
       // === 毒对aoe伤害特殊处理: randomTargets ===
       // randomTargets标记用于攻击，在攻击循环中处理
-      // 敏捷（Agility）- 临时
-      if(card.tempAgil){
-        gBattle.playerAgil = (gBattle.playerAgil || 0) + card.tempAgil;
-        showEffectFloat(window.innerWidth/2, window.innerHeight/2-20, '敏捷+'+card.tempAgil);
-      }
-      // 残花（Shiv）生成
-      if(card.addShivs){
-        for(var si=0; si<card.addShivs; si++){
-          var shivCard = JSON.parse(JSON.stringify(CARDS.liqing_canhua || {name:"残花",cost:0,type:"attack",dmg:4,exhaust:true,isShiv:true,desc:"零落成泥 · 4伤·消耗",rarity:"common",char:"liqing"}));
-          shivCard.id = 'shiv_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
-          G.deck.push(shivCard);
-          gBattle.hand.push(G.deck.length-1);
-        }
-      }
-
+      // 注意：tempAgil 和 addShivs 已在上面处理，此处为已删除的重复代码
       // Temp strength
       if(card.tempStr){
         var strGain = card.tempStr;
@@ -8215,6 +8207,7 @@ gBattle.noMoreDraw = false;
             gBattle.hand.push(replayIdx);
           }
         }
+        gBattle._exhaustPlayCards = []; // 清除，防止无限增长
       }
 
       // === 力量流每回合效果 ===
@@ -8586,7 +8579,15 @@ applyPoison();
           }
         }
       }
-gBattle.hand = [];
+      // 保留被 shivRetain 标记的残花
+      var retainedHand = [];
+      if(G.powers && G.powers.shivRetain){
+        for(var ri=0; ri<gBattle.hand.length; ri++){
+          var rc = G.deck[gBattle.hand[ri]];
+          if(rc && rc.isShiv) retainedHand.push(gBattle.hand[ri]);
+        }
+      }
+      gBattle.hand = retainedHand;
 
       // Draw new hand
       var drawAmt = 5;
