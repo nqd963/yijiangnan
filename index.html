@@ -9573,6 +9573,12 @@ function setBattleBackground(){
       if(G.hp < 0) G.hp = 0;
       if(G.gold < 0) G.gold = 0; // 金币不应为负数
 
+      // 事件效果可能导致玩家死亡
+      if(G.hp <= 0){
+        showResult(false);
+        return;
+      }
+
       // Show result briefly
       var descEl = document.getElementById('sgEventDesc');
       if(descEl){
@@ -10200,6 +10206,7 @@ function setBattleBackground(){
         eDiv.innerHTML = '<div class="ee-name">'+ench.icon+' '+ench.name+'</div><div class="ee-desc">'+ench.desc+'</div>';
         (function(ench2){
           eDiv.addEventListener('click', function(){
+            if(G.gold < 80){ showEffectFloat(window.innerWidth/2, window.innerHeight/2, '金币不足'); return; }
             G.gold -= 80;
             ench2.apply(G.deck[deckIdx]);
             G.deck[deckIdx].enchanted = true;
