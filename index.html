@@ -5659,6 +5659,7 @@ function startBattle(eData){
         _lostHpThisTurn:false,
         _heguangniBlock:0,
         _zhexiantongUsed:false,
+        _duannianzhuUsed:false,
         _poqingguanUsed:false,
         _chixialuActive:false,
         _xuanguijiaTriggered:false,
@@ -5722,7 +5723,6 @@ function startBattle(eData){
       }
 
       // === 新增遗器效果（Item 8） ===
-      if(hasRelic('qinglianjiu')){ gBattle.firstAttackBonusPlus = true; }
       if(hasRelic('bailuyi')){ gBattle.playerBlock += 5; gBattle.playerStr += 2; }
 
       // 苏轼·球体初始化
@@ -6552,6 +6552,8 @@ return gBattle.energy >= cost;
       }
       if(card.orPower === "orbSlot" && !gBattle._orPowerApplied_slot){
         gBattle._orPowerApplied_slot = true;
+        if(G.orbs) G.orbs.maxOrbs = (G.orbs.maxOrbs || 3) + 1;
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-30, '扩容·球槽+1');
       }
       
       if(card.orPower === "loop" && !gBattle._orPowerApplied_loop){
@@ -6603,6 +6605,13 @@ return gBattle.energy >= cost;
             break;
           }
         }
+      }
+
+      // === requireExhaust3 === (在费用扣除前检查，避免 cardPlayedThisTurn 虚增)
+      if(card.requireExhaust3 && (!gBattle.exhaustPile || gBattle.exhaustPile.length < 3)){
+        renderBattle();
+        showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '❌ 消耗不足3张');
+        return false;
       }
 
       if(gBattle.energy < cost) return false;
@@ -7004,12 +7013,7 @@ return gBattle.energy >= cost;
         card.dmg = (card.dmg||0) + card.upgradePermanent;
       }
 
-      // === freeIfLostHp ===
-      if(card.freeIfLostHp && G._everLostHp){
-        card._wasFree = true;
-      }
-
-      // === freeIfLostHp === (已在费用计算部分处理，移除重复代码)
+      // === freeIfLostHp === (已在费用计算部分处理)
 
       // === halfEnemyBlock ===
       if(card.halfEnemyBlock){
@@ -7120,22 +7124,6 @@ return gBattle.energy >= cost;
         hits = Math.max(1, Math.floor((G.maxHp - G.hp) / 3) + 1);
       }
 
-      // === requireExhaust3 ===
-      if(card.requireExhaust3 && (!gBattle.exhaustPile || gBattle.exhaustPile.length < 3)){
-        // Can't play this card, return energy
-        gBattle.energy += (card.cost||0);
-        gBattle.hand.push(deckIdx);
-        renderBattle();
-        showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '❌ 消耗不足3张');
-        return false;
-      }
-
-      // === spiteDraw ===
-      if(gBattle._spiteFlag && gBattle._selfDamagedThisTurn){
-        drawCards(1);
-        gBattle._spiteFlag = false;
-      }
-
       // === exhaustHandDrawN ===
       if(card.exhaustHandDrawN){
         var handSize7 = gBattle.hand.length;
@@ -7165,6 +7153,11 @@ return gBattle.energy >= cost;
 
       // Apply damage
       if(card.type === 'attack'){
+        // rageBlockPerAtk: 狂怒 - 本回合每打出1张攻击牌获得格挡
+        if(gBattle._rageBlockPerAtk && gBattle._rageBlockPerAtk > 0){
+          gBattle.playerBlock += gBattle._rageBlockPerAtk;
+          showEffectFloat(window.innerWidth/2, window.innerHeight/2-20, '狂怒·+'+gBattle._rageBlockPerAtk+'挡');
+        }
         // 发条靴：未被格挡的攻击伤害≤4时提升至5点（在最终伤害计算后生效）
         if(hasRelic('fatiaoxue') && finalDmg > 0 && finalDmg <= 4){
           finalDmg = 5;
@@ -7300,6 +7293,12 @@ gBattle.playerBlock += blockVal;
           gBattle._zhexiantongUsed = true;
           showEffectFloat(window.innerWidth/2, window.innerHeight/2-50, '谪仙舌回复'+hpLost);
         }
+      }
+
+      // === spiteDraw === (在 selfDmg 之后检查，确保 _selfDamagedThisTurn 已设置)
+      if(gBattle._spiteFlag && gBattle._selfDamagedThisTurn){
+        drawCards(1);
+        gBattle._spiteFlag = false;
       }
 
       // Heal
@@ -8348,6 +8347,8 @@ gBattle.playerBlock += blockVal;
 gBattle.noMoreDraw = false;
       gBattle._rageBlockPerAtk = 0;
       gBattle._blockShrapnel = 0;
+      gBattle._zhexiantongUsed = false;
+      gBattle._duannianzhuUsed = false;
 
       // === 和光泥: 若上回合失去生命，获得3格挡 ===
       if(hasRelic('lizhi_heguangni')){
