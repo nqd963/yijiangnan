@@ -564,7 +564,7 @@ body{font-family:'Noto Sans SC','Microsoft YaHei','PingFang SC','Helvetica Neue'
   position:fixed;top:1.2rem;right:1.2rem;z-index:9998;
   width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
   background:var(--bg-card);cursor:pointer;display:flex;align-items:center;justify-content:center;
-  font-size:1.2rem;transition:all .3s;box-shadow:0 2px 12px var(--shadow);
+  font-size:1.2rem;transition:background .3s,color .3s,border-color .3s,box-shadow .3s,opacity .3s,transform .3s;box-shadow:0 2px 12px var(--shadow);
 }
 .theme-toggle:hover{transform:scale(1.08);border-color:var(--gold);}
 #shareBtn{left:auto;right:calc(1.2rem + 48px);font-size:1rem;}
@@ -641,7 +641,7 @@ body{font-family:'Noto Sans SC','Microsoft YaHei','PingFang SC','Helvetica Neue'
   padding:.7rem 2rem;border:1px solid rgba(201,168,76,0.35);border-radius:100px;
   background:rgba(201,168,76,0.08);color:var(--gold-light);cursor:pointer;
   font-size:.85rem;letter-spacing:.1em;font-family:inherit;
-  transition:all .3s;animation:faIn 1.2s 1s both;
+  transition:background .3s,color .3s,border-color .3s,box-shadow .3s,opacity .3s,transform .3s;animation:faIn 1.2s 1s both;
 }
 .recite-btn:hover{background:rgba(201,168,76,0.18);border-color:rgba(201,168,76,0.6);transform:translateY(-2px);}
 .recite-btn .icon{font-size:1.2rem;}
@@ -694,7 +694,7 @@ body{font-family:'Noto Sans SC','Microsoft YaHei','PingFang SC','Helvetica Neue'
 .poem-line{
   display:block;font-size:clamp(1.3rem,3vw,1.9rem);line-height:2.8;letter-spacing:.15em;
   color:var(--text);cursor:pointer;position:relative;padding:.3rem 0;
-  transition:all .3s;border-radius:4px;
+  transition:background .3s,color .3s,border-color .3s,box-shadow .3s,opacity .3s,transform .3s;border-radius:4px;
 }
 .poem-line:hover{background:var(--gold-dim);}
 .poem-line .c{position:relative;display:inline-block;padding:0 .05em;transition:color .2s;}
@@ -887,7 +887,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   background:var(--bg-card);cursor:pointer;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:0;line-height:1;
   font-size:.45rem;color:var(--text-faint);letter-spacing:.05em;
-  transition:all .3s;box-shadow:0 2px 12px var(--shadow);
+  transition:background .3s,color .3s,border-color .3s,box-shadow .3s,opacity .3s,transform .3s;box-shadow:0 2px 12px var(--shadow);
 }
 .mp-btn:hover{border-color:var(--gold);background:var(--gold-dim);transform:translateY(-2px);}
 .mp-btn .mp-icon{font-size:1.3rem;color:var(--gold);margin-bottom:1px;}
@@ -910,7 +910,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
   background:transparent;cursor:pointer;display:flex;align-items:center;
   justify-content:center;font-size:1.1rem;color:var(--text-dim);
-  transition:all .2s;flex-shrink:0;
+  transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;flex-shrink:0;
 }
 .mp-back:hover{border-color:var(--gold);color:var(--gold);}
 .mp-title{font-size:1.05rem;font-weight:700;letter-spacing:.1em;flex:1;}
@@ -975,7 +975,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .cipu-tabs{display:flex;gap:2px;margin-bottom:1rem;border-radius:8px;overflow:hidden;border:1px solid var(--border);}
 .cipu-tab{
   flex:1;padding:.5rem;text-align:center;cursor:pointer;font-size:.78rem;
-  background:var(--bg-card-alt);color:var(--text-dim);transition:all .2s;letter-spacing:.05em;
+  background:var(--bg-card-alt);color:var(--text-dim);transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;letter-spacing:.05em;
 }
 .cipu-tab:hover{background:var(--gold-dim);}
 .cipu-tab.active{background:var(--gold);color:#fff;font-weight:700;}
@@ -1032,7 +1032,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .game-btn{
   padding:.4rem 1.2rem;border:1px solid var(--border);border-radius:100px;
   background:transparent;cursor:pointer;font-size:.78rem;font-family:inherit;
-  color:var(--text-dim);transition:all .2s;
+  color:var(--text-dim);transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;
 }
 .game-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
 .game-btn.primary{background:var(--gold);color:#fff;border-color:var(--gold);}
@@ -1084,7 +1084,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .music-inst{
   flex-shrink:0;padding:.3rem .7rem;border-radius:100px;border:1px solid var(--border);
   background:var(--bg-card-alt);color:var(--text-dim);cursor:pointer;
-  font-size:.72rem;font-family:inherit;transition:all .2s;letter-spacing:.05em;
+  font-size:.72rem;font-family:inherit;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;letter-spacing:.05em;
   -webkit-tap-highlight-color:transparent;user-select:none;
 }
 .music-inst:hover{border-color:var(--gold);color:var(--gold);}
@@ -1096,7 +1096,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .oct-btn{
   padding:.25rem .9rem;border-radius:100px;border:1px solid var(--border);
   background:transparent;color:var(--text-dim);cursor:pointer;
-  font-size:.72rem;font-family:inherit;transition:all .2s;letter-spacing:.05em;
+  font-size:.72rem;font-family:inherit;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;letter-spacing:.05em;
   -webkit-tap-highlight-color:transparent;user-select:none;
 }
 .oct-btn:hover{border-color:var(--gold);color:var(--gold);}
@@ -1116,7 +1116,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .music-play-btn{
   padding:.4rem .8rem;border-radius:8px;border:1px solid var(--border);
   background:var(--gold);color:#fff;cursor:pointer;font-size:.78rem;
-  font-family:inherit;font-weight:700;transition:all .2s;white-space:nowrap;
+  font-family:inherit;font-weight:700;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;white-space:nowrap;
   -webkit-tap-highlight-color:transparent;user-select:none;
 }
 .music-play-btn:hover{opacity:.85;}
@@ -1248,7 +1248,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   padding:0.25rem 0.7rem;background:rgba(10,8,20,0.6);
   border-bottom:1px solid rgba(201,168,76,0.2);
   font-size:0.75rem;color:var(--text);gap:0.3rem;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  /* backdrop-filter removed for perf */
   min-height:1.8rem;flex-wrap:wrap;
 }
 .sg-sbar-left,.sg-sbar-center,.sg-sbar-right{
@@ -1268,7 +1268,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   padding:.65rem 1.6rem;border:1px solid var(--border);border-radius:var(--radius-md);
   background:transparent;color:var(--text-dim);cursor:pointer;font-size:.95rem;
   font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;
-  transition:all .2s;letter-spacing:.03em;
+  transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;letter-spacing:.03em;
   -webkit-tap-highlight-color:transparent;user-select:none;
   text-transform:none;
 }
@@ -1290,7 +1290,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-cs-card{
   width:140px;padding:1rem .6rem;border-radius:12px;cursor:pointer;
   background:var(--bg-card);border:2px solid var(--border);text-align:center;
-  transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:6px;
+  transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;display:flex;flex-direction:column;align-items:center;gap:6px;
 }
 .sg-cs-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 4px 16px var(--shadow);}
 .sg-cs-card .sg-cs-portrait{font-size:2.5rem;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--border);}
@@ -1326,7 +1326,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
   width:100%;padding:.6rem .5rem .5rem;
   background:linear-gradient(180deg,transparent,rgba(0,0,0,.75) 30%);
   position:absolute;bottom:0;left:0;z-index:2;
-  transition:all .3s;
+  transition:background .3s,color .3s,border-color .3s,box-shadow .3s,opacity .3s,transform .3s;
 }
 .sg-cs-portrait-card:hover .sg-cs-info-overlay{
   background:rgba(0,0,0,.85);
@@ -1406,7 +1406,7 @@ body.show-pz .poem-line .c .pz{opacity:.75;}
 .sg-map-row{display:flex;gap:12px;justify-content:center;}
 .sg-map-node{
   width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;cursor:pointer;transition:all .2s;
+  font-size:1.5rem;cursor:pointer;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;
   border:2px solid var(--border);background:var(--bg-card-alt);
   position:relative;
 }
@@ -1619,7 +1619,7 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   box-shadow:0 2px 4px rgba(0,0,0,.35),inset 0 1px 2px rgba(255,255,255,.45);
   z-index:3;border:1px solid rgba(255,255,255,.25);
   text-shadow:0 1px 2px rgba(0,0,0,.3);
-  transition:all .3s ease;
+  transition:background .3s ease,color .3s ease,border-color .3s ease,box-shadow .3s ease,opacity .3s ease,transform .3s ease;
 }
 /* 费用变化时的脉冲动画 */
 @keyframes sgCostPulse{
@@ -1731,7 +1731,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
   background:linear-gradient(145deg,rgba(245,240,235,0.95),rgba(230,225,215,0.95));color:#2a2015;
   border:1px solid var(--gold);border-radius:10px;
   padding:.7rem 1rem;font-size:.95rem;line-height:1.6;
-  opacity:0;visibility:hidden;transition:all .2s cubic-bezier(.4,0,.2,1);z-index:100000;
+  opacity:0;visibility:hidden;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s cubic-bezier(.4,0,.2,1);z-index:100000;
   pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.25);
   max-width:380px;white-space:normal;font-weight:500;letter-spacing:.02em;
 }
@@ -1760,7 +1760,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
   background:rgba(245,240,235,0.95);color:#2a2015;
   border:1px solid var(--gold);border-radius:8px;
   padding:.4rem .7rem;font-size:.75rem;line-height:1.5;white-space:nowrap;
-  opacity:0;visibility:hidden;transition:all .2s;z-index:100000;
+  opacity:0;visibility:hidden;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;z-index:100000;
   pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.35);
 }
 .sg-stat-tip:hover .sg-stat-tooltip{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
@@ -1772,7 +1772,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
   background:linear-gradient(145deg,#4a3020,#3a2215);color:#f0d878;border:1px solid rgba(201,168,76,0.3);
   border:1px solid var(--gold);border-radius:8px;
   padding:.5rem .8rem;font-size:.6rem;line-height:1.5;
-  opacity:0;visibility:hidden;transition:all .2s;z-index:100000;
+  opacity:0;visibility:hidden;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;z-index:100000;
   pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.4);
   min-width:120px;text-align:center;
 }
@@ -2144,7 +2144,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
 .sg-shop-item{
   display:flex;align-items:center;justify-content:space-between;gap:8px;
   background:var(--bg-card-alt);border:1px solid var(--border);border-radius:8px;
-  padding:.5rem .8rem;cursor:pointer;transition:all .2s;
+  padding:.5rem .8rem;cursor:pointer;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;
 }
 .sg-shop-item:hover{border-color:var(--gold);}
 .sg-shop-item .sg-shop-info{flex:1;text-align:left;}
@@ -2156,7 +2156,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
 .sg-shop-heal{
   text-align:center;padding:.3rem;font-size:.75rem;color:var(--text-dim);
   cursor:pointer;border:1px dashed var(--border);border-radius:8px;margin:0 .5rem;
-  transition:all .2s;
+  transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;
 }
 .sg-shop-heal:hover{border-color:var(--gold);color:var(--gold);}
 .sg-shop-relic{text-align:center;padding:.3rem 0;}
@@ -2181,7 +2181,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
 .sg-event-choice{
   background:var(--bg-card-alt);border:1px solid var(--border);border-radius:8px;
   padding:.75rem 1rem;cursor:pointer;text-align:center;font-size:.85rem;color:var(--text-dim);
-  transition:all .2s;
+  transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;
 }
 .sg-event-choice:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
 .sg-event-choice .sg-event-effect{font-size:.7rem;color:var(--text-faint);margin-top:.2rem;}
@@ -2996,7 +2996,7 @@ body.sg-float-active .sg-tooltip:hover{opacity:0!important;visibility:hidden!imp
 .sg-collection-cat-tab{
   padding:0.2rem 0.6rem;font-size:0.58rem;color:var(--text-faint);
   border:1px solid transparent;border-radius:100px;
-  cursor:pointer;transition:all .2s;background:transparent;
+  cursor:pointer;transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;background:transparent;
   font-family:inherit;
 }
 .sg-collection-cat-tab:hover{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,0.04);}
@@ -6413,7 +6413,7 @@ function startBattle(eData){
 
     // 炼狱签：消耗状态/诅咒牌时对敌人造成伤害
     function checkLianyuqian(cardObj){
-      if(!gBattle || (gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0))) return;
+      if(!gBattle || (_isBattleOver())) return;
       if(!hasRelic('lianyuqian')) return;
       if(cardObj && (cardObj.unplayable || cardObj.curse)){
         var dmg = 3;
@@ -7130,7 +7130,7 @@ return gBattle.energy >= cost;
       }
 
       // === killMaxHp ===
-      if(card.killMaxHp && gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)){
+      if(card.killMaxHp && _isBattleOver()){
         G.maxHp += card.killMaxHp;
         G.hp = Math.min(G.hp+card.killMaxHp, G.maxHp);
       }
@@ -7392,20 +7392,20 @@ return gBattle.energy >= cost;
       }
 
       // === echoKill - 击杀重复 ===
-      if(card.echoKill && gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)){
+      if(card.echoKill && _isBattleOver()){
         gBattle._echoKillPending = true;
       }
-      if(gBattle._echoKillPending && gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0) && !card.echoKill){
+      if(gBattle._echoKillPending && _isBattleOver() && !card.echoKill){
         gBattle._echoKillPending = false;
       }
       // killEnergy: 如果此卡击杀敌人，获得能量
-      if(card.killEnergy && gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)){
+      if(card.killEnergy && _isBattleOver()){
         gBattle.energy += card.killEnergy;
         showEffectFloat(window.innerWidth/2, 60, '月影剑+'+card.killEnergy+'能量');
       }
 
       // === killBonusReward - 致命获得额外奖励（狩猎）===
-      if(card.killBonusReward && gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)){
+      if(card.killBonusReward && _isBattleOver()){
         var bonusCards = Math.floor(Math.random() * 2) + 1;
         for(var kr=0; kr<bonusCards; kr++){
           var pool = [];
@@ -7854,7 +7854,7 @@ gBattle.playerBlock += blockVal;
     function damageEnemy(enemyIdx, dmg, isAoe){
       if(!gBattle) return;
       if(typeof dmg !== 'number' || isNaN(dmg) || dmg <= 0) return; // 防御NaN和负数
-      if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)) return;
+      if(_isBattleOver()) return;
 
       // 群体敌人：玩家点击选择攻击目标（Item 7）
       if(gBattle._isGroup){
@@ -8075,7 +8075,7 @@ gBattle.playerBlock += blockVal;
         }
         showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '🌵 荆棘反伤'+gBattle.thorns);
         // 荆棘伤害可能击杀敌人，需要检查（但不中断当前函数，保证受击反馈正常显示）
-        if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)){
+        if(_isBattleOver()){
           checkEnemyDeath();
         }
       }
@@ -8252,7 +8252,7 @@ gBattle.playerBlock += blockVal;
           var pr = gPendingRelic;
           var rDiv = document.createElement('div');
           rDiv.id = 'sgRewardRelicBtn';
-          rDiv.style.cssText = 'display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:0.3rem 0.8rem;border:1px solid var(--gold);border-radius:8px;background:var(--bg-card-alt);transition:all .2s;';
+          rDiv.style.cssText = 'display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:0.3rem 0.8rem;border:1px solid var(--gold);border-radius:8px;background:var(--bg-card-alt);transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;';
           rDiv.innerHTML = '<span style="font-size:1.5rem;">' + (pr.icon||'🔮') + '</span>' +
             '<div style="text-align:left;"><div style="font-size:.75rem;color:var(--gold);font-weight:700;">' + pr.name + '</div><div style="font-size:.55rem;color:var(--text-faint);">遗器 · 点击领取</div></div>';
           itemsEl.appendChild(rDiv);
@@ -8263,7 +8263,7 @@ gBattle.playerBlock += blockVal;
           var pp = PILLS[gPendingPill];
           var pDiv = document.createElement('div');
           pDiv.id = 'sgRewardPillBtn';
-          pDiv.style.cssText = 'display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:0.3rem 0.8rem;border:1px solid var(--gold);border-radius:8px;background:var(--bg-card-alt);transition:all .2s;';
+          pDiv.style.cssText = 'display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:0.3rem 0.8rem;border:1px solid var(--gold);border-radius:8px;background:var(--bg-card-alt);transition:background .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s,transform .2s;';
           pDiv.innerHTML = '<span style="font-size:1.5rem;">' + (pp.icon||'💊') + '</span>' +
             '<div style="text-align:left;"><div style="font-size:.75rem;color:var(--gold);font-weight:700;">' + pp.name + '</div><div style="font-size:.55rem;color:var(--text-faint);">灵丹 · 点击领取</div></div>';
           itemsEl.appendChild(pDiv);
@@ -8381,7 +8381,7 @@ gBattle.playerBlock += blockVal;
 
     function enemyTurn(){
       if(!gBattle) return;
-      if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)) return;
+      if(_isBattleOver()) return;
       if(!gBattle.intent){ gBattle.intent='attack'; gBattle.intentVal=gBattle.dmgBase||6; }
       if(gBattle.intentVal === undefined) gBattle.intentVal = gBattle.dmgBase || 6;
       if(gBattle.intentAmount === undefined) gBattle.intentAmount = 1;
@@ -8456,7 +8456,7 @@ gBattle.playerBlock += blockVal;
       if(gBattle._endingTurn) return;
       gBattle._endingTurn = true;
       try {
-      if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)) return;
+      if(_isBattleOver()) return;
 
       // 重置本回合弃牌计数
       gBattle._discardCountThisTurn = 0;
@@ -8740,7 +8740,7 @@ applyPoison();
       }
 
       // Check if enemy died (group enemy: only if BOTH are dead)
-      if(gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0)){
+      if(_isBattleOver()){
         checkEnemyDeath();
         return;
       }
@@ -9097,6 +9097,30 @@ function setBattleBackground(){
 
 /* ══════ 战斗渲染 ══════ */
     /* ═══════════════════════════════════════════════════════════════════════ */
+    // ── 战斗常用辅助函数 ──
+    // 检查战斗是否结束（敌人全部被击败）
+    function _isBattleOver(){
+      return gBattle.hp <= 0 && (!gBattle._isGroup || (gBattle._groupHp2 || 0) <= 0);
+    }
+    // 安全数值（防御 NaN）
+    function _safeNum(v, def){ return (typeof v === 'number' && !isNaN(v)) ? v : (def || 0); }
+    // SVG UID 缓存（避免每帮重复生成）
+    var _svgUidCache = {};
+    function _getSvgUid(enemyId){
+      if(!_svgUidCache[enemyId]) _svgUidCache[enemyId] = '_e' + enemyId + (Date.now() % 9999);
+      return _svgUidCache[enemyId];
+    }
+    // 构建敌人 buff HTML（消除3处重复代码）
+    function _buildEnemyBuffHtml(){
+      var h = '';
+      if(gBattle.buffs.str > 0) h += '<span class="sg-buff" title="力量：每层使攻击伤害+3。当前层数：'+gBattle.buffs.str+'"><span class="sg-ico sg-ico-str sg-ico-sm">力</span>+' + gBattle.buffs.str + '</span>';
+      if(gBattle.buffs.strDown > 0) h += '<span class="sg-buff sg-debuff" title="力竭：每层使攻击伤害-3。当前层数：'+gBattle.buffs.strDown+'"><span class="sg-ico sg-ico-poison sg-ico-sm">竭</span>' + gBattle.buffs.strDown + '</span>';
+      if(gBattle.buffs.vuln > 0) h += '<span class="sg-buff sg-debuff" title="易伤：受到的攻击伤害增加50%。当前层数：'+gBattle.buffs.vuln+'"><span class="sg-ico sg-ico-poison sg-ico-sm">弱</span>' + gBattle.buffs.vuln + '</span>';
+      if(gBattle.buffs.weak > 0) h += '<span class="sg-buff sg-debuff" title="虚弱：造成的攻击伤害减少25%。当前层数：'+gBattle.buffs.weak+'"><span class="sg-ico sg-ico-poison sg-ico-sm">虚</span>' + gBattle.buffs.weak + '</span>';
+      return h;
+    }
+
+
     function renderBattle(animated){
       if(!gBattle) return;
       if(!gBattle || !gBattle.id){ console.warn('[安全] renderBattle: 无有效战斗数据'); return; }
@@ -9113,6 +9137,25 @@ function setBattleBackground(){
       var _handChanged = gBattle._lastHandHash !== gBattle.hand.join(',') + '|' + gBattle.energy + '|' + _costStateKey;
       gBattle._lastHandHash = gBattle.hand.join(',') + '|' + gBattle.energy + '|' + _costStateKey;
 // 记录动画标志
+      // ── DOM 查询缓存（每帧只查一次）──
+      var _E = renderBattle._E;
+      if(!_E){
+        _E = renderBattle._E = {};
+        var _ids = [
+          'sgEnemyArea','sgEnemy','sgEnemy2','sgEnemyPortrait','sgEnemyPortrait2',
+          'sgEnemyName','sgEnemyName2','sgEnemyDesc','sgEnemyDesc2',
+          'sgEnemyHpFill','sgEnemyHpFill2','sgEnemyHp','sgEnemyHp2',
+          'sgEnemyMaxHp','sgEnemyMaxHp2','sgEnemyBlock','sgEnemyBlock2',
+          'sgEnemyBlockNum','sgEnemyBlockNum2','sgEnemyBuffs','sgEnemyBuffs2',
+          'sgEnemyPoison','sgEnemyPoison2','sgEnemyPoisonNum','sgEnemyPoisonNum2',
+          'sgEnemyIntent','sgEnemyIntent2','sgIntentVal','sgIntentVal2','sgIntentDetail',
+          'sgPlayerPortrait','sgPlayerName','sgPlayerHpFill','sgPlayerHp','sgPlayerMaxHp',
+          'sgPlayerBlock','sgPlayerStrength','sgPlayerPoison',
+          'sgPlayerEnergy','sgTurnNum','sgDrawPile','sgHandCount','sgDiscardPile',
+          'sgDeckCountNum','sgHand','sgBattle'
+        ];
+        for(var _di=0;_di<_ids.length;_di++){ _E[_ids[_di]] = document.getElementById(_ids[_di]); }
+      }
       gBattle._animDraw = animated;
       updateStatusBar();
       updateRelicBar('sgBattleRelicBar');
@@ -9120,32 +9163,24 @@ function setBattleBackground(){
       // Enemy name and HP
       // 敌人立绘emoji映射（使用模块级常量 ENEMY_EMOJIS）
       var enemyEmoji = ENEMY_EMOJIS[gBattle.id] || '魔';
-      var enemyEmoji = ENEMY_EMOJIS[gBattle.id] || '魔';
       // Use generated SVG portrait if available, fall back to emoji
       var _svgAvail = (typeof ENEMY_SVGS !== 'undefined');
       var _svgFound = _svgAvail ? ENEMY_SVGS[gBattle.id] : null;
-      // Reduce portrait debug log spam: only log on first render or enemy change
-      if(gBattle._lastPortraitEnemy !== gBattle.id){
-        gBattle._lastPortraitEnemy = gBattle.id;
-        ////////////////////////////////////////console.log('[PortraitDebug] enemy='+gBattle.id+' SVG_global='+_svgAvail+' SVG_found='+!!_svgFound+' emoji='+enemyEmoji);
-      }
-      var enemySvg = _svgFound;
-      var portraitHtml;
-      // On file:// protocol, skip SVG (SVG filters often fail silently in browsers)
-      // But in Electron, file:// SVGs work fine, so detect Electron via __electron flag
       var _isElectronApp = (typeof window.__electron !== 'undefined' && window.__electron.isElectron);
       var _isFileProtocol = (window.location && window.location.protocol === 'file:' && !_isElectronApp);
-      if(enemySvg && !_isFileProtocol){
-        // Deduplicate SVG IDs to avoid conflicts when multiple SVGs coexist
-        var uid = '_e' + (gBattle.id || 'x') + (gBattle._portraitUid || (gBattle._portraitUid = Date.now() % 9999));
-        var safeSvg = enemySvg
-          .replace(/id="([^"]+)"/g, 'id="$1'+uid+'"')
-          .replace(/url\(#([^)]+)\)/g, 'url(#$1'+uid+')')
-          .replace(/href="#([^"]+)"/g, 'href="#$1'+uid+'"')
-          .replace(/xlink:href="#([^"]+)"/g, 'xlink:href="#$1'+uid+'"');
-        portraitHtml = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">'+safeSvg+'</div>';
+      var portraitHtml;
+      if(_svgFound && !_isFileProtocol){
+        var uid = _getSvgUid(gBattle.id);
+        if(!gBattle._cachedSvg || gBattle._cachedSvgUid !== uid){
+          gBattle._cachedSvgUid = uid;
+          gBattle._cachedSvg = _svgFound
+            .replace(/id="([^"]+)"/g, 'id="$1'+uid+'"')
+            .replace(/url\(#([^)]+)\)/g, 'url(#$1'+uid+')')
+            .replace(/href="#([^"]+)"/g, 'href="#$1'+uid+'"')
+            .replace(/xlink:href="#([^"]+)"/g, 'xlink:href="#$1'+uid+'"');
+        }
+        portraitHtml = '<div class="sg-enemy-svg-portrait" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">'+gBattle._cachedSvg+'</div>';
       } else {
-        if(_isFileProtocol && enemySvg) console.log('[PortraitDebug] 已检测到file://协议，跳过SVG使用emoji');
         portraitHtml = '<span class="sg-emojifallback" style="font-size:3.2rem;line-height:1;display:inline-block;">'+enemyEmoji+'</span>';
       }
       // Fallback: if portrait container is empty after render, force emoji
@@ -9180,30 +9215,30 @@ function setBattleBackground(){
           });
         }catch(_ee){}
       }, 1500));
-      var enemyArea = document.getElementById('sgEnemyArea');
+      var enemyArea = _E['sgEnemyArea'];
       if(gBattle._isGroup){
         // 群体敌人：显示两个敌人框（Item 3）
         if(enemyArea) enemyArea.className = 'sg-enemy-area sg-group-battle';
-        document.getElementById('sgEnemy2').style.display = '';
+        _E['sgEnemy2'].style.display = '';
         // 初始化二组血量
         if(gBattle._groupHp2 === undefined){ gBattle._groupHp2 = Math.ceil(gBattle.maxHp/2); gBattle._groupMaxHp2 = gBattle._groupHp2; }
         // 敌人1
-        document.getElementById('sgEnemyPortrait').innerHTML = portraitHtml;
+        _E['sgEnemyPortrait'].innerHTML = portraitHtml;
         var _actEt = gBattle.isBoss ? 'sg-etype-boss' : 'sg-etype-act'+(G?Math.min(Math.max(G.act,1),3):1);
-        document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced ' + _actEt;
-        document.getElementById('sgEnemyPortrait').onmouseenter = function(e){ showPortraitBuffTip(e, 'enemy'); };
-        document.getElementById('sgEnemyPortrait').onmousemove = function(e){ movePortraitBuffTip(e); };
-        document.getElementById('sgEnemyPortrait').onmouseleave = function(){ hidePortraitBuffTip(); };
-        document.getElementById('sgEnemyName').textContent = gBattle.name + ' · 甲';
-        document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
+        _E['sgEnemyPortrait'].className = 'sg-enemy-portrait sg-enemy-enhanced ' + _actEt;
+        _E['sgEnemyPortrait'].onmouseenter = function(e){ showPortraitBuffTip(e, 'enemy'); };
+        _E['sgEnemyPortrait'].onmousemove = function(e){ movePortraitBuffTip(e); };
+        _E['sgEnemyPortrait'].onmouseleave = function(){ hidePortraitBuffTip(); };
+        _E['sgEnemyName'].textContent = gBattle.name + ' · 甲';
+        _E['sgEnemyDesc'].textContent = gBattle.desc;
         var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
-        document.getElementById('sgEnemyHpFill').style.width = eHpPct + '%';
-        document.getElementById('sgEnemyHpFill').className = 'sg-enemy-hp-fill' + (eHpPct <= 25 ? ' low' : '');
-        document.getElementById('sgEnemyHp').textContent = (typeof gBattle.hp === 'number' && !isNaN(gBattle.hp)) ? gBattle.hp : 0; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
-        document.getElementById('sgEnemyBlockNum').textContent = (typeof gBattle.block === 'number' && !isNaN(gBattle.block)) ? gBattle.block : 0;
-        document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
+        _E['sgEnemyHpFill'].style.width = eHpPct + '%';
+        _E['sgEnemyHpFill'].className = 'sg-enemy-hp-fill' + (eHpPct <= 25 ? ' low' : '');
+        _E['sgEnemyHp'].textContent = _safeNum(gBattle.hp); _E['sgEnemyMaxHp'].textContent = gBattle.maxHp;
+        _E['sgEnemyBlockNum'].textContent = _safeNum(gBattle.block);
+        _E['sgEnemyBlock'].style.display = gBattle.block > 0 ? '' : 'none';
         // 敌人2 — 使用独立的 SVG ID 后缀避免与敌人1冲突
-        var e2El = document.getElementById('sgEnemyPortrait2');
+        var e2El = _E['sgEnemyPortrait2'];
         if(e2El){
           var portraitHtml2 = portraitHtml;
           if(enemySvg && !_isFileProtocol){
@@ -9220,25 +9255,25 @@ function setBattleBackground(){
           e2El.onmousemove = function(e){ movePortraitBuffTip(e); };
           e2El.onmouseleave = function(){ hidePortraitBuffTip(); };
         }
-        document.getElementById('sgEnemyName2').textContent = gBattle.name + ' · 乙';
-        document.getElementById('sgEnemyDesc2').textContent = gBattle.desc;
+        _E['sgEnemyName2'].textContent = gBattle.name + ' · 乙';
+        _E['sgEnemyDesc2'].textContent = gBattle.desc;
         var e2HpPct = Math.max(0, Math.floor(gBattle._groupHp2 / gBattle._groupMaxHp2 * 100));
-        document.getElementById('sgEnemyHpFill2').style.width = e2HpPct + '%';
-        document.getElementById('sgEnemyHpFill2').className = 'sg-enemy-hp-fill' + (e2HpPct <= 25 ? ' low' : '');
-        document.getElementById('sgEnemyHp2').textContent = (typeof gBattle._groupHp2 === 'number' && !isNaN(gBattle._groupHp2)) ? gBattle._groupHp2 : 0;
-        document.getElementById('sgEnemyMaxHp2').textContent = gBattle._groupMaxHp2;
-        document.getElementById('sgEnemyBlockNum2').textContent = 0;
-        document.getElementById('sgEnemyBlock2').style.display = 'none';
+        _E['sgEnemyHpFill2'].style.width = e2HpPct + '%';
+        _E['sgEnemyHpFill2'].className = 'sg-enemy-hp-fill' + (e2HpPct <= 25 ? ' low' : '');
+        _E['sgEnemyHp2'].textContent = _safeNum(gBattle._groupHp2);
+        _E['sgEnemyMaxHp2'].textContent = gBattle._groupMaxHp2;
+        _E['sgEnemyBlockNum2'].textContent = 0;
+        _E['sgEnemyBlock2'].style.display = 'none';
         // Enemy 2 buffs (shared same buffs as enemy 1)
         var ebHtml2 = _buildEnemyBuffHtml();
-        document.getElementById('sgEnemyBuffs2').innerHTML = ebHtml2;
+        _E['sgEnemyBuffs2'].innerHTML = ebHtml2;
         var poison2 = gBattle._groupPoison2 || 0;
-        document.getElementById('sgEnemyPoison2').style.display = poison2 > 0 ? '' : 'none';
-        var _poiN2=document.getElementById('sgEnemyPoisonNum2');if(_poiN2)_poiN2.textContent=poison2;
+        _E['sgEnemyPoison2'].style.display = poison2 > 0 ? '' : 'none';
+        var _poiN2=_E['sgEnemyPoisonNum2'];if(_poiN2)_poiN2.textContent=poison2;
         // 目标选择高亮（Item 7）
         var target = gBattle._selectedTarget || 1;
-        var e1El = document.getElementById('sgEnemy');
-        var e2El = document.getElementById('sgEnemy2');
+        var e1El = _E['sgEnemy'];
+        var e2El = _E['sgEnemy2'];
         if(e1El){ e1El.style.cursor = 'pointer'; e1El.style.borderColor = target === 1 ? 'var(--gold)' : 'var(--border)'; e1El.style.boxShadow = target === 1 ? '0 0 15px rgba(201,168,76,.3)' : 'none'; }
         if(e2El){ e2El.style.cursor = 'pointer'; e2El.style.borderColor = target === 2 ? 'var(--gold)' : 'var(--border)'; e2El.style.boxShadow = target === 2 ? '0 0 15px rgba(201,168,76,.3)' : 'none'; }
         // 点击选择目标
@@ -9251,12 +9286,12 @@ function setBattleBackground(){
           e2El.onclick = function(e){ e.stopPropagation(); if(gBattle){ gBattle._selectedTarget = 2; renderBattle(); } };
         }
         // 目标指示标记
-        document.getElementById('sgEnemyName').innerHTML = gBattle.name + ' · 甲' + (target === 1 ? ' 👈' : '');
-        document.getElementById('sgEnemyName2').innerHTML = gBattle.name + ' · 乙' + (target === 2 ? ' 👈' : '');
+        _E['sgEnemyName'].innerHTML = gBattle.name + ' · 甲' + (target === 1 ? ' 👈' : '');
+        _E['sgEnemyName2'].innerHTML = gBattle.name + ' · 乙' + (target === 2 ? ' 👈' : '');
         // 意图只显示在敌人1上
         // 使用模块级常量 INTENT_NAMES
-        document.getElementById('sgEnemyIntent').innerHTML = INTENT_NAMES[gBattle.intent] || '<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>';
-        document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
+        _E['sgEnemyIntent'].innerHTML = INTENT_NAMES[gBattle.intent] || '<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>';
+        _E['sgIntentVal'].textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
 
       // 详细意图
       var intentDetail = '';
@@ -9274,46 +9309,46 @@ function setBattleBackground(){
       } else if(gBattle.intent === 'heal'){
       intentDetail = '💚回复 ' + gBattle.intentVal + 'HP';
       }
-      document.getElementById('sgIntentDetail').textContent = intentDetail;
-        document.getElementById('sgEnemyIntent2').textContent = '';
-        document.getElementById('sgIntentVal2').textContent = '';
+      _E['sgIntentDetail'].textContent = intentDetail;
+        _E['sgEnemyIntent2'].textContent = '';
+        _E['sgIntentVal2'].textContent = '';
         // 重置血条样式
-        var hpFill1 = document.getElementById('sgEnemyHpFill');
+        var hpFill1 = _E['sgEnemyHpFill'];
         if(hpFill1) hpFill1.style.transition = 'width .3s';
-        var hpFill2 = document.getElementById('sgEnemyHpFill2');
+        var hpFill2 = _E['sgEnemyHpFill2'];
         if(hpFill2) hpFill2.style.transition = 'width .3s';
         // Buff显示
         var ebHtml = _buildEnemyBuffHtml();
-        document.getElementById('sgEnemyBuffs').innerHTML = ebHtml;
-        var _poiEl=document.getElementById('sgEnemyPoison');if(_poiEl){_poiEl.style.display=gBattle.enemyPoison>0?'':'none';var _poiN=document.getElementById('sgEnemyPoisonNum');if(_poiN)_poiN.textContent=gBattle.enemyPoison;}
+        _E['sgEnemyBuffs'].innerHTML = ebHtml;
+        var _poiEl=_E['sgEnemyPoison'];if(_poiEl){_poiEl.style.display=gBattle.enemyPoison>0?'':'none';var _poiN=_E['sgEnemyPoisonNum'];if(_poiN)_poiN.textContent=gBattle.enemyPoison;}
       } else {
         // 单个敌人
         if(enemyArea) enemyArea.className = 'sg-enemy-area';
-        document.getElementById('sgEnemy2').style.display = 'none';
-        document.getElementById('sgEnemyPortrait').innerHTML = portraitHtml;
+        _E['sgEnemy2'].style.display = 'none';
+        _E['sgEnemyPortrait'].innerHTML = portraitHtml;
         var _actEt = gBattle.isBoss ? 'sg-etype-boss' : 'sg-etype-act'+(G?Math.min(Math.max(G.act,1),3):1);
-        document.getElementById('sgEnemyPortrait').className = 'sg-enemy-portrait sg-enemy-enhanced ' + _actEt;
-        document.getElementById('sgEnemyPortrait').onmouseenter = function(e){ showPortraitBuffTip(e, 'enemy'); };
-        document.getElementById('sgEnemyPortrait').onmousemove = function(e){ movePortraitBuffTip(e); };
-        document.getElementById('sgEnemyPortrait').onmouseleave = function(){ hidePortraitBuffTip(); };
-        document.getElementById('sgEnemyName').textContent = gBattle.name;
-        document.getElementById('sgEnemyDesc').textContent = gBattle.desc;
+        _E['sgEnemyPortrait'].className = 'sg-enemy-portrait sg-enemy-enhanced ' + _actEt;
+        _E['sgEnemyPortrait'].onmouseenter = function(e){ showPortraitBuffTip(e, 'enemy'); };
+        _E['sgEnemyPortrait'].onmousemove = function(e){ movePortraitBuffTip(e); };
+        _E['sgEnemyPortrait'].onmouseleave = function(){ hidePortraitBuffTip(); };
+        _E['sgEnemyName'].textContent = gBattle.name;
+        _E['sgEnemyDesc'].textContent = gBattle.desc;
         var abilityNames = {enrage:"🔥暴怒",regen:"💚再生",summon:"👥召唤",curse:"💀诅咒"};
         if(gBattle.specialAbility && abilityNames[gBattle.specialAbility]){
-          document.getElementById('sgEnemyDesc').textContent += ' ['+abilityNames[gBattle.specialAbility]+']';
+          _E['sgEnemyDesc'].textContent += ' ['+abilityNames[gBattle.specialAbility]+']';
         }
         if(gBattle.slippery > 0){
-          document.getElementById('sgEnemyDesc').textContent += ' [滑溜'+gBattle.slippery+']';
+          _E['sgEnemyDesc'].textContent += ' [滑溜'+gBattle.slippery+']';
         }
         var eHpPct = Math.max(0, Math.floor(gBattle.hp / gBattle.maxHp * 100));
-        document.getElementById('sgEnemyHpFill').style.width = eHpPct + '%';
-        document.getElementById('sgEnemyHp').textContent = (typeof gBattle.hp === 'number' && !isNaN(gBattle.hp)) ? gBattle.hp : 0; document.getElementById('sgEnemyMaxHp').textContent = gBattle.maxHp;
-        document.getElementById('sgEnemyBlockNum').textContent = gBattle.block; document.getElementById('sgEnemyBlock').style.display = gBattle.block > 0 ? '' : 'none';
+        _E['sgEnemyHpFill'].style.width = eHpPct + '%';
+        _E['sgEnemyHp'].textContent = _safeNum(gBattle.hp); _E['sgEnemyMaxHp'].textContent = gBattle.maxHp;
+        _E['sgEnemyBlockNum'].textContent = gBattle.block; _E['sgEnemyBlock'].style.display = gBattle.block > 0 ? '' : 'none';
 
         // Intent
-        var intentNames = { attack:'<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>攻击', defend:'<span class="sg-ico sg-ico-block sg-ico-sm">盾</span>防御', debuff:'<span class="sg-ico sg-ico-poison sg-ico-sm">毒</span>衰弱', buff:'<span class="sg-ico sg-ico-energy sg-ico-sm">光</span>强化', heal:'<span class="sg-ico sg-ico-hp sg-ico-sm">心</span>回复' };
-        document.getElementById('sgEnemyIntent').innerHTML = INTENT_NAMES[gBattle.intent] || '<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>';
-        document.getElementById('sgIntentVal').textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
+        // Using INTENT_NAMES constant'<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>攻击', defend:'<span class="sg-ico sg-ico-block sg-ico-sm">盾</span>防御', debuff:'<span class="sg-ico sg-ico-poison sg-ico-sm">毒</span>衰弱', buff:'<span class="sg-ico sg-ico-energy sg-ico-sm">光</span>强化', heal:'<span class="sg-ico sg-ico-hp sg-ico-sm">心</span>回复' };
+        _E['sgEnemyIntent'].innerHTML = INTENT_NAMES[gBattle.intent] || '<span class="sg-ico sg-ico-str sg-ico-sm">剑</span>';
+        _E['sgIntentVal'].textContent = gBattle.intent === 'attack' ? (gBattle.intentVal + (gBattle.buffs.str||0)) : '';
 
         // 意图详情（补充单人战缺失）
         var intentDetail = '';
@@ -9331,18 +9366,18 @@ function setBattleBackground(){
         } else if(gBattle.intent === 'heal'){
           intentDetail = '💚回复 ' + gBattle.intentVal + 'HP';
         }
-        document.getElementById('sgIntentDetail').textContent = intentDetail;
+        _E['sgIntentDetail'].textContent = intentDetail;
 
         // Enemy buffs
         var ebHtml = _buildEnemyBuffHtml();
-        document.getElementById('sgEnemyBuffs').innerHTML = ebHtml;
+        _E['sgEnemyBuffs'].innerHTML = ebHtml;
 
         // Enemy poison
-        var _poiEl=document.getElementById('sgEnemyPoison');if(_poiEl){_poiEl.style.display=gBattle.enemyPoison>0?'':'none';var _poiN=document.getElementById('sgEnemyPoisonNum');if(_poiN)_poiN.textContent=gBattle.enemyPoison;}
+        var _poiEl=_E['sgEnemyPoison'];if(_poiEl){_poiEl.style.display=gBattle.enemyPoison>0?'':'none';var _poiN=_E['sgEnemyPoisonNum'];if(_poiN)_poiN.textContent=gBattle.enemyPoison;}
         // 立即强制敌人区域可见
-        try{ document.getElementById('sgEnemyArea').style.display = 'flex'; }catch(ee){}
-        try{ document.getElementById('sgEnemy').style.display = ''; }catch(ee){}
-        try{ if(gBattle && gBattle._isGroup) document.getElementById('sgEnemy2').style.display = ''; }catch(ee){}
+        try{ _E['sgEnemyArea'].style.display = 'flex'; }catch(ee){}
+        try{ _E['sgEnemy'].style.display = ''; }catch(ee){}
+        try{ if(gBattle && gBattle._isGroup) _E['sgEnemy2'].style.display = ''; }catch(ee){}
       }
       // 检查敌人立绘是否正确加载，失败则显示emoji
       try{
@@ -9354,16 +9389,16 @@ function setBattleBackground(){
       }catch(e){}
       // 立即强制敌人区域可见
       try{
-        var _eaImm = document.getElementById('sgEnemyArea');
+        var _eaImm = _E['sgEnemyArea'];
         if(_eaImm) _eaImm.style.display = 'flex';
-        var _eImm = document.getElementById('sgEnemy');
+        var _eImm = _E['sgEnemy'];
         if(_eImm) _eImm.style.display = '';
       }catch(ee){}
       // 合并的立绘回退检查（替代原来3个独立的setTimeout）
       gBattle._renderTimers.push(setTimeout(function(){
         try{
           var fb = ENEMY_EMOJIS[gBattle.id] || '魔';
-          var ep = document.getElementById('sgEnemyPortrait');
+          var ep = _E['sgEnemyPortrait'];
           if(ep && (!ep.innerHTML || ep.innerHTML.trim() === '')){
             ep.innerHTML = '<span class="sg-emojifallback" style="font-size:3.2rem;">'+fb+'</span>';
           }
@@ -9371,9 +9406,9 @@ function setBattleBackground(){
             _checkPortraitLoaded('sgEnemyPortrait', fb);
             if(gBattle._isGroup) _checkPortraitLoaded('sgEnemyPortrait2', fb);
           }
-          var _ea = document.getElementById('sgEnemyArea');
+          var _ea = _E['sgEnemyArea'];
           if(_ea) _ea.style.display = 'flex';
-          var _e = document.getElementById('sgEnemy');
+          var _e = _E['sgEnemy'];
           if(_e) _e.style.display = '';
         }catch(ee){}
       }, 300));
@@ -9382,7 +9417,7 @@ function setBattleBackground(){
       var charPortraits = {lizhi:'月',sush:'浪',liqing:'花'};
       var pEmoji = charPortraits[G.charId] || '诗';
       var pClass = G.charId || '';
-      var portraitEl = document.getElementById('sgPlayerPortrait');
+      var portraitEl = _E['sgPlayerPortrait'];
       if(portraitEl){
         portraitEl.innerHTML = '<img class="sg-player-portrait-img" src="images/'+G.charId+'.png" onerror="this.style.display=\'none\'">'+pEmoji;
         portraitEl.className = 'sg-player-portrait-icon ' + pClass;
@@ -9393,50 +9428,50 @@ function setBattleBackground(){
         portraitEl.onmousemove = function(e){ movePortraitBuffTip(e); };
         portraitEl.onmouseleave = function(){ hidePortraitBuffTip(); };
       }
-      document.getElementById('sgPlayerName').textContent = G.charName;
+      _E['sgPlayerName'].textContent = G.charName;
 
       // Player HP
       var pHpPct = Math.max(0, Math.floor(G.hp / G.maxHp * 100));
-      document.getElementById('sgPlayerHpFill').style.width = pHpPct + '%';
-      document.getElementById('sgPlayerHp').textContent = G.hp; document.getElementById('sgPlayerMaxHp').textContent = G.maxHp;
-      document.getElementById('sgPlayerBlock').textContent = gBattle.playerBlock;
-      document.getElementById('sgPlayerStrength').textContent = gBattle.playerStr;
+      _E['sgPlayerHpFill'].style.width = pHpPct + '%';
+      _E['sgPlayerHp'].textContent = G.hp; _E['sgPlayerMaxHp'].textContent = G.maxHp;
+      _E['sgPlayerBlock'].textContent = gBattle.playerBlock;
+      _E['sgPlayerStrength'].textContent = gBattle.playerStr;
 
       // Player poison
-      document.getElementById('sgPlayerPoison').textContent = gBattle.playerPoison;
+      _E['sgPlayerPoison'].textContent = gBattle.playerPoison;
       // 确保敌人区域始终可见（防御性渲染）
       try{
-        var _eArea = document.getElementById('sgEnemyArea');
+        var _eArea = _E['sgEnemyArea'];
         if(_eArea){
           _eArea.style.display = 'flex';
-          var _epEl = document.getElementById('sgEnemyPortrait');
+          var _epEl = _E['sgEnemyPortrait'];
           if(_epEl && (!_epEl.innerHTML || _epEl.innerHTML.trim() === '')){
             var _fb = ENEMY_EMOJIS[gBattle.id] || '魔';
             _epEl.innerHTML = '<span style="font-size:2rem;">'+_fb+'</span>';
           }
         }
         // 确保敌人卡片可见
-        var _eElMain = document.getElementById('sgEnemy');
+        var _eElMain = _E['sgEnemy'];
         if(_eElMain) _eElMain.style.display = '';
         if(gBattle && gBattle._isGroup){
-          var _eElMain2 = document.getElementById('sgEnemy2');
+          var _eElMain2 = _E['sgEnemy2'];
           if(_eElMain2) _eElMain2.style.display = '';
         }
       }catch(_ee){}
 
       // Energy and turn
-      document.getElementById('sgPlayerEnergy').textContent = gBattle.energy;
-      document.getElementById('sgTurnNum').textContent = gBattle.turn;
+      _E['sgPlayerEnergy'].textContent = gBattle.energy;
+      _E['sgTurnNum'].textContent = gBattle.turn;
 
       // Draw pile
-      document.getElementById('sgDrawPile').textContent = gBattle.drawPile.length;
-      document.getElementById('sgHandCount').textContent = gBattle.hand.length;
-      document.getElementById('sgDiscardPile').textContent = gBattle.discardPile.length;
+      _E['sgDrawPile'].textContent = gBattle.drawPile.length;
+      _E['sgHandCount'].textContent = gBattle.hand.length;
+      _E['sgDiscardPile'].textContent = gBattle.discardPile.length;
 
-      document.getElementById('sgDeckCountNum').textContent = G.deck.length;
+      _E['sgDeckCountNum'].textContent = G.deck.length;
       // Hand cards
       if(_handChanged || gBattle._animDraw || gBattle._animDraw===undefined){
-      var handEl = document.getElementById('sgHand');
+      var handEl = _E['sgHand'];
       handEl.innerHTML = '';
       // Fallback: show diagnostic when hand is empty
       if(gBattle.hand.length === 0){
@@ -9499,45 +9534,7 @@ function setBattleBackground(){
             (card.gainAgil>0?'<span style="margin:0 2px;">💨'+card.gainAgil+'</span>':'') +
             '</div>' : '')
 
-        // 鼠标悬停音效
-        cardEl.addEventListener('mouseenter', function(){ playHoverSfx(); });
-        cardEl.addEventListener('mouseleave', function(){ playCardLeaveSfx(); });
-        if(canPlay){
-          (function(ci, el2){
-            el2.draggable = 'true';
-            el2.addEventListener('dragstart', function(e){
-              e.dataTransfer.setData('text/plain', ''+ci);
-              e.dataTransfer.effectAllowed = 'move';
-              el2.classList.add('dragging');
-            });
-            el2.addEventListener('dragend', function(e){
-              el2.classList.remove('dragging');
-              handEl.classList.remove('drag-over');
-            });
-            el2.addEventListener('click', function(){
-              playCard(ci);
-            });
-          })(hi, cardEl);
-        }
-        // Drop targets for reorder (all cards including disabled)
-        (function(ci, el2){
-          if(!el2.draggable) el2.draggable = 'true';
-          el2.addEventListener('dragover', function(e){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
-          el2.addEventListener('dragenter', function(e){ e.preventDefault(); handEl.classList.add('drag-over'); el2.classList.add('drag-hover'); });
-          el2.addEventListener('dragleave', function(){ el2.classList.remove('drag-hover'); });
-          el2.addEventListener('drop', function(e){
-            e.preventDefault();
-            el2.classList.remove('drag-hover');
-            handEl.classList.remove('drag-over');
-            var fromIdx = parseInt(e.dataTransfer.getData('text/plain'), 10);
-            if(isNaN(fromIdx) || fromIdx === ci) return;
-            // Swap hand positions
-            var tmp = gBattle.hand[fromIdx];
-            gBattle.hand[fromIdx] = gBattle.hand[ci];
-            gBattle.hand[ci] = tmp;
-            renderBattle();
-          });
-        })(hi, cardEl);
+        cardEl.setAttribute('data-card-idx', hi);
 
         var isNewlyDrawn = gBattle._newlyDrawn && gBattle._newlyDrawn.indexOf(hi) !== -1;
         if(gBattle._animDraw || isNewlyDrawn){
@@ -9560,9 +9557,68 @@ function setBattleBackground(){
       gBattle._newlyDrawn = null;
       }
 
+      // ── 手牌事件委托（只绑定一次，替代每张牌单独绑定）──
+      if(!handEl._delegatesAttached){
+        handEl._delegatesAttached = true;
+        // 点击出牌
+        handEl.addEventListener('click', function(e){
+          var cardEl = e.target.closest('.sg-card');
+          if(!cardEl) return;
+          var ci = parseInt(cardEl.getAttribute('data-card-idx'), 10);
+          if(isNaN(ci)) return;
+          var card = G.deck[gBattle.hand[ci]];
+          if(card && !card.unplayable && gBattle.energy >= calcCardCost(card, gBattle.hand[ci]).finalCost){
+            playCard(ci);
+          }
+        });
+        // 悬偌音效（使用 capture 阶段以支持子元素）
+        handEl.addEventListener('mouseenter', function(e){
+          if(e.target.closest('.sg-card')) playHoverSfx();
+        }, true);
+        handEl.addEventListener('mouseleave', function(e){
+          if(e.target.closest('.sg-card')) playCardLeaveSfx();
+        }, true);
+        // 拖拽重排序
+        handEl.addEventListener('dragover', function(e){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+        handEl.addEventListener('dragstart', function(e){
+          var cardEl = e.target.closest('.sg-card');
+          if(!cardEl) return;
+          var ci = parseInt(cardEl.getAttribute('data-card-idx'), 10);
+          e.dataTransfer.setData('text/plain', ''+ci);
+          e.dataTransfer.effectAllowed = 'move';
+          cardEl.classList.add('dragging');
+        });
+        handEl.addEventListener('dragend', function(e){
+          var cardEl = e.target.closest('.sg-card');
+          if(cardEl) cardEl.classList.remove('dragging');
+          handEl.classList.remove('drag-over');
+        });
+        handEl.addEventListener('dragenter', function(e){
+          var cardEl = e.target.closest('.sg-card');
+          if(cardEl){ handEl.classList.add('drag-over'); cardEl.classList.add('drag-hover'); }
+        });
+        handEl.addEventListener('dragleave', function(e){
+          var cardEl = e.target.closest('.sg-card');
+          if(cardEl) cardEl.classList.remove('drag-hover');
+        });
+        handEl.addEventListener('drop', function(e){
+          e.preventDefault();
+          handEl.classList.remove('drag-over');
+          var toCardEl = e.target.closest('.sg-card');
+          if(toCardEl) toCardEl.classList.remove('drag-hover');
+          var fromIdx = parseInt(e.dataTransfer.getData('text/plain'), 10);
+          var toIdx = toCardEl ? parseInt(toCardEl.getAttribute('data-card-idx'), 10) : -1;
+          if(isNaN(fromIdx) || isNaN(toIdx) || fromIdx === toIdx) return;
+          var tmp = gBattle.hand[fromIdx];
+          gBattle.hand[fromIdx] = gBattle.hand[toIdx];
+          gBattle.hand[toIdx] = tmp;
+          renderBattle();
+        });
+      }
+
       // Intent reveal
       if(gBattle.seeIntents || hasRelic('qingtongjing')){
-        document.getElementById('sgEnemyIntent').style.opacity = '1';
+        _E['sgEnemyIntent'].style.opacity = '1';
       }
     
 
@@ -12992,7 +13048,7 @@ html2 += '<div class="sg-cs-portrait-card '+cssClass+'" data-char="'+ch.id+'">' 
             return;
           }
           // 检查敌人是否全部死亡
-          var allDead = gBattle.hp <= 0 && (!gBattle._isGroup || gBattle._groupHp2 <= 0);
+          var allDead = _isBattleOver();
           if(allDead){
             console.warn('[结束回合] 敌人已全部死亡，强制结束');
             checkEnemyDeath();
