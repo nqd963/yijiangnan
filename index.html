@@ -6127,6 +6127,7 @@ function startBattle(eData){
       var extra = hasRelic('shizhen') ? 1 : 0;
       if(hasRelic('lianyezhou')) extra += 1;
       n = n + extra;
+      var _bonusDraw = 0; // 额外补偿抽牌（如涤尘泉）
       playDrawSfx();
 
       var startHandLen = gBattle.hand.length;
@@ -6165,7 +6166,7 @@ function startBattle(eData){
           exhaustCard(cardIdx);
           gBattle.hand.pop();
           // 补抽1张
-          n++; // 增加本次抽牌数量以补偿
+          _bonusDraw++; // 记录补偿抽牌，循环结束后统一执行
           showEffectFloat(window.innerWidth/2, window.innerHeight/2-50, '\uD83D\uDCA7 \u6DA4\u5C18\u6CC9\uFF1A\u6D88\u8017\u72B6\u6001\u724C+\u62BD\u724C');
           checkLianyuqian(drawnCard);
         }
@@ -6182,6 +6183,26 @@ function startBattle(eData){
         // poisonPerDraw: 本回合每抽一张牌叠毒
         if(gBattle._poisonOnDraw && gBattle._poisonOnDraw > 0 && (gBattle.hp > 0 || (gBattle._isGroup && gBattle._groupHp2 > 0))){
           gBattle.enemyPoison += gBattle._poisonOnDraw;
+        }
+      }
+      // 执行补偿抽牌（如涤尘泉）
+      if(_bonusDraw > 0){
+        for(var bdi=0; bdi<_bonusDraw; bdi++){
+          if(gBattle.drawPile.length === 0 && gBattle.discardPile.length > 0){
+            gBattle.drawPile = gBattle.discardPile.slice();
+            gBattle.discardPile = [];
+            shuffle(gBattle.drawPile);
+          }
+          if(gBattle.drawPile.length > 0){
+            var _bdIdx = gBattle.drawPile.pop();
+            gBattle.hand.push(_bdIdx);
+            // 检查虚空
+            var _bdCard = G.deck[_bdIdx];
+            if(_bdCard && _bdCard.void){
+              exhaustCard(_bdIdx);
+              gBattle.hand.pop();
+            }
+          }
         }
       }
       // Track newly drawn card indices for animation
