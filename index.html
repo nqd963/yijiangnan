@@ -1602,7 +1602,21 @@ body.light .sg-card::before{background:linear-gradient(180deg,rgba(0,0,0,.03) 0%
   box-shadow:0 2px 4px rgba(0,0,0,.35),inset 0 1px 2px rgba(255,255,255,.45);
   z-index:3;border:1px solid rgba(255,255,255,.25);
   text-shadow:0 1px 2px rgba(0,0,0,.3);
+  transition:all .3s ease;
 }
+/* 费用变化时的脉冲动画 */
+@keyframes sgCostPulse{
+  0%{transform:scale(1);box-shadow:0 2px 4px rgba(0,0,0,.35),inset 0 1px 2px rgba(255,255,255,.45);}
+  50%{transform:scale(1.25);box-shadow:0 0 16px rgba(100,255,100,.5),inset 0 1px 2px rgba(255,255,255,.45);}
+  100%{transform:scale(1);box-shadow:0 2px 4px rgba(0,0,0,.35),inset 0 1px 2px rgba(255,255,255,.45);}
+}
+@keyframes sgCostFreeGlow{
+  0%{transform:scale(1);box-shadow:0 0 8px rgba(255,215,0,.5),inset 0 1px 2px rgba(255,255,255,.45);}
+  50%{transform:scale(1.2);box-shadow:0 0 20px rgba(255,215,0,.9),inset 0 1px 2px rgba(255,255,255,.6);}
+  100%{transform:scale(1);box-shadow:0 0 8px rgba(255,215,0,.5),inset 0 1px 2px rgba(255,255,255,.45);}
+}
+.sg-card-cost-changed .sg-card-cost{animation:sgCostPulse .4s ease;}
+.sg-card-cost-changed .sg-card-cost[data-free="true"]{animation:sgCostFreeGlow .6s ease;}
 /* 卡牌名称 — 类型色带 */
 .sg-card .sg-card-name{
   padding:7px 8px 5px;margin:0;font-size:.8rem;font-weight:700;
@@ -4944,6 +4958,151 @@ wuse_wuxin:{name:"物心",cost:0,type:"skill",block:5,char:"wuse",desc:"万物�
       return (card.cost || 0)+'';
     }
 
+    // ══ 动态费用计算：实时计算一张牌的当前费用 ══
+    // 返回 { finalCost, baseCost, reductions: [{label, amount}], isFree }
+    function calcCardCost(card, deckIdx){
+      if(!card) return { finalCost:0, baseCost:0, reductions:[], isFree:false };
+      if(card.curse || card.type === 'curse' || card.type === 'status') return { finalCost:0, baseCost:0, reductions:[], isFree:false };
+
+      var baseCost = card.cost || 0;
+      var cost = baseCost;
+      var reductions = [];
+
+      // 醉猴遗物：每回合首张-1
+      if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0){
+        var amt = Math.min(1, cost);
+        cost = Math.max(0, cost - 1);
+        reductions.push({ label:'醉猴', amt:amt });
+      }
+
+      // nextAtkCost0：下一张攻击牌免费
+      if(gBattle.nextAtkCost0 && card.type === 'attack' && cost > 0){
+        reductions.push({ label:'百炼剑', amt:cost });
+        cost = 0;
+      }
+
+      // freeThisTurn：本回合免费（墨剑生成）
+      if(card._freeThisTurn && cost > 0){
+        reductions.push({ label:'墨剑', amt:cost });
+        cost = 0;
+      }
+
+      // stompCostReduce：神机，每打出一张攻击牌费用-1
+      if(card.stompCostReduce && cost > 0 && gBattle.cardPlayedThisTurn > 0){
+        var amt = Math.min(gBattle.cardPlayedThisTurn, cost);
+        cost = Math.max(0, cost - amt);
+        reductions.push({ label:'神机', amt:amt });
+      }
+
+      // skillCost0：黄泉路，所有技能牌免费
+      if((G.powers||{}).skillCost0 && card.type === 'skill' && cost > 0){
+        reductions.push({ label:'黄泉路', amt:cost });
+        cost = 0;
+      }
+
+      // nextSkillCost0：蚱蜢舟，下一张技能牌免费
+      if(gBattle._nextSkillCost0Flag && card.type === 'skill' && cost > 0){
+        reductions.push({ label:'蚱蜢舟', amt:cost });
+        cost = 0;
+      }
+
+      // costDownPerSkill：才下眉头，本局每打N张技能费用-1
+      if(card.costDownPerSkill && card.type === 'attack'){
+        var skillsPlayed = gBattle._skillsPlayedThisCombat || 0;
+        var reduction = Math.floor(skillsPlayed / card.costDownPerSkill);
+        if(reduction > 0 && cost > 0){
+          var amt = Math.min(reduction, cost);
+          cost = Math.max(0, cost - amt);
+          reductions.push({ label:'才下眉头', amt:amt });
+        }
+      }
+
+      // freeIfLostHp：雪耻，本回合失去过生命则免费
+      if(card.freeIfLostHp && G._everLostHp && cost > 0){
+        reductions.push({ label:'雪耻', amt:cost });
+        cost = 0;
+      }
+
+      // 金星砚：攻击牌30%概率免费（概率效果，这里只计算期望显示）
+      // 注意：金星砚是概率效果，不在预计算中显示，在 playCard 时触发
+
+      var totalReduction = 0;
+      for(var ri=0; ri<reductions.length; ri++) totalReduction += reductions[ri].amt;
+
+      return {
+        finalCost: cost,
+        baseCost: baseCost,
+        reductions: reductions,
+        isFree: cost === 0 && baseCost > 0,
+        totalReduction: totalReduction
+      };
+    }
+
+    // ══ 费用变化音效 ══
+    function playCostChangeSfx(isFree){
+      try{
+        if(!window.audioCtx) window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if(!window.audioCtx) return;
+        if(window.audioCtx.state === 'suspended') window.audioCtx.resume();
+        var ctx = window.audioCtx;
+        var now = ctx.currentTime;
+        if(isFree){
+          // 免费：清脆的叮当声
+          var notes = [1046, 1318, 1568];
+          for(var ni=0;ni<notes.length;ni++){
+            var o = ctx.createOscillator();
+            var g = ctx.createGain();
+            o.type = 'sine';
+            o.frequency.value = notes[ni];
+            g.gain.value = 0.06;
+            g.gain.exponentialRampToValueAtTime(0.001, now + ni*0.06 + 0.3);
+            o.connect(g); g.connect(ctx.destination);
+            o.start(now + ni*0.06);
+            o.stop(now + ni*0.06 + 0.3);
+          }
+        } else {
+          // 减费：下降音
+          var o2 = ctx.createOscillator();
+          var g2 = ctx.createGain();
+          o2.type = 'triangle';
+          o2.frequency.setValueAtTime(800, now);
+          o2.frequency.exponentialRampToValueAtTime(300, now + 0.15);
+          g2.gain.value = 0.05;
+          g2.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          o2.connect(g2); g2.connect(ctx.destination);
+          o2.start(now);
+          o2.stop(now + 0.2);
+        }
+      }catch(e){}
+    }
+
+    // ══ 费用变化浮动文字 ══
+    function showCostChangeFloat(cardName, baseCost, finalCost, label){
+      if(!gBattle) return;
+      var _el = document.getElementById('sgHand');
+      if(!_el) return;
+      var _rect = _el.getBoundingClientRect();
+      var _floatEl = document.createElement('div');
+      _floatEl.style.cssText = 'position:fixed;left:'+(_rect.left+40)+'px;top:'+(_rect.top+20)+'px;font-size:0.65rem;font-weight:800;pointer-events:none;z-index:100;text-shadow:0 1px 3px rgba(0,0,0,.5);transition:all .8s ease;opacity:1;';
+      if(finalCost === 0 && baseCost > 0){
+        _floatEl.textContent = '✨ '+cardName+' 免费!';
+        _floatEl.style.color = '#ffd700';
+      } else if(finalCost < baseCost){
+        _floatEl.textContent = '↓ '+cardName+' ' + baseCost + '→' + finalCost + (label ? ' ('+label+')' : '');
+        _floatEl.style.color = '#88ff88';
+      } else {
+        _floatEl.textContent = '↑ '+cardName+' ' + baseCost + '→' + finalCost;
+        _floatEl.style.color = '#ff6666';
+      }
+      document.body.appendChild(_floatEl);
+      playCostChangeSfx(finalCost === 0 && baseCost > 0);
+      requestAnimationFrame(function(){
+        _floatEl.style.transform = 'translateY(-30px)';
+        _floatEl.style.opacity = '0';
+      });
+      setTimeout(function(){ if(_floatEl.parentNode) _floatEl.parentNode.removeChild(_floatEl); }, 800);
+    }
+
     // 爪牙机制：主要敌人死亡时清除爪牙
     function killMinions(){
       if(gBattle && gBattle._minionActive){
@@ -6616,6 +6775,16 @@ return gBattle.energy >= cost;
         showEffectFloat(window.innerWidth/2, window.innerHeight/2-40, '金星砚免费');
       }
 
+      // ══ 费用变化总结浮动文字 ══
+      var _playedCostInfo = calcCardCost(card, deckIdx);
+      if(_playedCostInfo.totalReduction > 0){
+        var _reductionLabels = [];
+        for(var _ri=0; _ri<_playedCostInfo.reductions.length; _ri++){
+          _reductionLabels.push(_playedCostInfo.reductions[_ri].label);
+        }
+        showCostChangeFloat(card.name, _playedCostInfo.baseCost, _playedCostInfo.finalCost, _reductionLabels.join('+'));
+      }
+
       // === slyOnSkillPlay: 打出技能牌时给手牌中下一张技能添加奇巧 ===
       if(card.type === 'skill' && G.powers && G.powers.slyOnSkillPlay){
         for(var _slyI = 0; _slyI < gBattle.hand.length; _slyI++){
@@ -6639,6 +6808,7 @@ return gBattle.energy >= cost;
 
       gBattle.energy -= cost;
       gBattle.cardPlayedThisTurn++;
+      if(card.type === 'skill') gBattle._skillsPlayedThisCombat = (gBattle._skillsPlayedThisCombat || 0) + 1;
 
       // blockPerCardPlayed: 每打出一张牌获得格挡
       if(gBattle._blockPerCardPlayed && gBattle._blockPerCardPlayed > 0){
@@ -6847,6 +7017,7 @@ return gBattle.energy >= cost;
       // === nextAtkCost0 ===
       if(card.nextAtkCost0){
         gBattle.nextAtkCost0 = (gBattle.nextAtkCost0||0)+1;
+        showCostChangeFloat('下张攻击牌', 1, 0, '百炼剑');
       }
 
       // === upgradeHand ===
@@ -7235,6 +7406,7 @@ return gBattle.energy >= cost;
       // === nextSkillCost0 - 下一张技能费用为0（猛扑）===
       if(card.nextSkillCost0){
         gBattle._nextSkillCost0Flag = true;
+        showCostChangeFloat('下张技能牌', 1, 0, '蚱蜢舟');
       }
 
       // === costDownPerSkill === (已在费用计算部分处理，移除重复代码)
@@ -7544,7 +7716,7 @@ gBattle.playerBlock += blockVal;
       if(card.selfDmgPerTurn){ G.powers.selfDmgPerTurn = (G.powers.selfDmgPerTurn||0) + card.selfDmgPerTurn; }
       if(card.hurtStartBlock){ G.powers.hurtStartBlock = (G.powers.hurtStartBlock||0) + card.hurtStartBlock; }
       if(card.selfDmgStart){ G.powers.selfDmgStart = (G.powers.selfDmgStart||0) + card.selfDmgStart; }
-      if(card.skillCost0){ G.powers.skillCost0 = true; }
+      if(card.skillCost0){ G.powers.skillCost0 = true; showCostChangeFloat('所有技能牌', 1, 0, '黄泉路'); }
       if(card.exhaustSkill){ G.powers.exhaustSkill = true; }
       if(card.rampageStrTurn){ G.powers.rampageStrTurn = (G.powers.rampageStrTurn||0) + card.rampageStrTurn; }
       if(card.armorThorns){ G.powers.armorThorns = (G.powers.armorThorns||0) + card.armorThorns; }
@@ -7871,6 +8043,7 @@ gBattle.playerBlock += blockVal;
 
       G.hp -= dmg;
       if(G.hp < 0) G.hp = 0;
+      if(dmg > 0) G._everLostHp = true; // 标记本回合失去过生命（雪耻等效果用）
 
       // 玄龟甲：首次HP低于50%时获得15格挡和2力量
       if(hasRelic('xuanguijia') && !gBattle._xuanguijiaTriggered && G.hp <= Math.floor(G.maxHp / 2) && dmg > 0){
@@ -8931,9 +9104,10 @@ function setBattleBackground(){
       var _rEls=["sgEnemy","sgEnemy2"];for(var _ri=0;_ri<_rEls.length;_ri++){var _r=document.getElementById(_rEls[_ri]);if(_r){if(_r.style.transform)_r.style.transform="";if(_r.style.opacity==="0")_r.style.opacity="";}}
 
       
-      // 手牌变化检测（性能优化）
-      var _handChanged = gBattle._lastHandHash !== gBattle.hand.join(',') + '|' + gBattle.energy;
-      gBattle._lastHandHash = gBattle.hand.join(',') + '|' + gBattle.energy;
+      // 手牌变化检测（性能优化）— 包含费用相关状态以确保动态费用实时更新
+      var _costStateKey = gBattle.cardPlayedThisTurn + '|' + (gBattle.nextAtkCost0||0) + '|' + (gBattle._nextSkillCost0Flag||false) + '|' + (gBattle._skillsPlayedThisCombat||0) + '|' + (G._everLostHp||false) + '|' + (G.powers&&G.powers.skillCost0||false);
+      var _handChanged = gBattle._lastHandHash !== gBattle.hand.join(',') + '|' + gBattle.energy + '|' + _costStateKey;
+      gBattle._lastHandHash = gBattle.hand.join(',') + '|' + gBattle.energy + '|' + _costStateKey;
 // 记录动画标志
       gBattle._animDraw = animated;
       updateStatusBar();
@@ -9308,19 +9482,45 @@ function setBattleBackground(){
         var card = G.deck[deckIdx];
         if(!card) continue;
 
-        var cost = card.cost || 0;
-        if(hasRelic('zuihou') && gBattle.cardPlayedThisTurn === 0 && cost > 0) cost = Math.max(0, cost - 1);
-        if(card.stompCostReduce && cost > 0 && gBattle.cardPlayedThisTurn > 0) cost = Math.max(0, cost - gBattle.cardPlayedThisTurn);
+        var _costInfo = calcCardCost(card, deckIdx);
+        var cost = _costInfo.finalCost;
+        var baseCost = _costInfo.baseCost;
+        var costChanged = _costInfo.totalReduction > 0 || _costInfo.isFree;
 
         var canPlay = !card.unplayable && gBattle.energy >= cost;
         var rarityColors = {basic:'#8b7355', common:'#a8a8a8', uncommon:'#55cc55', rare:'#ffcc00', ancient:'#ff44ff'};
         var borderColor = card.curse ? '#993333' : (card.unplayable ? '#994433' : (rarityColors[card.rarity] || '#a8a8a8'));
 
+        // 费用宝石颜色：降低=翠绿，升高=红色，免费=金色
+        var costGemClass = 'sg-card-cost';
+        var costGemStyle = '';
+        var costTextColor = '#fff';
+        if(_costInfo.isFree){
+          costGemStyle = 'background:radial-gradient(circle at 35% 30%,#fff7c0,#ffd700 55%,#b8860b);box-shadow:0 0 12px rgba(255,215,0,.7),inset 0 1px 2px rgba(255,255,255,.5);';
+        } else if(_costInfo.totalReduction > 0 && cost < baseCost){
+          costGemStyle = 'background:radial-gradient(circle at 35% 30%,#a8ff8a,#44cc44 55%,#228b22);';
+        }
+
+        // 费用显示文本
+        var costDisplay;
+        if(card.curse || card.type === 'curse' || card.type === 'status'){
+          costDisplay = _sgCardCost(card);
+        } else if(!canPlay){
+          costDisplay = '<span style="color:#ff4444">' + cost + '</span>';
+        } else if(costChanged && baseCost > 0){
+          costDisplay = '<span style="position:relative;">' +
+            '<span style="text-decoration:line-through;opacity:0.4;font-size:0.55rem;position:absolute;top:-8px;left:-2px;color:#aaa;">' + baseCost + '</span>' +
+            '<span style="color:' + (_costInfo.isFree ? '#ffd700' : '#88ff88') + ';">' + cost + '</span>' +
+          '</span>';
+        } else {
+          costDisplay = '' + cost;
+        }
+
         var cardEl = document.createElement('div');
-        cardEl.className = 'sg-card' + (canPlay ? '' : ' disabled') + (card.unplayable ? ' sg-card-unplayable' : '');
+        cardEl.className = 'sg-card' + (canPlay ? '' : ' disabled') + (card.unplayable ? ' sg-card-unplayable' : '') + (costChanged ? ' sg-card-cost-changed' : '');
         cardEl.style.borderColor = borderColor;
         cardEl.innerHTML =
-          '<div class="sg-card-cost">' + (card.curse||card.type==='curse'||card.type==='status' ? _sgCardCost(card) : (canPlay ? cost : ('<span style="color:#ff4444">' + cost + '</span>'))) + '</div>' +
+          '<div class="' + costGemClass + '" style="' + costGemStyle + '">' + costDisplay + '</div>' +
           '<div class="sg-card-name'+(card.upgraded?' sg-upgraded-name':'')+'">' + card.name + '</div>' +
           '<div class="sg-card-desc">' + parseKeywords(card.desc || '') + (card.enchantDesc ? '<br><span style="color:var(--gold);font-size:.45rem;">✦ '+card.enchantDesc+'</span>' : '') + '</div>' +
           '<div class="sg-card-type">' + card.type + ((card.rarity === 'rare' || card.rarity === 'ancient') ? ' ★' : '') + '</div>' +
